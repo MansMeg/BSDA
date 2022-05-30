@@ -3,6 +3,7 @@
 .RData
 .Ruserdata
 BSDA.Rproj
+TODO.tdl
 
 *.log
 *.synctex.gz

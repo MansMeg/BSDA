@@ -1,0 +1,222 @@
+\documentclass[11pt,a4paper,english]{article}
+\usepackage[latin1]{inputenc}
+\usepackage{hyperref}
+\usepackage{listings}
+
+\usepackage{xcolor}
+\hypersetup{
+    colorlinks,
+    linkcolor={red!50!black},
+    citecolor={blue!50!black},
+    urlcolor={blue!80!black}
+}
+
+% Normal latex T1-fonts
+\usepackage[T1]{fontenc}
+
+% Figures
+%\usepackage{graphicx,fancybox,subfigure}
+
+ % AMS-stuff
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{amsbsy}
+
+ % Misc
+\usepackage{verbatim}
+\usepackage{url}
+
+% Page size
+\addtolength{\hoffset}{-1cm}
+\addtolength{\textwidth}{2cm}
+\addtolength{\voffset}{-1cm}
+\addtolength{\textheight}{2cm}
+
+% Paragraph
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1ex plus 0.5ex minus 0.2ex}
+
+% Horizontal line
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+
+% No page numbers
+\pagestyle{empty}
+
+% New commands:
+\DeclareMathOperator{\var}{var}
+\DeclareMathOperator{\cov}{cov}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Prob}{\mathbb{P}}
+
+\begin{document}
+
+\begin{titlepage}
+
+\center
+\textsc{\LARGE Uppsala University}\\[1.5cm] % Name of your university/college
+\includegraphics[scale=.2]{files/uu_logo.png}\\[1cm]
+\textsc{\Large Bayesian Statistics and Data Analysis}\\[0.5cm]
+\textsc{\large }\\[0.5cm]
+
+%\HRule \\[0.4cm]
+{ \huge \bfseries Mini-Project Instructions}\\[0.4cm] % Title of your document
+%\HRule \\[1.5cm]
+
+\vfill
+
+\end{titlepage}
+
+
+% General Knitr options
+% (this cannot be input since the file runs knitr before LaTeX)
+<<echo=FALSE,eval=TRUE>>=
+options(continue="  ", prompt="> ")
+knitr::opts_chunk$set(size = "small")
+@
+
+\section{Project Instructions}
+
+The last two weeks will focus on a course project where 2-3 students choose data and will do a bayesian analysis of a  real-world dataset.
+
+Requirements for the projects are:
+\begin{itemize}
+\item Your project should be a Bayesidan Data Analysis using Stan.
+\item Real data should be used (see below for details).
+\item At least two different models shopuld be estimated and compared.
+\end{itemize}
+
+\emph{For PhD students}: You can choose to make a small project related to your research interest instead. Although, it should still be a 4 page paper output.
+
+\subsection{Suggested Reading/Video material}
+
+The project will be a small practical exercise in Bayesian data analysis. To get some inspiration, see the Stan YouTube channel \href{https://www.youtube.com/watch?v=k9sH7x8O0Y8}{[here]} or the Stan User Guide \href{https://mc-stan.org/docs/2_29/stan-users-guide/index.html}{[here]}
+
+\subsection{Project Group and Expected Workload}
+It is possible to have only one student in a group, although this is not recommended. One student group will, in practice, mean additional work due to the requirements of the project.
+
+The project is expected to take 40h per student in the group. Hence a 3 group project should be the equivalent of a 120h project.
+
+\subsection{Data Sets and Methods Recommendations}
+
+We recommend that you find a dataset you are interested in using yourself, ideally in a field you find interesting. Feel free to discuss potential projects with the teacher.
+
+If you have a hard time finding a dataset to use, there are a lot of available datasets (and problems) at:
+
+\begin{itemize}
+\item The UCI Machine Learning repository: \href{https://archive.ics.uci.edu/ml/index.php}{[here]}
+\item The machine learning competition site Kaggle: \href{https://www.kaggle.com/}{[here]}
+\end{itemize}
+
+The following data sets should not be used in the project:
+\begin{itemize}
+\item Titanic (R data set)
+\item mtcars (R data set)
+\end{itemize}
+
+
+\subsection{Project Proposal}
+Students need to turn in a half-page project and data description by and get approval for the proposed project. The project proposal must include the following pieces.
+
+\emph{The project proposal should include all the group members names!}
+
+\begin{itemize}
+  \item Description of the problem/area/idea.
+  \item Description of the data.
+\end{itemize}
+
+To minimize the project work's total workload, I suggest you see the proposal as a first draft of Sections 1 and 2 of the project report (see below). Then you will already have written the first part of your project report.
+
+\subsection{Project Report}
+\label{project_report}
+
+The Project outcome is a report in the ICML paper format that can be found \href{https://icml.cc/Conferences/2020/StyleAuthorInstructions}{[here]}.
+The ICML format is also available in overleaf here: \href{https://www.overleaf.com/latex/templates/icml-2019-submission-template/vkqjjvzjvhdc}{[here]}
+
+The paper should consist of \emph{between three and a half (3.5) and four (4) pages}, excluding references and eventual appendices. The paper should include the following four (4) sections:
+\begin{enumerate}
+  \item Abstract
+  \item Introduction (roughly 0.5 page)
+  \begin{itemize}
+    \item Description of the problem.
+  \end{itemize}
+  \item Data (roughly 0.5 page)
+  \begin{itemize}
+    \item Description of the data.
+  \end{itemize}
+  \item Models (roughly 0.5 page)
+  \begin{itemize}
+    \item Description of the models
+    \item Description of how the models were compared (LOO/WAIC)
+  \end{itemize}
+  \item Results (roughly 1.5-2 pages)
+  \begin{itemize}
+    \item Results of the different models
+    \item Which model does seem to work the best, and why?
+  \end{itemize}
+  \item Conclusions (roughly 0.5-1 pages)
+  \begin{itemize}
+    \item Conclusions from the results.
+    \item Discussion of problems and potential improvements and other models
+  \end{itemize}
+\end{enumerate}
+
+Additional requirements and hints for the report:
+\begin{enumerate}
+\item All Figures using color should have a color-blind friendly color palette. See \href{http://www.cookbook-r.com/Graphs/Colors_(ggplot2)/#a-colorblind-friendly-palette}{here} and \href{https://rdrr.io/cran/ggthemes/man/colorblind.html}{here}.
+\item Before you turn in the project, do a language check with a tool such as Grammarly. A project will poor english (errors that would have been spotted with a tool such as Grammarly) will affect your grade downwards.
+\item The final report should look like a research paper, i.e. try to avoid bullet list and get a good flow in the text.
+\item You should use correct reference systems. A tip is to use \texttt{\\citet}, \texttt{\\citep}, and \texttt{\\bibtex}. This will also simplify your future thesis work.
+\end{enumerate}
+
+
+\subsection{Project Presentations}
+
+Presentation details:
+\begin{itemize}
+  \item Each project needs to be presented in addition to submitting the mini-project report
+  \item The presentation should be high level, but sufficiently detailed information should be readily available to facilitate answering questions from the audience
+  \item For 1-2 person groups, the presentation should be 10 minutes
+  \item For three-person groups, the presentation should be 15 minutes
+  \item Afterwards, questions will be asked first by other students and then by attending teachers.
+\end{itemize}
+
+Specific presentation recommendations:
+\begin{itemize}
+  \item The first slide needs to include the project title and names of the group members.
+  \item The chosen methods(s) should be explained and justified (you are \textit{not} holding this presentation for a hypothetical customer who doesn't care about the details of your methods).
+  \item Big enough font size for text and figure labels should be used to make it easy for the audience to read slides.
+  \item A good rule of thumb is to expect one slide to take 2 minutes to present.
+  \item The last/final slide needs to include your conclusion and names of the group members.
+\end{itemize}
+
+\subsection{Project Grading}
+
+Below are the criterias used when grading the mini-projects. Some general comments on grading are:
+
+\begin{enumerate}
+\item The more students the higher the quality expected of the project, i.e. a better report is expected from a three-student report than a two-student report.
+\end{enumerate}
+
+
+To pass the report (G), the following criterias should be fulfilled:
+
+\begin{enumerate}
+\item The report should be turned in and follow the general outline of Section \ref{project_report}.
+\item show basic knowledge and understanding of the core concepts of the course by using concepts correctly
+\item show an understanding in when certain methods should be used or not, and how
+\item use at least two (2) different models and compare them in a correct way
+\item state what has been done in the report with clarity, good english and rigour so it is easy for a reader to understand and follow the paper.
+\item correctly use references in the report following the guideline of the template in Section \ref{project_report}
+\end{enumerate}
+
+To pass the mini-project with distinction (VG), the following criterias also apply in addition to the criteria for passing the report above:
+
+\begin{enumerate}
+\item show deep knowledge knowledge and understanding of the core concepts and how to adapt them in a good way to a new situation
+\item connect the analysis in the report with other areas in statistics or previous courses taken in the masters program, i.e. not just repeat what has been done in previous labs.
+\item use models that has not been part of the BSDA course
+\end{enumerate}
+
+
+
+\end{document}
+

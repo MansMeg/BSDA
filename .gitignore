@@ -1,0 +1,9 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+BSDA.Rproj
+
+*.log
+*.synctex.gz
+project/*.tex

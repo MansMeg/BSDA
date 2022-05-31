@@ -59,10 +59,33 @@ Below are some suggested complementary reading for the interested student.
 
 
 
-### Video material
+## Video material
 
-- Akis videos
-- https://www.youtube.com/channel/UCwgN5srGpBH4M-Zc2cAluOA
+### Aki Vehtari lectures
+
+Aki Vehtari at Aalto University has recorded lectures with very similar content as the content presented in the course.
+
+- [AV10, Computational probabilistic programming](https://www.youtube.com/watch?v=ukE5aqdoLZI)
+- [AV11, Introduction to uncertainty and modelling](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=d841f429-9c3d-4d24-8228-a9f400efda7b)
+- [AV21, Basics of Bayesian inference (1)](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=9c271082-5a8c-4b66-b6c2-aacc00fc683f)
+- [AV22, Basics of Bayesian inference (2)](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=70655a8a-0eb4-4ddd-9f52-aacc00fc67a2)
+- [AV31, Multiparameter models](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=ab958b4b-e2c4-4534-8305-aad100ba191f)
+- [AV41, Monte Carlo](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=8a3c7bbc-e2b8-4c16-97b2-aad800ba7927)
+- [AV42, Monte Carlo](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=44446861-eaa2-41b5-bf33-aad800caf18a)
+- [AV51, Markov Chain Monte Carlo](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=098dfdb4-f3b8-46aa-b988-aadf00bd3177)
+- [AV52, Markov Chain Monte Carlo](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=9f657178-d8cf-4cb8-af62-aadf00cd9423)
+- [AV61, Probabilistic programming](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=1744f6a0-84d3-4218-8a86-aae600ba7e84)
+- [AV62, Probabilistic programming](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=e60ba1a9-f752-4b0a-88c6-aae600caa61a)
+- [AV71, Hiearchical models](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=79dee6de-afa9-446f-b533-aaf400cabf2b)
+- [AV72, Hiearchical models](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=c822561c-f95d-44fc-a1d0-aaf400d9fae3)
+- [AV81, Model evaluation](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=7047e366-0df6-453c-867f-aafb00ca2d78)
+- [AV82, Model evaluation](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=d7849131-0afd-4ae6-ad64-aafb00da36f4)
+- [AV83, Model evaluation](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=50b2e73f-af0a-4715-b627-ab0200ca7bbd)
+- [AV91, Decision analysis](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=82943720-de0f-4195-8639-ab0900ca2085)
+
+### Additional video material
+
+- [Stan YouTube channel](https://www.youtube.com/channel/UCwgN5srGpBH4M-Zc2cAluOA) contains good introductions to Stan and some basic suggestions on how to fit models
 
 
 ## Recommended workflow for each block/assignment

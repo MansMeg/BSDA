@@ -107,8 +107,10 @@ You can find information and support for students on Zoom [here](https://mp.uu.s
 
 ## Teachers
 
-Main Teacher: Måns Magnusson
-Teaching assistant: Väinö Yrjänäinen
+Main Teacher: [Måns Magnusson](https://www.mansmagnusson.com/)
+
+Teaching assistant: [Väinö Yrjänäinen](https://katalog.uu.se/empinfo/?id=N21-638)
+
 
 ## Course structure
 

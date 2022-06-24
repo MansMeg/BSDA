@@ -1,0 +1,20 @@
+Package: bsda
+Type: Package
+Title: Functionality and Data for the Uppsala course on Bayesian Statistics and Data Analysis (BSDA)
+Version: 0.3.1
+Date: 2022-06-26
+Author: Mans Magnusson
+Maintainer: Mans Magnusson <mans.magnusson@statistik.uu.se>
+Description: Functionality and Data for the Uppsala course on Bayesian Statistics and Data Analysis (BSDA)
+License: MIT + file LICENCE
+Depends:
+    R (>= 3.1.2)
+Imports:
+    checkmate,
+    stats
+Suggests:
+    ggplot2,
+    testthat
+RoxygenNote: 7.1.1
+LazyData: true
+Encoding: UTF-8

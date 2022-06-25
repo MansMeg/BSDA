@@ -1,0 +1,169 @@
+---
+title: "BSDA: Assignment Template and Formating Instructions"
+author: "Anonymous student"
+output: 
+  pdf_document: 
+    toc: yes
+    toc_depth: 1
+---
+
+# General Information to include
+
+Here general information is included that is needed for administrative/course purposes. Below is a list of the information that needs to be included under general information. **If the information below is missing in the report, the assignment will be failed**.
+
+- **Time used for reading**: [How long time took the reading assignment (in hours)]
+- **Time used for basic assignment**: [How long time took the basic assignment (in hours)]
+- **Time used for extra assignment (VG)**: [How long time did the extra (VG) assignments took (in hours)]
+- **Good with lab**: [Write one-two sentences of what you liked with the assignment/what should we keep for next year.]
+- **Things to improve in the lab**: [Write one-two sentences of what you think can be improved in the assignment. Can something be clarified further? Did you get stuck on stuff that is not related to the content of the assignment etc.]
+
+**NOTE!** The assignments will be graded anonymously. **Do not include your name anywhere in the assignment! If the name is included, the assignment will be failed.**
+
+
+# Introduction
+
+This rmd-file is a template with format instructions for Assignments in the Machine learning course at Uppsala University. R markdown is a convenient way of writing exercise reports by combining text and R code using markdown syntax. To create your assignment, remove the formatting instructions, and use this file as a template. Keep the header (the first lines of this file between two lines of ---). Set the author name to your name, and set the title to match the assignment number.
+
+R markdown makes it easy to make a structured document with section and subsection titles, textual explanations, equations, code, and figures in a logical order. When you make changes to the code and re-run the notebook or "knit" (render) it to PDF, the relevant code is re-run, and the figures and results are updated without the need to copy and paste (which is prone to errors).
+
+For more information on how to use markdown, see [**this**](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) and more details on R markdown can be found [**here**](https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf).
+
+Also, _R Markdown: The Definite Guide_, a comprehensive book on R Markdown, can be found [**here**](https://bookdown.org/yihui/rmarkdown/).
+
+
+```{r setup, include=FALSE}
+# This chunk sets echo = TRUE as default, that is, print all code.
+# knitr::opts_chunk$set can be used to set other notebook generation options, too.
+# include=FALSE inside curly brackets makes this block not be included in the pdf.
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Loading R packages
+
+Below are examples of how to load packages that are used in the assignment
+
+```{r, eval=FALSE}
+library(ggplot2)
+```
+
+# Including source code
+
+Try to avoid printing an excessive amount of code and think about what is essential to show how you got the result.
+
+Write clear code. The code is also part of your report, and the clarity of the report affects if you pass the assignment. If the code is not self-explanatory, add comments. In a notebook, you can interleave explaining text and code.
+
+If in doubt, additional source code can be included in an appendix. 
+
+
+# Including output
+
+Sometimes, the code can be heavy to run. In those situations it is often much simpler to run the code in ordinary R and the copy the output into markdown. This can be done by simply add the argument `eval=FALSE`.
+
+```{r, eval=FALSE}
+> 1 + 1
+[1] 2
+```
+
+
+
+# Format instructions
+
+All exercises in the assignment should start with a header fully specifying that it is exercise X and the question you are answering, as (in rmd use #):
+
+# Exercise 1) Describe the concept of aleatoric uncertainty.
+
+Subtasks in each assignment should be numbered and use header (in rmd use ##). Also include the question here. As an example:
+
+## a) What is a cumulative density function?
+
+For each subtask, include a necessary textual explanation, equations, code, and figures so that the answer to the question flows naturally. You can think about what kind of report you would like to review.
+
+# Code
+
+We can easily add R code as chunks in the following way:
+
+```{r}
+5 + 5
+```
+
+This R code is evaluated when running the notebook or when rendering to PDF.
+
+If you want to show and run the code, but the output is very long or messy, and you prefer to hide the output from the rendered report, you can use option results='hide'. 
+
+```{r, results='hide'}
+5 + 5
+```
+
+If you want to use some code in the notebook, but think it's not helpful for the teacher that grade your assignment, you can exclude it from the generated PDF with the option `include=FALSE`. You will see the next block in rmd, but not in the generated PDF.
+```{r, include=FALSE}
+5 + 5
+```
+
+# Plots
+
+Include plots, where we can specify the width and height of the figure.
+
+```{r, fig.height=4, fig.width=6, fig.align='center', fig.cap= "An example Figure."}
+data("faithful")
+plot(faithful$eruptions, faithful$waiting)
+```
+
+Or using qplot from ggplot2 package
+```{r, fig.height=4, fig.width=6, fig.align='center', "A ggplot2 Figure."}
+library(ggplot2)
+qplot(faithful$eruptions, faithful$waiting)
+```
+
+Or using ggplot from ggplot2 package
+```{r, fig.height=3, fig.width=4, fig.align='center', fig.cap="An smaller ggplot2 Figure."}
+ggplot(data=faithful, aes(x=eruptions, y=waiting)) + geom_point() +
+  labs(x='Eruption time in mins', y='Waiting time to next eruption (in mins)')
+```
+
+# Images
+
+You can include an existing image (e.g., scanned copy of pen and paper equations)
+
+![Uppsala University](files/uu_logo.png){ width=120}
+
+or alternatively
+
+```{r, out.width = "100px", fig.align="center"}
+knitr::include_graphics("files/uu_logo.png")
+```
+
+# Equations
+
+You should write equations using LaTeX syntax, or you can include them as images if, for example, you use Microsoft Equations. 
+
+In Markdown, equations can easily be formulated using LaTeX in line as $f(k) = {n \choose k} p^{k} (1-p)^{n-k}$. Or use the math environment as follows:
+
+$$
+\begin{array}{ccc}
+x_{11} & x_{12} & x_{13}\\
+x_{21} & x_{22} & x_{23}.
+\end{array}
+$$
+
+The above example also illustrated multicolumn 'array'. An alternative way to make multiline equations with alignment is to use 'aligned' as follows;
+$$
+\begin{aligned}
+y & \sim \mathrm{normal}(\mu,1) \\
+\mu & \sim \mathrm{normal}(0,1).
+\end{aligned}
+$$
+
+If you are new to LaTeX equations, you could use the [latext4technics](https://www.latex4technics.com/) equation editor to create LaTeX equations to include in the report.
+
+More information on using LaTeX in R markdown can be found in 2.5.3 in [R Markdown: The Definite Guide](https://bookdown.org/yihui/rmarkdown/).
+
+A short introduction to equations in LaTeX can be found [here](https://www.overleaf.com/learn/latex/Mathematical_expressions).
+
+# Language
+
+The language used in the course is English. Hence the report needs to be written in English.
+
+# Jupyter Notebook and other report formats
+
+You are allowed to use any format to produce your report. For example, you can use Jupyter Notebooks, as long as you abide by the instructions in this template.

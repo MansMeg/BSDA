@@ -8,3 +8,4 @@ TODO.tdl
 *.log
 *.synctex.gz
 project/*.tex
+assignments/*.tex

@@ -129,7 +129,7 @@ Don't include \texttt{markmyassignment} results in the report.
 Algae status is monitored in 274 sites at Finnish lakes and rivers.
 The observations for the 2008 algae status at each site are presented
 in file {\tt algae.txt} ('0': no algae, '1': algae present). The data
-can also be accessed from the {\tt aaltobda} R package as follows:
+can also be accessed from the {\tt bsda} R package as follows:
 
 <<echo=TRUE,eval=TRUE>>=
 library(bsda)

@@ -101,7 +101,8 @@ The exercises of this assignment are not necessarily related to chapter 1, but r
 
 %\textbf{Grading instructions:} The grading will be done in peergrade. All grading questions and evaluations for assignment 1 can be found \href{https://avehtari.github.io/BDA_course_Aalto/assignments/assignment1_rubric.md}{\textbf{here}}
 
-To use markmyassignment for this assignment, run the following code in R:
+To use \texttt{markmyassignment} for this assignment, run the following code in R:
+
 <<echo=FALSE,eval=TRUE>>=
 options(continue="  ", prompt="> ")
 @

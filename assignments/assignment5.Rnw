@@ -47,6 +47,9 @@
 \newcommand{\vc}[1] { \mathbf{#1} }
 \newcommand{\vs}[1] { \boldsymbol{#1} }
 
+% Horizontal line
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+
 \pagestyle{empty}
 
 \begin{document}

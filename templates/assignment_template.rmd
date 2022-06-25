@@ -12,10 +12,9 @@ output:
 Here general information is included that is needed for administrative/course purposes. Below is a list of the information that needs to be included under general information. **If the information below is missing in the report, the assignment will be failed**.
 
 - **Time used for reading**: [How long time took the reading assignment (in hours)]
-- **Time used for basic assignment**: [How long time took the basic assignment (in hours)]
-- **Time used for extra assignment (VG)**: [How long time did the extra (VG) assignments took (in hours)]
-- **Good with lab**: [Write one-two sentences of what you liked with the assignment/what should we keep for next year.]
-- **Things to improve in the lab**: [Write one-two sentences of what you think can be improved in the assignment. Can something be clarified further? Did you get stuck on stuff that is not related to the content of the assignment etc.]
+- **Time used for the assignment**: [How long time took the basic assignment (in hours)]
+- **Good with assignment**: [Write one-two sentences of what you liked with the assignment/what should we keep for next year.]
+- **Things to improve in the assignment**: [Write one-two sentences of what you think can be improved in the assignment. Can something be clarified further? Did you get stuck on stuff that is not related to the content of the assignment etc.]
 
 **NOTE!** The assignments will be graded anonymously. **Do not include your name anywhere in the assignment! If the name is included, the assignment will be failed.**
 

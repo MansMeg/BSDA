@@ -62,7 +62,7 @@
 \center
 \textsc{\LARGE Uppsala University}\\[1.5cm] % Name of your university/college
 \includegraphics[scale=.2]{files/uu_logo.png}\\[1cm]
-\textsc{\Large Introduction to Machine Learning, Big Data, and AI}\\[0.5cm]
+\textsc{\Large Bayesian Statistics and Data Analysis}\\[0.5cm]
 \textsc{\large }\\[0.5cm]
 
 \HRule \\[0.4cm]
@@ -81,6 +81,8 @@
 \HRule
 
 \input{general_info.tex}
+
+\HRule
 
 % General Knitr options
 % (this cannot be input since the file runs knitr before LaTeX)
@@ -119,9 +121,11 @@ Don't include \texttt{markmyassignment} results in the report.
 
 \newpage
 
-\begin{enumerate}
+\input{general_info_to_include.tex}
 
-\item {\bf (General questions)} See formating instructions in the template \href{https://github.com/MansMeg/BSDA/tree/main/templates}{\textbf{here}}.
+\subsection*{Recap on R, probability and Bayes Theorem}
+
+\begin{enumerate}
 
 \item {\bf (Basic probability theory notation and terms)}. This can be trivial or you may need to refresh your memory on these concepts. Note that some terms may be different names for the same concept. Explain each of the following terms with one sentence:
   \begin{itemize}

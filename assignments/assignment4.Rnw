@@ -109,7 +109,7 @@ This assignment is related to Chapters 3 and 10.
 
 % \textbf{Grading instructions:} The grading will be done in peergrade. All grading questions and evaluations for assignment 4 can be found \href{https://avehtari.github.io/BDA_course_Aalto/assignments/assignment4_rubric.md}{\textbf{here}}
 
-\textbf{Reporting accuracy:} For posterior statistics of interest, only report digits for which the Monte Carlo standard error (MCSE) is zero. \emph{Example:} If you estimate $E(\mu)=1.234$ with MCSE($E(\mu)$) = 0.01, you should report $E(\mu)=1.2$.
+\input{general_info_reporting_accuracy.tex}
 
 To use \texttt{markmyassignment} for this assignment, run the following code in R:
 
@@ -160,7 +160,6 @@ MCSE for the quantile estimates can be computed with the
 \subsection*{Importance sampling}
 
 Now we discard our posterior draws and switch to importance sampling.
-
 
 \begin{itemize}
 \item[c)] Implement a function for computing the log importance ratios (log importance weights) when the importance sampling \textbf{target distribution} is the posterior distribution, and the \textbf{proposal distribution} is the prior distribution from a). Below is a test example, the functions can also be tested with \texttt{markmyassignment}. Explain in words why it's better to compute log ratios instead of ratios.

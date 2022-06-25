@@ -1,0 +1,145 @@
+\documentclass[a4paper,11pt]{article}
+
+%\usepackage[pdftex]{graphicx}
+%\usepackage{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+%\usepackage[T1,mtbold,lucidacal,mtplusscr,subscriptcorrection]{mathtime}
+%\usepackage{times}
+\usepackage{amsmath}
+\usepackage{url}
+\usepackage{enumerate}
+%\usepackage{parskip}
+\usepackage[colorlinks,urlcolor=black]{hyperref}
+%\usepackage{microtype}
+
+% if not draft, the smaller printable area makes the paper more readable
+\topmargin -4mm
+\oddsidemargin 0mm
+\textheight 225mm
+\textwidth 150mm
+
+\usepackage{xcolor}
+\hypersetup{
+    colorlinks,
+    linkcolor={red!50!black},
+    citecolor={blue!50!black},
+    urlcolor={blue!80!black}
+}
+
+
+%\parskip=\baselineskip
+
+\DeclareMathOperator{\E}{E}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\var}{var}
+\DeclareMathOperator{\Sd}{Sd}
+\DeclareMathOperator{\sd}{sd}
+\DeclareMathOperator{\Bin}{Bin}
+\DeclareMathOperator{\Beta}{Beta}
+\DeclareMathOperator{\Poisson}{Poisson}
+\DeclareMathOperator{\betacdf}{betacdf}
+\DeclareMathOperator{\Invchi2}{Inv-\chi^2}
+\DeclareMathOperator{\logit}{logit}
+\DeclareMathOperator{\N}{N}
+\DeclareMathOperator{\U}{U}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\trace}{trace}
+\newcommand{\vc}[1] { \mathbf{#1} }
+\newcommand{\vs}[1] { \boldsymbol{#1} }
+
+% Horizontal line
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+
+\pagestyle{empty}
+
+\begin{document}
+%\SweaveOpts{concordance=TRUE}
+% \SweaveOpts{concordance=TRUE}
+\thispagestyle{empty}
+
+\begin{titlepage}
+
+\center
+\textsc{\LARGE Uppsala University}\\[1.5cm] % Name of your university/college
+\includegraphics[scale=.2]{files/uu_logo.png}\\[1cm]
+\textsc{\Large Bayesian Statistics and Data Analysis}\\[0.5cm]
+\textsc{\large }\\[0.5cm]
+
+\HRule \\[0.4cm]
+{ \huge \bfseries Assignment 6}\\[0.4cm] % Title of your document
+\HRule \\[1.5cm]
+
+\vfill
+
+\end{titlepage}
+
+
+%\HRule
+
+%\section*{Bayesian Data Analysis - Assignment 1}
+
+\HRule
+
+\input{general_info.tex}
+
+\HRule
+
+% General Knitr options
+% (this cannot be input since the file runs knitr before LaTeX)
+<<echo=FALSE,eval=TRUE>>=
+options(continue="  ", prompt="> ")
+knitr::opts_chunk$set(size = "small")
+@
+
+\newpage
+
+\subsubsection*{Information on this assignment}
+This assignment is related to Chapters 10 and 11.
+
+\textbf{Reading instructions:} Chapter 10 and 11 in BDA3, see reading instructions.
+
+% \textbf{Grading instructions:} The grading will be done in peergrade. All grading questions and evaluations for assignment 6 can be found \href{https://avehtari.github.io/BDA_course_Aalto/assignments/assignment6_rubric.html}{\textbf{here}}.
+
+\input{general_info_reporting_accuracy.tex}
+
+\input{general_info_rstan.tex}
+
+\newpage
+
+\subsection*{1. Generalized linear model: Bioassay with Stan}
+
+Replicate the computations for the bioassay example of section 3.7 (BDA3) using Stan.
+
+\begin{enumerate}
+\item Write down the model for the bioassay data in Stan syntax. For instructions in reporting your implementation, you can refer to parts 2 c) - g) in Assignment 5. More information on the bioassay data can be found in Section 3.7 of the course book. To get access to data, use the following code:
+
+<<echo=TRUE, eval=FALSE>>=
+library(bsda)
+data("bioassay")
+@
+
+Use the Gaussian prior
+\begin{align*}
+    \begin{bmatrix}
+    \alpha \\ \beta
+    \end{bmatrix}
+    \sim
+    \text{N} \left(\vs \mu_0, \vc \Sigma_0 \right), \qquad
+    \text{where} \quad
+    \vs \mu_0 = \begin{bmatrix} 0 \\ 10 \end{bmatrix} \quad \text{and} \quad
+    \vc \Sigma_0 = \begin{bmatrix} 2^2 & 12 \\ 12 & 10^2 \end{bmatrix}.
+\end{align*}
+
+\textbf{Hint!} You will need Stan functions \texttt{multi\_normal} and \texttt{binomial\_logit} for implementing the prior and observation model, respectively. In Stan code, it is easiest to declare a variable (say \texttt{theta}) which is a two-element vector so that the first value denotes $\alpha$ and latter one $\beta$. This is because the \texttt{multi\_normal} function that you need for implementing the prior requires a vector as an input.
+
+\item Use $\widehat{R}$ for convergence analysis. You can either use Eq. (11.4) in BDA3 or the later version that can be found \href{https://arxiv.org/abs/1903.08008}{\textbf{here}}. You should specify which $\widehat{R}$ you used. In R the best choice is to use function \texttt{Rhat} from package \texttt{rstan} (see \texttt{?rstan::Rhat}). To check $\widehat{R}$ and other diagnostics, you can also call \texttt{monitor(fit)}, where \texttt{fit} is the fit object returned by Stan's sampling function. Report the $\widehat{R}$ values both for $\alpha$ and $\beta$ and discuss the convergence of the chains.
+\textbf{Briefly explain in your own words how to interpret the obtained} $\widehat{R}$ \textbf{values}.
+
+\item Plot the draws for $\alpha$ and $\beta$ (scatter plot) and include this plot in your report. You can compare the results to Figure~3.3b in BDA3 to verify that your code gives sensible results. Notice though that the results in Figure~3.3b are generated from posterior with a uniform prior, so even when your algorithm works perfectly, the results will look slightly different (although fairly similar).
+
+\end{enumerate}
+
+
+\end{document}
+

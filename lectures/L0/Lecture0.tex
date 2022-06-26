@@ -1,0 +1,130 @@
+\documentclass[10pt,handout]{beamer}
+%\documentclass[10pt]{beamer}
+\usepackage[english]{babel} % Anpassa efter svenska. Ger svensk logga.
+\usepackage[utf8]{inputenc} % Anpassa efter linux
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=cyan,
+}
+\usepackage{../common/beamerthemeUppsala}
+%\usetheme{Uppsala}
+%\usecolortheme{UU} % Anpassa efter UU:s frger och logga
+%\hypersetup{pdfpagemode=FullScreen} % Adobe Reader ska ppna fullskrm
+\setbeamertemplate{itemize items}[circle]
+
+% \usepackage{beamerthemesplit}
+\usepackage{amsmath}
+% \usepackage{amssymb}
+% \usepackage{graphics}
+% \usepackage{graphicx}
+% \usepackage{epsfig}
+% \usepackage[latin1]{inputenc}
+ \usepackage{color}
+% \usepackage{fancybox}
+% \usepackage{psfrag}
+% \usepackage[english]{babel}
+ \setbeamertemplate{footline}{\hfill\insertframenumber/\inserttotalframenumber}
+
+% Input new commands
+\input{../common/commands.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\setlength{\parskip}{3mm}
+\title[]{{\color{black}Bayesian Statistics and Data Analysis \\ Course information}}
+\author[]{M{\aa}ns Magnusson \\ Department of Statistics, Uppsala University}
+\date{}
+
+\begin{document}
+
+\frame{\titlepage
+% \thispagestyle{empty}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Course information}
+\frame{\sectionpage}
+
+\begin{frame}{Course information}
+The aims of this course are that you should:\\[3mm]\pause
+\begin{enumerate}
+\item get a good knowledge of a large number of machine learning models,
+\item become able to use methods for evaluating and improving predictive models,
+\item become able to handle big data,
+\item become able to train and use machine learning models in R,
+\item become able to train and use neural networks using Keras/TensorFlow.
+\item become able to describe and discuss ethical aspects of big data and black box-models,
+\end{enumerate}
+
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Pre-requisites}
+  \begin{itemize}
+  \item Basic terms of probability theory
+    \begin{itemize}
+    \item probability, probability density, distribution
+    \item sum, product rule, and Bayes' rule
+    \item expectation, mean, variance, median
+  \end{itemize}
+  \item Some linear algebra and calculus
+  \item Basic visualisation techniques (R or Python)
+  \begin{itemize}
+    \item histogram, density plot, scatter plot
+  \end{itemize}
+  \end{itemize}
+
+  First assignment is a recap.
+
+\end{frame}
+
+
+
+\begin{frame}{Course Outline}
+Two main parts:
+\begin{itemize}
+\item Core Content (9 lecture blocks)\pause
+\item Assignments (8 individual assignments)\pause
+\item Mini-project on a supervised project (2-3 students)\pause
+\end{itemize}
+Exact dates and details; see the course page.
+\end{frame}
+
+\begin{frame}{Core Content}
+
+\begin{itemize}
+\item Two lectures/computer labs (approx. 4h)
+\begin{itemize}
+\item Lecture(s): present overall theory and content (overview)
+\item Computer labs(s): Hands on help with the assignment if you get stuck. \emph{Start before the computer assignment!}
+\end{itemize}
+\item Online video material and reading assignments (approx. 4-6h, 50-90 pages a week)
+\item \emph{Note!} There might be some overlap between reading instructions.
+\item An individual computer assignment (approx. 12-16h). Deadline Sundays 23.59.\pause
+\item Recommended workflow for each week
+\begin{itemize}
+\item Do the reading assignments
+\item Attend lecture
+\item Watch the videos (although, optional)
+\item Do the assignment
+\end{itemize}
+\end{itemize}
+
+\end{frame}
+
+
+
+
+\end{document}
+
+

@@ -81,7 +81,7 @@ Requirements for the projects are:
 \begin{itemize}
 \item Your project should be a Bayesidan Data Analysis using Stan.
 \item Real data should be used (see below for details).
-\item At least two different models shopuld be estimated and compared.
+\item At least two different models should be estimated and compared.
 \end{itemize}
 
 \emph{For PhD students}: You can choose to make a small project related to your research interest instead. Although, it should still be a 4 page paper output.
@@ -129,7 +129,7 @@ To minimize the project work's total workload, I suggest you see the proposal as
 \label{project_report}
 
 The Project outcome is a report in the ICML paper format that can be found \href{https://icml.cc/Conferences/2020/StyleAuthorInstructions}{[here]}.
-The ICML format is also available in overleaf here: \href{https://www.overleaf.com/latex/templates/icml-2019-submission-template/vkqjjvzjvhdc}{[here]}
+The ICML format is also available in overleaf here: \href{https://www.overleaf.com/latex/templates/icml-2019-submission-template/vkqjjvzjvhdc}{[here]}. We recommend using Overleaf for writing the report.
 
 The paper should consist of \emph{between three and a half (3.5) and four (4) pages}, excluding references and eventual appendices. The paper should include the following four (4) sections:
 \begin{enumerate}
@@ -190,7 +190,7 @@ Specific presentation recommendations:
 
 \subsection{Project Grading}
 
-Below are the criterias used when grading the mini-projects. Some general comments on grading are:
+Below are the criteria used when grading the mini-projects. Some general comments on grading are:
 
 \begin{enumerate}
 \item The more students the higher the quality expected of the project, i.e. a better report is expected from a three-student report than a two-student report.

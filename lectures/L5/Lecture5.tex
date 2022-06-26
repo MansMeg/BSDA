@@ -53,6 +53,7 @@
 \section{Introduction}
 \frame{\sectionpage}
 
+
 \begin{frame}
 
 \frametitle{ It's all about expectations}
@@ -125,6 +126,7 @@
   \end{itemize}
 
 \end{frame}
+
 
 \begin{frame}
 
@@ -250,6 +252,8 @@
   \end{itemize}
 
 \end{frame}
+
+
 
 \begin{frame}
 
@@ -380,6 +384,7 @@
 
 \end{frame}
 
+
 \begin{frame}
 
 \frametitle{ Why Metropolis algorithm works}
@@ -480,27 +485,6 @@
 
 \end{frame}
 
-% \begin{frame}
-
-% \frametitle{ Metropolis-Hastings algorithm}
-
-%   \begin{itemize}
-%   \item Update of parameters
-%     \begin{itemize}
-%     \item jointly
-%     \item blocked
-%     \item  single-component
-%     \end{itemize}
-%   \item Order of single or blocked updates is free
-%     \begin{itemize}
-%       \item same for all rounds
-%       \item random
-%       \item not all parameters updated each round
-%     \end{itemize}
-%   \end{itemize}
-
-% \end{frame}
-
 \begin{frame}
 
 \frametitle{ Gibbs sampling}
@@ -553,7 +537,6 @@
 
 \end{frame}
 
-
 \begin{frame}
 
 \frametitle{ Example of uncertainty in modeling}
@@ -571,54 +554,6 @@
   Source: Jonah Gabry
 
 \end{frame}
-
-% \begin{frame}{HMC / NUTS}
-%   \includegraphics[width=\textwidth,clip]{typicalset49.pdf}
-% \end{frame}
-
-% \begin{frame}{HMC / NUTS}
-%   \includegraphics[width=\textwidth,clip]{typicalset50.pdf}
-% \end{frame}
-
-% \begin{frame}{HMC / NUTS}
-%   \includegraphics[width=\textwidth,clip]{typicalset51.pdf}
-% \end{frame}
-
-% \begin{frame}{HMC / NUTS}
-%   \includegraphics[width=\textwidth,clip]{typicalset52.pdf}
-% \end{frame}
-
-% \begin{frame}{Hamiltonian Monte Carlo}
-
-%   \begin{itemize}
-%   \item demo12\_1
-%   \item Uses gradient information for more efficient sampling
-%   \item Alternating dynamic simulation and sampling of the energy
-%     level
-%   \item Parameters
-%     \begin{itemize}
-%     \item step size, number of steps in each chain
-%     \end{itemize}
-% \pause
-% \item No U-Turn Sampling
-%   \begin{itemize}
-%   \item adaptively selects number of steps to improve robustness and
-%     efficiency
-%   \end{itemize}
-% \pause
-% \item Adaptation in Stan
-%   \begin{itemize}
-%   \item Step size adjustment (mass matrix) is estimated during initial
-%     adaptation phase
-%   \end{itemize}
-% \item See more
-%   \begin{itemize}
-%   \item \url{https://icerm.brown.edu/video_archive/\#/play/1107}
-%   \item \url{https://arxiv.org/abs/1701.02434}
-%   \end{itemize}
-% \end{itemize}
-
-% \end{frame}
 
 \begin{frame}
 
@@ -697,6 +632,8 @@
 
 \end{frame}
 
+
+
 \begin{frame}[fragile]
 
 \frametitle{ $\widehat{R}$: comparison of within and between variances of the chains}
@@ -747,6 +684,8 @@
 
 \end{frame}
 
+
+
 % \note{1) $B/n$ on varsinainen ketjujen keskiarvojen varianssi, jossa $n$
 % johtuu siitä että ne keskiarvot joiden varianssia lasketaan on
 % muodostettu $n$ näytteestä ja siten varianssi pienempi, mutta
@@ -787,6 +726,7 @@
 \end{itemize}
 
 \end{frame}
+
 
 \begin{frame}[fragile]
 
@@ -863,46 +803,6 @@
   R-hat for assessing convergence of MCMC. Bayesian Analysis, doi:10.1214/20-BA1221. \url{https://projecteuclid.org/euclid.ba/1593828229}.
 
 \end{frame}
-
-% \begin{frame}
-
-% \frametitle{ Convergence diagnostics}
-
-%   \begin{itemize}
-%   \item After how many iterations can we check for convergence
-%     \begin{itemize}
-%     \item it's not possible to no this beforehand
-%     \item Stan uses NUTS which is an efficient sampler and default is
-%       to use 4 chains, get 1000 draws from each for adaptation and
-%       warmup, 1000 more draws from each and estimate $\widehat{R}$ for
-%       each parameter
-%     \end{itemize}
-%   \end{itemize}
-
-% \end{frame}
-
-% \begin{frame}{Divergences}
-
-%   \begin{itemize}
-%   \item Diagnosing difficult to reach corners of the posterior
-%   \item Case study \url{http://mc-stan.org/users/documentation/case-studies/divergences_and_bias.html}
-%   \end{itemize}
-
-% \end{frame}
-
-% \begin{frame}{Tree depth}
-
-%   \begin{itemize}
-%   \item Diagnosing long tails
-%   \item Case studies
-%     \begin{itemize}
-%     \item R: \url{http://mc-stan.org/users/documentation/case-studies/rstan_workflow.html}
-%     \item Python: \url{http://mc-stan.org/users/documentation/case-studies/pystan_workflow.html}
-%     \end{itemize}
-
-%   \end{itemize}
-
-% \end{frame}
 
 \begin{frame}
 
@@ -995,6 +895,8 @@
     from a single chain, the multi-chain estimate has smaller variance
  \end{itemize}
 \end{frame}
+
+
 
 \begin{frame}
 
@@ -1151,46 +1053,6 @@
   \end{itemize}
 
 \end{frame}
-
-\begin{frame}
-
- \frametitle{ Next week: HMC, NUTS, and dynamic HMC}
-
-   Effective sample size $\ESS = S_\eff \approx S/\hat{\tau}$\\
-  \makebox[12cm][t]{
-    \hspace{-.7cm}
-     \begin{minipage}{12cm}
-     \includegraphics[width=6cm]{figs/hmc1trace.pdf}
-     \includegraphics[width=6cm]{figs/hmc1acf.pdf}\\
-     \includegraphics[width=6cm]{figs/hmc1mcerr.pdf}
-     \hspace{0cm}
-     \begin{minipage}[t][4cm][t]{6cm}
-       \vspace{-3.5cm}
-       \begin{align*}
-         \hat{\tau} & = 1 + 2 \sum_{t=1}^T \hat{\rho}_t\\
-                 & \approx 1.6
-       \end{align*}
-     \end{minipage}
-   \end{minipage}
-   }
-
-\end{frame}
-
-\begin{frame}
-
- \frametitle{ Further diagnostics}
-
-   \begin{itemize}
-   \item Dynamic HMC/NUTS has additional diagnostics
-     \begin{itemize}
-     \item divergences
-     \item tree depth exceedences
-     \item fraction of missing information
-     \end{itemize}
-   \end{itemize}
-
- \end{frame}
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

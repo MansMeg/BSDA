@@ -463,6 +463,225 @@
 \end{frame}
 
 
+\begin{frame}
+
+  \frametitle{Weakly informative priors}
+
+  \begin{itemize}
+  \item Weakly informative priors produce computationally better
+    behaving posteriors
+    \begin{itemize}
+    \item quite often there's at least some knowledge about the
+      scale
+    \item useful also if there's more information from previous
+      observations, but not certain how well that information is
+      applicable in a new case uncertainty
+    \end{itemize}
+    \pause
+    \item Construction
+      \begin{itemize}
+      \item Start with some version of a noninformative prior distribution and then add enough
+        information so that inferences are constrained to be reasonable.
+      \item Start with a strong, highly informative prior and broaden it to account for uncertainty
+        in one's prior beliefs and in the applicability of any historically based prior distribution
+        to new data.
+      \end{itemize}
+    \item Stan team prior choice recommendations \url{https://github.com/stan-dev/stan/wiki/Prior-Choice-Recommendations}
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+
+  \frametitle{Example of informative prior}
+
+  \begin{itemize}
+  \item The percentage of girl births is remarkably stable at about
+    48.8\% girls, rarely varying by more than 0.5\% from this rate
+  \only<2-3>{\item There was a study on the percentage of girl births among
+    parents in attractiveness categories 1--5 (assessed by
+    interviewers in a face-to-face survey)}
+  \end{itemize}
+  \begin{center}
+  \only<3>{\includegraphics[width=9cm]{figs/sexratio_bayes_1.pdf}}
+  \only<4>{\includegraphics[width=9cm]{figs/sexratio_bayes_2.pdf}}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+
+  \frametitle{Example of weakly informative prior}
+
+  \begin{itemize}
+  \item Gabry et al (2019). Visualization in Bayesian workflow.
+    \only<1>{
+    \begin{itemize}
+    \item Estimation of human exposure to air pollution from
+      particulate matter measuring less than 2.5 microns in diameter
+      (PM$_{2.5}$)
+  \item A recent report estimated that PM$_{2.5}$ is responsible for three
+    million deaths worldwide each year (Shaddick et al, 2017)
+  \end{itemize}
+  }
+  \end{itemize}
+  \begin{center}
+  \only<2>{\includegraphics[width=10cm]{figs/map-data.png}\\Satellite estimates and ground monitor locations}
+  \only<3>{\includegraphics[width=6.5cm]{figs/plot2_bigger.png}}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+
+  \frametitle{Example of weakly informative prior}
+
+  \begin{center}
+    \only<1>{\includegraphics[width=11cm]{figs/pm25_pp1a.pdf}}
+    \only<2>{\includegraphics[width=11cm]{figs/pm25_pp1b.pdf}}
+    \only<3>{\includegraphics[width=11cm]{figs/pm25_pp2.pdf}}
+\end{center}
+\end{frame}
+
+\begin{frame}
+
+  \frametitle{Effect of incorrect priors?}
+
+  \begin{itemize}
+  \item Introduce bias, but often still produce smaller estimation
+    error because the variance is reduced
+    \begin{itemize}
+    \item bias-variance tradeoff
+    \end{itemize}
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Structural information \only<1-2>{in predicting future}\only<3>{-- Prophet by Facebook}}
+
+    \only<1>{\hspace*{-2.5cm}\includegraphics[width=16cm]{figs/rstan_downloads_forecast.pdf}}
+    \only<2>{\hspace*{-2.5cm}\includegraphics[width=16cm]{figs/rstan_downloads_forecast_zoomed.pdf}}
+    \only<3>{\hspace*{-.5cm}\includegraphics[width=11.25cm]{figs/rstan_downloads_components.pdf}}
+
+\end{frame}
+
+%skip rest in video
+
+\begin{frame}
+  \frametitle{Sufficient statistics*}
+
+  \begin{itemize}
+  \item The quantity $t(y)$ is said to be a {\em sufficient statistic}
+    for $\theta$, because the likelihood for $\theta$ depends on the
+    data $y$ only through the value of $t(y)$.
+  \end{itemize}
+
+\end{frame}
+
+%%% demos
+
+\begin{frame}
+  \frametitle{Posterior visualization and inference demos}
+
+  \begin{itemize}
+  \item demo2\_3: Simulate samples from Beta(438,544), and draw
+    a histogram of $\theta$ with quantiles.
+  \end{itemize}
+  \vspace{-\baselineskip}
+  \begin{center}
+  \includegraphics[width=11cm]{figs/demo2_3.pdf}
+\end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Posterior visualization and inference demos}
+
+  \begin{itemize}
+  \item demo2\_4: Compute posterior distribution in a grid.
+  \end{itemize}
+  \includegraphics[width=11cm]{figs/demo2_4a.pdf}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Posterior visualization and inference demos}
+
+  \begin{itemize}
+  \item demo2\_4: Sample using the inverse-cdf method.
+  \end{itemize}
+  \includegraphics[width=11cm]{figs/demo2_4b.pdf}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Algae}
+  \framesubtitle{Exercise}
+
+Algae status is monitored in 274 sites at Finnish lakes and rivers.
+The observations for the 2008 algae status at each site are presented
+in file \emph{algae.mat} ('0': no algae, '1': algae present).
+% In year 2008 blue-green algae was observed at 44 sites.
+Let $\pi$ be the probability of a monitoring site having detectable
+blue-green algae levels.
+
+\begin{itemize}
+\item Use a binomial model for observations and a \emph{beta}(2,10) prior.
+\item What can you say about the value of the unknown $\pi$?
+\item Experiment how the result changes if you change the prior.
+\end{itemize}
+
+\end{frame}
+
+%%%normal
+
+\begin{frame}
+  \frametitle{Normal / Gaussian}
+
+  \begin{itemize}
+  \item Observations $y$ real valued
+  \item Mean $\theta$ and variance $\sigma^2$ (or deviation $\sigma$)\\
+    (first assume $\sigma^2$ known)
+  \end{itemize}
+  \vskip -2mm
+  \begin{align*}
+    p(y|\theta)&=\frac{1}{\sqrt{2\pi}\sigma}\exp\left(-\frac{1}{2\sigma^2}(y-\theta)^2\right)\\
+    y & \sim \N(\theta,\sigma^2)
+  \end{align*}
+
+  \begin{center}
+      \includegraphics[clip]{figs/kuva2b_1}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+
+  \frametitle{Reasons to use Normal distribution}
+
+  \begin{itemize}
+  \item Normal distribution often justified based on central limit theorem
+  \item More often used due to the computational convenience or tradition
+  \end{itemize}
+
+\end{frame}
+
+%%skip in video
+
+\begin{frame}
+
+  \frametitle{Central limit theorem*}
+
+  \begin{itemize}
+  \item De Moivre, Laplace, Gauss, Chebysev, Liapounov, Markov, et al.
+  \item Given certain conditions sum (and mean) of random variables
+    approach Gaussian distribution as d $n \rightarrow \infty$
+  \item Problems
+    \begin{itemize}
+    \item does not hold for all distributions, e.g., Cauchy
+    \item may require large $n$,\\ e.g.
+      Binomial, when $\theta$ close to $0$ or $1$
+    \item does not hold if one the variables has much larger scale
+    \end{itemize}
+  \end{itemize}
+
+\end{frame}
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

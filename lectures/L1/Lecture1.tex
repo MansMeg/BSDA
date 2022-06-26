@@ -4,6 +4,7 @@
 \usepackage[utf8]{inputenc} % Anpassa efter linux
 \usepackage{graphicx}
 \usepackage{hyperref}
+\usepackage{listings}
 
 \hypersetup{
     colorlinks=true,
@@ -336,6 +337,216 @@
     \end{itemize}
   \end{itemize}
 \end{frame}
+
+\begin{frame}
+
+  \frametitle{Probabilistic programming}
+
+  \begin{center}
+   \vspace{-\baselineskip}
+    \includegraphics[width=5cm]{figs/wide_ensemble.png}\\
+   \vspace{2\baselineskip}
+  {\large Enables agile workflow for developing probabilistic models}\\
+   \vspace{\baselineskip}
+   language \, -- \,
+   automated inference \, -- \,
+   diagnostics
+   \vspace{\baselineskip}
+  \vfill
+    \includegraphics[width=1.5cm]{figs/stan_logo_wide.png}\\
+    \url{mc-stan.org}
+  \end{center}
+
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Binomial model for treatment/control comparison}
+
+  \begin{itemize}
+  \item Two groups of patients: treatment and control
+    \begin{itemize}
+    \item Binary outcome
+    \item Is the treatment useful?
+    \end{itemize}
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Binomial model for treatment/control comparison}
+  {\footnotesize
+  \begin{lstlisting}
+data {
+  int<lower=0> N1;
+  int<lower=0> y1;
+  int<lower=0> N2;
+  int<lower=0> y2;
+}
+parameters {
+  real<lower=0,upper=1> theta1;
+  real<lower=0,upper=1> theta2;
+}
+model {
+  theta1 ~ beta(1,1);
+  theta2 ~ beta(1,1);
+  y1 ~ binomial(N1,theta1);
+  y2 ~ binomial(N2,theta2);
+}
+generated quantities {
+  real oddsratio;
+  oddsratio = (theta2/(1-theta2))/(theta1/(1-theta1));
+}
+  \end{lstlisting}
+}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Binomial model for treatment/control comparison}
+
+  RStanARM
+  {\scriptsize
+  \begin{lstlisting}
+    fit_bin2 <- stan_glm(y/N ~ grp2, family = binomial(),
+                         data = d_bin2, weights = N)
+  \end{lstlisting}
+}
+\end{frame}
+
+\begin{frame}{Modeling nature}
+
+  \begin{itemize}
+  \item Drop a ball from different heights and measure time
+    \pause
+    \begin{itemize}
+    \item Newton
+    \item air resistance, air pressure, shape and surface structure of the ball
+    \item relativity
+    \end{itemize}
+    \pause
+  \item Taking into account the accuracy of the measurements, how
+    accurate model is needed?
+    \pause
+    \begin{itemize}
+    \item often simple models are adequate and useful
+    \item \emph{All models are wrong, but some of them are useful},
+      George P. Box
+    \end{itemize}
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Reminder: Uncertainty and probabilistic modeling}
+
+  \begin{itemize}
+  \item Two types of uncertainty: aleatoric and epistemic
+    \vspace{\baselineskip}
+  \item Representing uncertainty with probabilities
+    \vspace{\baselineskip}
+  \item Updating uncertainty
+    \vspace{\baselineskip}
+  %   \pause
+  % \item Additional reading material in Noppa (see Lecture 1)
+   \end{itemize}
+\end{frame}
+
+\begin{frame}{Questions}
+
+  \begin{itemize}
+  \item<1-> Pick a number between 1--5
+    \begin{itemize}
+    \item<2-> raise as many fingers
+    \item<3-> is the number of fingers raised random (by you or by others)?
+    \end{itemize}
+    \vspace{\baselineskip}
+  \item<4-> If we build a robot with very fast vision which can observe
+    the rotating coin accurately, is the throw random for the robot?
+    \vspace{\baselineskip}
+  \item<5-> Is the quantum uncertainty aleatoric or epistemic?
+    \vspace{\baselineskip}
+  \item<6-> What is your own example with both aleatoric and epistemic
+    uncertainty?
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Rest of the course}
+
+  \begin{itemize}
+  \item Basic models which can be used as building blocks
+    \vspace{\baselineskip}
+  \item Basic computation
+    \vspace{\baselineskip}
+  \item Typical simple scientific data analysis cases
+     \begin{itemize}
+     \item e.g. comparison of treatments
+     \end{itemize}
+    \vspace{\baselineskip}
+  \item Presentation of the results
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Some important terms}
+
+  \begin{itemize}
+  \item[-] probability
+  \item[-] probability density
+  \item[-] probability mass
+  \item[-] probability density function (pdf)
+  \item[-] probability mass function (pmf)
+  \item[-] probability distribution
+  \item[-] discrete probability distribution
+  \item[-] continuous probability distribution
+  \item[-] cumulative distribution function (cdf)
+  \item[-] likelihood
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Ambiguous notation in statistics}
+
+  \begin{itemize}
+  \item[] In $p(y|\theta)$
+    \pause
+  \begin{itemize}
+  \item[-] $y$ can be variable or value
+    \begin{itemize}
+    \item[] we could clarify by using $p(Y|\theta)$ or $p(y|\theta)$
+    \end{itemize}
+    \pause
+  \item[-] $\theta$ can be variable or value
+    \begin{itemize}
+    \item[] we could clarify by using $p(y|\Theta)$ or $p(y|\theta)$
+    \end{itemize}
+    \pause
+  \item[-] $p$ can be a discrete or continuous function of $y$ or $\theta$
+    \begin{itemize}
+    \item[] we could clarify by using $P_Y$, $P_\Theta$, $p_Y$ or $p_\Theta$
+    \end{itemize}
+    \pause
+\item[-]
+  $P_Y(Y|\Theta=\theta)$ is a probability mass function, sampling distribution, observation model
+    \pause
+\item[-]
+$P(Y=y|\Theta=\theta)$ is a probability
+    \pause
+\item[-]
+$P_\Theta(Y=y|\Theta)$ is a likelihood function (can be discrete or continuous)
+    \pause
+\item[-] $p_Y(Y|\Theta=\theta)$ is a probability density function, sampling distrbution, observation model
+    \pause
+\item[-] $p(Y=y|\Theta=\theta)$ is a density
+    \pause
+\item[-] $p_\Theta(Y=y|\Theta)$ is a likelihood function (can be discrete or continuous)
+    \pause
+  \item[-] $y$ and $\theta$ can also be mix of continuous and discrete
+    \pause
+    \item[-] Due to the sloppines sometimes likelihood is used to refer
+$P_{Y,\theta}(Y|\Theta)$, $p_{Y,\theta}(Y|\Theta)$
+
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+
 
 \end{document}
 

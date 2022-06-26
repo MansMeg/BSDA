@@ -9,3 +9,7 @@ TODO.tdl
 *.synctex.gz
 project/*.tex
 assignments/*.tex
+lectures/*/*.toc
+lectures/*/*.nav
+lectures/*/*.snm
+lectures/*/*.vrb

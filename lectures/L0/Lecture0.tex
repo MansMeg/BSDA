@@ -55,14 +55,17 @@
 \frame{\sectionpage}
 
 \begin{frame}{Course information}
-The aims of this course are that you should:\\[3mm]\pause
+The aims of this course are that, after this course you should:\\[3mm]\pause
 \begin{enumerate}
-\item get a good knowledge of a large number of machine learning models,
-\item become able to use methods for evaluating and improving predictive models,
-\item become able to handle big data,
-\item become able to train and use machine learning models in R,
-\item become able to train and use neural networks using Keras/TensorFlow.
-\item become able to describe and discuss ethical aspects of big data and black box-models,
+\item have knowledge in basic concepts, philosophy, and perspectives in Bayesian Statistics,
+\item derive posterior distributions in simple situations,
+\item derive and use predictive distributions,
+\item identify and formulate Bayesian probabilistic models for analysis and predictions,
+\item estimate models using contemporary computer-based methods for posterior approximations,
+\item understand and use basic principles for decisions under uncertainty,
+\item have knowledge about and be able to use Bayesian methods for model comparisons,
+\item be able to critically evaluate Bayesian methods,
+\item report, orally and in writing, a Bayesian statistical analysis
 \end{enumerate}
 
 \end{frame}
@@ -71,20 +74,20 @@ The aims of this course are that you should:\\[3mm]\pause
 \begin{frame}
   \frametitle{Pre-requisites}
   \begin{itemize}
-  \item Basic terms of probability theory
+  \item Basic probability theory
     \begin{itemize}
     \item probability, probability density, distribution
     \item sum, product rule, and Bayes' rule
     \item expectation, mean, variance, median
   \end{itemize}
-  \item Some linear algebra and calculus
+  \item Basic linear algebra and calculus
   \item Basic visualisation techniques (R or Python)
   \begin{itemize}
     \item histogram, density plot, scatter plot
   \end{itemize}
   \end{itemize}
 
-  First assignment is a recap.
+  \emph{First assignment is a recap.}
 
 \end{frame}
 
@@ -95,7 +98,7 @@ Two main parts:
 \begin{itemize}
 \item Core Content (9 lecture blocks)\pause
 \item Assignments (8 individual assignments)\pause
-\item Mini-project on a supervised project (2-3 students)\pause
+\item Mini-project: do your own Bayesian analysis (2-3 students)\pause
 \end{itemize}
 Exact dates and details; see the course page.
 \end{frame}
@@ -103,14 +106,13 @@ Exact dates and details; see the course page.
 \begin{frame}{Core Content}
 
 \begin{itemize}
-\item Two lectures/computer labs (approx. 4h)
+\item Every week: lectures/and assignments (approx. 4h)
 \begin{itemize}
-\item Lecture(s): present overall theory and content (overview)
-\item Computer labs(s): Hands on help with the assignment if you get stuck. \emph{Start before the computer assignment!}
-\end{itemize}
 \item Online video material and reading assignments (approx. 4-6h, 50-90 pages a week)
-\item \emph{Note!} There might be some overlap between reading instructions.
-\item An individual computer assignment (approx. 12-16h). Deadline Sundays 23.59.\pause
+\item Lecture(s): present overall theory and content (overview)
+\item Assignment(s): Computational and theoretical individual work. \emph{Start monday morning every week!}
+\end{itemize}
+\item An individual assignment (approx. 12-16h). Deadline Sundays 23.59.\pause
 \item Recommended workflow for each week
 \begin{itemize}
 \item Do the reading assignments
@@ -122,16 +124,15 @@ Exact dates and details; see the course page.
 
 \end{frame}
 
-%% OK
-
-
+\section{Assignments}
+\frame{\sectionpage}
 
 \begin{frame}{Assignments}
 
 \begin{enumerate}
-\item Both implementation of core components and state-of-the-art methods\pause
+\item Core components and concepts and state-of-the-art methods\pause
 \item \emph{Warning!} There might be bugs in the assignments!\pause
-\item All labs can be turned in a three times. Deadline last day of course and one month after last day of course.
+\item All labs can be turned in a three times. See Studium for details.
 \item We will mark and return each assignment within 10 working days.
 \item \emph{Important!} Do not write your name anywhere and do the assignment evaluation!
 \item Three one hour zoom seminars per week with individual help on assignments.
@@ -139,66 +140,59 @@ Exact dates and details; see the course page.
 
 \end{frame}
 
-%% OK
-
 \begin{frame}
-  \frametitle{R vs Python}
+  \frametitle{R vs Python and Colab}
 
   \begin{itemize}
-  \item We strongly recommend using R in the course as there are more
-    packages for Stan and statistical analysis in general in R
-  \item If you are already fluent in Python, but not in R, then using Python
-    may be easier, but it can still be more useful to learn also R
+    \item We strongly recommend using R in the course as there are more
+    packages for Stan and statistical analysis in general in R\pause
+    \item If you are already fluent in Python, but not in R, then using Python may be easier, but it can still be more useful to learn also R\pause
+    \item We supply a Google Colab template with everything pre-installed.
   \end{itemize}
 
 \end{frame}
 
-% OK
-
 
 \begin{frame}{Stan}
 
-  Stan is a probabilistic programming framework and ecosystem
-
-  40+ developers, 100+ contributors, 100K+ users
-
-  R, Python, Julia, Scala, Stata, Matlab, command line interfaces
-
-  More than 120 R packages using Stan
-
-  Many packages to support diagnostics and workflow
-
-  Can be used for frequentist inference as well
-
+\begin{itemize}
+  \item Stan is a probabilistic programming framework (PPF) and ecosystem
+  \item 40+ developers, 100+ contributors, 100K+ users
+  \item R, Python, Julia, Scala, Stata, Matlab, command line interfaces
+  \item More than 120 R packages using Stan
+  \item Many packages to support diagnostics and workflow
+  \item Can be used for frequentist inference as well
+  \item Alternative PPF exists, Turing (Julia), Pyro (PyTorch), etc.
   \center
   \vspace{\baselineskip}
   \includegraphics[width=2.5cm]{figs/stan_logo_wide.png}\\
   mc-stan.org
+\end{itemize}
 
 \end{frame}
 
+\section{Mini-project}
+\frame{\sectionpage}
 
 \begin{frame}{Mini-project}
 
 \begin{itemize}
 \item See project instructions on webpage for details.\pause
-\item Supervised problem of choice on real data.
+\item Data analysis of choice on real data.
 \item 2-3 students.\pause
-\item Supply a half-page project proposal of data and problem at the end of block 6.\pause
+\item Supply a half-page project proposal of data and problem in the middle of the course.\pause
+\item Ideally, use a model not presented in this course.
 \item Project will last two weeks (half time) - but start earlier.
+\item The project should use Stan.
 \item Approximate 40 hours of work \emph{per student}.\pause
 \item The project should result in a 4 page report (PDF) using the ICML LaTeX template (see course page).
-\item Project oral presentation (10-15 minutes)\pause
-\item Each student will review one other project:
-\begin{enumerate}
-\item Write a 1-2 page review of the report.
-\item Discuss at the oral presentations.
-\end{enumerate}
+\item Project oral presentation (10-15 minutes)
 \end{itemize}
 \end{frame}
 
 
-
+\section{Practicalities}
+\frame{\sectionpage}
 
 \begin{frame}{Practicalities}
 
@@ -225,27 +219,29 @@ Exact dates and details; see the course page.
 
 \end{frame}
 
+\section{Examination}
+\frame{\sectionpage}
+
+
 \begin{frame}{Examination}
 
 \begin{enumerate}
 \item To pass (G): All labs, mini-project, and project review need to be passed\pause
 \item To pass with distinction (VG): 7/10 VG points\pause
-\item Each assignment has an extra (VG) task worth 1 VG point.\pause
+\item If everything is correct in an assignment, 1 VG point is awarded.\pause
 \item The mini-project is worth 2 VG-points (if it is passed with distinction).
 \item Ph.D. students: I suggest you get VG to pass the course. Make the project a potential paper.
 \end{enumerate}
 
 \end{frame}
 
+\section{Course improvements}
+\frame{\sectionpage}
 
 \begin{frame}{Course improvements since last time}
 
 \begin{itemize}
-\item Optional VG assignments and clearer info on how to get VG
-\item More even burden (hopefully)
-\item General updates of unclear parts in assignments
-\item General question in each assignment (4-5 paragraphs)
-\item \emph{Note!} There can be some new bugs after these updates.
+\item Multiple short TA sessions over zoom
 \end{itemize}
 
 \end{frame}

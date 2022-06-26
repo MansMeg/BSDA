@@ -1,0 +1,136 @@
+\ProvidesPackage{beamerthemeUppsala}[2011/08/13]
+\NeedsTeXFormat{LaTeX2e}[1995/12/01]
+
+% Defitition of some constants and colors
+\newdimen\beamer@sidebarwidth
+\beamer@sidebarwidth=2.5cm
+
+\definecolor{uured}{rgb}{0.6,0,0}
+\definecolor{uulgr}{rgb}{0.7,0.7,0.7}
+\definecolor{uullgr}{rgb}{0.9,0.9,0.9}
+
+% The next two commands define the used letters in sectioning in the sidebar;
+% they need to be math symbols, i.e. that they can stand in a $...$ environment;
+% for example: -, \cdot, \bullet, \ast, ...
+\newcommand{\sectionItemLetter}{\bullet}
+\newcommand{\subSectionItemLetter}{-}
+
+% General layout
+\beamersetleftmargin{0.5cm}
+\beamersetrightmargin{0.5cm}
+
+\setbeamertemplate{navigation symbols}{}
+\useheadtemplate{}
+\usefoottemplate{}
+
+\setbeamercolor{itemize item}{fg=uured}
+\setbeamercolor{enumerate item}{fg=uured}
+
+\setbeamercolor{itemize subitem}{fg=uured}
+\setbeamercolor{enumerate subitem}{fg=uured}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{calc}
+
+\newsavebox{\indentBox}
+
+% Side bar background
+\useleftsidebarcolortemplate{\color{uullgr}}
+
+\pgfdeclareimage[width=0.8\beamer@sidebarwidth]{UU-logo}{figs/UU_logo_2f_84}
+%\pgfdeclareimage[width=12cm]{UU-logo}{hund.jpg}
+\pgfdeclareimage[width=\beamer@sidebarwidth]{UU-logo2}{figs/UU_marginalsigill_5Svart}
+\useleftsidebartemplate{\beamer@sidebarwidth}{
+\vspace{1em}
+\hspace{0.1\beamer@sidebarwidth}
+\pgfuseimage{UU-logo}
+
+%% General layout of Sidebar
+%\pgfdeclareimage[width=\beamer@sidebarwidth]{UU-logo}{beamerthemeUppsalalogo}
+%\useleftsidebartemplate{\beamer@sidebarwidth}{
+%	\pgfuseimage{UU-logo}
+
+
+	\vskip 1em
+	\hspace{2pt}
+	\parbox{\beamer@sidebarwidth-0.4cm}{
+		\small \color{black} \hyperlinkpresentationstart{\beamer@shorttitle}
+	}
+	\vskip 1.5em
+	\insertverticalnavigation{\beamer@sidebarwidth}
+%	\vfill
+%	\parbox{\beamer@sidebarwidth-0.4cm}{\raggedright
+%		\color{black} ~~~~\insertshortauthor \\ ~~~~\insertshortdate
+%	}
+	\vspace{10pt}
+\vfill
+	\pgfuseimage{UU-logo2}
+
+}
+
+% Section entrys of sidebar (active/passive)
+\usesectionsidetemplate{
+	\parbox{\beamer@sidebarwidth-0.1cm}{\raggedright
+		\vspace{3pt}
+		\color{uured} \fontsize{6}{7} \selectfont
+		\sbox{\indentBox}{~$\sectionItemLetter$~}
+		\settowidth{\hangindent}{\usebox{\indentBox}}
+		\usebox{\indentBox}\insertsectionhead
+		\vspace{3pt}
+	}
+}{
+	\parbox{\beamer@sidebarwidth-0.1cm}{\raggedright
+		\vspace{3pt}
+		\color{black} \fontsize{6}{7} \selectfont
+		\sbox{\indentBox}{~$\sectionItemLetter$~}
+		\settowidth{\hangindent}{\usebox{\indentBox}}
+		\usebox{\indentBox}\insertsectionhead
+		\vspace{3pt}
+	}
+}
+
+% Subsection entrys of sidebar (active/passive)
+\usesubsectionsidetemplate{
+	\parbox{\beamer@sidebarwidth-0.1cm}{\raggedright
+		\color{uured}
+		\sbox{\indentBox}{\fontsize{6}{7} \selectfont ~$\phantom{\sectionItemLetter}$~\fontsize{4}{5} \selectfont $\subSectionItemLetter$~~}
+		\settowidth{\hangindent}{\usebox{\indentBox}}
+		\usebox{\indentBox}\insertsubsectionhead
+		\vspace{3pt}
+	}
+}{
+	\parbox{\beamer@sidebarwidth-0.1cm}{\raggedright
+		\color{black}
+		\sbox{\indentBox}{\fontsize{6}{7} \selectfont ~$\phantom{\sectionItemLetter}$~\fontsize{4}{5} \selectfont $\subSectionItemLetter$~~}
+		\settowidth{\hangindent}{\usebox{\indentBox}}
+		\usebox{\indentBox}\insertsubsectionhead
+		\vspace{3pt}
+	}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Titlepage
+\usetitlepagetemplate{
+	\begin{center}
+		\color{uured}
+		\Large \inserttitle \par
+		\normalsize \insertsubtitle \par \vspace{0.5cm}
+		\insertauthor \par \vspace{0.3cm}
+		\insertinstitute \par \vspace{0.3cm}
+		\insertdate \par \vspace{0.3cm}
+	\end{center}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Frametitles
+\useframetitletemplate{
+    \color{uured} \Large \insertframetitle $\phantom{g}$ \par \vspace{2pt} \hrule
+}
+

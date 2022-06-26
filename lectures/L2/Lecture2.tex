@@ -321,6 +321,146 @@
 
 \end{frame}
 
+%%%priors
+
+\begin{frame}
+  \frametitle{Priors}
+
+  \begin{itemize}
+  \item Conjugate prior (BDA3 p. 35)
+  \item Noninformative prior (BDA3 p. 51)
+  \item Proper and improper prior (BDA3 p. 52)
+  \item Weakly informative prior (BDA3 p. 55)
+  \item Informative prior (BDA3 p. 55)
+  \item Prior sensitivity (BDA3 p. 38)
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+
+  \frametitle{Conjugate prior}
+
+  \begin{itemize}
+  \item Prior and posterior have the same form
+    \begin{itemize}
+    \item only for exponential family distributions (plus for
+      some irregular cases)
+    \end{itemize}
+  \item Used to be important for computational reasons, and still
+    sometimes used for special models to allow partial analytic
+    marginalization (Ch 3)
+    \begin{itemize}
+    \item with dynamic Hamiltonian Monte Carlo used e.g. in Stan no any
+      computational benefit
+    \end{itemize}
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+
+  \frametitle{Beta prior for Binomial model}
+
+  \begin{itemize}
+  \item Prior \vskip -1.5\baselineskip
+    \begin{align*}
+      \text{Beta}(\theta|\alpha,\beta) \propto \theta^{\alpha-1}
+      (1-\theta)^{\beta-1}
+    \end{align*}
+  \item Posterior
+    \vskip -1.5\baselineskip
+    \begin{align*}
+      p(\theta|y,n,M) & \propto \theta^y(1-\theta)^{n-y}
+      \theta^{\alpha-1} (1-\theta)^{\beta-1}\\
+      &\uncover<2->{ \propto
+        \theta^{y+\alpha-1} (1-\theta)^{n-y+\beta-1}}\\
+      \uncover<3->{\text{after normalization}} &\\
+      \uncover<3->{p(\theta|y,n,M)}
+      &\uncover<3->{ = \text{Beta}(\theta|\alpha+y,\beta+n-y)}
+    \end{align*}
+    \vskip -2mm
+  \item<4-> $(\alpha-1)$ and $(\beta-1)$ can considered to be number of prior observations
+  \item<4-> Uniform prior when $\alpha=1$ and $\beta=1$
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Placenta previa}
+
+  \begin{itemize}
+  \item Beta prior centered on population average 0.485
+  \end{itemize}
+  \includegraphics[width=11cm]{figs/demo2_2.pdf}
+\end{frame}
+% We next consider an informative prior.  As discussed in Section \ref{beauty1}, the percentage of girl births is remarkably stable at about 48.8\% girls, rarely varying by more than 0.5\% from this rate.
+
+\begin{frame}
+  \frametitle{Benefits of integration and prior}
+
+  \vspace{-0.5\baselineskip}
+  Example: $n=10, y=10$ - uniform vs Beta(2,2) prior
+  \begin{center}
+  \includegraphics[width=7.8cm]{figs/dbbeta10a.pdf}\\
+  \includegraphics[width=7.8cm]{figs/dbbeta10b.pdf}
+  \end{center}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Beta prior for Binomial model}
+
+  \begin{itemize}
+  \item Posterior
+    \vskip -1.5\baselineskip
+    \begin{align*}
+      p(\theta|y,n,M) = \text{Beta}(\theta|\alpha+y,\beta+n-y)
+    \end{align*}
+    \item Posterior mean
+    \vskip -1\baselineskip
+    \begin{align*}
+      \E[\theta|y] = \frac{\alpha+y}{\alpha+\beta+n}
+    \end{align*}
+    \begin{itemize}
+    \item combination prior and likelihood information
+    \item when $n\rightarrow\infty$, $\text{E}[\theta|y]\rightarrow y/n$
+    \end{itemize}
+    \pause
+  \item  Posterior variance
+    \vskip -1\baselineskip
+    \begin{align*}
+      \var[\theta|y]=\frac{\E[\theta|y](1-\E[\theta|y])}{\alpha+\beta+n+1}
+    \end{align*}
+    \begin{itemize}
+    \item decreases when $n$ increases
+    \item when $n\rightarrow\infty$, $\var[\theta|y]\rightarrow 0$
+    \end{itemize}
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+
+  \frametitle{Noninformative prior, proper and improper prior}
+
+  \begin{itemize}
+  \item Vague, flat, diffuse of noninformative
+    \begin{itemize}
+    \item try to ``to let the data speak for themselves''
+    \item flat is not non-informative
+    \item flat can be stupid
+    \item making prior flat somewhere can make it non-flat somewhere
+      else
+    \end{itemize}
+  \item Proper prior has $\int p(\theta) = 1$
+  \item Improper prior density doesn't have a finite integral
+    \begin{itemize}
+    \item the posterior can still sometimes be proper
+    \end{itemize}
+  \end{itemize}
+
+\end{frame}
 
 
 

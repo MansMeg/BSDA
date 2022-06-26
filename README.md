@@ -34,10 +34,15 @@ You can find the course schedule on TimeEdit [here](https://cloud.timeedit.net/u
 ## Grading
 The course is graded with U (Underkänd/Fail), G (Godkänd/Pass), VG (väl godkänd/Pass with distinction).
 
-To pass, you should pass all assignments and the mini-project. 
+To pass, you should pass all assignments and the mini-project *at the set deadline*. 
 
-On each assignment, if everything is correct, a VG point can be awarded. Similarly on the mini-project, 2 VG points can be awarded. A total of 7 or more VG points is needed to get VG on the course. 
+On each assignment, if everything is correct, a VG point can be awarded. Similarly on the mini-project, if it is considered to be good, 2 VG points can be awarded. A total of 7 or more VG points is needed to get VG on the course. 
 
+## Follow up and late submissions
+There are two follow up deadlines (or follow-up corrections) during the course. First, the assignments can be submitted again at the deadline of the project work. Then additional submissions of assignments will be corrected. Also, roughly one month after the end of the course, assignments can be turned in again. *Assignments submitted in after the first deadline cannot get VG*.
+
+The project can also be turned in a second time a month after the end of the course. Then the student(s) need to submit both a project report, a PDF with presentation slides and a link to a video presentation of the mini-project.
+*Projects submitted in after the first deadline cannot get VG*.
 
 ## Course Literature and Video Material
 Below are the main references for the course.

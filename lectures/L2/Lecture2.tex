@@ -681,6 +681,116 @@ blue-green algae levels.
 
 \end{frame}
 
+\begin{frame}
+  \frametitle{Normal distribution - conjugate prior for $\theta$}
+
+  \begin{itemize}
+  \item Assume $\sigma^2$ known
+    \begin{align*}
+      &\text{Likelihood} & p(y|\theta) & \propto
+      \exp\left(-\frac{1}{2\sigma^2}(y-\theta)^2\right)\\ \\
+      &\text{Prior} & p(\theta) & \propto
+      \exp\left(-\frac{1}{2\tau_0^2}(\theta-\mu_0)^2\right)\\ \\
+      & & \uncover<2->{\exp(a)\exp(b)} & \uncover<2->{= \exp(a+b)} \\ \\
+      &\uncover<3->{ \text{Posterior}}&
+      \uncover<3->{p(\theta|y)& \propto \exp\left(-\frac{1}{2}\left[ \frac{(y-\theta)^2}{\sigma^2}+\frac{(\theta-\mu_0)^2}{\tau_0^2} \right]\right)}
+    \end{align*}
+  \end{itemize}
+
+\end{frame}
+
+% \note{  exp(a)*exp(b)=exp(a+b)}
+
+ \begin{frame}
+  \frametitle{Normal distribution - conjugate prior for $\theta$}
+
+  \begin{itemize}
+  \item Posterior (see ex 2.14a)
+    \vskip -5mm
+    \begin{align*}
+      & &
+      p(\theta|y)&\propto \exp\left(-\frac{1}{2}\left[
+          \frac{(y-\theta)^2}{\sigma^2}+\frac{(\theta-\mu_0)^2}{\tau_0^2} \right]\right) \\
+      & & & \propto \exp \left(-\frac{1}{2\tau_1^2}(\theta-\mu_1)^2
+      \right)
+    \end{align*}
+    \begin{equation*}
+      \theta|y \sim \N(\mu_1,\tau_1^2), \quad
+      \text{where} \quad
+      \mu_1=\frac{\frac{1}{\tau_0^2}\mu_0+\frac{1}{\sigma^2}y}{\frac{1}{\tau_0^2}+\frac{1}{\sigma^2}} \quad  \text{and}  \quad \frac{1}{\tau_1^2} = \frac{1}{\tau_0^2}+\frac{1}{\sigma^2}
+    \end{equation*}
+    \vskip -2mm
+    \pause
+    \item 1/variance = precision
+    \item Posterior precision = prior precision + data precision
+    \item Posterior mean is precision weighted mean
+  \end{itemize}
+
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Normal distribution - example}
+
+  \only<1>{\includegraphics[width=11cm]{figs/pguess.pdf}}
+  \only<2>{\includegraphics[width=11cm]{figs/pguessprior.pdf}}
+  \only<3>{\includegraphics[width=11cm]{figs/ppost.pdf}}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Normal distribution - conjugate prior for $\theta$}
+
+  \begin{itemize}
+  \item Several observations -- use chain rule
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+
+  \frametitle{Normal distribution - conjugate prior for $\theta$}
+
+  \begin{itemize}
+  \item Several observations $y=(y_1,\ldots,y_n)$
+    \begin{align*}
+      p(\theta|y) = \N(\theta|\mu_n,\tau_n^2)
+    \end{align*}
+    \vskip -6mm
+    \begin{align*}
+      \text{where} \quad
+      \mu_n=\frac{\frac{1}{\tau_0^2}\mu_0+\frac{n}{\sigma^2}\bar{y}}{\frac{1}{\tau_0^2}+\frac{n}{\sigma^2}} \quad
+      \text{ja} \quad \frac{1}{\tau_n^2} = \frac{1}{\tau_0^2}+\frac{n}{\sigma^2}
+    \end{align*}
+  \item If $\tau_0^2=\sigma^2$, prior corresponds to one virtual observation with value $\mu_0$
+    \pause
+    \item If $\tau_0\rightarrow\infty$ when $n$ fixed\\
+      or if $n\rightarrow\infty$ when $\tau_0$ fixed
+      \begin{equation*}
+        p(\theta|y) \approx \N(\theta|\bar{y},\sigma^2/n)
+      \end{equation*}
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Normal distribution - conjugate prior for $\theta$}
+
+  \begin{itemize}
+  \item Posterior predictive distribution
+    \begin{align*}
+      p(\tilde{y}|y)&=\int p(\tilde{y}|\theta)p(\theta|y) d\theta \\
+      p(\tilde{y}|y)& \propto\int
+      \exp\left(-\frac{1}{2\sigma^2}(\tilde{y}-\theta)^2\right)\exp\left(-\frac{1}{2\tau_1^2}(\theta-\mu_1)^2\right) d\theta \\
+      ~&~\\
+      \tilde{y}|y &\sim \N(\mu_1,\sigma^2+\tau_1^2)
+    \end{align*}
+  \item Predictive variance = observation model variance $\sigma^2$ + \\
+     posterior variance $\tau_1^2$
+
+  \end{itemize}
+
+\end{frame}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

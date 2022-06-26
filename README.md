@@ -126,7 +126,9 @@ The course consists of rougly 8 blocks (weeks) of material. Each week consists o
 - An individual computer assignment (approx. 10-12 h per week)
 
 ### Computer assignments
-Each week an individual computer assignment is done with a focus on computational aspects of Bayesian Statistics. Each assignment is completed individually and should follow the computer assignment template.
+Each week an individual computer assignment is done with a focus on computational aspects of Bayesian Statistics. Each assignment is completed individually and should follow the computer [assignment_template](https://github.com/MansMeg/BSDA/blob/master/templates/). 
+
+We also supply a Google Colab assignment template with all R packages installed (or rather code to install them). This is an alternative if there are problems with getting the code to run locally. The template can be found [here](https://github.com/MansMeg/BSDA/blob/main/templates/bsda_colab_template.ipynb) or can be open directly in Google Colab [here](https://colab.research.google.com/github/MansMeg/BSDA/blob/main/templates/bsda_colab_template.ipynb).
 
 Students should return the computer assignments no later than **Sunday 23.59 each week**. A second possibility to turn in assignments is possible after the end of the course. For a detailed list of deadlines, see the [course plan](https://docs.google.com/spreadsheets/d/e/2PACX-1vTMN6pWULQIs_klRyunyS3OiQZ5ty67Smljo6gcxc1dQ68c4dDoZlSJTmDowYixvPZpANqDhSIA40Cs/pubhtml).
 

@@ -247,6 +247,80 @@
   \includegraphics[width=9cm]{figs/demo2_1.pdf}
 \end{frame}
 
+%%%% predictive distribution
+
+\begin{frame}
+  \frametitle{Predictive distribution -- Effect of integration}
+
+  \begin{itemize}
+  \item Predictive distribution for new $\tilde{y}$ (discrete)
+    \begin{align*}
+      \uncover<2->{p(\tilde{y}=1|y,n,M)} & \uncover<2->{= \int_0^1} p(\tilde{y}=1|\theta,y,n,M) \uncover<2->{p(\theta|y,n,M)d\theta}\\
+      &\uncover<3->{= \int_0^1 \theta p(\theta|y,n,M)d\theta}\\
+      &\uncover<4->{= \E[\theta|y]}
+    \end{align*}
+    \vskip -4mm
+  \item<5-> With uniform prior
+    \begin{align*}
+      \uncover<4->{\E[\theta|y] = \frac{y+1}{n+2}}
+    \end{align*}
+  \item<6-> Extreme cases
+    \begin{align*}
+      p(\tilde{y}=1|y=0,n,M) &= \frac{1}{n+2} \\
+      p(\tilde{y}=1|y=n,n,M) &= \frac{n+1}{n+2}
+    \end{align*}
+    \vskip -2mm
+
+  \item<6-> cf. maximum likelihood
+
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Benefits of integration}
+
+  Example: $n=10, y=10$
+  \begin{center}
+  \includegraphics[width=10cm]{figs/dbbeta10.pdf}
+  \end{center}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Predictive distribution}
+
+  \begin{itemize}
+  \item {\color{blue} Prior predictive} distribution for new $\tilde{y}$ (discrete)
+    \begin{align*}
+      p(\tilde{y}=1|M) &= \int_0^1 p(\tilde{y}=1|\theta,y,n,M){\color{blue}p(\theta|M)}d\theta
+    \end{align*}
+  \item {\color{red} Posterior predictive} distribution for new $\tilde{y}$ (discrete)
+    \begin{align*}
+      p(\tilde{y}=1|y,n,M) &= \int_0^1 p(\tilde{y}=1|\theta,y,n,M){\color{red}p(\theta|y,n,M)}d\theta
+    \end{align*}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Justification for uniform prior}
+
+  \begin{itemize}
+  \item $p(\theta|M)=1$ if
+    \begin{itemize}
+    \item[1)] we want the prior predictive distribution to be uniform
+      \begin{equation*}
+        p(y|n,M) = \frac{1}{n+1}, \quad y=0,\ldots,n
+      \end{equation*}
+      \begin{itemize}
+      \item nice justification as it is based on observables $y$ and $n$
+      \end{itemize}
+     \item<2->[2)] we think all values of $\theta$ are equally likely
+      %   Laplace "principle of insufficient reason"
+    \end{itemize}
+  \end{itemize}
+
+\end{frame}
+
 
 
 

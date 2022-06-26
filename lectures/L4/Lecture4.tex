@@ -558,13 +558,13 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
 
   \begin{itemize}
   \item Box-Muller -method:\\ If $U_1$ and $U_2$ are independent
-    draws from distribution $\U(0,1)$, and
+    draws from distribution $U(0,1)$, and
     \begin{align*}
       X_1 & = \sqrt{-2\log(U_1)}\cos(2\pi U_2) \\
       X_2 & = \sqrt{-2\log(U_1)}\sin(2\pi U_2)
     \end{align*}
     then $X_1$ and $X_2$ are independent draws from the distribution
-    $\N(0,1)$
+    $N(0,1)$
     \pause
     \begin{itemize}
       \item not the fastest method due to trigonometric computations

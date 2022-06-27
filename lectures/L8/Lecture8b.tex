@@ -1,0 +1,1101 @@
+\documentclass[10pt,handout]{beamer}
+%\documentclass[10pt]{beamer}
+\usepackage[english]{babel} % Anpassa efter svenska. Ger svensk logga.
+\usepackage[utf8]{inputenc} % Anpassa efter linux
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+%\input{../common/lststan} % Stan listing
+\usepackage{lstbayes}
+\usepackage[all,poly,ps,color]{xy}
+
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=cyan,
+}
+\usepackage{../common/beamerthemeUppsala}
+%\usetheme{Uppsala}
+%\usecolortheme{UU} % Anpassa efter UU:s frger och logga
+%\hypersetup{pdfpagemode=FullScreen} % Adobe Reader ska ppna fullskrm
+\setbeamertemplate{itemize items}[circle]
+
+% \usepackage{beamerthemesplit}
+\usepackage{amsmath,amsfonts,amssymb}
+% \usepackage{amssymb}
+% \usepackage{graphics}
+% \usepackage{graphicx}
+% \usepackage{epsfig}
+% \usepackage[latin1]{inputenc}
+ \usepackage{color}
+% \usepackage{fancybox}
+% \usepackage{psfrag}
+% \usepackage[english]{babel}
+ \setbeamertemplate{footline}{\hfill\insertframenumber/\inserttotalframenumber}
+
+% Input new commands
+\input{../common/commands.tex}
+
+\def\dashxy(#1){%
+  /xydash{[#1] 0 setdash}def}
+\def\grayxy(#1){%
+  /xycolor{#1 setgray}def}
+\newgraphescape{D}[1]{!{\ar @*{[!\dashxy(2 2)]} "#1"}}
+\newgraphescape{P}[1]{!{\ar "#1"}}
+\newgraphescape{F}[1]{!{*+=<2em>[F=]{#1}="#1"}}
+\newgraphescape{O}[1]{!{*+=<2em>[F]{#1}="#1"}}
+\newgraphescape{V}[1]{!{*+=<2em>[o][F]{#1}="#1"}}
+\newgraphescape{B}[3]{!{{ "#1"*+#3\frm{} }.{ "#2"*+#3\frm{} } *+[F:!\grayxy(0.75)]\frm{}}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\setlength{\parskip}{3mm}
+\title[]{{\color{black}Bayesian Statistics and Data Analysis \\ Lecture 8b}}
+\author[]{M{\aa}ns Magnusson \\ Department of Statistics, Uppsala University \\ Thanks to Aki Vehtari, Aalto University}
+\date{}
+
+\begin{document}
+
+\frame{\titlepage
+% \thispagestyle{empty}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\section{Introduction}
+\frame{\sectionpage}
+
+\begin{frame}
+
+ \frametitle{Model assessment, selection and inference after selection}
+
+   \begin{enumerate}
+   \item Extra material at \url{https://avehtari.github.io/modelselection/}
+     \begin{enumerate}
+       \item Videos, Slides, Notebooks, References
+       \item The most relevant for the course is the first part of the
+         talk ``Model assessment, comparison and selection at Master
+         class in Bayesian statistics, CIRM, Marseille''
+     \end{enumerate}
+   \end{enumerate}
+
+\end{frame}
+
+\begin{frame}{}
+
+\frametitle{Predicting concrete quality}
+
+%  \begin{center}
+%    \includegraphics[width=5cm]{figs/slump1b.eps}
+%  \end{center}
+
+\end{frame}
+
+\begin{frame}{}
+
+\frametitle{Predicting cancer recurrence}
+
+  \begin{center}
+    \includegraphics[width=11.5cm]{figs/gistrisk.png}
+  \end{center}
+
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Predictive performance}
+
+  \begin{itemize}
+  \item<1-> True predictive performance is found out by using it to make
+    predictions and comparing predictions to true observations
+    \begin{itemize}
+      \item external validation
+    \end{itemize}
+  \item<2-> Expected predictive performance
+    \begin{itemize}
+      \item approximates the external validation
+      \end{itemize}
+    \end{itemize}
+
+\end{frame}
+
+% \begin{frame}{}
+
+% \frametitle{Model assessment, comparison, selection and averaging}
+
+%   \begin{enumerate}
+%   \item Modeling complex phenomena with models that
+%     are much simpler than the nature ($M$-open)
+%   \item<2-> Decision theoretical approch in spirit of
+%     \begin{enumerate}
+%     \item Lindley, Box, Rubin, Bernardo \& Smith, etc.
+%     \end{enumerate}
+%   \end{enumerate}
+
+% \end{frame}
+
+\begin{frame}
+
+\frametitle{Predictive performance}
+
+  \begin{itemize}
+  \item We need to choose the utility/cost function
+  \item Application specific utility/cost functions are important
+    \begin{itemize}
+      \item eg. money, life years, quality adjusted life years, etc.
+    \end{itemize}
+    \pause
+  \item If are interested overall in the goodness of the predictive distribution,
+    or we don't know (yet) the application specific utility, then
+    good information theoretically justified choice is log-score
+      \begin{align*}
+        \log p(y^{\text{rep}} | y, M),
+      \end{align*}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{}
+
+\frametitle{Outline}
+
+  \begin{enumerate}
+  \item What is cross-validation
+    {\color{gray}
+  \begin{enumerate}
+    \item Leave-one-out cross-validation (elpd\_loo, p\_loo)
+    \item Uncertainty in LOO (SE)
+    \end{enumerate}
+    }
+  \item When is cross-validation applicable?
+    {\color{gray}
+    \begin{enumerate}
+    \item data generating mechanisms and prediction tasks
+    \item leave-many-out cross-validation
+    \end{enumerate}
+    }
+  \item Fast cross-validation
+    {\color{gray}
+    \begin{enumerate}
+    \item PSIS and diagnostics in loo package (Pareto k, n\_eff, Monte Carlo SE)
+    \item K-fold cross-validation
+    \end{enumerate}
+    }
+  \item {\footnotesize Related methods (WAIC, *IC, BF)}
+  \item Model comparison and selection (elpd\_diff, se)
+  \item Model averaging with Bayesian stacking
+  % \item<2-> Part 2: Projective Inference in High-dimensional Problems:
+  %   Prediction and Feature Selection
+  \end{enumerate}
+
+\end{frame}
+
+\begin{frame}[fragile]
+
+\frametitle{Stan and {\tt loo} package}
+
+  {\scriptsize
+\begin{lstlisting}
+ Computed from 4000 by 20 log-likelihood matrix
+
+         Estimate  SE
+elpd_loo    -29.5 3.3
+p_loo         2.7 1.0
+------
+Monte Carlo SE of elpd_loo is 0.1.
+
+Pareto k diagnostic values:
+                         Count Pct.    Min. n_eff
+(-Inf, 0.5]   (good)     18    90.0%   899
+ (0.5, 0.7]   (ok)        2    10.0%   459
+   (0.7, 1]   (bad)       0     0.0%   <NA>
+   (1, Inf)   (very bad)  0     0.0%   <NA>
+
+All Pareto k estimates are ok (k < 0.7).
+See help('pareto-k-diagnostic') for details.
+
+Model comparison:
+(negative 'elpd_diff' favors 1st model, positive favors 2nd)
+
+elpd_diff        se
+     -0.2       0.1
+\end{lstlisting}
+}
+
+\end{frame}
+
+
+\begin{frame}{}
+
+  \only<1>{\includegraphics[width=10cm]{figs/fake1.pdf}}
+  \only<2>{\includegraphics[width=10cm]{figs/fake2.pdf}}
+  \only<3>{\includegraphics[width=10cm]{figs/fake3.pdf}}
+  \only<4>{\includegraphics[width=10cm]{figs/fake4.pdf}}
+  \only<5>{\includegraphics[width=10cm]{figs/fake4b.pdf}}
+  \only<6>{\includegraphics[width=10cm]{figs/fake4.pdf}}
+  \only<7>{\includegraphics[width=10cm]{figs/fake4s.pdf}}
+  \only<8-9>{\includegraphics[width=10cm]{figs/fake5.pdf}}
+  \only<10>{\includegraphics[width=10cm]{figs/fake5n.pdf}}
+  \only<11>{\includegraphics[width=10cm]{figs/fake6.pdf}}
+  \only<12>{\includegraphics[width=10cm]{figs/fake7.pdf}}
+  \\
+  \onslide<9>{\color{red} $p(\tilde{y}|\tilde{x}=18,x,y)=\int p(\tilde{y}|\tilde{x}=18,\theta)p(\theta|x,y)d\theta$\\ \vspace{0.5\baselineskip}}
+\end{frame}
+
+\begin{frame}{}
+
+  {\includegraphics[width=10cm]{figs/fake7r.pdf}}
+  \\
+  \onslide<2->{{\color{blue} $y_{18} - E[p(\tilde{y}|\tilde{x}=18,x_{-18},y_{-18})]$}\\ \vspace{0.5\baselineskip}}
+  \onslide<3->{Can be use to compute, e.g., RMSE, $R^2$, 90\% error}
+  \onslide<4>{\\~\\ \small See LOO-$R^2$ at \url{avehtari.github.io/bayes_R2/bayes_R2.html}}
+\end{frame}
+
+\begin{frame}{}
+
+  {\includegraphics[width=10cm]{figs/fake8.pdf}}
+  \\
+  \onslide<2>{\color{uulgr} $p(\tilde{y}|\tilde{x}=18,x_{-18},y_{-18})=\int p(\tilde{y}|\tilde{x}=18,\theta)p(\theta|x_{-18},y_{-18})d\theta$}
+
+\end{frame}
+
+\begin{frame}{}
+
+  \only<1-2>{\includegraphics[width=10cm]{figs/fake8pd.pdf}}
+  \only<3>{\includegraphics[width=10cm]{figs/fake8loopd.pdf}}
+  \\
+  \onslide<2->{\color{red} $p(\tilde{y}=y_{18}|\tilde{x}=18,x,y) \approx 0.07$\\ \vspace{0.5\baselineskip}}
+  \onslide<3>{\color{uulgr} $p(\tilde{y}=y_{18}|\tilde{x}=18,x_{-18},y_{-18}) \approx 0.03$}
+
+\end{frame}
+
+\begin{frame}{}
+
+  \only<1>{\includegraphics[width=10cm]{figs/fake8loopds.pdf}}
+  \only<2->{\includegraphics[width=10cm]{figs/fake8loolpds.pdf}}
+  \\ \vspace{-0.5\baselineskip}
+  \only<1>{\color{blue} $p(y_i|x_i,x_{-i},y_{-i}), \quad i=1,\ldots,20$}
+  \only<2>{\color{blue} $\log p(y_i|x_i,x_{-i},y_{-i}), \quad i=1,\ldots,20$}
+  \only<3>{\color{blue} $\sum_{i=1}^{20} \log p(y_i|x_i,x_{-i},y_{-i}) \approx -29.5$}
+  \only<4->{\color{blue} $\mbox{elpd\_loo} = \sum_{i=1}^{20} \log p(y_i|x_i,x_{-i},y_{-i}) \approx -29.5$\\ \vspace{0.2\baselineskip}}
+  \only<5> {\color{blue} unbiased estimate of log posterior pred. density for new data}
+  \only<6-7>{\color{red} $\mbox{lpd} = \sum_{i=1}^{20} \log p(y_i|x_i,x,y) \approx -26.8$\\ \vspace{0.2\baselineskip}}
+  \only<7>{\color{blue} $\mbox{p\_loo} = \mbox{lpd}-\mbox{elpd\_loo} \approx 2.7$}
+  \only<8-> {\color{blue} $\mbox{SE} = \mbox{sd}(\log p(y_i|x_i,x_{-i},y_{-i}))\cdot \sqrt{20} \approx 3.3$}
+  \only<9>{\\~\\~\\ \color{black} \footnotesize see \href{http://link.springer.com/article/10.1007/s11222-016-9696-4}{Vehtari, Gelman \& Gabry (2017a)} and \href{http://dx.doi.org/10.1214/12-SS102}{Vehtari \& Ojanen (2012)} for more}
+
+\end{frame}
+
+\begin{frame}{}
+
+  \only<1>{\includegraphics[width=10cm]{figs/fakedfixed.pdf}}
+  \only<2->{\includegraphics[width=10cm]{figs/fakedrandom.pdf}}
+  \\ \vspace{-0.5\baselineskip}
+  \only<1>{LOO is ok for fixed / designed $x$. SE is uncertainty about $y|x$.\\ \vspace{0.2\baselineskip}}
+  \only<2->{LOO is ok for random $x$. SE is uncertainty about $y|x$ and $x$.\\ \vspace{0.2\baselineskip}}
+  \onslide<3>{Covariate shift can be handled with importance weighting or modelling}
+  \onslide<1->{\\ \small see \href{http://dx.doi.org/10.1214/12-SS102}{Vehtari \& Ojanen (2012)} and \url{andrewgelman.com/2018/08/03/loo-cross-validation-approaches-valid/}}
+
+\end{frame}
+
+\begin{frame}[fragile]
+
+\frametitle{{\tt loo} package}
+
+  {\scriptsize
+\begin{lstlisting}
+ Computed from 4000 by 20 log-likelihood matrix
+
+         Estimate  SE
+elpd_loo    -29.5 3.3
+p_loo         2.7 1.0
+\end{lstlisting}
+      {\color{gray}
+\begin{lstlisting}
+------
+Monte Carlo SE of elpd_loo is 0.1.
+
+Pareto k diagnostic values:
+                         Count Pct.    Min. n_eff
+(-Inf, 0.5]   (good)     18    90.0%   899
+ (0.5, 0.7]   (ok)        2    10.0%   459
+   (0.7, 1]   (bad)       0     0.0%   <NA>
+   (1, Inf)   (very bad)  0     0.0%   <NA>
+
+All Pareto k estimates are ok (k < 0.7).
+See help('pareto-k-diagnostic') for details.
+\end{lstlisting}}
+}
+\end{frame}
+
+\begin{frame}{}
+
+  \only<1>{\includegraphics[width=10cm]{figs/lake1data.pdf}}
+  \only<2>{\includegraphics[width=10cm]{figs/lake1gp.pdf}}
+  \only<3->{\includegraphics[width=10cm]{figs/lake1gpptest.pdf}}
+  \\
+  \only<4>{Extrapolation is more difficult}
+
+\end{frame}
+
+\begin{frame}{}
+
+  \includegraphics[width=10cm]{figs/lake2data.pdf}
+
+
+  {Can LOO or other cross-validation be used with time series?}
+
+\end{frame}
+
+\begin{frame}{}
+
+  \only<1>{\includegraphics[width=10cm]{figs/lake3loo.pdf}}
+  \only<2>{\includegraphics[width=10cm]{figs/lake3stepahead.pdf}}
+  \only<3>{\includegraphics[width=10cm]{figs/lake3tenstepahead.pdf}}
+  \only<4>{\includegraphics[width=10cm]{figs/lake3stepaheadblock.pdf}}
+  \\
+  \only<1>{Leave-one-out cross-validation is ok for assessing conditional model}
+  \only<2>{Leave-future-out cross-validation is better for predicting future}
+  \only<3>{$m$-step-ahead cross-validation is better for predicting further future}
+  \only<4>{$m$-step-ahead leave-a-block-out cross-validation}
+
+\end{frame}
+
+\begin{frame}{}
+
+  \only<1>{\includegraphics[width=10cm]{figs/rats1data.pdf}}
+  \only<2>{\includegraphics[width=10cm]{figs/rats1loo.pdf}}
+  \only<3>{\includegraphics[width=10cm]{figs/rats1step.pdf}}
+  \only<4>{\includegraphics[width=10cm]{figs/rats1onetime.pdf}}
+  \only<5>{\includegraphics[width=10cm]{figs/rats1onerat.pdf}}
+  \only<6>{\includegraphics[width=10cm]{figs/rats1init.pdf}}
+  \\
+  \only<1>{Can LOO or other cross-validation be used with hierarchical data?}
+  \only<2->{Yes!}
+
+\end{frame}
+
+\begin{frame}{}
+
+\frametitle{ Summary of data generating mechanisms and prediction tasks}
+
+\begin{enumerate}
+\item You have to make some assumptions on data generating mechanism
+\item Use the knowledge of the prediction task if available
+\item Cross-validation can be used to analyse different parts, even if
+  there is no clear prediction task
+\end{enumerate}
+
+ \vspace{6.5\baselineskip}
+{ \small see \href{http://dx.doi.org/10.1214/12-SS102}{Vehtari \& Ojanen (2012)} and \url{andrewgelman.com/2018/08/03/loo-cross-validation-approaches-valid/}}
+
+\end{frame}
+
+\begin{frame}{}
+
+\frametitle{ Fast cross-validation}
+
+\begin{enumerate}
+\item Pareto smoothed importance sampling LOO (PSIS-LOO)
+\item K-fold cross-validation
+\end{enumerate}
+
+\vspace{12\baselineskip}
+
+{\small see \href{http://link.springer.com/article/10.1007/s11222-016-9696-4}{Vehtari, Gelman \& Gabry (2017a)} and \url{mc-stan.org/loo/}}
+
+\end{frame}
+
+%\begin{frame}{}
+%
+%  \only<1>{\includegraphics[width=10cm]{figs/fakedata.pdf}}
+%  \only<2>{\includegraphics[width=10cm]{figs/fakedraws.pdf}}
+%  \only<3>{\includegraphics[width=10cm]{figs/fakepostpred.pdf}}
+%  \only<4>{\includegraphics[width=10cm]{figs/fakepostpred18.pdf}}
+%  \only<5-7>{\includegraphics[width=10cm]{figs/fakepsisdraws.pdf}}
+%  \only<8-10>{\includegraphics[width=10cm]{figs/fakepsispostpred.pdf}}
+%  \\
+%  \only<2>{$\theta^{(s)} \sim p(\theta|x,y)$}
+%  \only<3-4>{$\theta^{(s)} \sim p(\theta|x,y), \quad p(\tilde{y}|\tilde{x},x,y) \approx \frac{1}{S}\sum_{s=1}^S p(\tilde{y}|\tilde{x},\theta^{(s)})$ }
+%  \only<5>{$\theta^{(s)} \sim p(\theta|x,y)$\\ \vspace{0.2\baselineskip}$ r_i^{(s)} = p(\theta^{(s)}|x_{-i},y_{-i}) / p(\theta^{(s)}|x,y)$ }
+%  \only<6-8>{$\theta^{(s)} \sim p(\theta|x,y)$\\ \vspace{0.2\baselineskip} $ r_i^{(s)} = p(\theta^{(s)}|x_{-i},y_{-i}) / p(\theta^{(s)}|x,y) \propto 1/p(y_i|x_i,\theta^{(s)})$\\ \vspace{0.2\baselineskip} }
+%  \only<7>{$\log(1/p(y_i|x_i,\theta^{(s)})) = -\mbox{log\_lik}[i]$}
+%  \only<9-10>{$\theta^{(s)} \sim p(\theta|x,y)$\\ \vspace{0.2\baselineskip}
+%    $ r_i^{(s)} = p(\theta^{(s)}|x_{-i},y_{-i}) / p(\theta^{(s)}|x,y) \propto 1/p(y_i|x_i,\theta^{(s)})$\\ \vspace{0.2\baselineskip}
+%  $p(y_i|x_i,x_{-i},y_{-i}) \approx \sum_{s=1}^S [w_i^{(s)} p(y_i|x_i,\theta^{(s)})]$}\only<10>{, where $w \leftarrow \mbox{PSIS}(r)$}
+%
+%\end{frame}
+
+%\begin{frame}{}
+%
+%  \only<1>{\includegraphics[width=10cm]{fakepsisweights.pdf}}
+%  \only<2->{\includegraphics[width=10cm]{fakepsisweights4000.pdf}}
+%  \\
+%  \vspace{-\baselineskip}
+%  \onslide<3->{n\_eff $\approx$ 459\\  \vspace{0.2\baselineskip}}
+%  \onslide<4>{Pareto $\hat{k}$ $\approx$ 0.52
+%  \vspace{-\parskip}
+%    \begin{enumerate}
+%    \item Pareto $\hat{k}$ estimates the tail shape which determines the convergence rate of PSIS. Less than 0.7 is ok.}
+%\end{enumerate}
+%  \onslide<3->{\vspace{0.1\baselineskip}\small see \href{http://link.springer.com/article/10.1007/s11222-016-9696-4}{Vehtari, Gelman \& Gabry (2017b)}}
+%\end{frame}
+
+%\begin{frame}[fragile]
+%
+%  \includegraphics[width=10cm]{fakepks.pdf}
+%
+%\end{frame}
+
+%\begin{frame}[fragile]
+%
+%  \only<1>{\includegraphics[width=10cm]{fakepks.pdf}}
+%  \only<2>{\includegraphics[width=10cm]{fakeneffs.pdf}}
+%  \\
+%  {\scriptsize
+%\begin{lstlisting}
+%    Pareto k diagnostic values:
+%                         Count Pct.    Min. n_eff
+%(-Inf, 0.5]   (good)     18    90.0%   899
+% (0.5, 0.7]   (ok)        2    10.0%   459
+%   (0.7, 1]   (bad)       0     0.0%   <NA>
+%   (1, Inf)   (very bad)  0     0.0%   <NA>
+%\end{lstlisting}
+%}
+%
+%\end{frame}
+
+\begin{frame}[fragile]
+
+\frametitle{{\tt loo} package}
+
+  {\scriptsize
+    {\color{gray}
+\begin{lstlisting}
+ Computed from 4000 by 20 log-likelihood matrix
+
+         Estimate  SE
+elpd_loo    -29.5 3.3
+p_loo         2.7 1.0
+\end{lstlisting}
+      }
+\begin{lstlisting}
+------
+Monte Carlo SE of elpd_loo is 0.1.
+
+Pareto k diagnostic values:
+                         Count Pct.    Min. n_eff
+(-Inf, 0.5]   (good)     18    90.0%   899
+ (0.5, 0.7]   (ok)        2    10.0%   459
+   (0.7, 1]   (bad)       0     0.0%   <NA>
+   (1, Inf)   (very bad)  0     0.0%   <NA>
+
+All Pareto k estimates are ok (k < 0.7).
+See help('pareto-k-diagnostic') for details.
+\end{lstlisting}
+    }
+
+    {\vspace{2\baselineskip}\small see more in \href{http://link.springer.com/article/10.1007/s11222-016-9696-4}{Vehtari, Gelman \& Gabry (2017b)}}
+
+\end{frame}
+
+% \begin{frame}
+%   \frametitle{Importance sampling}
+
+%   \begin{itemize}
+%   \item Having samples $\theta^s$ from $p(\theta^s|D)$
+%     \begin{align*}
+%       p(\tilde{y}_i|x_i,D_{-i})\approx\frac{\sum_{s=1}^Sp(\tilde{y}_i|\theta^s)w_i^s}{\sum_{s=1}^S w_i^s},
+%     \end{align*}
+%     where $w_i^s$ are importance weights and
+%     \begin{align*}
+%       w_i^s=\frac{p(\theta^s|x_i,D_{-i})}{p(\theta^s|D)}\propto\frac{1}{\color{red} p(y_i|\theta^s)}.
+%     \end{align*}
+% % \pause
+% %   \item If evaluated with $\tilde{y}_i=y_i$
+% %     \begin{align*}
+% %       p(y_i|x_i,D_{-i})\approx\frac{1}{\sum_{s=1}^S\frac{1}{p(y_i|\theta^s)}},
+% %     \end{align*}
+%   \end{itemize}
+
+% \end{frame}
+
+\begin{frame}[fragile]
+
+\frametitle{Stan code }
+
+  \vspace{\baselineskip}
+  $ \log(r_i^{(s)}) = \log(1/p(y_i|x_i,\theta^{(s)})) = {\color{red}-\mbox{log\_lik}[i]}$
+  \vspace{\baselineskip}
+
+  \pause
+  {\small
+\begin{lstlisting}[language=Stan,escapechar=!]
+...
+model {
+  alpha ~ normal(pmualpha, psalpha);
+  beta ~ normal(pmubeta, psbeta);
+  y ~ normal(mu, sigma);
+}
+generated quantities {
+  vector[N] log_lik;
+  for (i in 1:N)
+    !\color{red}\tt log\_lik[i] = normal\_lpdf(y[i] | mu[i], sigma); \color{black}!
+}
+\end{lstlisting}
+  }
+
+  \begin{enumerate}
+  \item<3-> RStanARM and BRMS compute log\_lik by default
+  \end{enumerate}
+
+\end{frame}
+
+\begin{frame}{}
+
+\frametitle{ Pareto smoothed importance sampling LOO}
+
+\begin{enumerate}
+\item PSIS-LOO for hierarchical models
+  \begin{enumerate}
+  \item leave-one-group out is challenging for PSIS-LOO\\ \vspace{0.2\baselineskip}
+    {\small see Merkel, Furr and Rabe-Hesketh
+      (2018) for an approach using quadrature integration}
+  \end{enumerate}
+  \item<2-> PSIS-LOO for non-factorizable models
+    \begin{enumerate}
+    \item {\url{mc-stan.org/loo/articles/loo2-non-factorizable.html}}
+    \end{enumerate}
+  \item<3-> PSIS-LOO for time series
+  \begin{enumerate}
+  \item Approximate leave-future-out cross-validation \\ \vspace{0.2\baselineskip}
+    {\url{mc-stan.org/loo/articles/loo2-lfo.html}}
+  \end{enumerate}
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame}{}
+
+  \only<1>{\includegraphics[width=10cm]{figs/lake4data.pdf}}
+  \only<2>{\includegraphics[width=10cm]{figs/lake4pred.pdf}}
+  \only<3>{\includegraphics[width=10cm]{figs/lake4psisrefits.pdf}}
+
+  \vspace{3\baselineskip}
+  \only<3> {\small \url{mc-stan.org/loo/articles/loo2-lfo.html}}
+
+\end{frame}
+
+\begin{frame}{}
+
+\frametitle{ K-fold cross-validation}
+
+\begin{enumerate}
+\item K-fold cross-validation can approximate LOO
+  \begin{enumerate}
+    \item all uses for LOO
+  \end{enumerate}
+\item K-fold cross-validation can be used for hierarchical models
+  \begin{enumerate}
+    \item good for leave-one-group-out
+  \end{enumerate}
+\item K-fold cross-validation can be used for time series
+  \begin{enumerate}
+    \item with leave-block-out
+  \end{enumerate}
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame}{}
+
+  \only<1>{\includegraphics[width=10cm]{figs/lake3kfoldbal1.pdf}}
+  \only<2>{\includegraphics[width=10cm]{figs/lake3kfoldbal2.pdf}}
+  \only<3>{\includegraphics[width=10cm]{figs/lake3kfoldrand.pdf}}
+  \only<4>{\includegraphics[width=10cm]{figs/rats1kfoldrand.pdf}}
+  \only<5->{\includegraphics[width=10cm]{figs/rats1oneratb.pdf}}
+  \\
+  \only<6>{kfold\_split\_random()\\ \vspace{0.2\baselineskip}
+  kfold\_split\_balanced()\\ \vspace{0.2\baselineskip}
+  kfold\_split\_stratified()}
+
+\end{frame}
+
+\begin{frame}{}
+
+\frametitle{ WAIC vs PSIS-LOO}
+
+\begin{enumerate}
+  \item<2-> WAIC has same assumptions as LOO
+  \item<3-> PSIS-LOO is more accurate
+  \item<4-> PSIS-LOO has much better diagnostics
+  \item<5-> LOO makes the prediction assumption more clear,\\ which
+    helps if K-fold-CV is needed instead
+  \item<6-> Multiplying by -2 doesn't give any benefit\\ (Watanabe
+    didn't multiply by -2)
+\end{enumerate}
+
+\vspace{6\baselineskip}
+{\small see \href{http://link.springer.com/article/10.1007/s11222-016-9696-4}{Vehtari, Gelman \& Gabry (2017a)}}
+\end{frame}
+
+\begin{frame}{}
+
+\frametitle{ *IC}
+
+\begin{enumerate}
+  \item AIC uses maximum likelihood estimate for prediction
+  \item DIC uses posterior mean for prediction
+  \item BIC is an approximation for marginal likelihood
+  \item TIC, NIC, RIC, PIC, BPIC, QIC, AICc, ...
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame}{}
+
+\frametitle{ Marginal likelihood / Bayes factor}
+
+\vspace{-0.3\baselineskip}
+\begin{enumerate}
+\item Like leave-future-out 1-step-ahead cross-validation but starting with 0 observations\\
+  \onslide<3->{- which makes it very sensitive to prior}
+  \onslide<4->{and \\- unstable in case of misspecified
+    models}\uncover<5->{ also asymptotically}
+\end{enumerate}
+\vspace{-0.5\baselineskip}
+  \onslide<2->{\includegraphics[width=9.4cm]{figs/lake3bf.pdf}}
+
+\end{frame}
+
+\begin{frame}{}
+
+\frametitle{ Cross-validation for model assessment}
+
+\begin{enumerate}
+\item CV is good for model assessment when application specific utility/cost functions are used
+  \begin{enumerate}
+  \item e.g. 90\% absolute error
+  \end{enumerate}
+\item<2-> Also useful in model checking in similar way as posterior
+  predictive checking (PPC)
+  \begin{enumerate}
+  \item model misspecification diagnostics\\ (e.g. Pareto-$k$ and p\_loo)
+  \item checking calibration of leave-one-out predictive posteriors
+    (ppc\_loo\_pit in bayesplot)
+  \end{enumerate}
+  {\small see demos \url{avehtari.github.io/modelselection/}}
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame}
+
+ \frametitle{Radon example}
+
+   PSIS-LOO diagnostics
+   \includegraphics[width=.8\textwidth]{figs/radon1k.pdf}
+
+{\small see \href{http://link.springer.com/article/10.1007/s11222-016-9696-4}{Vehtari, Gelman \& Gabry (2017a)}}
+
+ \end{frame}
+
+
+\begin{frame}
+
+\frametitle{ Sometimes cross-validation is not needed}
+
+\vspace{-0.5\baselineskip}
+
+  \begin{enumerate}
+  \item<2-> Posterior predictive checking is often sufficient\\
+    \vspace{0.5\baselineskip}
+    \includegraphics[width=11cm]{figs/mesquite_ppc.pdf}\\
+  \vspace{-0.1\baselineskip} {Predicting the yields of mesquite bushes.\\
+    \color{gray} \footnotesize
+    Gelman, Hill \& Vehtari (2020): Regression and Other Stories, Chapter 11.}\\
+  \vspace{-0.8\baselineskip}
+\end{enumerate}
+{\footnotesize
+  \begin{enumerate}
+  \item<3-> BDA3, Chapter 6
+  \vspace{-0.6\parskip}
+  \item<3-> Gabry, Simpson, Vehtari, Betancourt, Gelman
+    (2019). Visualization in Bayesian workflow. JRSS A, \url{https://doi.org/10.1111/rssa.12378}
+  \vspace{-0.6\parskip}
+  \item<3-> \url{mc-stan.org/bayesplot/articles/graphical-ppcs.html}
+  \vspace{-0.6\parskip}
+  \item<3-> \url{betanalpha.github.io/assets/case_studies/principled_bayesian_workflow.html}
+   \end{enumerate}}
+\end{frame}
+
+% \begin{frame}{}
+
+% \frametitle{ Model comparison}
+
+% \begin{enumerate}
+% \item ``A popular hypothesis has it that primates with larger brains
+%   produce more energetic milk, so that brains can grow quickly'' (from
+%   Statistical Rethinking)
+%   \begin{enumerate}
+%     \item Model 1: formula = kcal.per.g $\sim$ neocortex
+%     \item Model 2: formula = kcal.per.g $\sim$ neocortex + log(mass)
+%   \end{enumerate}
+% \end{enumerate}
+
+% \vspace{10\baselineskip}
+% {\small \url{mc-stan.org/loo/articles/loo2-example.html}}
+
+% \end{frame}
+
+% \begin{frame}
+
+%   \only<1-2>{\includegraphics[width=10cm]{milkelpdloo.pdf}}
+%   \only<3>{\includegraphics[width=10cm]{milkelpdloo2.pdf}}
+%   \\
+%   \only<2-3>{Model 1 elpd\_loo $\approx$ 3.7, SE=1.8\\
+%   Model 2 elpd\_loo $\approx$ 8.4, SE=2.8}
+
+% \end{frame}
+
+% \begin{frame}[fragile]
+
+%   {\includegraphics[width=10cm]{milkelpddiff.pdf}}
+%   \\
+%   {\scriptsize
+% \begin{lstlisting}
+% Model comparison:
+% (negative 'elpd_diff' favors 1st model, positive favors 2nd)
+
+% elpd_diff        se
+%       4.7       2.7
+% \end{lstlisting}}
+
+% \end{frame}
+
+% \begin{frame}
+
+% \frametitle{Arsenic well example -- Model comparison}
+
+
+%    \includegraphics[width=.8\textwidth]{arsenic12d.pdf}
+
+%    An estimated difference in ${\rm elpd}_{\rm loo}$ of 16.4 with SE of 4.4.
+
+% {\small see \href{http://link.springer.com/article/10.1007/s11222-016-9696-4}{Vehtari, Gelman \& Gabry (2017a)}}
+% \end{frame}
+
+\begin{frame}{}
+
+\frametitle{Arsenic well example -- Model comparison}
+
+\begin{enumerate}
+\item Probability of switching well with high arsenic level in rural Bangladesh
+  \begin{enumerate}
+    \item Model 1 covariates: log(arsenic) and distance
+    \item Model 2 covariates: log(arsenic), distance and education level
+  \end{enumerate}
+\end{enumerate}
+
+\vspace{10\baselineskip}
+{\small Gelman, Hill \& Vehtari (2020): Regression and Other Stories, Chapter 13.}
+
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Arsenic well example -- Model comparison}
+
+  {\includegraphics[width=6.5cm]{figs/arsenicelpdloo.pdf}}
+  % \only<3>{\includegraphics[width=10cm]{milkelpdloo2.pdf}}
+  \\
+  {Model 1 elpd\_loo $\approx$ -1952, SE=16\\
+  Model 2 elpd\_loo $\approx$ -1938, SE=17}
+
+\end{frame}
+
+\begin{frame}[fragile]
+
+\frametitle{Arsenic well example -- Model comparison}
+
+  {\includegraphics[width=6.5cm]{figs/arsenicelpddiff.pdf}}
+  \\
+  {\scriptsize
+\begin{lstlisting}
+> loo_compare(model1, model2)
+       elpd_diff se_diff
+model2   0.0       0.0
+model1 -14.4       6.1
+\end{lstlisting}}
+\vspace{-\baselineskip}
+    {\scriptsize \hspace{6cm} see \href{http://link.springer.com/article/10.1007/s11222-016-9696-4}{Vehtari, Gelman \& Gabry (2017a)}}
+
+\end{frame}
+
+% \begin{frame}
+
+% \frametitle{ Sometimes cross-validation is not needed}
+
+% \vspace{-0.5\baselineskip}
+
+%   \begin{enumerate}
+%   \item Posterior predictive checking is often sufficient\\
+%     \vspace{0.5\baselineskip}
+%     \includegraphics[width=11cm]{mesquite_ppc.pdf}\\
+%   \vspace{-0.1\baselineskip} {Predicting the yields of mesquite bushes.\\
+%     \color{gray} \footnotesize
+%     Gelman, Hill \& Vehtari (2019): Regression and Other Stories, Chapter 11.}\\
+%   \vspace{-0.8\baselineskip}
+% \end{enumerate}
+% {\footnotesize
+%   \begin{enumerate}
+%   \item BDA3, Chapter 6
+%   \vspace{-0.6\parskip}
+%   \item Gabry, Simpson, Vehtari, Betancourt, Gelman
+%     (2019). Visualization in Bayesian workflow. JRSS A, \url{https://doi.org/10.1111/rssa.12378}
+%   \vspace{-0.6\parskip}
+%   \item \url{mc-stan.org/bayesplot/articles/graphical-ppcs.html}
+%   \vspace{-0.6\parskip}
+%   \item \url{betanalpha.github.io/assets/case_studies/principled_bayesian_workflow.html}
+%    \end{enumerate}}
+% \end{frame}
+
+\begin{frame}[fragile]
+
+\frametitle{Arsenic well example -- Model comparison}
+
+  {\scriptsize
+\begin{lstlisting}
+> loo_compare(model1, model2)
+       elpd_diff se_diff
+model2   0.0       0.0
+model1 -14.4       6.1
+\end{lstlisting}}
+
+    {\tt se\_diff} and normal approximation for the uncertainty in the
+    difference is good only if models are well specified and the
+    number of observations is relatively big (more details in a
+    forthcoming article).
+
+%\vspace{9\baselineskip}
+%    {\scriptsize \hspace{6cm} see \href{http://link.springer.com/article/10.1007/s11222-016-9696-4}{Vehtari, Gelman \& Gabry (2017a)}}
+
+\end{frame}
+
+
+\begin{frame}{}
+
+\frametitle{ Sometimes cross-validation is not needed}
+
+\begin{enumerate}
+\item<+-> For some very simple cases you may assume that true model
+  is included in the list of models considered ($M$-closed)
+  \begin{enumerate}
+  \item<+-> see predictive model selection in $M$-closed case by
+    San Martini and Spezzaferri (1984)
+  \item<+-> but you should not force your design of experiment or
+    analysis to stay in the simplified world
+  \end{enumerate}
+% \item<+-> For fully non-parametric models you may assume that true model
+%   is included in the list of models considered ($M$-closed)
+%   \begin{enumerate}
+%   \item<+-> related to talk by Chris Holmes
+%   \item<.-> see
+%     \href{http://dx.doi.org/10.1214/12-SS102}{Vehtari \& Ojanen
+%       (2012)} for earlier references
+% \item<+-> posterior convergence rate can be slow for fully non-parametric models
+% \end{enumerate}
+\item<+-> In nested case, often easier and
+  more accurate to analyse posterior distribution of more complex
+  model directly \\
+  {\small \url{avehtari.github.io/modelselection/betablockers.html}}
+   % \begin{enumerate}
+   %   \item<3-> need to do some model checking anyway
+   % \end{enumerate}
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame}{}
+
+\frametitle{Sometimes predictive model comparison can be useful}
+
+      \begin{minipage}[t]{0.45\linewidth}
+        \begin{center}
+          \includegraphics[width=5cm]{figs/fitg2_xx_areas.pdf}\\
+          Marginal posterior intervals
+        \end{center}
+      \end{minipage}
+      \pause
+      \begin{minipage}[t]{0.45\linewidth}
+        \begin{center}
+          \includegraphics[width=5cm]{figs/fitg2_xx_scatter.pdf}\\
+          Joint posterior density
+        \end{center}
+      \end{minipage}
+
+            \begin{center}
+      {\scriptsize rstanarm + bayesplot}
+    \end{center}
+
+    \pause
+    {\small
+      see also \href{https://avehtari.github.io/modelselection/collinear.html}{Collinear demo}
+    }
+
+\end{frame}
+
+\begin{frame}{}
+
+\frametitle{What if one is not clearly better than others?}
+
+  \begin{enumerate}
+  \item<2-> Continuous expansion including all models?
+    \begin{enumerate}
+    \item and then analyse the posterior distribution directly\\
+        {\small \url{avehtari.github.io/modelselection/betablockers.html}}
+      \item sparse priors like regularized horseshoe prior instead of variable selection\\
+        {\small video, refs and demos at
+          \url{avehtari.github.io/modelselection/}}
+    \end{enumerate}
+  \item<3-> Model averaging with BMA or Bayesian stacking?\\
+    {\small \url{mc-stan.org/loo/articles/loo2-example.html}}
+  \item<4-> In a nested case choose simpler if assuming some cost for
+    extra parts?\\
+    {\small \url{andrewgelman.com/2018/07/26/parsimonious-principle-vs-integration-uncertainties/}}
+  \item<5-> In a nested case choose more complex if you want to take
+    into account all the uncertainties.\\
+    {\small \url{andrewgelman.com/2018/07/26/parsimonious-principle-vs-integration-uncertainties/}}
+  \end{enumerate}
+
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Model averaging}
+
+  \begin{enumerate}
+  \item<+-> Prefer continuous model expansion
+  \item<+-> If needed integrate over the model space = model averaging
+  \item<+-> Bayesian stacking may work better than BMA
+    \begin{enumerate}
+    \item \href{https://projecteuclid.org/euclid.ba/1516093227}{Yao, Vehtari, Simpson, \& Gelman (2018)}
+    \end{enumerate}
+  \end{enumerate}
+
+\end{frame}
+
+\begin{frame}{}
+
+\frametitle{Cross-validation and model selection}
+
+  \begin{enumerate}
+  \item<1-> Cross-validation can be used for model selection if
+    \begin{enumerate}
+      \item small number of models
+      \item the difference between models is clear
+    \end{enumerate}
+  \item<2-> Do not use cross-validation to choose from a large set of models
+    \begin{enumerate}
+    \item selection process leads to overfitting
+    % \item you may use projection predictive approach
+    % \item useful when correlating variables make the posterior
+    %   distribution analysis difficult\\
+    %   {\small video, refs and demos  at \url{avehtari.github.io/modelselection/}\\
+    %   and \href{http://link.springer.com/article/10.1007/s11222-016-9649-y}{Piironen \& Vehtari (2017)}}
+    \end{enumerate}
+  \item<3-> Overfitting in selection process is not unique for cross-validation
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Selection induced bias and overfitting}
+
+  \begin{itemize}
+  \item Selection induced bias in cross-validation
+    \begin{itemize}
+    \item same data is used to assess the performance and make the selection
+    \item the selected model fits more to the data
+    \item the CV estimate for the selected model is biased
+    \item recognized already, e.g., by Stone (1974)
+    \end{itemize}
+    \pause
+  \item Performance of the selection process itself can be assessed
+    using two level cross-validation, but it does not help choosing
+    better models
+    \pause
+  \item Bigger problem if there is a large number of models as in
+    covariate selection
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Selection induced bias in variable selection}
+
+  \includegraphics[width=\textwidth]{figs/cv.pdf}
+
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Selection induced bias in variable selection}
+
+  \includegraphics[height=0.88\textheight]{figs/simulated_searchpath.pdf}
+   \vspace{-1.5\baselineskip}
+   \mbox{{\hspace{8cm} \footnotesize \href{http://link.springer.com/article/10.1007/s11222-016-9649-y}{Piironen \& Vehtari (2017)}}}
+
+\end{frame}
+
+% \begin{frame}
+
+% \frametitle{Selection induced bias in variable selection}
+
+%   \includegraphics[height=0.88\textheight]{simulated_variability.pdf}
+%    \vspace{-1.5\baselineskip}
+%    \mbox{{\hspace{8cm} \footnotesize \href{http://link.springer.com/article/10.1007/s11222-016-9649-y}{Piironen \& Vehtari (2017)}}}
+
+% \end{frame}
+
+% \begin{frame}
+
+% \frametitle{Selection induced bias in variable selection}
+
+%   \includegraphics[height=0.88\textheight]{real_searchpath.pdf}
+%    \vspace{-2\baselineskip}
+%    \mbox{{\hspace{9.5cm} \parbox[t]{12cm}{\footnotesize \href{http://link.springer.com/article/10.1007/s11222-016-9649-y}{Piironen \&\\ Vehtari (2017)}}}}
+
+% \end{frame}
+
+\begin{frame}{}
+
+\frametitle{Take-home messages}
+
+  \begin{enumerate}
+  \item It's good to think predictions of observables, because
+    observables are the only ones we can observe
+  \item \only<1>{\color{gray}}Cross-validation can simulate predicting and observing new
+    data
+  \item \only<2>{\color{gray}}Cross-validation is good if you don't
+    trust your model
+  \item \only<3>{\color{gray}}Different variants of cross-validation
+    are useful in different scenarios
+  \item \only<4>{\color{gray}}Cross-validation has high variance, and
+    {\bf if} you trust your model you can beat cross-validation in
+    accuracy
+  \end{enumerate}
+  \only<5>{~}
+
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\end{document}

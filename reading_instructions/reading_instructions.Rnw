@@ -1,0 +1,217 @@
+\documentclass[11pt,a4paper,english]{article}
+%\usepackage[finnish]{babel}
+\usepackage[latin1]{inputenc}
+\usepackage{hyperref}
+\usepackage{listings}
+
+\usepackage{xcolor}
+\hypersetup{
+    colorlinks,
+    linkcolor={red!50!black},
+    citecolor={blue!50!black},
+    urlcolor={blue!80!black}
+}
+
+ % Normal latex T1-fonts
+\usepackage[T1]{fontenc}
+ % For the pdf-conversion. Remember -Ppdf for latex!
+%\usepackage[T1,mtbold,lucidacal,mtplusscr,subscriptcorrection]{mathtime}
+%\usepackage{times}
+
+ % Figures
+%\usepackage{graphicx,fancybox,subfigure}
+
+ % AMS-stuff
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{amsbsy}
+
+ % Misc
+\usepackage{verbatim}
+\usepackage{url}
+
+% Page size
+\addtolength{\hoffset}{-1cm}
+\addtolength{\textwidth}{2cm}
+\addtolength{\voffset}{-1cm}
+\addtolength{\textheight}{2cm}
+
+% Paragraph
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1ex plus 0.5ex minus 0.2ex}
+
+% Horizontal line
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+
+% No page numbers
+\pagestyle{empty}
+
+% New commands:
+\DeclareMathOperator{\var}{var}
+\DeclareMathOperator{\cov}{cov}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Prob}{\mathbb{P}}
+
+
+\begin{document}
+%\SweaveOpts{concordance=TRUE}
+%\SweaveOpts{concordance=TRUE}
+
+
+\begin{titlepage}
+
+\center
+\textsc{\LARGE Uppsala University}\\[1.5cm] % Name of your university/college
+\includegraphics[scale=.2]{files/uu_logo.png}\\[1cm]
+\textsc{\Large Bayesian Statistics and Data Analysis}\\[0.5cm]
+\textsc{\large }\\[0.5cm]
+
+\HRule \\[0.4cm]
+{ \huge \bfseries Reading Instructions}\\[0.4cm] % Title of your document
+\HRule \\[1.5cm]
+
+\vfill
+
+\end{titlepage}
+
+\tableofcontents
+
+
+% General Knitr options
+% (this cannot be input since the file runs knitr before LaTeX)
+<<echo=FALSE,eval=TRUE>>=
+options(continue="  ", prompt="> ")
+knitr::opts_chunk$set(size = "small")
+@
+
+\newpage
+
+\section{The Bayesian Data Analysis book: Reading instructions}
+
+\subsection{Chapter 1}
+
+\begin{list}{$\bullet$}{\parsep=0pt\itemsep=2pt}
+\item 1.1-1.3 important terms, especially 1.3 for the notation
+\item 1.4 an example related to the first exercise, and another
+  practical example
+\item 1.5 foundations
+\item 1.6 good example related to visualization exercise
+\item 1.7 example (can be skipped)
+\item 1.8 background material, good to read before doing assignment 1
+\item 1.9 background material, good to read before doing assignment 2
+\item 1.10 a point of view for using Bayesian inference
+\end{list}
+
+
+\subsection{Chapter 2}
+
+\begin{list}{$\bullet$}{\parsep=0pt\itemsep=2pt}
+\item 2.1 Binomial model (\emph{very important}, related to assignment 2)
+\item 2.2 Posterior as compromise between data and prior information
+\item 2.3 Posterior summaries
+\item 2.4 Informative prior distributions
+\item 2.5 Gaussian model with known variance
+\item 2.6 Other single parameter models
+  \begin{list}{-}{\parsep=0pt\itemsep=2pt}
+  \item in this course the normal distribution with known mean but
+    unknown variance is the most important
+  \item glance through Poisson and exponential
+  \end{list}
+\item 2.7 glance through this example, which illustrates benefits of prior information, no need to read all the details (it's quite long example)
+\item 2.8 Noninformative and weakly informative priors
+\end{list}
+
+\subsection{Chapter 3}
+
+\begin{list}{$\bullet$}{\parsep=0pt\itemsep=2pt}
+\item 3.1 Marginalisation (\emph{very important})
+\item 3.2 Normal distribution with a noninformative prior (\emph{very important})
+\item 3.3 Normal distribution with a conjugate prior (\emph{very important})
+\item 3.4 Multinomial model (\emph{can be skipped})
+\item 3.5 Multivariate normal with known variance (needed later)
+\item 3.6 Multivariate normal with unknown variance (glance through)
+\item 3.7 Bioassay example (\emph{very important}, related to one of the exercises)
+\item 3.8 Summary (\emph{can be skipped})
+\end{list}
+
+\subsection{Chapter 5}
+
+\begin{list}{$\bullet$}{\parsep=0pt\itemsep=2pt}
+\item 5.1 Lead-in to hierarchical models
+\item 5.2 Exchangeability (a useful theoretical concept)
+\item 5.3 Bayesian analysis of hierarchical models
+\item 5.4 Hierarchical normal model
+\item 5.5 Example: parallel experiments in eight schools (uses hierarchical normal model, details of computation can be skipped)
+\item 5.6 Meta-analysis (\emph{can be skipped})
+\item 5.7 Weakly informative priors for hierarchical variance parameters
+\end{list}
+
+\subsection{Chapter 6}
+
+\begin{list}{$\bullet$}{\parsep=0pt\itemsep=2pt}
+\item 6.1 The place of model checking in applied Bayesian statistics
+\item 6.2 Do the inferences from the model make sense?
+\item 6.3 Posterior predictive checking ($p$-values (\emph{can be skipped})
+\item 6.4 Graphical posterior predictive checks
+\item 6.5 Model checking for the educational testing example
+\end{list}
+
+\subsection{Chapter 7}
+
+\begin{list}{$\bullet$}{\parsep=0pt\itemsep=2pt}
+\item 7.1 Measures of predictive accuracy
+\item 7.2 Information criteria and cross-validation (\emph{skip, instead read Vehtari, Gelman, and Gabry (2017)})
+\item 7.3 Model comparison based on predictive performance  (\emph{skip, instead read Vehtari, Gelman, and Gabry (2017)})
+\item 7.4 Model comparison using Bayes factors
+\item 7.5 Continuous model expansion / sensitivity analysis
+\item 7.6 Example (\emph{can be skipped})
+\end{list}
+
+
+\subsection{Chapter 9}
+
+\begin{list}{$\bullet$}{\parsep=0pt\itemsep=2pt}
+\item 9.1 Context and basic steps (\emph{very important})
+\item 9.2 Example
+\item 9.3 Multistage decision analysis (\emph{can be skipped})
+\item 9.4 Hierarchical decision analysis (\emph{can be skipped})
+\item 9.5 Personal vs. institutional decision analysis (\emph{very important})
+\end{list}
+
+
+\subsection{Chapter 10}
+
+\begin{list}{$\bullet$}{\parsep=0pt\itemsep=2pt}
+\item 10.1 Numerical integration (overview)
+\item 10.2 Distributional approximations (overview)
+\item 10.3 Direct simulation and rejection sampling (overview)
+\item 10.4 Importance sampling (used in PSIS-LOO discussed later)
+\item 10.5 How many simulation draws are needed? (\emph{very important} Exercise. 10.1 and 10.2)
+\item 10.6 Software (\emph{can be skipped})
+\item 10.7 Debugging (\emph{can be skipped})
+\end{list}
+
+\subsection{Chapter 11}
+
+\begin{list}{$\bullet$}{\parsep=0pt\itemsep=2pt}
+\item Markov chain simulation: before section 11.1, pages 275-276
+\item 11.1 Gibbs sampler (an example of simple MCMC method)
+\item 11.2 Metropolis and Metropolis-Hastings (an example of simple MCMC method)
+\item 11.3 Using Gibbs and Metropolis as building blocks (\emph{can be skipped})
+\item 11.4 Inference and assessing convergence (\emph{very important})
+\item 11.5 Effective number of simulation draws (\emph{very important})
+\item 11.6 Example: hierarchical normal model (\emph{can be skipped})
+\end{list}
+
+\subsection{Chapter 12}
+
+\begin{list}{$\bullet$}{\parsep=0pt\itemsep=2pt}
+\item 12.1 Efficient Gibbs samplers (\emph{can be skipped})
+\item 12.2 Efficient Metropolis jump rules (\emph{can be skipped})
+\item 12.3 Further extensions to Gibbs and Metropolis (\emph{can be skipped})
+\item 12.4 Hamiltonian Monte Carlo (used in Stan)
+\item 12.5 Hamiltonian dynamics for a simple hierarchical model (read through)
+\item 12.6 Stan: developing a computing environment (read through)
+\end{list}
+
+\end{document}
+

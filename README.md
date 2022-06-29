@@ -24,7 +24,7 @@ The basic prerequisites can be summarized in:
 
 
 ## (Rough) Course Plan and Reading Instructions
-You can find a rough course plan with reading instructions [here](https://docs.google.com/spreadsheets/d/e/2PACX-1vTMN6pWULQIs_klRyunyS3OiQZ5ty67Smljo6gcxc1dQ68c4dDoZlSJTmDowYixvPZpANqDhSIA40Cs/pubhtml).
+You can find a rough course plan with reading instructions [here](https://docs.google.com/spreadsheets/d/e/2PACX-1vTMN6pWULQIs_klRyunyS3OiQZ5ty67Smljo6gcxc1dQ68c4dDoZlSJTmDowYixvPZpANqDhSIA40Cs/pubhtml). More detailed reading instructions can be found [here](https://github.com/MansMeg/BSDA/blob/main/reading_instructions/reading_instructions.pdf).
 
 
 ## Schedule

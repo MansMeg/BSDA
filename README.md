@@ -12,7 +12,7 @@ This course has a strong emphasis in computational aspects of Bayesian data anal
 
 
 ## Prerequisites and Course Goals
-See course syllabus with course goals [not here yet](https://www.uu.se/en/admissions/freestanding-courses/course-syllabus/?kpid=39843&type=1).
+See course syllabus with course goals [here](https://www.uu.se/en/admissions/freestanding-courses/course-syllabus/?kpid=47023&type=1).
 
 The basic prerequisites can be summarized in:
 - Basic probability theory:

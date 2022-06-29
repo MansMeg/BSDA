@@ -51,7 +51,7 @@ Below are the main references for the course.
 
 - BDA3: Gelman, A., Carlin, J. B., Stern, H. S., Dunson, D. B., Vehtari, A., & Rubin, D. B. (2013). Bayesian Data Analysis (3rd edition) [available for non-commercial purposes here](https://users.aalto.fi/~ave/BDA3.pdf) 
 - TH04: O'Hagan, Tony. "Dicing with the unknown." Significance 1.3 (2004): 132-133. [online](http://www.stat.columbia.edu/~gelman/stuff_for_blog/ohagan.pdf)
-- VAJ17: Vehtari, Aki, Andrew Gelman, and Jonah Gabry. "Practical Bayesian model evaluation using leave-one-out cross-validation and WAIC." Statistics and computing 27.5 (2017): 1413-1432. [online](https://arxiv.org/pdf/1507.04544.pdf)
+- VGG17: Vehtari, Aki, Gelman, Andrew and Gabry, Jonah. "Practical Bayesian model evaluation using leave-one-out cross-validation and WAIC." Statistics and computing 27.5 (2017): 1413-1432. [online](https://arxiv.org/pdf/1507.04544.pdf)
 
 
 ### Complementary Reading

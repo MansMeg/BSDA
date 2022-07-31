@@ -36,7 +36,7 @@ The course is graded with U (Underkänd/Fail), G (Godkänd/Pass), VG (väl godk�
 
 To pass, you should pass all assignments and the mini-project *at the set deadline*. 
 
-On each assignment, if everything is correct, a VG point can be awarded. Similarly on the mini-project, if it is considered to be good, 2 VG points can be awarded. A total of 7 or more VG points is needed to get VG on the course. 
+On each assignment, if everything is correct (>90% of points), a VG point will be awarded. Similarly on the mini-project, if it is considered to be very good, 2 VG points can be awarded. A total of 7 or more VG points is needed to get VG on the course. 
 
 ## Follow up and late submissions
 There are two follow up deadlines (or follow-up corrections) during the course. First, the assignments can be submitted again at the deadline of the project work. Then additional submissions of assignments will be corrected. Also, roughly one month after the end of the course, assignments can be turned in again. *Assignments submitted in after the first deadline cannot get VG*.

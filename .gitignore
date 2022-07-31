@@ -13,3 +13,4 @@ lectures/*/*.toc
 lectures/*/*.nav
 lectures/*/*.snm
 lectures/*/*.vrb
+*/tmp/*

@@ -117,7 +117,7 @@ This assignment is related to Chapter 5.
 \newpage
 
 
-\subsection*{1. Linear model: drowning data with Stan (3p)}
+\subsection*{1. Linear model: drowning data with Stan}
 
 The provided data \texttt{drowning} in the \texttt{bsda} package contains the number of people who died from drowning each year in Finland 1980--2019.
 %

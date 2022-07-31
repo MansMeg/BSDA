@@ -122,8 +122,6 @@ Don't include \texttt{markmyassignment} results in the report.
 
 \newpage
 
-\input{general_info_to_include.tex}
-
 \subsection*{Recap on R, probability and Bayes Theorem}
 
 \begin{enumerate}

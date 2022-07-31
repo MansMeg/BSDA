@@ -122,14 +122,12 @@ Don't include \texttt{markmyassignment} results in the report.
 
 \newpage
 
-\input{general_info_to_include.tex}
-
 \subsection*{Inference for binomial proportion (Computer)}
 
 Algae status is monitored in 274 sites at Finnish lakes and rivers.
 The observations for the 2008 algae status at each site are presented
-in file {\tt algae.txt} ('0': no algae, '1': algae present). The data
-can also be accessed from the {\tt bsda} R package as follows:
+in the {\tt algae} dataset ('0': no algae, '1': algae present). The data
+can be accessed from the {\tt bsda} R package as follows:
 
 <<echo=TRUE,eval=TRUE>>=
 library(bsda)

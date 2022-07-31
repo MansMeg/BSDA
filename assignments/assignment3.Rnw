@@ -121,15 +121,13 @@ Don't include \texttt{markmyassignment} results in the report.
 
 \newpage
 
-\input{general_info_to_include.tex}
-
 \subsection*{Inference for normal mean and deviation}
 
 A factory has a production line for manufacturing car windshields.
 A sample of windshields has been taken for testing hardness. The
-observed hardness values $\mathbf{y}_1$ can be found in file
-{\tt windshieldy1.txt}. The data
-can also be accessed from the {\tt bsda} R package as follows:
+observed hardness values $\mathbf{y}_1$ can be found in the
+{\tt windshieldy1} dataset. The data
+can be accessed from the {\tt bsda} R package as follows:
 
 <<echo=TRUE,eval=TRUE>>=
 library(bsda)

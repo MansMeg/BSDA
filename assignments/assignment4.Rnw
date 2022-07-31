@@ -129,8 +129,6 @@ Don't include \texttt{markmyassignment} results in the report.
 
 \newpage
 
-\input{general_info_to_include.tex}
-
 \subsection*{Bioassay model}
 
 In this exercise, you will use a dose-response relation model that is used in Section 3.7 of the course book. The used likelihood is the same, but instead of uniform priors,

@@ -1,4 +1,4 @@
-# Grading of Assignment 2
+# Assignment 2
 
 ## Basic requirements
 

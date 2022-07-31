@@ -3,7 +3,6 @@
 ## Basic requirements
 
 ### Q1 - 1 point
-
 Can you open the pdf and it's not blank?
 
 - No
@@ -16,9 +15,17 @@ Is the report anonymous?
 - No
 - Yes
 
-### Q2b - fail/pass
+### Q2b - 1 point
+Does the report follow the formatting instructions?
 
-Are the evaluation questions reported and are the total number of hours put written down in the report. If not, ask student to resubmit .
+- Not at all
+- Little
+- Mostly
+- Yes
+
+### Q2c - fail/pass
+
+Are the evaluation questions answered and are the total number of hours put written down in the report. If not fail and resubmit.
 
 
 ## Exercise 1
@@ -117,7 +124,7 @@ a) How is the answer for probability of picking a red ball?
 
 - No answer
 - Probability rules ... and ... used, but the result is not ... (0.5p)
-- Probability rules ... and ... used, and the result is ... (1p)
+- Probability rules ... and ... used, and the result is ... 
 
 
 ### Q15 - 1 point
@@ -127,7 +134,7 @@ b) How is the answer for what box is most probable?
 - No answer
 - Probabilities are computed correctly for all boxes given that the picked ball is red, but the answers are not .... (0.5p)
 - Probabilities are computed correctly for all boxes given that the picked ball is red, the answers are ... and it is **not** explicitly said that the most probable box is box .... (0.5p)
-- Probabilities are computed correctly for all boxes given that the picked ball is red, the answers are ... and it is explicitly said that the most probable box is box .... (1p)
+- Probabilities are computed correctly for all boxes given that the picked ball is red, the answers are ... and it is explicitly said that the most probable box is box .... 
 
 ## Exercise 5
 
@@ -137,20 +144,6 @@ How is the answer for probability of Elvis having had an identical twin brother?
 
 - No answer
 - Probability that Elvis had an identical twin brother is computed correctly, but the result is not roughly ... (0.5p)
-- Probability that Elvis had an identical twin brother is computed using Bayes rule, and the result is roughly ... (1p)
+- Probability that Elvis had an identical twin brother is computed using Bayes rule, and the result is roughly ...
 
-## Overall quality of the report
-
-### Q17 -
-
-Does the report follow the formatting instructions?
-
-- Not at all
-- Little
-- Mostly
-- Yes
-
-### Q18 -
-
-In case the report doesn't fully follow the formatting instructions, specify the formatting instruction that is not followed. If applicable, specify the page of the report, where this difference in formatting is visible.
 

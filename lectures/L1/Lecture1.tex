@@ -1,5 +1,5 @@
-\documentclass[10pt,handout]{beamer}
-%\documentclass[10pt]{beamer}
+%\documentclass[10pt,handout]{beamer}
+\documentclass[10pt]{beamer}
 \usepackage[english]{babel} % Anpassa efter svenska. Ger svensk logga.
 \usepackage[utf8]{inputenc} % Anpassa efter linux
 \usepackage{graphicx}
@@ -66,7 +66,7 @@
 \begin{frame}{Bayesian Analysis}
 
   \begin{itemize}
-  \item Based on Bayesian probability theory
+  \item Bayesian probability theory
     \begin{itemize}
     \item uncertainty is presented with probabilities
     \item probabilities are updated based on new information
@@ -157,7 +157,147 @@
 \end{frame}
 
 
-\begin{frame}{Updating uncertainty}
+\section{Bayesian Statistical Inference}
+\frame{\sectionpage}
+
+\begin{frame}{Probability in Bayesian Statistics}
+
+  \begin{itemize}
+  \item Uncertainty and knowledge is expressed as probability distributions, why? \pause
+  \begin{itemize}
+    \item Analogy to physical randomness
+    \item Knowledge as coherence of bets (the Dutch book)
+    % TODO: Add link to Wikipedia
+  \end{itemize}
+  \pause
+  \item Everyone can have their own 'subjective' uncertainty, e.g.  P(rain tomorrow), P(Magdalena Andersson will be the next primeminister)
+  \item Frequency arguments can be difficult in some situations: P(other life in the universe)
+  \pause
+  \item {\color{uured} Bayesian epistemiology}
+  \begin{itemize}
+  \item State of knowledge is a probability distribution,
+  \item e.g. unlike Popperian aproaches, we can talk about P(black swan)
+  \item Research in Philisophy of Science
+  \end{itemize}
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}{Statistical inference}
+  \begin{itemize}
+  \item Draw conclusions of {\color{uured} unobserved} entities, based on {\color{uured} data} \pause
+  \item Different types of unobserved entities
+    \begin{itemize}
+    \item {\color{uured} potentially observed}: future observations, treatment effects
+    \item {\color{uured} parameters}: data-generating process (e.g. regression coefficients)
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Parameters, data, and predictions}
+
+  \begin{itemize}
+  \item Model parameters: $\theta = (\theta_1,...,\theta_p)$
+  \item Observed data: $y = (y_1,...,y_n)$
+    \begin{itemize}
+    \item $y_i$ can be a vector and is assumed to be random
+    \end{itemize}
+  \item Potentially observed data: $\tilde{y} = (\tilde{y}_1,...,\tilde{y}_m)$
+  \item Observed (known) covariates: $x$
+  \item We assume \emph{exchangeability} of the observations:
+\[
+p(y_1,...,y_n)
+\]
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Notation}
+
+  \begin{itemize}
+    \item $p(\cdot|\cdot)$: conditional pdf/pmf
+    \item $p(\cdot)$: marginal pdf/pmf
+    \item $P(\cdot)$ or $Pr(\cdot)$: probability, e.g. $P(\theta > 0) = \int_0^\infty p(\theta) d\theta$
+    \item Random variable: $\theta \sim N(\mu,\sigma)$
+    \item pdf/pmf: $p(\theta) = N(\theta | \mu,\sigma)$
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}{The basic steps of Bayesian inference}
+
+  \begin{enumerate}
+  \item Setting up a full probability model $p(y|\theta) \cdot p(\theta) = p(y,\theta)$ %; a joint probability distribution for all observable and unobservable quantities in a problem. The model should be consistent with knowledge about the underlying scientific problem and the data collection process.
+  \pause
+  \item Conditioning on observed data $y$ to calculate the posterior distribution $p(\theta|y)$%: calculating and interpreting the appropriate posterior distribution—the conditional probability distribution of the unobserved quantities of ultimate interest, given the observed data.
+  \pause
+  \item Evaluate the model. If not satisfied, go back to 1.% Evaluating the fit of the model and the implications of the resulting posterior distribution: how well does the model fit the data, are the substantive conclusions reasonable, and how sensitive are the results to the modeling assumptions in step 1? In response, one can alter or expand the model and repeat the three steps.
+   \end{enumerate}
+\end{frame}
+
+
+\begin{frame}{Bayesian Inference I}
+  \begin{itemize}
+  \item Bayesian conclusions about $\theta$ or $\tilde{y}$ are made using probabilities, {\color{uured} conditional on data} $y$
+  \pause
+  \item We state our uncertainty about $\theta$ or $\tilde{y}$ as distributions
+  \pause
+  \begin{itemize}
+    \item potentially observed: $p(\tilde{y}|y)$
+    \item parameters: $p(\theta|y)$
+  \end{itemize}
+  \item We implicitly condition on $x$, i.e. $p(\theta|y) = p(\theta|y, x)$
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}{Bayesian Inference: Setting up the model}
+  \begin{itemize}
+  \item Start out with a {\color{uured} model}: a \emph{joint distribution} for data and parameters:
+  \[
+  p(y,\theta) = p(y|\theta) p(\theta)
+  \]
+  \pause
+  \item $p(y|\theta)$ is our data model, and when conditioned on $y$, the \emph{likelihood}
+  \pause
+  \item $p(\theta)$ is our prior distribution for our parameters
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Bayesian Inference: Computing the posterior}
+  \begin{itemize}
+  \item Conditioning on data $y$, using \emph{Bayes theorem}, we can the compute the \emph{posterior distribution}
+  \[
+  p(\theta|y) = \frac{p(y|\theta) p(\theta)}{p(y)}
+  \]
+  where
+  \[
+  p(y) = \int p(y|\theta) p(\theta) d\theta
+  \]
+  \pause
+  \item $p(y)$ is the \emph{marginal likelihood}
+  \pause
+  \item $p(\theta|y)$ summarize our knowledge about $\theta$
+  \pause
+  \item Bayesian statistics obey the \emph{likelihood principle}: data only affects $p(\theta|y)$ through the likelihood $p(y|\theta)$
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}{Predictions}
+  \begin{itemize}
+  \item How to do inference on an unknown (potential) observable $\tilde{y}$? E.g. a future observation
+  \pause
+  \item We use our \emph{data} model and our posterior and \emph{marginalize} over the uncertainty
+  \[
+  p(\tilde{y}|y) = \int p(\tilde{y}|\theta) p(\theta|y) d\theta
+  \]
+  \item The \emph{posterior predictive distribution}
+  \item 'An average of conditional predictions over the posterior distribution'
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}{Example: Updating uncertainty}
 
   \begin{itemize}
   %\item<2-> probability of red $\frac{\mathrm{\#red}}{\mathrm{\#red+\#yellow}}{\onslide<3->=\theta}$
@@ -177,48 +317,68 @@
 \end{frame}
 
 
-\begin{frame}{Model vs. likelihood}
-
+\begin{frame}{Model vs. Likelihood}
   \begin{itemize}
   \item Bayes rule
-      $p(\theta|y)\propto p(y|\theta)p(\theta)$
+      \[
+      p(\theta|y) = \frac{p(y|\theta)p(\theta)}{p(y)} \propto p(y|\theta)p(\theta)
+      \]
     \vspace{\baselineskip}
-  \item Model: $p(y|\theta)$ as a function of $y$ given fixed $\theta$
-    describes the aleatoric uncertainty \vspace{\baselineskip}
-  \item Likelihood: $p(y|\theta)$ %=L(\theta|y)$
+  \item Data model: $p(y|\theta)$ as a function of $y$ given fixed $\theta$
+    describes the {\color{uured} aleatoric} uncertainty \vspace{\baselineskip}
+  \item Likelihood: $p(y|\theta)=L(\theta|y)$
     as a function of $\theta$
     given fixed $y$ provides information about epistemic uncertainty,
-    but is not a probability distribution
+    but is not a probability distribution, why?
     \vspace{\baselineskip}
   \item<2-> Bayes rule combines the likelihood with prior uncertainty
-    $p(\theta)$ and transforms them to updated posterior uncertainty
+    $p(\theta)$ and transforms them to updated posterior uncertainty $p(\theta|y)$
   \end{itemize}
 \end{frame}
 
-%% TODO: Change example
 
-\begin{frame}{Example application: Drug dosage for liver transplant\footnote{\color{gray}with E. Siivola, Aalto and S. Weber, Novartis Pharma}}
 
-  \vspace{-0.5\baselineskip}
+\begin{frame}{Example application: Effects on roaches}
+% https://avehtari.github.io/modelselection/roaches.html
 \begin{itemize}
-\item Everolimus is immunosuppressant to prevent rejection of organ
-  transplants
-\item Pharmacokinetic model of drug and body, optimal dosage depends on weight\\
-  \begin{minipage}[t]{\textwidth}
-    \vspace{-.2\baselineskip}
-  \hspace{-1.2cm}\includegraphics[width=6cm]{figs/2compartment_graph.png}
-  \includegraphics[width=6cm]{figs/data_population_simple.pdf}
-\end{minipage}
-    \vspace{.2\baselineskip}
-\item<2-> Model fitted with 500 adults, extrapolation to children?
-\item<3-> Maturation effect, 17 observations from children
+\item Question: Effect of treamtments on captured roaches
+\pause
+\item Outcome ($y$): The number of roaches
+\item Coeffcients ($x$): Treatment, Senior home, Pre-treatment number of roaches
+\pause
+\item Data model:
+\[
+p(y|\theta) = Po(\lambda) = \frac{1}{y!}\lambda^y \exp(\lambda)
+\]
+where
+\[
+\lambda = \exp(\alpha + \beta X)
+\]
+\item Prior:
+\[
+p(\theta) = p(\alpha) = p(\beta_k) = N(\theta|\mu,\sigma)
+\]
+\pause
+\item Posterior:
+\[
+p(\alpha, \beta|y) \propto N(\alpha|\mu,\sigma) \prod^K N(\beta_k|\mu,\sigma) \prod^N_{i=1} Po(\exp(\alpha + \beta x))
+\]
+\pause
+\item Predictive distribution:
+\[
+p(\tilde{y}|y,\tilde{x}) = \int Po(\exp(\alpha + \beta \tilde{x})) p(\alpha, \beta |y) d\alpha d\beta
+\]
+
 \end{itemize}
 
 \end{frame}
 
-\begin{frame}{The art of probabilistic modeling}
+\section{Probabilistic Modeling}
+\frame{\sectionpage}
 
+\begin{frame}{The art of probabilistic modeling}
   \begin{itemize}
+  \item Subjectivity: we need to specify both $p(\theta)$ and $p(y|\theta)$
   \item The art of probabilistic modeling is to describe in a
     mathematical form (model and prior distributions) what we already
     know and what we don't know
@@ -230,13 +390,14 @@
 \vspace{\baselineskip}
   \item<3-> Other parts of the art of probabilistic modeling are, for example,
     \begin{itemize}
-    \item model checking: is data in conflict with our prior knowledge?
+    \item model checking/assesment: is data in conflict with our prior knowledge?
+    \item model choice: which model should we use?
     \item presentation: presenting the model and the results to the application experts
     \end{itemize}
   \end{itemize}
 \end{frame}
 
-\begin{frame}
+\begin{frame}{Example applications}
 
   \begin{columns}[T] % align columns
  \begin{column}{.49\textwidth}
@@ -276,45 +437,56 @@
 \end{columns}
 \end{frame}
 
-\begin{frame}
-  \frametitle{Bayesian data analysis}  %
-  \framesubtitle{Example analyses}
-  \begin{itemize}
-  \item Treatment/control
-    \begin{itemize}
-    \item randomize patients to treatment or control
-    \item is the treatment effective?
-    \end{itemize}
-    \pause
-  \item Continuous valued treatment
-    \begin{itemize}
-    \item randomize patients with different dosages
-    \item which dosage is sufficient without too many side effects?
-    \end{itemize}
-    \pause
-  \item Different effects for different patients?
-    \begin{itemize}
-    \item Is the treatment effect different for male/female, child/adult, light/heavy, ...
-    \end{itemize}
-  \end{itemize}
+%\begin{frame}
+%  \frametitle{Bayesian data analysis}  %
+%  \framesubtitle{Example analyses}
+%  \begin{itemize}
+%  \item Treatment/control
+%    \begin{itemize}
+%    \item randomize patients to treatment or control
+%    \item is the treatment effective?
+%    \end{itemize}
+%    \pause
+%  \item Continuous valued treatment
+%    \begin{itemize}
+%    \item randomize patients with different dosages
+%    \item which dosage is sufficient without too many side effects?
+%    \end{itemize}
+%    \pause
+%  \item Different effects for different patients?
+%    \begin{itemize}
+%    \item Is the treatment effect different for male/female, child/adult, light/heavy, ...
+%    \end{itemize}
+%  \end{itemize}
 
-\end{frame}
+%\end{frame}
 
-\begin{frame}{Bayesian approach}
+\begin{frame}{Benefits and problems when going Bayesian}
 
   \begin{itemize}
   \item Benefits of Bayesian approach
     \begin{itemize}
     \item integrate over uncertainties to focus to interesting parts
+    \item straight-forward predictive distributions
     \item use relevant prior information
     \item hierarchical models
     \item model checking and evaluation
+    \item easier interpretation of uncertainty intervals
+    \end{itemize}
+  \item Complications of Bayesian approach
+    \begin{itemize}
+    \item most models does not have nice analytical posteriors
+    \item we need to \emph{approximate} our posterior
+    \item can be computationally costly
     \end{itemize}
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Computation}
 
+\section{Bayesian Computation}
+\frame{\sectionpage}
+
+\begin{frame}{Computation}
   We need to be able to compute expectations with respect to posterior
   distribution $p(\theta|y)$
   \begin{align*}
@@ -332,7 +504,7 @@
     \end{itemize}
   \item Distributional approximations
     \begin{itemize}
-    \item e.g. Laplace, variational, expectation propagation
+    \item e.g. Laplace, variational inference
     \item less generic, but can be much faster with sufficient accuracy
     \end{itemize}
   \end{itemize}
@@ -389,8 +561,8 @@ parameters {
 model {
   theta1 ~ beta(1,1);
   theta2 ~ beta(1,1);
-  y1 ~ binomial(N1,theta1);
-  y2 ~ binomial(N2,theta2);
+  y1 ~ binomial(N1, theta1);
+  y2 ~ binomial(N2, theta2);
 }
 generated quantities {
   real oddsratio;
@@ -435,7 +607,7 @@ generated quantities {
 
 \end{frame}
 
-\begin{frame}{Reminder: Uncertainty and probabilistic modeling}
+\begin{frame}{Recap: Uncertainty and probabilistic modeling}
 
   \begin{itemize}
   \item Two types of uncertainty: aleatoric and epistemic
@@ -449,31 +621,31 @@ generated quantities {
    \end{itemize}
 \end{frame}
 
-\begin{frame}{Questions}
-
-  \begin{itemize}
-  \item<1-> Pick a number between 1--5
-    \begin{itemize}
-    \item<2-> raise as many fingers
-    \item<3-> is the number of fingers raised random (by you or by others)?
-    \end{itemize}
-    \vspace{\baselineskip}
-  \item<4-> If we build a robot with very fast vision which can observe
-    the rotating coin accurately, is the throw random for the robot?
-    \vspace{\baselineskip}
-  \item<5-> Is the quantum uncertainty aleatoric or epistemic?
-    \vspace{\baselineskip}
-  \item<6-> What is your own example with both aleatoric and epistemic
-    uncertainty?
-  \end{itemize}
-\end{frame}
+%\begin{frame}{Questions}
+%
+%  \begin{itemize}
+%  \item<1-> Pick a number between 1--5
+%    \begin{itemize}
+%    \item<2-> raise as many fingers
+%    \item<3-> is the number of fingers raised random (by you or by others)?
+%    \end{itemize}
+%    \vspace{\baselineskip}
+%  \item<4-> If we build a robot with very fast vision which can observe
+%    the rotating coin accurately, is the throw random for the robot?
+%    \vspace{\baselineskip}
+%  \item<5-> Is the quantum uncertainty aleatoric or epistemic?
+%    \vspace{\baselineskip}
+%  \item<6-> What is your own example with both aleatoric and epistemic
+%    uncertainty?
+%  \end{itemize}
+%\end{frame}
 
 \begin{frame}{Rest of the course}
 
   \begin{itemize}
   \item Basic models which can be used as building blocks
     \vspace{\baselineskip}
-  \item Basic computation
+  \item Basic computation of posterior distributions
     \vspace{\baselineskip}
   \item Typical simple scientific data analysis cases
      \begin{itemize}
@@ -484,22 +656,20 @@ generated quantities {
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Some important terms}
-
-  \begin{itemize}
-  \item[-] probability
-  \item[-] probability density
-  \item[-] probability mass
-  \item[-] probability density function (pdf)
-  \item[-] probability mass function (pmf)
-  \item[-] probability distribution
-  \item[-] discrete probability distribution
-  \item[-] continuous probability distribution
-  \item[-] cumulative distribution function (cdf)
-  \item[-] likelihood
-  \end{itemize}
-
-\end{frame}
+%\begin{frame}{Some important terms}
+% This they should know
+%  \begin{itemize}
+%  \item[-] probability
+%  \item[-] probability density function (pdf)
+%  \item[-] probability mass function (pmf)
+%  \item[-] probability distribution
+%  \item[-] discrete probability distribution
+%  \item[-] continuous probability distribution
+%  \item[-] cumulative distribution function (cdf)
+%  \item[-] likelihood
+%  \end{itemize}
+%
+%\end{frame}
 
 \begin{frame}{Ambiguous notation in statistics}
 
@@ -507,7 +677,7 @@ generated quantities {
   \item[] In $p(y|\theta)$
     \pause
   \begin{itemize}
-  \item[-] $y$ can be variable or value
+  \item[-] $y$ can be variable or (observed) value
     \begin{itemize}
     \item[] we could clarify by using $p(Y|\theta)$ or $p(y|\theta)$
     \end{itemize}
@@ -531,16 +701,16 @@ $P(Y=y|\Theta=\theta)$ is a probability
 \item[-]
 $P_\Theta(Y=y|\Theta)$ is a likelihood function (can be discrete or continuous)
     \pause
-\item[-] $p_Y(Y|\Theta=\theta)$ is a probability density function, sampling distrbution, observation model
+\item[-] $p_Y(Y|\Theta=\theta)$ is a probability density function, sampling distribution, observation model
     \pause
 \item[-] $p(Y=y|\Theta=\theta)$ is a density
     \pause
 \item[-] $p_\Theta(Y=y|\Theta)$ is a likelihood function (can be discrete or continuous)
-    \pause
-  \item[-] $y$ and $\theta$ can also be mix of continuous and discrete
-    \pause
-    \item[-] Due to the sloppines sometimes likelihood is used to refer
-$P_{Y,\theta}(Y|\Theta)$, $p_{Y,\theta}(Y|\Theta)$
+%    \pause
+%  \item[-] $y$ and $\theta$ can also be mix of continuous and discrete
+%    \pause
+%    \item[-] Due to the sloppines sometimes likelihood is used to refer
+%$P_{Y,\theta}(Y|\Theta)$, $p_{Y,\theta}(Y|\Theta)$
 
   \end{itemize}
 \end{itemize}

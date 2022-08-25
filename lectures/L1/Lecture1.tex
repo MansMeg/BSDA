@@ -5,6 +5,7 @@
 \usepackage{graphicx}
 \usepackage{hyperref}
 \usepackage{listings}
+\input{../common/lststan} % Stan listing
 
 \hypersetup{
     colorlinks=true,
@@ -547,7 +548,7 @@ p(\tilde{y}|y,\tilde{x}) = \int Po(\exp(\alpha + \beta \tilde{x})) p(\alpha, \be
 \begin{frame}[fragile]
   \frametitle{Binomial model for treatment/control comparison}
   {\footnotesize
-  \begin{lstlisting}
+  \begin{lstlisting}[language=Stan]
 data {
   int<lower=0> N1;
   int<lower=0> y1;

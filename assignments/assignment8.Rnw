@@ -90,7 +90,7 @@ This assignment is related to Chapter 7.
 \textbf{Note!} This assignment build upon assignment 7, so be sure that assignment 7 is correct before you start with this assignment. You can ask TAs for help to check that your assignment 7 answer is good.
 
 \textbf{Reading instructions:} Chapter 7 in BDA3, see reading instructions. The [`loo` package vignette on the basics of LOO](https://mc-stan.org/loo/articles/loo2-with-rstan.html) shows an example of how to modify Stan code and use the package with Stan models.
-Also read about the PSIS-LOO that in \href{https://link.springer.com/article/10.1007/s11222-016-9696-4}{\textbf{this article}} or \href{https://arxiv.org/pdf/1507.04544}{\textbf{the corresponding preprint}}.
+Also read about the PSIS-LOO that in \href{https://link.springer.com/article/10.1007/s11222-016-9696-4}{\textbf{this article}}.
 
 \input{general_info_reporting_accuracy.tex}
 

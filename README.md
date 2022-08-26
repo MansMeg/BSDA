@@ -49,9 +49,14 @@ Below are the main references for the course.
 
 ### Literature
 
+
 - BDA3: Gelman, A., Carlin, J. B., Stern, H. S., Dunson, D. B., Vehtari, A., & Rubin, D. B. (2013). Bayesian Data Analysis (3rd edition) [available for non-commercial purposes here](https://users.aalto.fi/~ave/BDA3.pdf) 
 - TH04: O'Hagan, Tony. "Dicing with the unknown." Significance 1.3 (2004): 132-133. [online](http://www.stat.columbia.edu/~gelman/stuff_for_blog/ohagan.pdf)
-- VGG17: Vehtari, Aki, Gelman, Andrew and Gabry, Jonah. "Practical Bayesian model evaluation using leave-one-out cross-validation and WAIC." Statistics and computing 27.5 (2017): 1413-1432. [online](https://arxiv.org/pdf/1507.04544.pdf)
+- VGG17: Vehtari, A, Gelman, A and Gabry, J. "Practical Bayesian model evaluation using leave-one-out cross-validation and WAIC." Statistics and computing 27.5 (2017): 1413-1432. [online](https://arxiv.org/pdf/1507.04544.pdf)
+
+Optional literature
+- G17: Gelman , A "Should we worry about rigged priors? A long discussion" (2017) [online](http://andrewgelman.com/2017/10/04/worry-rigged-priors/)
+- H21: Harrell, F. "Bayesian vs. Frequentist Statements About Treatment Efficacy" (2021) [online](https://www.fharrell.com/post/bayes-freq-stmts/)
 
 
 ### Complementary Reading

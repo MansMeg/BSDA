@@ -1,5 +1,5 @@
-\documentclass[10pt,handout]{beamer}
-%\documentclass[10pt]{beamer}
+%\documentclass[10pt,handout]{beamer}
+\documentclass[10pt]{beamer}
 \usepackage[english]{babel} % Anpassa efter svenska. Ger svensk logga.
 \usepackage[utf8]{inputenc} % Anpassa efter linux
 \usepackage{graphicx}
@@ -39,7 +39,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \setlength{\parskip}{3mm}
-\title[]{{\color{black}Bayesian Statistics and Data Analysis \\ Lecture 1}}
+\title[]{{\color{black}Bayesian Statistics and Data Analysis \\ Lecture 2}}
 \author[]{M{\aa}ns Magnusson \\ Department of Statistics, Uppsala University \\ Thanks to Aki Vehtari, Aalto University}
 \date{}
 
@@ -72,9 +72,9 @@
   \end{itemize}
 
 %   \begin{center}
-%   \only<2>{\includegraphics[width=9cm]{dbinom1.pdf}}
-%   \only<3>{\includegraphics[width=9cm]{dbinom10.pdf}}
-%   \only<4>{\includegraphics[width=9cm]{dbinom10b.pdf}}
+%   \only<2>{\includegraphics[width=8cm]{dbinom1.pdf}}
+%   \only<3>{\includegraphics[width=8cm]{dbinom10.pdf}}
+%   \only<4>{\includegraphics[width=8cm]{dbinom10b.pdf}}
 % \end{center}
 \end{frame}
 
@@ -89,7 +89,7 @@
   \end{itemize}
 
   \begin{center}
-    \only<2>{\includegraphics[width=9cm]{figs/dbinom1.pdf}}
+    \only<2>{\includegraphics[width=8cm]{figs/dbinom1.pdf}}
   \end{center}
 \end{frame}
 
@@ -104,9 +104,9 @@
   \end{itemize}
 
   \begin{center}
-    {\includegraphics[width=9cm]{figs/dbinom10.pdf}\\
+    {\includegraphics[width=8cm]{figs/dbinom10.pdf}\\
       \vspace{-0.6\baselineskip}
-\uncover<2>{\hspace{-18mm}\scriptsize    $p({\color{red}y}|n=10,\theta=0.5)$:\, 0.00 0.01 0.04 0.12 0.21 0.25 0.21 0.12 0.04 0.01 0.00}}
+\uncover<2>{\scriptsize    $p({\color{red}y}|n=10,\theta=0.5)$:\, 0.00 0.01 0.04 0.12 0.21 0.25 0.21 0.12 0.04 0.01 0.00}}
 \end{center}
 \end{frame}
 
@@ -121,15 +121,15 @@
   \end{itemize}
 
   \begin{center}
-  \only<1>{\includegraphics[width=9cm]{figs/dbinom10b.pdf}\\
+  \only<1>{\includegraphics[width=8cm]{figs/dbinom10b.pdf}\\
       \vspace{-0.6\baselineskip}
 {\hspace{-18mm}\scriptsize    $p({\color{red}y}|n=10,\theta=0.9)$:\, 0.00 0.00 0.00 0.00 0.00 0.00 0.01 0.06 0.19 0.39 0.35}}
-    \only<2>{\includegraphics[width=9cm]{figs/dbinom10.pdf}\\
-      \vspace{-0.6\baselineskip}
-{\hspace{-22mm}\scriptsize    $p({\color{red}y}=6|n=10,\theta=0.5)$:\, 0.00 0.01 0.04 0.12 0.21 0.25 \textbf{0.21} 0.12 0.04 0.01 0.00}}
-  \only<3>{\includegraphics[width=9cm]{figs/dbinom10b.pdf}\\
-      \vspace{-0.6\baselineskip}
-{\hspace{-22mm}\scriptsize    $p({\color{red}y}=6|n=10,\theta=0.9)$:\, 0.00 0.00 0.00 0.00 0.00 0.00 \textbf{0.01} 0.06 0.19 0.39 0.35}}
+%    \only<2>{\includegraphics[width=8cm]{figs/dbinom10.pdf}\\
+%      \vspace{-0.6\baselineskip}
+%{\hspace{-22mm}\scriptsize    $p({\color{red}y}=6|n=10,\theta=0.5)$:\, 0.00 0.01 0.04 0.12 0.21 0.25 \textbf{0.21} 0.12 0.04 0.01 0.00}}
+%  \only<3>{\includegraphics[width=8cm]{figs/dbinom10b.pdf}\\
+%      \vspace{-0.6\baselineskip}
+%{\hspace{-22mm}\scriptsize    $p({\color{red}y}=6|n=10,\theta=0.9)$:\, 0.00 0.00 0.00 0.00 0.00 0.00 \textbf{0.01} 0.06 0.19 0.39 0.35}}
 \end{center}
 \end{frame}
 
@@ -152,7 +152,8 @@
       p(\theta|y,n,M)&=\frac{p(y|\theta,n,M)}{p(y|n,M)}
       =\frac{\binom{n}{y} \theta^y(1-\theta)^{n-y}}{\int_0^1
         \binom{n}{y} \theta^y(1-\theta)^{n-y} d\theta} \\
-        &=\frac{1}{Z}\theta^y(1-\theta)^{n-y}
+        &=\frac{1}{Z}\theta^y(1-\theta)^{n-y} \\
+        \propto \theta^y(1-\theta)^{n-y}
     \end{align*}
   \end{itemize}
 
@@ -192,11 +193,13 @@
       \theta|y,n \sim \text{Beta}(y+1,n-y+1)
     \end{align*}}
   \end{itemize}
+  \pause
   \vspace{0.5\baselineskip}
   \begin{center}
-    \only<2>{\includegraphics[width=9cm]{figs/dbbeta10c.pdf}}
+    \only<2>{\includegraphics[width=8cm]{figs/dbbeta10c.pdf}}
   \end{center}
 \end{frame}
+
 
 \begin{frame}
   \frametitle{Binomial: computation}
@@ -247,7 +250,7 @@
     \end{itemize}
   \end{itemize}
   \pause
-  \includegraphics[width=9cm]{figs/demo2_1.pdf}
+  \includegraphics[width=8cm]{figs/demo2_1.pdf}
 \end{frame}
 
 %%%% predictive distribution
@@ -287,7 +290,7 @@
 
   Example: $n=10, y=10$
   \begin{center}
-  \includegraphics[width=10cm]{figs/dbbeta10.pdf}
+  \includegraphics[width=8cm]{figs/dbbeta10.pdf}
   \end{center}
 
 \end{frame}
@@ -315,7 +318,7 @@
     \begin{itemize}
     \item[1)] we want the prior predictive distribution to be uniform
       \begin{equation*}
-        p(y|n,M) = \frac{1}{n+1}, \quad y=0,\ldots,n
+        p(\tilde{y}=1|n=0,M) = \frac{1}{2}
       \end{equation*}
       \begin{itemize}
       \item nice justification as it is based on observables $y$ and $n$
@@ -355,13 +358,14 @@
     \item only for exponential family distributions (plus for
       some irregular cases)
     \end{itemize}
-  \item Used to be important for computational reasons, and still
-    sometimes used for special models to allow partial analytic
+    \pause
+  \item Used to be important for computational reasons
+  \item Still used for special models to allow partial analytic
     marginalization (Ch 3)
-    \begin{itemize}
-    \item with dynamic Hamiltonian Monte Carlo used e.g. in Stan no any
+  \begin{itemize}
+  \item with dynamic Hamiltonian Monte Carlo used e.g. in Stan no any
       computational benefit
-    \end{itemize}
+  \end{itemize}
   \end{itemize}
 
 \end{frame}
@@ -400,7 +404,7 @@
   \begin{itemize}
   \item Beta prior centered on population average 0.485
   \end{itemize}
-  \includegraphics[width=11cm]{figs/demo2_2.pdf}
+  \includegraphics[width=8cm]{figs/demo2_2.pdf}
 \end{frame}
 % We next consider an informative prior.  As discussed in Section \ref{beauty1}, the percentage of girl births is remarkably stable at about 48.8\% girls, rarely varying by more than 0.5\% from this rate.
 
@@ -449,51 +453,74 @@
 \end{frame}
 
 \begin{frame}
+\frametitle{Noninformative prior}
 
-  \frametitle{Noninformative prior, proper and improper prior}
-
+% TODO: Add Jeffreys prior here
+\begin{itemize}
+  \item Vague, flat, diffuse, or noninformative
   \begin{itemize}
-  \item Vague, flat, diffuse of noninformative
-    \begin{itemize}
     \item try to ``to let the data speak for themselves''
     \item flat is not non-informative
     \item flat can be stupid
     \item making prior flat somewhere can make it non-flat somewhere
       else
-    \end{itemize}
+  \end{itemize}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Proper and improper prior}
+
+\begin{itemize}
   \item Proper prior has $\int p(\theta) = 1$
   \item Improper prior density doesn't have a finite integral
-    \begin{itemize}
+  \begin{itemize}
     \item the posterior can still sometimes be proper
+  \end{itemize}
+  \pause
+  \item Example: Binomial model
+  \begin{itemize}
+    \item Beta(0,0) prior is improper
+    \item If $y\neq 0$ and $y \neq n$, the posterior is proper
+  \end{itemize}
+  \item \emph{Be careful with improper priors!}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Weakly informative priors}
+
+  \begin{itemize}
+  % TODO: Add interactive example in other places as well
+  \item Weakly informative priors produce computationally better
+    behaving posteriors
+    \begin{itemize}
+    \item If we want to model IQ in children, how to construct a prior? % Question
+    \pause
+    \item often there's some knowledge about the scale
+    \item Using the {\color{blue} prior predictive} distribution
+    \begin{align*}
+      p(\tilde{y}|M) &= \int p(\tilde{y}|\theta,M){\color{blue}p(\theta|M)}d\theta\,,
+    \end{align*}
+    we can simulate data from the model: \\{\color{uured}Does it look (remotely) reasonable?}
+    \item useful if there's more information from previous
+      observations - not certain how well that information is
+      applicable in a new case
     \end{itemize}
   \end{itemize}
 
 \end{frame}
 
-
 \begin{frame}
-
-  \frametitle{Weakly informative priors}
+\frametitle{Construction of weakly informative priors}
 
   \begin{itemize}
-  \item Weakly informative priors produce computationally better
-    behaving posteriors
-    \begin{itemize}
-    \item quite often there's at least some knowledge about the
-      scale
-    \item useful also if there's more information from previous
-      observations, but not certain how well that information is
-      applicable in a new case uncertainty
-    \end{itemize}
-    \pause
-    \item Construction
-      \begin{itemize}
-      \item Start with some version of a noninformative prior distribution and then add enough
-        information so that inferences are constrained to be reasonable.
-      \item Start with a strong, highly informative prior and broaden it to account for uncertainty
-        in one's prior beliefs and in the applicability of any historically based prior distribution
-        to new data.
-      \end{itemize}
+      \item Prior prediction checks!
+      \item Start with some version of a noninformative prior, then add  information until reasonable.
+      \item Start with a strong prior, then broaden it to account for uncertainty
+      \pause
     \item Stan team prior choice recommendations \url{https://github.com/stan-dev/stan/wiki/Prior-Choice-Recommendations}
   \end{itemize}
 
@@ -511,14 +538,13 @@
     interviewers in a face-to-face survey)}
   \end{itemize}
   \begin{center}
-  \only<3>{\includegraphics[width=9cm]{figs/sexratio_bayes_1.pdf}}
-  \only<4>{\includegraphics[width=9cm]{figs/sexratio_bayes_2.pdf}}
+  \only<3>{\includegraphics[width=8cm]{figs/sexratio_bayes_1.pdf}}
+  \only<4>{\includegraphics[width=8cm]{figs/sexratio_bayes_2.pdf}}
   \end{center}
 \end{frame}
 
 \begin{frame}
-
-  \frametitle{Example of weakly informative prior}
+\frametitle{Example of weakly informative prior}
 
   \begin{itemize}
   \item Gabry et al (2019). Visualization in Bayesian workflow.
@@ -533,95 +559,72 @@
   }
   \end{itemize}
   \begin{center}
-  \only<2>{\includegraphics[width=10cm]{figs/map-data.png}\\Satellite estimates and ground monitor locations}
-  \only<3>{\includegraphics[width=6.5cm]{figs/plot2_bigger.png}}
+  \only<2>{\includegraphics[width=8cm]{figs/map-data.png}\\Satellite estimates and ground monitor locations}
+%  \only<3>{\includegraphics[width=6.5cm]{figs/plot2_bigger.png}}
   \end{center}
 \end{frame}
 
 \begin{frame}
-
-  \frametitle{Example of weakly informative prior}
+\frametitle{Example of weakly informative prior}
 
   \begin{center}
-    \only<1>{\includegraphics[width=11cm]{figs/pm25_pp1a.pdf}}
-    \only<2>{\includegraphics[width=11cm]{figs/pm25_pp1b.pdf}}
-    \only<3>{\includegraphics[width=11cm]{figs/pm25_pp2.pdf}}
+    \only<1>{\includegraphics[width=8cm]{figs/pm25_pp1a.pdf}}
+    \only<2>{\includegraphics[width=8cm]{figs/pm25_pp1b.pdf}}
+    \only<3>{\includegraphics[width=8cm]{figs/pm25_pp2.pdf}}
 \end{center}
 \end{frame}
 
 \begin{frame}
+\frametitle{Effect of incorrect priors?}
 
-  \frametitle{Effect of incorrect priors?}
-
-  \begin{itemize}
+\begin{itemize}
   \item Introduce bias, but often still produce smaller estimation
     error because the variance is reduced
-    \begin{itemize}
+  \begin{itemize}
     \item bias-variance tradeoff
-    \end{itemize}
   \end{itemize}
-
+\end{itemize}
 \end{frame}
-
-\begin{frame}{Structural information \only<1-2>{in predicting future}\only<3>{-- Prophet by Facebook}}
-
-    \only<1>{\hspace*{-2.5cm}\includegraphics[width=16cm]{figs/rstan_downloads_forecast.pdf}}
-    \only<2>{\hspace*{-2.5cm}\includegraphics[width=16cm]{figs/rstan_downloads_forecast_zoomed.pdf}}
-    \only<3>{\hspace*{-.5cm}\includegraphics[width=11.25cm]{figs/rstan_downloads_components.pdf}}
-
-\end{frame}
-
-%skip rest in video
 
 \begin{frame}
-  \frametitle{Sufficient statistics*}
+  \frametitle{Sufficient statistics}
 
-  \begin{itemize}
-  \item The quantity $t(y)$ is said to be a {\em sufficient statistic}
-    for $\theta$, because the likelihood for $\theta$ depends on the
-    data $y$ only through the value of $t(y)$.
-  \end{itemize}
+\begin{itemize}
+  \item The function $t(y)$ of data $y$ is said to be a {\em sufficient statistic} for $\theta$ if the likelihood for $\theta$ depends on the
+data $y$ only through the value of $t(y)$.
+  \item Example: Binomial model (with known $n$, and $y_i \in \{0,1\}$)
+  \begin{align*}
+      p(\theta|y) & \propto p(\theta) \prod^n p(y_i | \theta) \\
+      &\uncover<2->{ \propto \theta^{\alpha-1} (1-\theta)^{\beta-1} \prod^n\theta^y_i (1-\theta)^{1-y_i}} \\
+      &\uncover<3->{ \propto \theta^{\alpha-1} (1-\theta)^{\beta-1} \theta^{\sum y_i} (1-\theta)^{n - \sum y_i}} \\
+      &\uncover<4->{ \propto
+        \theta^{\sum y_i+\alpha-1} (1-\theta)^{n-\sum y_i+\beta-1}}\\
+      \uncover<5->{\text{after normalization}} &\\
+      \uncover<5->{p(\theta|y,n,M)}
+      &\uncover<5->{ = \text{Beta}(\theta|\alpha+\sum^n y_i,\beta+n-\sum^n y_i)}
+  \end{align*}
+  \uncover<6->{
+  Hence, $\sum y_i$ is a sufficient statistic for $\theta$ \color{uured}{in this model}}.
+\end{itemize}
 
 \end{frame}
 
 %%% demos
-\section{Demos}
-\frame{\sectionpage}
+\section{Demo}
+%\frame{\sectionpage}
 
 \begin{frame}
-  \frametitle{Posterior visualization and inference demos}
+  \frametitle{Demo in R}
 
   \begin{itemize}
-  \item demo2\_3: Simulate samples from Beta(438,544), and draw
-    a histogram of $\theta$ with quantiles.
+  \item L2demo.R
   \end{itemize}
-  \vspace{-\baselineskip}
-  \begin{center}
-  \includegraphics[width=11cm]{figs/demo2_3.pdf}
-\end{center}
+
 \end{frame}
 
 \begin{frame}
-  \frametitle{Posterior visualization and inference demos}
-
-  \begin{itemize}
-  \item demo2\_4: Compute posterior distribution in a grid.
-  \end{itemize}
-  \includegraphics[width=11cm]{figs/demo2_4a.pdf}
-\end{frame}
-
-\begin{frame}
-  \frametitle{Posterior visualization and inference demos}
-
-  \begin{itemize}
-  \item demo2\_4: Sample using the inverse-cdf method.
-  \end{itemize}
-  \includegraphics[width=11cm]{figs/demo2_4b.pdf}
-\end{frame}
-
-\begin{frame}
-  \frametitle{Algae}
-  \framesubtitle{Exercise}
+\frametitle{Algae}
+\framesubtitle{Exercise}
 
 Algae status is monitored in 274 sites at Finnish lakes and rivers.
 The observations for the 2008 algae status at each site are presented
@@ -635,7 +638,6 @@ blue-green algae levels.
 \item What can you say about the value of the unknown $\pi$?
 \item Experiment how the result changes if you change the prior.
 \end{itemize}
-
 \end{frame}
 
 \section{The Normal model}
@@ -645,9 +647,9 @@ blue-green algae levels.
   \frametitle{Normal / Gaussian}
 
   \begin{itemize}
-  \item Observations $y$ real valued
-  \item Mean $\theta$ and variance $\sigma^2$ (or deviation $\sigma$)\\
-    (first assume $\sigma^2$ known)
+  \item Observations $y \in \mathcal{R}$ (real valued)
+  \item Mean $\theta$ and variance $\sigma^2$ (or deviation $\sigma$)
+  \item For now: assume $\sigma^2$ is known
   \end{itemize}
   \vskip -2mm
   \begin{align*}
@@ -675,18 +677,18 @@ blue-green algae levels.
 
 \begin{frame}
 
-  \frametitle{Central limit theorem*}
+  \frametitle{Central limit theorem (recap)}
 
   \begin{itemize}
   \item De Moivre, Laplace, Gauss, Chebysev, Liapounov, Markov, et al.
-  \item Given certain conditions sum (and mean) of random variables
-    approach Gaussian distribution as d $n \rightarrow \infty$
+  \item Given certain conditions, sums (and means) of random variables
+    approach Gaussian distribution as $n \rightarrow \infty$
   \item Problems
     \begin{itemize}
     \item does not hold for all distributions, e.g., Cauchy
     \item may require large $n$,\\ e.g.
       Binomial, when $\theta$ close to $0$ or $1$
-    \item does not hold if one the variables has much larger scale
+    %\item does not hold if one the variables has much larger scale
     \end{itemize}
   \end{itemize}
 
@@ -703,8 +705,10 @@ blue-green algae levels.
       &\text{Prior} & p(\theta) & \propto
       \exp\left(-\frac{1}{2\tau_0^2}(\theta-\mu_0)^2\right)\\ \\
       & & \uncover<2->{\exp(a)\exp(b)} & \uncover<2->{= \exp(a+b)} \\ \\
-      &\uncover<3->{ \text{Posterior}}&
-      \uncover<3->{p(\theta|y)& \propto \exp\left(-\frac{1}{2}\left[ \frac{(y-\theta)^2}{\sigma^2}+\frac{(\theta-\mu_0)^2}{\tau_0^2} \right]\right)}
+      &\uncover<3->{ \text{Posterior}} & & \\
+    \end{align*}
+    \begin{align*}
+      \uncover<3->{p(\theta|y) & \propto \exp\left(-\frac{1}{2}\left[ \frac{(y-\theta)^2}{\sigma^2}+\frac{(\theta-\mu_0)^2}{\tau_0^2} \right]\right)}
     \end{align*}
   \end{itemize}
 
@@ -726,9 +730,11 @@ blue-green algae levels.
       \right)
     \end{align*}
     \begin{equation*}
-      \theta|y \sim \N(\mu_1,\tau_1^2), \quad
-      \text{where} \quad
-      \mu_1=\frac{\frac{1}{\tau_0^2}\mu_0+\frac{1}{\sigma^2}y}{\frac{1}{\tau_0^2}+\frac{1}{\sigma^2}} \quad  \text{and}  \quad \frac{1}{\tau_1^2} = \frac{1}{\tau_0^2}+\frac{1}{\sigma^2}
+      \theta|y \sim \N(\mu_1,\tau_1^2),\,
+      \text{where}
+    \end{equation*}
+    \begin{equation*}
+      \mu_1=\frac{\frac{1}{\tau_0^2}\mu_0+\frac{1}{\sigma^2}y}{\frac{1}{\tau_0^2}+\frac{1}{\sigma^2}} \text{and}   \frac{1}{\tau_1^2} = \frac{1}{\tau_0^2}+\frac{1}{\sigma^2}
     \end{equation*}
     \vskip -2mm
     \pause
@@ -743,24 +749,34 @@ blue-green algae levels.
 \begin{frame}
   \frametitle{Normal distribution - example}
 
-  \only<1>{\includegraphics[width=11cm]{figs/pguess.pdf}}
-  \only<2>{\includegraphics[width=11cm]{figs/pguessprior.pdf}}
-  \only<3>{\includegraphics[width=11cm]{figs/ppost.pdf}}
+  \only<1>{\includegraphics[width=8cm]{figs/pguess.pdf}}
+  \only<2>{\includegraphics[width=8cm]{figs/pguessprior.pdf}}
+  \only<3>{\includegraphics[width=8cm]{figs/ppost.pdf}}
 
 \end{frame}
 
 \begin{frame}
-  \frametitle{Normal distribution - conjugate prior for $\theta$}
+\frametitle{Normal distribution - conjugate prior for $\theta$}
+\framesubtitle{Several observations (iid)}
 
-  \begin{itemize}
-  \item Several observations -- use chain rule
-  \end{itemize}
+  Posterior (several observations $y=(y_1,\ldots,y_n)$)
+  \begin{align*}
+      p(\theta|y) & \propto p(\theta) p(y | \theta) \\
+      \uncover<2->{ & = p(\theta) \prod^n p(y_i | \theta)} \\
+      \uncover<3->{ & \propto \exp\left(-\frac{1}{2}\left[
+          \frac{\sum^n(y_i-\theta)^2}{\sigma^2}+\frac{(\theta-\mu_0)^2}{\tau_0^2} \right]\right)} \\
+      \uncover<4->{ & = \exp\left(-\frac{1}{2}\left[
+          \frac{n(\bar{y}-\theta)^2 + \sum^n(y_i-\bar{y})^2}{\sigma^2}+\frac{(\theta-\mu_0)^2}{\tau_0^2} \right]\right)} \\
+      \uncover<4->{ & \propto \exp\left(-\frac{1}{2}\left[
+          \frac{n(\bar{y}-\theta)^2}{\sigma^2}+\frac{(\theta-\mu_0)^2}{\tau_0^2} \right]\right)}
+  \end{align*}
 
 \end{frame}
 
 \begin{frame}
 
-  \frametitle{Normal distribution - conjugate prior for $\theta$}
+\frametitle{Normal distribution - conjugate prior for $\theta$}
+\framesubtitle{Several observations (iid)}
 
   \begin{itemize}
   \item Several observations $y=(y_1,\ldots,y_n)$
@@ -771,7 +787,7 @@ blue-green algae levels.
     \begin{align*}
       \text{where} \quad
       \mu_n=\frac{\frac{1}{\tau_0^2}\mu_0+\frac{n}{\sigma^2}\bar{y}}{\frac{1}{\tau_0^2}+\frac{n}{\sigma^2}} \quad
-      \text{ja} \quad \frac{1}{\tau_n^2} = \frac{1}{\tau_0^2}+\frac{n}{\sigma^2}
+      \text{and} \quad \frac{1}{\tau_n^2} = \frac{1}{\tau_0^2}+\frac{n}{\sigma^2}
     \end{align*}
   \item If $\tau_0^2=\sigma^2$, prior corresponds to one virtual observation with value $\mu_0$
     \pause
@@ -780,208 +796,39 @@ blue-green algae levels.
       \begin{equation*}
         p(\theta|y) \approx \N(\theta|\bar{y},\sigma^2/n)
       \end{equation*}
+      \pause
+      \item Find the {\color{uured}sufficient statistic} for $\theta$!
   \end{itemize}
 
 \end{frame}
 
 \begin{frame}
   \frametitle{Normal distribution - conjugate prior for $\theta$}
-
   \begin{itemize}
   \item Posterior predictive distribution
     \begin{align*}
       p(\tilde{y}|y)&=\int p(\tilde{y}|\theta)p(\theta|y) d\theta \\
-      p(\tilde{y}|y)& \propto\int
+      p(\tilde{y}|y)& \propto \int
       \exp\left(-\frac{1}{2\sigma^2}(\tilde{y}-\theta)^2\right)\exp\left(-\frac{1}{2\tau_1^2}(\theta-\mu_1)^2\right) d\theta \\
       ~&~\\
       \tilde{y}|y &\sim \N(\mu_1,\sigma^2+\tau_1^2)
     \end{align*}
-  \item Predictive variance = observation model variance $\sigma^2$ + \\
-     posterior variance $\tau_1^2$
-
+  \pause
+  \item Can be derived in multiple ways
+  \begin{enumerate}
+    \item integrate
+    \item $p(\tilde{y},\theta)$ is a bivariate normal - marginalize out $\theta$
+  \end{enumerate}
+  \item Predictive variance
+  \begin{enumerate}
+    \item observation model variance $\sigma^2$
+    \item posterior variance $\tau_1^2$
+  \end{enumerate}
+  \pause
+  \item {\color{uured}Aleatoric} and {\color{uured}epistemic} uncertainty?
   \end{itemize}
-
 \end{frame}
 
-% \section{Extra}
-% \frame{\sectionpage}
-
-
-\begin{frame}
-  \frametitle{Extras for Chapter 2}
-
-  \begin{itemize}
-  \item A bit more what is likelihood
-  \item Why do we need the normalization term
-  \item Plotting a continuous function
-  \item Why probability density can be larger than 1
-  \item Explicit conditioning on model $M$
-  \end{itemize}
-
-\end{frame}
-
-\begin{frame}
-  \frametitle{Binomial: known $\theta$}
-
-  \begin{itemize}
-  \item {\color{blue}Observation model} (function of {\color{red} $y$}, discrete)
-    \begin{align*}
-      p({\color{red}y}|\theta,n) = \binom{n}{{\color{red}y}} \theta^{\color{red}y}(1-\theta)^{n-{\color{red}y}}
-    \end{align*}
-  \end{itemize}
-
-  \begin{center}
-    {\includegraphics[width=9cm]{figs/dbinom10.pdf}\\
-      \vspace{-0.6\baselineskip}
-\uncover<2>{\hspace{-18mm}\scriptsize    $p({\color{red}y}|n=10,\theta=0.5)$:\, 0.00 0.01 0.04 0.12 0.21 0.25 0.21 0.12 0.04 0.01 0.00}}
-\end{center}
-\end{frame}
-
-\begin{frame}
-  \frametitle{Binomial: known $\theta$}
-
-  \begin{itemize}
-  \item {\color{blue}Observation model} (function of {\color{red} $y$}, discrete)
-    \begin{align*}
-      p({\color{red}y}|\theta,n) = \binom{n}{{\color{red}y}} \theta^{\color{red}y}(1-\theta)^{n-{\color{red}y}}
-    \end{align*}
-  \end{itemize}
-
-  \begin{center}
-  \only<1>{\includegraphics[width=9cm]{figs/dbinom10b.pdf}\\
-      \vspace{-0.6\baselineskip}
-{\hspace{-18mm}\scriptsize    $p({\color{red}y}|n=10,\theta=0.9)$:\, 0.00 0.00 0.00 0.00 0.00 0.00 0.01 0.06 0.19 0.39 0.35}}
-    \only<2>{\includegraphics[width=9cm]{figs/dbinom10.pdf}\\
-      \vspace{-0.6\baselineskip}
-{\hspace{-22mm}\scriptsize    $p({\color{red}y}=6|n=10,\theta=0.5)$:\, 0.00 0.01 0.04 0.12 0.21 0.25 \textbf{0.21} 0.12 0.04 0.01 0.00}}
-  \only<3>{\includegraphics[width=9cm]{figs/dbinom10b.pdf}\\
-      \vspace{-0.6\baselineskip}
-{\hspace{-22mm}\scriptsize    $p({\color{red}y}=6|n=10,\theta=0.9)$:\, 0.00 0.00 0.00 0.00 0.00 0.00 \textbf{0.01} 0.06 0.19 0.39 0.35}}
-\end{center}
-\end{frame}
-
-\begin{frame}
-  \frametitle{Binomial: unknown $\theta$}
-
-  \begin{itemize}
-  \item {\color{blue}Likelihood} (function of {\color{red}$\theta$}, continuous)
-    \begin{align*}
-      p(y|{\color{red}\theta},n) = \binom{n}{y} {\color{red}\theta}^y(1-{\color{red}\theta})^{n-y}
-    \end{align*}
-  \end{itemize}
-
-  \begin{center}
-    \only<1>{\includegraphics[width=9cm]{figs/lbinom10a.pdf}\\
-      \vspace{-0.6\baselineskip}
-{\hspace{-12mm}\scriptsize $p(y=6|n=10,{\color{red}\theta})$:\, 0.00\, 0.00\, 0.01\,\, 0.04\, 0.11\, \textbf{0.21}\, 0.25\, 0.20\, 0.09\, \textbf{0.01}\,\, 0.00}}
-    \only<2>{\includegraphics[width=9cm]{figs/lbinom10b.pdf}\\
-      \vspace{-0.6\baselineskip}
-{\hspace{-14mm}\scriptsize $\,$}}
-    \only<3>{\includegraphics[width=9cm]{figs/lbinom10c.pdf}\\
-      \vspace{-0.6\baselineskip}
-      \only<3>{\hspace{-14mm}\scriptsize $\,$}}
-    \only<4-5>{\includegraphics[width=9cm]{figs/lbinom10d.pdf}\\
-      \vspace{-0.6\baselineskip}
-      \only<4>{\hspace{-14mm}\scriptsize $\,$}
-      \only<5>{\scriptsize\texttt{integrate(function({\color{red}theta}) dbinom(6, 10, {\color{red}theta}), 0, 1)} $\approx 0.09$ }}
-\end{center}
-\end{frame}
-
-\begin{frame}
-  \frametitle{Binomial: unknown $\theta$}
-
-  \begin{itemize}
-  \item {\color{blue}Posterior} with Bayes rule (function of ${\color{red}\theta}$, continuous)
-    \begin{equation*}
-      p({\color{red}\theta}|y,n)=\frac{p(y|{\color{red}\theta},n)p({\color{red}\theta}|n)}{p(y|n)}
-    \end{equation*}
-    \pause
-    where $p(y|n)=\int p(y|{\color{red}\theta},n)p({\color{red}\theta}|n) d{\color{red}\theta}$
-  \item<3-> Start with uniform prior
-    \begin{align*}
-      p({\color{red}\theta}|n)=p({\color{red}\theta}|M)=1,\, \text{when}\,\, 0\leq{\color{red}\theta}\leq 1
-    \end{align*}
-  \item<4-> Then
-    \begin{align*}
-      p({\color{red}\theta}|y,n)&=\frac{p(y|{\color{red}\theta},n)}{p(y|n)}
-      =\frac{\binom{n}{y} {\color{red}\theta}^y(1-{\color{red}\theta})^{n-y}}{\int_0^1
-        \binom{n}{y} {\color{red}\theta}^y(1-{\color{red}\theta})^{n-y} d{\color{red}\theta}} \\
-        &=\frac{1}{Z}{\color{red}\theta}^y(1-{\color{red}\theta})^{n-y}
-    \end{align*}
-  \end{itemize}
-
-\end{frame}
-
-\begin{frame}
-  \frametitle{Binomial: unknown $\theta$}
-
-  \begin{itemize}
-  \item Normalization term $Z$ (constant given $y$)
-    \begin{equation*}
-      Z=p(y|n)= \int_0^1 \theta^y(1-\theta)^{n-y} d\theta = \frac{\Gamma(y+1)\Gamma(n-y+1)}{\Gamma(n+2)}
-    \end{equation*}
-  \item Evaluate with $y=6, n=10$\\
-    {\scriptsize\texttt{y<-6;n<-10;\\integrate(function(theta) theta\^{}y*(1-theta)\^{}(n-y), 0, 1)} $\approx 0.0004329$}\\
-    \uncover<2->{{\scriptsize\texttt{gamma(6+1)*gamma(10-6+1)/gamma(10+2)} $\approx 0.0004329$}}
-  % \item<3-> Normalisation term has \emph{Beta} function form
-  %   \begin{itemize}
-  %   \item when integrated over $(0,1)$
-  %     the result can presented with Gamma functions
-  %   \item with integers  $\Gamma(n)=(n-1)!$
-  %   \item for large integers even this is challenging and usually
-  %     $\log \Gamma(\cdot)$ is computed instead of $\Gamma(\cdot)$
-  %   \end{itemize}
-  \end{itemize}
-
-\end{frame}
-
-\begin{frame}
-  \frametitle{Binomial: unknown $\theta$}
-
-  \begin{itemize}
-  \item Posterior is
-    \begin{align*}
-      p(\theta|y,n) = \frac{\Gamma(n+2)}{\Gamma(y+1)\Gamma(n-y+1)}\theta^y(1-\theta)^{n-y},
-    \end{align*}
-    {
-    which is called Beta distribution
-    \begin{align*}
-      \theta|y,n \sim \text{Beta}(y+1,n-y+1)
-    \end{align*}}
-  \end{itemize}
-  \vspace{0.5\baselineskip}
-  \begin{center}
-    {\includegraphics[width=9cm]{figs/dbbeta10c.pdf}}
-  \end{center}
-\end{frame}
-
-\begin{frame}
-  \frametitle{Binomial: unknown $\theta$}
-
-  Sometimes conditioning on the model $M$ is explicitly shown
-
-  \begin{itemize}
-  \item {\color{blue}Posterior} with Bayes rule (function of $\theta$, continuous)
-    \begin{equation*}
-      p(\theta|y,n,M)=\frac{p(y|\theta,n,M)p(\theta|n,M)}{p(y|n,M)}
-    \end{equation*}
-    where $p(y|n,M)=\int p(y|\theta,n,M)p(\theta|n,M) d\theta$
-    \vspace{0.5\baselineskip}
-    \uncover<2->{\begin{itemize}
-    \item makes it more clear that likelihood and prior are both part
-      of the model
-    \item makes it more clear that there is no absolute probability
-      for $p(y|n)$, but it depends on the model $M$
-    \item in case of two models, we can evaluate marginal likelihoods
-      $p(y|n,M_1)$ and $p(y|n,M_2)$ (more in Ch 7)
-    \item<3-> usually dropped to make the notation more concise
-    \end{itemize}}
-  \end{itemize}
-
-\end{frame}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 \end{document}

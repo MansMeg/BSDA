@@ -57,7 +57,7 @@ Below are the main references for the course.
 Optional literature
 - G17: Gelman , A "Should we worry about rigged priors? A long discussion" (2017) [online](http://andrewgelman.com/2017/10/04/worry-rigged-priors/)
 - H21: Harrell, F. "Bayesian vs. Frequentist Statements About Treatment Efficacy" (2021) [online](https://www.fharrell.com/post/bayes-freq-stmts/)
-
+- SDT20: Stan Development Team "Prior choice recommendations" (2022) [online](https://github.com/stan-dev/stan/wiki/Prior-Choice-Recommendations)
 
 ### Complementary Reading
 

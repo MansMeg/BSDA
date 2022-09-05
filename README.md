@@ -99,12 +99,6 @@ Aki Vehtari at Aalto University has recorded lectures with very similar content 
 - [Stan YouTube channel](https://www.youtube.com/channel/UCwgN5srGpBH4M-Zc2cAluOA) contains good introductions to Stan and some basic suggestions on how to fit models
 
 
-## Recommended workflow for each block/assignment
-
-1. Read the literature according to the rough course plan
-2. Watch the videos to get more indepth knowledge/understanding (however, optional)
-3. Do the assignment
-
 ## Course practicalities
 
 Online course discussions will be held at Studium.
@@ -132,7 +126,7 @@ The course consists of rougly 8 blocks (weeks) of material. Each week consists o
 - An individual computer assignment (approx. 10-12 h per week)
 
 ### Computer assignments
-Each week an individual computer assignment is done with a focus on computational aspects of Bayesian Statistics. Each assignment is completed individually and should follow the computer [assignment_template](https://github.com/MansMeg/BSDA/blob/master/templates/). 
+Each week an individual computer assignment is done with a focus on computational aspects of Bayesian Statistics. Each assignment is completed individually and should follow the computer [assignment_template](https://github.com/MansMeg/BSDA/blob/master/templates/). There is also a [LaTeX template](https://github.com/MansMeg/BSDA/blob/main/templates/assignment_template.Rtex) that can be used on Overleaf.
 
 We also supply a Google Colab assignment template with all R packages installed (or rather code to install them). This is an alternative if there are problems with getting the code to run locally. The template can be found [here](https://github.com/MansMeg/BSDA/blob/main/templates/bsda_colab_template.ipynb) or can be open directly in Google Colab [here](https://colab.research.google.com/github/MansMeg/BSDA/blob/main/templates/bsda_colab_template.ipynb).
 

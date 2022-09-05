@@ -1,5 +1,5 @@
 #' ---
-#' title: "Bayesian data analysis - some figs for slides_ch2"
+#' title: "Bayesian data analysis  - L2 demo"
 #' author: "Mans Magnusson"
 #' date: "`r format(Sys.Date())`"
 #' ---

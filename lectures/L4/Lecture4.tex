@@ -1,5 +1,5 @@
-\documentclass[10pt,handout]{beamer}
-%\documentclass[10pt]{beamer}
+%\documentclass[10pt,handout]{beamer}
+\documentclass[10pt]{beamer}
 \usepackage[english]{babel} % Anpassa efter svenska. Ger svensk logga.
 \usepackage[utf8]{inputenc} % Anpassa efter linux
 \usepackage{graphicx}
@@ -52,7 +52,7 @@
 
 
 \section{Introduction}
-\frame{\sectionpage}
+% \frame{\sectionpage}
 
 \begin{frame}
 
@@ -126,6 +126,8 @@
 
 \end{frame}
 
+\section{Bayesian Computation}
+
 \begin{frame}
 
 \frametitle{It's all about expectations}
@@ -158,7 +160,8 @@
 
 \end{frame}
 
- \begin{frame}
+\begin{frame}
+
 
 \frametitle{It's all about expectations}
 
@@ -176,7 +179,6 @@
 
 
  \end{frame}
-
 
 \begin{frame}
 
@@ -202,16 +204,20 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
   \end{center}
 \item<3-> In 2D and higher
   \begin{itemize}
-  \item nested quadrature
-  \item product rules
+  \item nested quadrature, product rules
+  \item but theres a curse of dimensionality...
   \end{itemize}
   \end{itemize}
 
 
 \end{frame}
 
+\section{Monte Carlo Methods}
 
 \begin{frame}
+
+% TODO: Add a slide on what MC is. I.e. we draw a sample from a density.
+% This can be used to approximate any integration
 
 \frametitle{Monte Carlo - history}
 
@@ -385,15 +391,15 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
 \frametitle{Example: Kilpisjärvi summer temperature}
 
   \vspace{\baselineskip}
-  \makebox[12cm][t]{
+  \makebox[10cm][t]{
     \hspace{-0.9cm}
-  \begin{minipage}[b][12cm][t]{12cm}
-    \only<1->{\includegraphics[width=4cm]{figs/kilpis_phist100_mcse1a.pdf}}
-    \only<2->{\includegraphics[width=4cm]{figs/kilpis_phist100_mcse2a.pdf}}
-    \only<3->{\includegraphics[width=4cm]{figs/kilpis_phist100_mcse3a.pdf}}\\
-    \only<1->{\includegraphics[width=4cm]{figs/kilpis_phist100_mcse1b.pdf}}
-    \only<2->{\includegraphics[width=4cm]{figs/kilpis_phist100_mcse2b.pdf}}
-    \only<3->{\includegraphics[width=4cm]{figs/kilpis_phist100_mcse3b.pdf}}\\
+  \begin{minipage}[b][10cm][t]{10cm}
+    \only<1->{\includegraphics[width=3cm]{figs/kilpis_phist100_mcse1a.pdf}}
+    \only<2->{\includegraphics[width=3cm]{figs/kilpis_phist100_mcse2a.pdf}}
+    \only<3->{\includegraphics[width=3cm]{figs/kilpis_phist100_mcse3a.pdf}}\\
+    \only<1->{\includegraphics[width=3cm]{figs/kilpis_phist100_mcse1b.pdf}}
+    \only<2->{\includegraphics[width=3cm]{figs/kilpis_phist100_mcse2b.pdf}}
+    \only<3->{\includegraphics[width=3cm]{figs/kilpis_phist100_mcse3b.pdf}}\\
     \begin{center}
       \vspace{-\baselineskip}
   \only<4->{Tail quantiles are more difficult to estimate}
@@ -414,10 +420,11 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
     \end{equation*}
     where $I(\theta^{(s)} \in A)=1$ if $\theta^{(s)} \in A$
     \begin{itemize}
+    \pause
     \item $I(\cdot)$ is binomially distributed as $p(\theta \in A)$
         \begin{itemize}
         \item[$\rightarrow$] $\var(I(\cdot)) =  p(1-p)$  (Appendix A, p. 579)
-        \item[$\rightarrow$] standard deviation of $p$ is $\sqrt{p(1-p)/S}$
+        \item[$\rightarrow$] standard deviation of $p$ is $\approx \sqrt{p(1-p)/S}$
         \end{itemize}
         \pause
       \item if $S=100$ and $p\approx 0.5$, $\sqrt{p(1-p)/S}=0.05$\\
@@ -440,11 +447,11 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
 \frametitle{Example: Kilpisjärvi summer temperature}
 
   \begin{center}
-    \only<1>{\includegraphics[width=10cm]{figs/kilpis_ppneg_mcse1a.pdf}}
-    \only<2>{\includegraphics[width=10cm]{figs/kilpis_ppneg_mcse1b.pdf}}
-    \only<3>{\includegraphics[width=10cm]{figs/kilpis_ppneg_mcse1c.pdf}}
-    \only<4>{\includegraphics[width=10cm]{figs/kilpis_ppneg_mcse1000.pdf}}
-    \only<5>{\includegraphics[width=10cm]{figs/kilpis_ppneg_mcse4000.pdf}}
+    \only<1>{\includegraphics[width=8cm]{figs/kilpis_ppneg_mcse1a.pdf}}
+    \only<2>{\includegraphics[width=8cm]{figs/kilpis_ppneg_mcse1b.pdf}}
+    \only<3>{\includegraphics[width=8cm]{figs/kilpis_ppneg_mcse1c.pdf}}
+    \only<4>{\includegraphics[width=8cm]{figs/kilpis_ppneg_mcse1000.pdf}}
+    \only<5>{\includegraphics[width=8cm]{figs/kilpis_ppneg_mcse4000.pdf}}
   \end{center}
 
 \end{frame}
@@ -480,9 +487,7 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
      \item<12-> For probabilities close to 0 or 1, consider also when
        the model assumption justify certain accuracy
      \end{itemize}
-   % \item<12-> For your reports: Don't be lazy and settle for the
-   %   default number of digits. Think for each reported value how
-   %   many digits is sensible.
+   \item<12-> For your project: Think for each reported value how many digits is sensible.
   \end{itemize}
 
 \end{frame}
@@ -518,6 +523,9 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
 
 \begin{frame}
 
+\subsection{Direct simulation}
+
+% TODO Express this in math
 
 \frametitle{Direct simulation}
 
@@ -632,6 +640,10 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
 
 \end{frame}
 
+\subsection{Rejection sampling}
+
+% TODO: Define efficient sample size
+
 \begin{frame}
 
 \frametitle{Rejection sampling}
@@ -644,18 +656,17 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
   \end{itemize}
   \begin{center}
     \vspace{-1.6\baselineskip}
-    \only<1>{\includegraphics[width=10cm]{figs/rejection1.pdf}}
-    \only<2>{\includegraphics[width=10cm]{figs/rejection2.pdf}}
-    \only<3>{\includegraphics[width=10cm]{figs/rejection3.pdf}}
+    \only<1>{\includegraphics[width=8cm]{figs/rejection1.pdf}}
+    \only<2>{\includegraphics[width=8cm]{figs/rejection2.pdf}}
+    \only<3>{\includegraphics[width=8cm]{figs/rejection3.pdf}}
   \end{center}
 
 \end{frame}
 
 \begin{frame}
-
 \frametitle{Rejection sampling}
 
-  \begin{itemize}
+\begin{itemize}
   \item The number of accepted draws is the effective sample size
     \begin{itemize}
     \item with bad proposal distribution may require a lot of trials
@@ -666,6 +677,8 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
   \end{itemize}
 
 \end{frame}
+
+\subsection{Importance sampling}
 
 
 \begin{frame}
@@ -699,9 +712,11 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
   \begin{itemize}
   \item Resampling using normalized importance weights can be used to
     pick a smaller number of draws with uniform weights
+    \pause
   \item Selection of good proposal gets more difficult when the
       number of dimensions increase
-    \item Often used to correct distributional approximations
+      \pause
+    \item Often used to correct distributional approximations and leave-one-out cross-validation
   \end{itemize}
 
 \end{frame}
@@ -711,17 +726,17 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
 \frametitle{Importance sampling}
 
   \begin{itemize}
-  \item Variation of the weights affect the effective sample size
+  \item Variation of the weights affect the {\color{uured} effective sample size}
     \begin{itemize}
     \item if single weight dominates, we have effectively one sample
     \item if weights are equal, we have effectively $S$ draws
     \end{itemize}
   \item Central limit theorem holds only if variance of the weight
     distribution is finite
-  \item See Vehtari, Simpson, Gelman, Yuling and Gabry (2019). Pareto
-    smoothed importance sampling. arXiv preprint arXiv:1507.02646,
-    \url{https://arxiv.org/abs/1507.02646} for improved diagnostics
-    and stability.
+%  \item See Vehtari, Simpson, Gelman, Yuling and Gabry (2019). Pareto
+%    smoothed importance sampling. arXiv preprint arXiv:1507.02646,
+%    \url{https://arxiv.org/abs/1507.02646} for improved diagnostics
+%    and stability.
   \end{itemize}
 
 \end{frame}
@@ -731,26 +746,26 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
 \frametitle{Example: Importance sampling in Bioassay}
 
    \vspace{-.5\baselineskip}
-   \makebox[12cm][t]{
+   \makebox[9cm][t]{
      \hspace{-0.9cm}
      \begin{minipage}[t][12cm][t]{12cm}
        \begin{center}
         \makebox[0cm][t]{\hspace{-0.5cm}\rotatebox{90}{\hspace{1cm}Grid}}
-        \includegraphics[width=3.4cm]{figs/bioassayis1d.pdf}
-      \includegraphics[width=3.4cm]{figs/bioassayis1s.pdf}
-      \includegraphics[width=3.4cm]{figs/bioassayis1h.pdf}\\
+        \includegraphics[width=2.5cm]{figs/bioassayis1d.pdf}
+      \includegraphics[width=2.5cm]{figs/bioassayis1s.pdf}
+      \includegraphics[width=2.5cm]{figs/bioassayis1h.pdf}\\
       \only<2->{
         \makebox[0cm][t]{\hspace{-0.5cm}\rotatebox{90}{\hspace{1cm}Normal}}
-      \includegraphics[width=3.4cm]{figs/bioassayis2d.pdf}
-      \includegraphics[width=3.4cm]{figs/bioassayis2s.pdf}
-      \includegraphics[width=3.4cm]{figs/bioassayis2h.pdf}\\}
+      \includegraphics[width=2.5cm]{figs/bioassayis2d.pdf}
+      \includegraphics[width=2.5cm]{figs/bioassayis2s.pdf}
+      \includegraphics[width=2.5cm]{figs/bioassayis2h.pdf}\\}
     \only<2-3>{Normal approximation is discussed more in BDA3 Ch 4\\}
     \only<3>{But the normal approximation is not that good here:\\ Grid sd(LD50) $\approx$ 0.1, Normal sd(LD50) $\approx$ .75!}
       \only<4->{
         \makebox[0cm][t]{\hspace{-0.5cm}\rotatebox{90}{\hspace{1cm}IR}}
-      \includegraphics[width=3.4cm]{figs/bioassayis3d.pdf}
-      \includegraphics[width=3.4cm]{figs/bioassayis3s.pdf}
-      \includegraphics[width=3.4cm]{figs/bioassayis3h.pdf}\\}
+      \includegraphics[width=2.5cm]{figs/bioassayis3d.pdf}
+      \includegraphics[width=2.5cm]{figs/bioassayis3s.pdf}
+      \includegraphics[width=2.5cm]{figs/bioassayis3h.pdf}\\}
     \only<5->{Grid sd(LD50) $\approx$ 0.1, IR sd(LD50) $\approx$ 0.1}
     \end{center}
      \end{minipage}
@@ -763,18 +778,18 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
 \frametitle{Example: Importance sampling in Bioassay}
 
 
-   \makebox[12cm][t]{
+   \makebox[8cm][t]{
      \hspace{-0.9cm}
-     \begin{minipage}[t][6cm][t]{6cm}
+     \begin{minipage}[t][4cm][t]{4cm}
        \begin{center}
        Grid\\
-       \includegraphics[width=6cm]{figs/bioassayis1s.pdf}
+       \includegraphics[width=4cm]{figs/bioassayis1s.pdf}
      \end{center}
      \end{minipage}
-     \begin{minipage}[t][6cm][t]{6cm}
+     \begin{minipage}[t][4cm][t]{4cm}
        \begin{center}
        IR\\
-       \includegraphics[width=6cm]{figs/bioassayis3s.pdf}
+       \includegraphics[width=4cm]{figs/bioassayis3s.pdf}
   \end{center}
   \end{minipage}
 }
@@ -787,7 +802,7 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
 
        \begin{center}
        IR\\
-       \includegraphics[width=10cm]{figs/bioassayis3s.pdf}
+       \includegraphics[width=8cm]{figs/bioassayis3s.pdf}
   \end{center}
 
 \end{frame}
@@ -797,9 +812,9 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
 \frametitle{Example: Importance sampling in Bioassay}
 
        \begin{center}
-       \only<1>{\includegraphics[width=10cm]{figs/bioassayisw1.pdf}}
-       \only<2>{\includegraphics[width=10cm]{figs/bioassayisw2.pdf}}
-       \only<3>{\includegraphics[width=10cm]{figs/bioassayisw3.pdf}}
+       \only<1>{\includegraphics[width=8cm]{figs/bioassayisw1.pdf}}
+       \only<2>{\includegraphics[width=8cm]{figs/bioassayisw2.pdf}}
+       \only<3>{\includegraphics[width=8cm]{figs/bioassayisw3.pdf}}
   \end{center}
 
 \end{frame}
@@ -807,7 +822,6 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
 \begin{frame}
 
 \frametitle{Example: Importance sampling in Bioassay}
-
        \begin{center}
          \vspace{-\baselineskip}
        \includegraphics[width=8cm]{figs/bioassayisw2.pdf}\\
@@ -824,38 +838,26 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
 
 \end{frame}
 
-\begin{frame}
+% TODO: Add example of S_eff for different settings of IS
+% (1/S)^2 = S 1/S^2
 
-\frametitle{Example: Importance sampling in Bioassay}
 
-       \begin{center}
-         \vspace{-\baselineskip}
-       \includegraphics[width=8cm]{figs/bioassayisw2.pdf}\\
-         \vspace{-2\baselineskip}
-         \begin{align*}
-           S_{\rm eff} & = \frac{1}{\sum_{s=1}^S (\tilde{w}(\theta^s))^2}, \quad \text{is based on variance of } \tilde{w}(\theta^s) \\
-           S_{\rm eff} & \approx 270 \\ \uncover<2->{&\text{Pareto-$k$ diagnostic preferably $<$ 0.7: }}\uncover<3->{ \hat{k} \approx 0.57}
-         \end{align*}
-  \end{center}
 
-\end{frame}
+\subsection{Pareto-Smoothed Importance Sampling}
+% TODO: Add more math here
 
 \begin{frame}
 
 \frametitle{Pareto smoothed importance sampling}
-
 
   \begin{itemize}
   \item Pareto-$k$ diagnostic estimate the number of existing moments ($\lfloor 1/k \rfloor$)
   \item<2-> Finite variance and central limit theorem for $k<1/2$
   \item<3-> Finite mean and generalized central limit theorem for $k<1$,
     but pre-asymptotic constant grows impractically large for $k>0.7$
-  \item<4-> See Vehtari, Simpson, Gelman, Yuling and Gabry (2019). Pareto smoothed
-    importance sampling. arXiv preprint arXiv:1507.02646,
-    \url{https://arxiv.org/abs/1507.02646} for improved diagnostics
-    and stability.
   \end{itemize}
 \end{frame}
+% \\ \uncover<2->{&\text{Pareto-$k$ diagnostic preferably $<$ 0.7: }}\uncover<3->{ \hat{k} \approx 0.57}
 
 \begin{frame}
 
@@ -888,7 +890,7 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
 
 \begin{frame}
 
-\frametitle{Markov chain Monte Carlo (MCMC)}
+\frametitle{Next week: Markov chain Monte Carlo (MCMC)}
 
   \begin{itemize}
   \item Pros
@@ -901,9 +903,10 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
     \item Draws are dependent (affects how many draws are needed)
     \item Convergence in practical time is not guaranteed
     \end{itemize}
+  \pause
   \item MCMC methods in this course
     \begin{itemize}
-    \item Gibbs: ``iterative conditional sampling''
+    \item Gibbs sampling: ``iterative conditional sampling''
     \item Metropolis: ``random walk in joint distribution''
     \item Dynamic Hamiltonian Monte Carlo: ``state-of-the-art'' used in Stan
     \end{itemize}

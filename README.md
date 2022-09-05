@@ -55,9 +55,10 @@ Below are the main references for the course.
 - VGG17: Vehtari, A, Gelman, A and Gabry, J. "Practical Bayesian model evaluation using leave-one-out cross-validation and WAIC." Statistics and computing 27.5 (2017): 1413-1432. [online](https://arxiv.org/pdf/1507.04544.pdf)
 
 Optional literature
-- G17: Gelman , A "Should we worry about rigged priors? A long discussion" (2017) [online](http://andrewgelman.com/2017/10/04/worry-rigged-priors/)
-- H21: Harrell, F. "Bayesian vs. Frequentist Statements About Treatment Efficacy" (2021) [online](https://www.fharrell.com/post/bayes-freq-stmts/)
+- G17: Gelman. "Should we worry about rigged priors? A long discussion" (2017) [online](http://andrewgelman.com/2017/10/04/worry-rigged-priors/)
+- H21: Harrell. "Bayesian vs. Frequentist Statements About Treatment Efficacy" (2021) [online](https://www.fharrell.com/post/bayes-freq-stmts/)
 - SDT20: Stan Development Team "Prior choice recommendations" (2022) [online](https://github.com/stan-dev/stan/wiki/Prior-Choice-Recommendations)
+- VSGYG19: Vehtari, Simpson, Gelman, Yuling and Gabry "Pareto smoothed importance sampling" (2019) arXiv preprint arXiv:1507.02646, [online](https://arxiv.org/abs/1507.02646) 
 
 ### Complementary Reading
 

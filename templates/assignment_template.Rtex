@@ -1,0 +1,73 @@
+\documentclass{article}
+
+\usepackage[english]{babel}
+\usepackage[a4paper,top=4cm,bottom=4cm,left=4cm,right=4cm,marginparwidth=1.75cm]{geometry}
+\title{BSDA: Assignment Template for \LaTeX{} and Overleaf}
+\author{Anonymous student}
+
+% Useful packages
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+
+\begin{document}
+\maketitle
+
+\section{General Information}
+
+Here general information is included that is needed for administrative/course purposes. Below is a list of the information that needs to be included under general information for all assignments. \emph{If the information below is missing in the report, the assignment will be failed}.
+
+\begin{description}
+\item[Time used for reading and self-study exercises] [How long time took the reading assignment and the self-study exercises (in hours)]
+\item[Time used for the assignment] [How long time took the basic assignment (in hours)]
+\item[Good with assignment] [Write one-two sentences of what you liked with the assignment/what should we keep for next year.]
+\item[Things to improve in the assignment] [Write one-two sentences of what you liked with the assignment/what should we keep for next year.]
+\end{description}
+
+\emph{NOTE!} The assignments will be graded anonymously. \emph{Do not include your name anywhere in the assignment!} If the name is included, the assignment will be failed.
+
+\section{Formatting instructions}
+
+The formatting instruction for the template can be found \href{https://github.com/MansMeg/BSDA/blob/main/templates/assignment_template.pdf}{here}. The document also contain information on how to govern R chunks in Rmd. This is similar in \texttt{knitR} that is used for \LaTeX{}, but with a slightly different chuck syntax (see below).
+
+\section{Using R}
+\emph{Note!} Running Stan is not possible in Overleaf and not all packages are available. Hence, only simple R code can be run in overleaf.
+
+You can type R commands in your \LaTeX{} document which will be processed and their output included in the document:
+
+<<>>=
+# Create a sequence of numbers
+X = 2:10
+
+# Display basic statistical measures
+summary(X)
+@
+
+Similarly 
+
+\subsection{Figures from R}
+
+Include plots, where we can specify the width and height of the figure.
+
+<<fig.height=4, fig.width=6, fig.align='center', fig.cap= "An example Figure">>=
+data("faithful")
+plot(faithful$eruptions, faithful$waiting)
+@
+
+Or using qplot from ggplot2 package
+
+<<fig.height=4, fig.width=6, fig.align='center', fig.cap= "A ggplot2 example Figure">>=
+library(ggplot2)
+qplot(faithful$eruptions, faithful$waiting)
+@
+
+We can also hide the code producing the plots with \texttt{echo=FALSE} (please do this in the reports).
+
+<<echo=FALSE, fig.height=4, fig.width=6, fig.align='center', fig.cap= "Another ggplot2 example">>=
+ggplot(data=faithful, aes(x=eruptions, y=waiting)) + geom_point() +
+  labs(x='Eruption time in mins', 
+  y='Waiting time to next eruption (in mins)')
+@
+
+
+\end{document}

@@ -121,7 +121,7 @@ Don't include \texttt{markmyassignment} results in the report.
 
 \newpage
 
-\subsection*{Inference for normal mean and deviation}
+\subsection*{1. Inference for normal mean and deviation}
 
 A factory has a production line for manufacturing car windshields.
 A sample of windshields has been taken for testing hardness. The
@@ -172,7 +172,7 @@ mu_pred_interval(data = windshieldy_test, prob = 0.95)
 R users can use the {\tt dt} function after doing input normalisation. We have added an R function {\tt dtnew()} in the {\tt aaltobda} R package which does that. For generating samples, you can use the corresponding {\tt rtnew} function.
 
 
-\subsection*{Inference for the difference between proportions}
+\subsection*{2. Inference for the difference between proportions}
 
 % See exercises/solution folder in teacher repo
 <<echo=FALSE>>=
@@ -206,7 +206,7 @@ to your choice of prior density with a couple of sentences.
 \end{enumerate}
 \textbf{Hint} With a conjugate prior, a closed-form posterior is the Beta form for each group separately (see equations in the book). You can use {\tt rbeta()} to sample from the posterior distributions of $p_0$ and $p_1$, and use these samples and odds ratio equation to get samples from the distribution of the odds ratio.
 
-\subsection*{Inference for the difference between normal means}
+\subsection*{3. Inference for the difference between normal means}
 
 Consider a case where the same factory has two production lines for
 manufacturing car windshields. Independent samples from the two

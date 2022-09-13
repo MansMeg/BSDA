@@ -226,7 +226,7 @@ generated quantities {
 
 \textbf{Note!} Assignment 8 build upon this part of the assignment, so it is important to get this assignment correct before you start with Assignment 8.
 
-The \texttt{factory} data in the \texttt{aaltobda} package contains quality control measurements from 6 machines in a factory (units of the measurements are irrelevant here). In the data file, each column contains the measurements for a single machine. Quality control measurements are expensive and time-consuming, so only 5 measurements were done for each machine. In addition to the existing machines, we are interested in the quality of another machine (the seventh machine). To read in the data, just use:
+The \texttt{factory} data in the \texttt{bsda} package contains quality control measurements from 6 machines in a factory (units of the measurements are irrelevant here). In the data file, each column contains the measurements for a single machine. Quality control measurements are expensive and time-consuming, so only 5 measurements were done for each machine. In addition to the existing machines, we are interested in the quality of another machine (the seventh machine). To read in the data, just use:
 
 <<echo=TRUE, eval=FALSE>>=
 library(bsda)

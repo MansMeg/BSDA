@@ -150,7 +150,7 @@ MCSE is nonzero (Example: if posterior mean is 2.345678 and MCSE is 0.0012345, r
 \item \textbf{Note!} The answer is graded as correct only if the number of digits reported is correct! The number of significant digits can be different for the mean and quantile estimates.  In some other cases, the number of digits reported can be less than MCSE allows for practical reasons.
 \item \textbf{Hint!} Quantiles can be computed with the \texttt{quantile} function. With $S$ draws, the MCSE for $\text{E}[\theta]$ is $\sqrt{\text{Var} [\theta]/S}$.
 MCSE for the quantile estimates can be computed with the
-\texttt{mcse\_quantile} function from the {\tt aaltobda} package.
+\texttt{mcse\_quantile} function from the {\tt bsda} package.
 \end{itemize}
 
 \end{itemize}
@@ -166,8 +166,8 @@ Now we discard our posterior draws and switch to importance sampling.
 \item \textbf{Note!} The values below are \emph{only} a test case. In this c) part, you
 only need to report the source code of your function, as it will be needed in
 later parts.
-\item \textbf{Hints!} Use the function {\tt rmvnorm} from the {\tt aaltobda} package for sampling. Non-log importance ratios are given by equation (10.3) in the course book. The fact that our proposal distribution is the same as
-the prior distribution makes this task easier. The \textbf{logarithm} of the likelihood can be computed with the {\tt bioassaylp} function from the {\tt aaltobda} package. The data required for the likelihood can be loaded with {\tt data("bioassay")}.
+\item \textbf{Hints!} Use the function {\tt rmvnorm} from the {\tt bsda} package for sampling. Non-log importance ratios are given by equation (10.3) in the course book. The fact that our proposal distribution is the same as
+the prior distribution makes this task easier. The \textbf{logarithm} of the likelihood can be computed with the {\tt bioassaylp} function from the {\tt bsda} package. The data required for the likelihood can be loaded with {\tt data("bioassay")}.
 \end{itemize}
 <<echo=FALSE>>=
 log_importance_weights <- function(alpha, beta) c(-8.95, -23.47, -6.02, -8.13, -16.61, -14.57)

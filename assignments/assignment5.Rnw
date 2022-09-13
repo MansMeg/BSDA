@@ -142,7 +142,7 @@ density_ratio <- function(alpha_propose, alpha_previous, beta_propose, beta_prev
 @
 
 <<echo=TRUE, eval=FALSE>>=
-library(aaltobda)
+library(bsda)
 data("bioassay")
 @
 

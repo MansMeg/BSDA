@@ -98,7 +98,7 @@ knitr::opts_chunk$set(size = "small")
 
 This assignment is related to Chapters 2 and 3.
 
-\textbf{Reading instructions:} Chapter 2 and 3 in BDA3, see reading instructions. Use \href{http://www.fharrell.com/2017/10/bayesian-vs-frequentist-statements.html}{Frank Harrell's recommendations} on how to state results in Bayesian two group comparisons (and note that there is no point null hypothesis testing in this assignment).
+\textbf{Reading instructions:} Chapter 2 and 3 in BDA3, see reading instructions. Use \href{(https://www.fharrell.com/post/bayes-freq-stmts/}{Frank Harrell's recommendations} on how to state results in Bayesian two group comparisons (and note that there is no point null hypothesis testing in this assignment).
 
 % \textbf{Grading instructions:} The grading will be done in peergrade. All grading questions and evaluations for assignment 3 can be found \href{https://avehtari.github.io/BDA_course_Aalto/assignments/assignment3_rubric.md}{\textbf{here}}.
 
@@ -169,7 +169,7 @@ mu_pred_interval(data = windshieldy_test, prob = 0.95)
 \textbf{Note!} Predictive intervals are different from posterior intervals.
 \end{enumerate}
 \textbf{Hint} With a conjugate prior a closed form posterior is Student's $t$ form (see equations in the book).
-R users can use the {\tt dt} function after doing input normalisation. We have added an R function {\tt dtnew()} in the {\tt aaltobda} R package which does that. For generating samples, you can use the corresponding {\tt rtnew} function.
+R users can use the {\tt dt} function after doing input normalisation. We have added an R function {\tt dtnew()} in the {\tt bsda} R package which does that. For generating samples, you can use the corresponding {\tt rtnew} function.
 
 
 \subsection*{2. Inference for the difference between proportions}

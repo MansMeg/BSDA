@@ -51,6 +51,21 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
+% Be more clear in the evaluation. "Some questions could be more clear" I cant use that. Please state what can be more clear and why.
+
+
+
+\begin{frame}
+
+\frametitle{Assignment 3}
+
+  \begin{itemize}
+  \item Be more clear in the evaluation - where is the problem.
+  \item Example: "Some questions could be more clear"% I cant use that. Please state what can be more clear and why.
+  \end{itemize}
+
+\end{frame}
+
 \section{Introduction}
 % \frame{\sectionpage}
 
@@ -63,7 +78,7 @@
     $p(\theta|y)$
   \item Unnormalized distribution is denoted by $q(\cdot)$
     \begin{itemize}
-    \item $\int q(\theta) d\theta \neq 1$, but finite
+    \item $\int q(\theta) d\theta \neq 1$, but finite (i.e. $\int q(\theta) d\theta \le \infty$
     \item $q(\cdot) \propto p(\cdot)$
     \end{itemize}
   \item Proposal distribution is denoted by $g(\cdot)$
@@ -216,9 +231,50 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
 
 \begin{frame}
 
-% TODO: Add a slide on what MC is. I.e. we draw a sample from a density.
-% This can be used to approximate any integration
 
+\frametitle{Monte Carlo integration/method}
+
+% Show that integral is essentially a weighted sum by xdelta
+% Add Gelmans definition of deterministic integral (i.e. the weight (or width) is the probability of that point
+% List the different numeric integral methods.
+
+  \begin{itemize}
+    \item Numerically (deterministic) compute an integral (midpoint) using $S$ sample points
+    \[
+      I^a_b(h) = \int^a_b h(\theta) d\theta = \sum_s^S f(\theta_s) \frac{w_s}{S}
+    \]
+    where
+    \[
+    w_s = b-a
+    \]
+    and
+    \[
+    \theta_i = a - (s + 0.5) \delta\theta
+    \]
+    \pause
+    \item In Gelman et al (2013) notation and for a posteriors $p(\theta|y)$
+    \[
+      E_{p(\theta|y)}(h(\theta)) = \int h(\theta) p(\theta|y) d\theta = \sum_s^S h(\theta_s) p(\theta_s|y) \frac{w_s}{S}
+    \]
+    \pause
+    \item If we have samples $\theta_s \sim p(\theta|y)$ we can approximate
+        \[
+      E_{p(\theta|y)}(h(\theta)) \approx \int f(\theta) p(\theta|y) d\theta = \frac{1}{S} \sum_s^S f(\theta_s)
+    \]
+  \end{itemize}
+
+\end{frame}
+
+%    A (stochastic) numerical technique to approximate integrals
+%    \item Main benefit: The error is $n^{-1/2}$ irrespective of dimension
+%    \pause
+%    \item Let $\theta \sim p(\theta)$, then
+%    \[
+%    E(g(\theta)) = \int g(\theta) p(\theta) d\theta
+%    \]
+%    \item
+
+\begin{frame}
 \frametitle{Monte Carlo - history}
 
   \begin{itemize}
@@ -251,27 +307,16 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
 
 \end{frame}
 
-% \note{Buffon tiputteli neuloja lautalattialle
-% % http://noppa5.pc.helsinki.fi/koe/flash/prob/buf-en.html
-
-% Pearson laski kuinka monta ruletinpyöritystä tarvitaan,
-% tätä tietoa joku muu hyödynsikin
-
-% Gosset käytti paperilappuja
-
-% atomipommin kehittäjillä oli laskentatehoa
-
-% }
 
 \begin{frame}
 
 \frametitle{Monte Carlo}
 
   \begin{itemize}
-  \item Simulate draws from the target distribution
+  \item Simulate draws from the target distribution $p(\theta|y)$
     \begin{itemize}
     \item these draws can be treated as any observations
-    \item a collection of draws is sample
+    \item a collection of draws is a sample of size $S$
     \end{itemize}
   \item Use these draws, for example,
     \begin{itemize}
@@ -287,18 +332,24 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
 \begin{frame}
 
 
-\frametitle{Monte Carlo vs. deterministic}
+\frametitle{Monte Carlo vs. Deterministic Methods}
 
   \begin{itemize}
-  \item Monte Carlo = simulation methods
-    \begin{itemize}
-    \item evaluation points are selected stochastically (randomly)
-    \end{itemize}
-  \item Deterministic methods (e.g. grid)
-    \begin{itemize}
-    \item evaluation points are selected by some deterministic rule
-    \item good deterministic methods converge faster (need less function evaluations)
-    \end{itemize}
+  \item Monte Carlo (approximation) error is $\propto S^{-1/2}$
+  \item Midpoint rule error is $\propto S^{-2}$
+  \item Trapezoidal rule error is $\propto S^{-2}$
+  \item Simpson rule error is $\propto S^{-4}$
+  \item Monte Carlo is bad (even worse than midpoint approximation)
+  \only<1>{{\color{uured}Why use Monte Carlo integration?}}
+  \pause
+  \item Monte Carlo has the same error irrespective of dimension $D$, i.e. $S_D = S$
+  \item Numerical methods create a grid with $S_D = S^D$
+  \only<2>{{\color{uured} When is Monte Carlo a better approach than Simpsons?}}
+  \pause
+  \[
+  (S_D^\frac{1}{D})^{-4} = S_D^{-\frac{1}{2}}\,,
+  \]
+  i.e. for $d > 8$ Monte Carlo is better.
   \end{itemize}
 
 \end{frame}
@@ -309,13 +360,13 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
 \frametitle{How many simulation draws are needed?}
 
   \begin{itemize}
-  \item How many draws or how big sample size?
+  \item How many draws or how big sample size $S$?
   \item If draws are independent
     \begin{itemize}
     \item usual methods to estimate the uncertainty due to a finite
       number of observations (finite sample size)
     \end{itemize}
-  \item Markov chain Monte Carlo produces dependent draws
+  \item Markov chain Monte Carlo produces dependent draws (next week)
     \begin{itemize}
     \item requires additional work to estimate the \emph{effective
         sample size}
@@ -338,7 +389,7 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
     distribution (see Ch 4) with variance $\sigma^2_\theta/S$
     (asymptotic normality)
     \begin{itemize}
-    \item this variance is independent on dimensionality of $\theta$
+    \item this variance is independent on dimensionality of $\theta$ (!)
       \pause
     \item total variance is sum of the epistemic uncertainty in the
       posterior and the uncertainty due to using finite number of
@@ -523,13 +574,12 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
 
 \begin{frame}
 
-\subsection{Direct simulation}
+\section{Direct sampling}
 
-% TODO Express this in math
-
-\frametitle{Direct simulation}
+\frametitle{Direct sampling}
 
   \begin{itemize}
+  \item Direct simulation from known pdf/pmf, e.g. $p(\theta|y)$ in conjugate case
   \item Produces independent draws
     \begin{itemize}
     \item Using analytic transformations of uniform random numbers
@@ -537,7 +587,7 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
     \item factorization
     \item numerical inverse-CDF
     \end{itemize}
-  \item Problem: restricted to limited set of models
+  \item {\color{uured} Problem}: restricted to limited set of models
   \end{itemize}
 
 \end{frame}
@@ -547,9 +597,10 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
 \frametitle{Random number generators}
 
   \begin{itemize}
-  \item Good pseudo random number generators are sufficient for
-    Bayesian inference
-    \begin{itemize}
+  \item {\color{uured}How to sample from a pdf?}
+  \pause
+  \item Good {\color{uured} psuedo} random number generators are sufficient for Bayesian inference
+  \begin{itemize}
     \item pseudo random generator uses deterministic algorithm to
       produce a sequence which is difficult to make difference from
       truly random sequence
@@ -584,8 +635,8 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
 
 \end{frame}
 
-\begin{frame}
 
+\begin{frame}
 \frametitle{Grid sampling and curse of dimensionality}
 
   \begin{itemize}
@@ -596,11 +647,13 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
           \item need to have enough grid points to get some of them
             where essential mass is
         \end{itemize}
+      \only<1>{{\color{uured} Can we do this?}}
       \item e.g. 50 or 1000 grid points per dimension
         \begin{itemize}
         \item[$\rightarrow$] 50$^{10} \approx$ 1e17 grid points
         \item[$\rightarrow$] 1000$^{10} \approx$ 1e30 grid points
         \end{itemize}
+      \pause
       \item R and my current laptop can compute density of normal
         distribution about 20 million times per second
         \begin{itemize}
@@ -612,6 +665,8 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
  \end{itemize}
 
 \end{frame}
+
+\section{Indirect sampling}
 
 \begin{frame}
 
@@ -640,9 +695,21 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
 
 \end{frame}
 
-\subsection{Rejection sampling}
+\begin{frame}
 
-% TODO: Define efficient sample size
+\frametitle{Effective sampling size}
+
+  \begin{itemize}
+    \item Efficient sampling size $S_\text{eff}$ the number of samples using direct methods
+    \item Common with {\color{uured} weighted} or {\color{uured} correlated} samples
+    \pause
+    \item Indirect methods usually have an $S_\text{eff} < S$
+    \item Informally an indication of performance of method
+  \end{itemize}
+
+\end{frame}
+
+\subsection{Rejection sampling}
 
 \begin{frame}
 
@@ -650,10 +717,11 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
 
     \vspace{-.3\baselineskip}
   \begin{itemize}
-  \item[-] Proposal forms envelope over the target distribution ${q(\theta|y)}/{M g(\theta)} \leq 1$
+  \item[-] Proposal ($g(\theta)$) forms envelope over the target distribution ${q(\theta|y)}/{M g(\theta)} \leq 1$
   \item[-] Draw from the proposal and accept with probability ${q(\theta|y)}/{M g(\theta)}$
   \item<3>[-] Common for truncated distributions
   \end{itemize}
+
   \begin{center}
     \vspace{-1.6\baselineskip}
     \only<1>{\includegraphics[width=8cm]{figs/rejection1.pdf}}
@@ -667,19 +735,22 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
 \frametitle{Rejection sampling}
 
 \begin{itemize}
-  \item The number of accepted draws is the effective sample size
+  \item The number of accepted draws is the effective sample size $S_\text{eff}$
+
+  \only<1>{{\color{uured} When will this be work/not work (i.e. give high/low $S_\text{eff}$)?}}
+  \pause
     \begin{itemize}
     \item with bad proposal distribution may require a lot of trials
     \item selection of good proposal gets very difficult when
       the number of dimensions increase
-    \item reliable diagnostics and thus can be a useful part
+%      \pause
+%    \item reliable diagnostics and thus can be a useful part
     \end{itemize}
   \end{itemize}
 
 \end{frame}
 
 \subsection{Importance sampling}
-
 
 \begin{frame}
 
@@ -729,8 +800,10 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
   \item Variation of the weights affect the {\color{uured} effective sample size}
     \begin{itemize}
     \item if single weight dominates, we have effectively one sample
-    \item if weights are equal, we have effectively $S$ draws
+    \item if all weights are equal, we have effectively $S$ draws
     \end{itemize}
+    \only<1>{{\color{uured}What does this mean? What is a good proposal $g(\theta)$?}}
+    \pause
   \item Central limit theorem holds only if variance of the weight
     distribution is finite
 %  \item See Vehtari, Simpson, Gelman, Yuling and Gabry (2019). Pareto
@@ -796,6 +869,7 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
 
 \end{frame}
 
+
 \begin{frame}
 
 \frametitle{Example: Importance sampling in Bioassay}
@@ -838,12 +912,11 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
 
 \end{frame}
 
-% TODO: Add example of S_eff for different settings of IS
-% (1/S)^2 = S 1/S^2
 
 
 
 \subsection{Pareto-Smoothed Importance Sampling}
+
 % TODO: Add more math here
 
 \begin{frame}
@@ -876,20 +949,19 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
 
 \end{frame}
 
+%\begin{frame}
+%
+%\frametitle{Curse of dimensionality}
+%
+%  \begin{itemize}
+%  \item Number of grid points increases exponentially
+%  \item Concentration of the measure, i.e., where is the most of the
+%    mass?
+%  \end{itemize}
+%
+%\end{frame}
+
 \begin{frame}
-
-\frametitle{Curse of dimensionality}
-
-  \begin{itemize}
-  \item Number of grid points increases exponentially
-  \item Concentration of the measure, i.e., where is the most of the
-    mass?
-  \end{itemize}
-
-\end{frame}
-
-\begin{frame}
-
 \frametitle{Next week: Markov chain Monte Carlo (MCMC)}
 
   \begin{itemize}

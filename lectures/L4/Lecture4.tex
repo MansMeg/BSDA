@@ -234,18 +234,14 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
 
 \frametitle{Monte Carlo integration/method}
 
-% Show that integral is essentially a weighted sum by xdelta
-% Add Gelmans definition of deterministic integral (i.e. the weight (or width) is the probability of that point
-% List the different numeric integral methods.
-
   \begin{itemize}
     \item Numerically (deterministic) compute an integral (midpoint) using $S$ sample points
     \[
-      I^a_b(h) = \int^a_b h(\theta) d\theta = \sum_s^S f(\theta_s) \frac{w_s}{S}
+      I^a_b(h) = \int^a_b h(\theta) d\theta \approx \sum_s^S h(\theta_s) \frac{w_s}{S}
     \]
     where
     \[
-    w_s = b-a
+    w_s = b - a
     \]
     and
     \[
@@ -254,12 +250,12 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
     \pause
     \item In Gelman et al (2013) notation and for a posteriors $p(\theta|y)$
     \[
-      E_{p(\theta|y)}(h(\theta)) = \int h(\theta) p(\theta|y) d\theta = \sum_s^S h(\theta_s) p(\theta_s|y) \frac{w_s}{S}
+      E_{p(\theta|y)}(h(\theta)) = \int h(\theta) p(\theta|y) d\theta \approx \sum_s^S h(\theta_s) p(\theta_s|y) \frac{w_s}{S}
     \]
     \pause
     \item If we have samples $\theta_s \sim p(\theta|y)$ we can approximate
         \[
-      E_{p(\theta|y)}(h(\theta)) \approx \int f(\theta) p(\theta|y) d\theta = \frac{1}{S} \sum_s^S f(\theta_s)
+      E_{p(\theta|y)}(h(\theta)) = \int h(\theta) p(\theta|y) d\theta \approx \frac{1}{S} \sum_s^S h(\theta_s)
     \]
   \end{itemize}
 

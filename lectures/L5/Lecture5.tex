@@ -215,6 +215,7 @@
         \theta_{j+1,t-1},\dots,\theta_{t-1,J})
       \end{align*}
       }
+  \item Will converge (in total variation) to $p(\theta|y)$ as $T\rightarrow\infty$\pause
   \item $j$ can be multiple (blocked) parameters
   \item 1D sampling ($|j|=1$) is generally easy\pause
   \item Related to the (stochastic) EM algorithm
@@ -245,13 +246,11 @@
   \begin{itemize}
   \item With {\it conditionally} conjugate priors, the sampling from
     the conditional distributions is easy for wide range of models
-    \begin{itemize}
-      \item BUGS/WinBUGS/OpenBUGS/JAGS
-    \end{itemize}
-  \item<2-> No algorithm parameters to tune
-  \item<3-> For not so easy conditionals, use  e.g. inverse-CDF
-  \item<4-> Several parameters can be updated in blocks ({\em blocking})
-  \item<5-> Slow if parameters are highly dependent in the posterior...
+  \item<2-> BUGS / WinBUGS / OpenBUGS / JAGS
+  \item<3-> No algorithm parameters to tune
+  \item<4-> For not so easy conditionals, use  e.g. inverse-CDF
+  \item<5-> Several parameters can be updated in blocks ({\em blocking})
+  \item<6-> Slow if parameters are highly dependent in the posterior...
   \end{itemize}
 
 \end{frame}
@@ -269,7 +268,8 @@
      \end{center}
 \end{frame}
 
-
+\subsection{Metropolis-Hastings}
+%\frame{\sectionpage}
 
 \begin{frame}
 
@@ -280,19 +280,17 @@
     \begin{itemize}
     \item e.g. it is easy to sample from multivariate normal
     \end{itemize}
-    \item<2-> Can we use that to form a Markov chain?\\
-      {\small \url{http://elevanth.org/blog/2017/11/28/build-a-better-markov-chain/}}
+    \item<2-> Can we use that to form a Markov chain?
   \end{itemize}
 
 \end{frame}
 
-\subsection{Metropolis-Hastings}
-%\frame{\sectionpage}
+
 
 
 \begin{frame}
 
-\frametitle{Metropolis algorithm}
+\frametitle{The Metropolis algorithm}
 
   \begin{itemize}
   \item Algorithm

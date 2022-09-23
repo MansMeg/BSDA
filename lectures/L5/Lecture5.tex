@@ -298,26 +298,26 @@
       \item[1.] starting point $\theta^0$
       \item[2.] $t=1,2,\ldots$
         \begin{itemize}
-        \item[(a)] pick a proposal $\theta^{*}$ from the proposal distribution
-          $J_t(\theta^{*}|\theta^{t-1})$. \\
+        \item[(a)] pick a proposal $\theta^{*}$ from a {\color{uured} proposal distribution}
+          $J_t(\theta^{*}|\theta_{t-1})$. \\
           Proposal distribution has to be symmetric, i.e.\\
           $J_t(\theta_a|\theta_b)=J_t(\theta_b|\theta_a)$, for all
           $\theta_a,\theta_b$
         \item<2->[(b)] calculate acceptance ratio
           \begin{equation*}
-            r=\frac{p(\theta^{*}|y)}{p(\theta^{t-1}|y)}
+            r=\frac{p(\theta^{*}|y)}{p(\theta_{t-1}|y)}
           \end{equation*}
           \vspace{-6mm}
         \item<3->[(c)] set
           \begin{equation*}
-            \theta^t=
+            \theta_t=
             \begin{cases}
               \theta^{*} & \text{with probability $\min(r,1)$}\\
-              \theta^{t-1} & \text{otherwise}
+              \theta_{t-1} & \text{otherwise}
             \end{cases}
           \end{equation*}
           \uncover<4>{
-          ie, if $p(\theta^{*}|y)>p(\theta^{t-1}|y)$ accept the proposal always \\
+          ie, if $p(\theta^{*}|y)>p(\theta_{t-1}|y)$ accept the proposal always \\
           \hspace{0.4cm}and otherwise accept the proposal with probability $r$}
       \end{itemize}
       \vspace{-1.5\baselineskip}
@@ -325,10 +325,9 @@
       ie, the new state is the same as previous
       \item<6-> step c is executed by generating a random number from
         $\U(0,1)$
-      \item<7-> $p(\theta^*|y)$ and $p(\theta^{t-1}|y)$ have the same
+      \item<7-> $p(\theta^*|y)$ and $p(\theta_{t-1}|y)$ have the same
         normalization terms, and thus instead of $p(\cdot|y)$,
-        unnormalized $q(\cdot|y)$ can be used, as the normalization
-        terms cancel out!
+        unnormalized $q(\cdot|y)$ can be used, { \color{uured} as the normalization terms cancel out}!
     \end{itemize}
   \end{itemize}
 
@@ -362,16 +361,18 @@
        \right)
        \end{equation*}
      \item proposal distribution
-       $J_t(\theta^{*}|\theta^{t-1})=\N(\theta^{*}|\theta^{t-1},\sigma_p^2)$
+       $J_t(\theta^{*}|\theta_{t-1})=\N(\theta^{*}|\theta_{t-1},\sigma_p^2)$
      \end{itemize}
-   \item Demo {\small \url{http://elevanth.org/blog/2017/11/28/build-a-better-markov-chain/}}
    \end{itemize}
+
+  \center
+  \href{https://chi-feng.github.io/mcmc-demo/app.html?algorithm=RandomWalkMH&target=standard}{demo}
 
 \end{frame}
 
  \begin{frame}
 
-\frametitle{ Why Metropolis algorithm works}
+\frametitle{Why Metropolis algorithm works}
 
   \begin{itemize}
   \item Intuitively more draws from the higher density areas as
@@ -391,7 +392,7 @@
 
 \begin{frame}
 
-\frametitle{ Why Metropolis algorithm works}
+\frametitle{Why Metropolis algorithm works}
 
   \begin{itemize}
   \item[1.] Prove that simulated series is a Markov chain
@@ -409,7 +410,7 @@
       \end{itemize}
     \item[c)] recurrent / not transient
       \begin{itemize}
-      \item<4->[=] probability to return to a state $i$ is 1
+      \item<4->[=] probability to return to a state $i$ is 1 as $T\rightarrow \infty$
       \item<4->[-] holds for a random walk on any proper distribution (except for trivial exceptions)
       \end{itemize}
     \end{itemize}
@@ -426,21 +427,21 @@
   \item[2.] Prove that this stationary distribution is the desired target distribution $p(\theta|y)$
     \begin{itemize}
     \item[-] consider starting algorithm at time $t-1$ with a draw
-      $\theta^{t-1} \sim p(\theta|y)$
+      $\theta_{t-1} \sim p(\theta|y)$
     \item<2->[-] consider any two such points $\theta_a$ and $\theta_b$ drawn
       from $p(\theta|y)$ and labeled so that
       $p(\theta_b|y)\geq p(\theta_a|y)$
     \item<3->[-] the unconditional probability density of a transition from $\theta_a$ to $\theta_b$ is
       \vspace{-0.5\baselineskip}
       \begin{equation*}
-        p(\theta^{t-1}=\theta_a,\theta^{t}=\theta_b)=
+        p(\theta_{t-1}=\theta_a,\theta_{t}=\theta_b)=
         p(\theta_a|y)J_t(\theta_b|\theta_a),
       \end{equation*}
       \vspace{-1\baselineskip}
     \item<4->[-] the unconditional probability density of a transition from $\theta_b$ to $\theta_a$ is
       \vspace{-0.5\baselineskip}
       \begin{eqnarray*}
-        p(\theta^{t}=\theta_a,\theta^{t-1}=\theta_b) & = &
+        p(\theta_{t}=\theta_a,\theta_{t-1}=\theta_b) & = &
         p(\theta_b|y)J_t(\theta_a|\theta_b)\left(\frac{p(\theta_a|y)}{p(\theta_b|y)}\right)\\
         \pause &  = &  p(\theta_a|y)J_t(\theta_a|\theta_b),
       \end{eqnarray*}
@@ -448,8 +449,8 @@
       which is the same as the probability of transition from $\theta_a$ to $\theta_b$,
       since we have required that $J_t(\cdot|\cdot)$ is symmetric}
       \pause
-    \item<6->[-] since their joint distribution is symmetric, $\theta^t$ and
-      $\theta^{t-1}$ have the same marginal distributions, and so
+    \item<6->[-] since their joint distribution is symmetric, $\theta_t$ and
+      $\theta_{t-1}$ have the same marginal distributions, and so
       $p(\theta|y)$ is the stationary distribution of the Markov chain of $\theta$
     \end{itemize}
   \end{itemize}
@@ -458,7 +459,7 @@
 
 \begin{frame}
 
-\frametitle{ Metropolis-Hastings algorithm}
+\frametitle{Metropolis-Hastings algorithm}
 
   \begin{itemize}
   \item Generalization of Metropolis algorithm for non-symmetric proposal distributions
@@ -466,8 +467,8 @@
     \item acceptance ratio includes ratio of proposal distributions
       \begin{equation*}
         r =
-        \frac{p(\theta^{*}|y)/J_t(\theta^{*}|\theta^{t-1})}{p(\theta^{t-1}|y)/J_t(\theta^{t-1}|\theta^{*})} \pause =
-        \frac{p(\theta^{*}|y)J_t(\theta^{t-1}|\theta^{*})}{p(\theta^{t-1}|y)J_t(\theta^{*}|\theta^{t-1})}
+        \frac{p(\theta^{*}|y)/J_t(\theta^{*}|\theta_{t-1})}{p(\theta_{t-1}|y)/J_t(\theta_{t-1}|\theta^{*})} \pause =
+        \frac{p(\theta^{*}|y)J_t(\theta_{t-1}|\theta^{*})}{p(\theta_{t-1}|y)J_t(\theta^{*}|\theta_{t-1})}
       \end{equation*}
     \end{itemize}
   \end{itemize}
@@ -506,21 +507,21 @@
     \item if the shape of the target distribution is unknown, usually
       normal or $t$ distribution is used
     \end{itemize}
-  \item<3-> After the shape has been selected, it is important to select the scale
+  \item<3-> After the proposal distribution shape has been selected, it is important to select the scale
     \begin{itemize}
     \item small scale \\$\rightarrow$ many steps accepted, but the chain moves slowly due to small steps
     \item big scale \\$\rightarrow$ long steps proposed, but many of
       those rejected and again chain moves slowly
     \end{itemize}
-  \item<4-> Generic rule for rejection rate is 60-90\% (but depends on
-    dimensionality and a specific algorithm variation)
+  \href{https://chi-feng.github.io/mcmc-demo/app.html?algorithm=RandomWalkMH&target=standard}{demo}
+  \item<4-> Generic rule for rejection rate is 60-90\% %(but depends on dimensionality and a specific algorithm variation)
 \end{itemize}
 
 \end{frame}
 
 \begin{frame}
 
-\frametitle{ Gibbs sampling}
+\frametitle{Gibbs sampling as a special case}
 
   \begin{itemize}
   \item Specific case of Metropolis-Hastings algorithm
@@ -542,9 +543,9 @@
   \item Usually doesn't scale well to high dimensions
     \begin{itemize}
     \item if the shape doesn't match the whole distribution, the efficiency drops
-    \item demo11\_2\\
+%    \item demo11\_2\\
       \vspace{1\baselineskip}
-      \hspace{-1cm}\includegraphics[width=5cm]{figs/Metrop2.pdf}\includegraphics[width=5cm]{figs/Metrop3.pdf}
+      \hspace{-1cm}\includegraphics[width=4cm]{figs/Metrop2.pdf}\includegraphics[width=4cm]{figs/Metrop3.pdf}
     \end{itemize}
   \end{itemize}
 

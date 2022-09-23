@@ -582,36 +582,35 @@
 
 \end{frame}
 
-\begin{frame}
-
 \subsection{Convergence}
 %\frame{\sectionpage}
+
+\begin{frame}
 
 \frametitle{Assesing convergence}
 
   \vspace{-0.5\baselineskip}
   \begin{itemize}
-  \item Use of several chains make convergence diagnostics easier
+  \item Several Markov chains make convergence diagnostics easier
+  \pause
     \item Start chains from different starting points -- preferably overdispersed
       \begin{center}
   \vspace{-0.5\baselineskip}
       \includegraphics[width=6cm]{figs/10chains1.pdf}
     \end{center}
   \vspace{-0.5\baselineskip}
-    \item<2-> Remove draws from the beginning of the chains and run
-      chains long enough so that it is not possible to distinguish
-      where each chain started and the chains are well mixed
+    \item<2-> Remove warm-up draws and run chains long enough
   \end{itemize}
 
 \end{frame}
 
 \begin{frame}
 
-\frametitle{ Several chains}
+\frametitle{Several chains}
 
       \begin{center}
-      \only<1>{\includegraphics[width=10cm]{figs/10chains2.pdf}}
-      \only<2->{\includegraphics[width=10cm]{figs/10chains3.pdf}}\\
+      \only<1>{\includegraphics[width=8cm]{figs/10chains2.pdf}}
+      \only<2->{\includegraphics[width=8cm]{figs/10chains3.pdf}}\\
       \uncover<3->{Visual convergence check is not sufficient}
     \end{center}
 
@@ -624,15 +623,15 @@
 \frametitle{ $\widehat{R}$: comparison of within and between variances of the chains}
 
   \begin{itemize}
-  \item BDA3: $\widehat{R}$ aka {\em potential scale reduction factor} (PSRF)
+  \item $\widehat{R}$ or {\color{uured} potential scale reduction factor} (PSRF)
   \item Compare means and variances of the chains\\
     \uncover<2->{W = within chain variance estimate\\
     var\_hat\_plus = total variance estimate\\}
     \vspace{1\baselineskip}
-    \only<1>{\hspace{-0.5cm}\phantom{\includegraphics[width=10.5cm]{figs/10chains_rhat1.pdf}}}
-    \only<2>{\hspace{-0.5cm}\includegraphics[width=10.5cm]{figs/10chains_rhat1.pdf}}
-    \only<3>{\hspace{-0.5cm}\includegraphics[width=10.5cm]{figs/10chains_rhat2.pdf}}
-    \only<4>{\hspace{-0.5cm}\includegraphics[width=10.5cm]{figs/10chains_rhat3.pdf}}
+    \only<1>{\hspace{-0.5cm}\phantom{\includegraphics[width=8cm]{figs/10chains_rhat1.pdf}}}
+    \only<2>{\hspace{-0.5cm}\includegraphics[width=8cm]{figs/10chains_rhat1.pdf}}
+    \only<3>{\hspace{-0.5cm}\includegraphics[width=8cm]{figs/10chains_rhat2.pdf}}
+    \only<4>{\hspace{-0.5cm}\includegraphics[width=8cm]{figs/10chains_rhat3.pdf}}
   \end{itemize}
 
 \end{frame}
@@ -642,7 +641,7 @@
 \frametitle{ $\widehat{R}$}
 
   \begin{itemize}
-  \item $M$ chains, each having $N$ draws (with new R-hat notation)
+  \item $M$ chains, each having $N$ draws
   \item<2-> Within chains variance $W$
     \begin{equation*}
       W=\frac{1}{M}\sum_{m=1}^M s^2_m ,\text{ where }
@@ -712,9 +711,9 @@
     W = within chain variance estimate\\
     var\_hat\_plus = total variance estimate\\
     \vspace{1\baselineskip}
-    \only<1>{\hspace{-0.5cm}\includegraphics[width=10.5cm]{figs/10chains_rhat1.pdf}}
-    \only<2>{\hspace{-0.5cm}\includegraphics[width=10.5cm]{figs/10chains_rhat2.pdf}}
-    \only<3>{\hspace{-0.5cm}\includegraphics[width=10.5cm]{figs/10chains_rhat3.pdf}}
+    \only<1>{\hspace{-0.5cm}\includegraphics[width=8cm]{figs/10chains_rhat1.pdf}}
+    \only<2>{\hspace{-0.5cm}\includegraphics[width=8cm]{figs/10chains_rhat2.pdf}}
+    \only<3>{\hspace{-0.5cm}\includegraphics[width=8cm]{figs/10chains_rhat3.pdf}}
   \end{itemize}
 
 \end{frame}
@@ -727,9 +726,9 @@
       \widehat{R}=\sqrt{\frac{\widehat{\var}^{+}}{W}}
     \end{equation*}
     \begin{itemize}
-    \item<1-> Estimates how much the scale of $\psi$ could reduce if $N\rightarrow\infty$
+    \item<1-> Estimates how much the scale could reduce if $N\rightarrow\infty$
     \item<1-> $\widehat{R}\rightarrow 1$, when $N\rightarrow\infty$
-    \item<1-> if $\widehat{R}$ is big (e.g., $R>1.01$), keep sampling
+    \item<1-> If $\widehat{R}$ is big (e.g., $R>1.01$), keep sampling
     \item<2-> If $\widehat{R}$ close to 1, it is still possible that chains have not converged
       \begin{itemize}
       \item if starting points were not overdispersed
@@ -742,41 +741,24 @@
 
 \begin{frame}[fragile]
 
-\frametitle{ Split-$\widehat{R}$}
+\frametitle{$\widehat{R}$}
 
   \begin{itemize}
-  \item BDA3: split-$\widehat{R}$
-  \item Examines {\it mixing} and {\it stationarity} of chains
-  \item To examine stationarity chains are split to two parts
-    \begin{itemize}
-    \item after splitting, we have $M$ chains, each having $N$ draws
-    \item scalar draws $\theta_{nm} \quad (n=1,\ldots,N;m=1,\ldots,M)$
-    \item compare means and variances of the split chains
-    \end{itemize}
+  \item Additional $\widehat{R}$ methods to assess convergence
+  \item Split-$\widehat{R}$
+  \begin{itemize}
+    \item Examines {\it mixing} and {\it stationarity} of chains
+    \item To examine stationarity chains are split to two parts: compare means and variances of the split chains
+  \end{itemize}
+  \pause
+  \item Rank normalized $\widehat{R}$
+  \begin{itemize}
+    \item Does not requires that the target distribution has finite mean and variance
+  \end{itemize}
   \end{itemize}
 
 \end{frame}
 
-\begin{frame}[fragile]
-
-\frametitle{ Rank normalized $\widehat{R}$}
-
-  \begin{itemize}
-  \item<+-> Original $\widehat{R}$ requires that the target distribution
-    has finite mean and variance
-  \item<+-> Rank normalization fixes this and is also more robust given
-    finite but high variance
-  \item<+-> Folding improves detecting scale differences between chains
-  \item<+-> Paper proposes also local convergence diagnostics and
-    practical MCSE estimates for quantiles
-  \item<+-> Notation updated compared to BDA3
-  \end{itemize}
-
-    Vehtari, Gelman, Simpson, Carpenter, Bürkner
-  (2020). Rank-normalization, folding, and localization: An improved
-  R-hat for assessing convergence of MCMC. Bayesian Analysis, doi:10.1214/20-BA1221. \url{https://projecteuclid.org/euclid.ba/1593828229}.
-
-\end{frame}
 
 \subsection{$S_\text{eff}$, MCSE, and autocorrelation}
 %\frame{\sectionpage}
@@ -784,16 +766,16 @@
 
 \begin{frame}
 
-\frametitle{ MCMC draws are dependent}
+\frametitle{MCMC draws are dependent}
 
   \begin{itemize}
-    \item Monte Carlo estimates still valid (central limit theorem holds)
+    \item Monte Carlo estimates still valid (central limit theorem)
       \begin{align*}
         E_{\color{blue} p(\theta|y)}[f(\theta)] \approx \frac{1}{S} \sum_{s=1}^S f(\theta^{(s)})
       \end{align*}
     \item Estimation of Monte Carlo error is more difficult
       \begin{itemize}
-      \item evaluation of {\it effective} sample size
+        \item evaluation of {\it effective} sample size, $S_\text{eff}$.
       \end{itemize}
     \end{itemize}
 \end{frame}
@@ -806,10 +788,10 @@
   \item Auto correlation function
     \begin{itemize}
     \item describes the correlation given a certain lag
-    \item can be used to compare efficiency of MCMC algorithms and parameterizations
+    \item can be used to compare efficiency of MCMC methods
     \end{itemize}
   \end{itemize}
-% \vspace{.5cm}
+%\vspace{.5cm}
 %   \begin{center}
 %       \includegraphics[scale=.8,clip]{kuva11_1}
 %   \end{center}
@@ -817,61 +799,60 @@
 
 \begin{frame}
 
-\frametitle{ Auto correlation}
+\frametitle{Autocorrelation}
 
   \vspace{-0.5\baselineskip}
-  \includegraphics[width=4.5cm]{figs/Metrop1.pdf}
-  \uncover<2->{\includegraphics[width=7cm]{figs/Metrop1trace.pdf}\\}
-  \uncover<3->{\includegraphics[width=7cm]{figs/Metrop1acf.pdf}}
+  \includegraphics[width=4cm]{figs/Metrop1.pdf}
+  \uncover<2->{\includegraphics[width=5cm]{figs/Metrop1trace.pdf}\\}
+  \uncover<3->{\includegraphics[width=5cm]{figs/Metrop1acf.pdf}}
 
 \end{frame}
 
 \begin{frame}
 
-\frametitle{Auto correlation}
+\frametitle{Autocorrelation}
 
   \vspace{-0.5\baselineskip}
-  \includegraphics[width=4.5cm]{figs/Metrop2.pdf}
-  {\includegraphics[width=7cm]{figs/Metrop2trace.pdf}\\}
-  {\includegraphics[width=7cm]{figs/Metrop2acf.pdf}}
+  \includegraphics[width=4cm]{figs/Metrop2.pdf}
+  {\includegraphics[width=5cm]{figs/Metrop2trace.pdf}\\}
+  {\includegraphics[width=5cm]{figs/Metrop2acf.pdf}}
 
 \end{frame}
 
 \begin{frame}
 
-\frametitle{ Auto correlation}
+\frametitle{Autocorrelation}
 
   \vspace{-0.5\baselineskip}
-  \includegraphics[width=4.5cm]{figs/Metrop3.pdf}
-  {\includegraphics[width=7cm]{figs/Metrop3trace.pdf}\\}
-  {\includegraphics[width=7cm]{figs/Metrop3acf.pdf}}
+  \includegraphics[width=4cm]{figs/Metrop3.pdf}
+  {\includegraphics[width=5cm]{figs/Metrop3trace.pdf}\\}
+  {\includegraphics[width=5cm]{figs/Metrop3acf.pdf}}
 
 \end{frame}
 
 \begin{frame}
 
-\frametitle{ Time series analysis}
+\frametitle{Autocorrelation}
 
   \begin{itemize}
-  \item Time series analysis can be used to estimate Monte Carlo
-    error in case of MCMC
+  \item The autocorrleation can be used to estimate Monte Carlo error in case of MCMC
   \item For expectation $\bar{\theta}$
     \begin{equation*}
-      \Var[\bar{\theta}] = \frac{\sigma^2_\theta}{S_\eff}
+      \Var[\bar{\theta}] = \frac{\sigma^2_\theta}{S_\text{eff}}
     \end{equation*}
-    where $S_\eff=S/\tau$, and $\tau$ is sum of autocorrelations
+    where $S_\text{eff}=S/\tau$, and $\tau$ is sum of autocorrelations
     \begin{itemize}
-      \item<2-> $\tau$ describes how many dependent draws correspond to one independent sample
-      \item<3-> new R-hat paper $S=NM$ (in BDA3 $N=nm$ and $n_\eff=N/\tau$)
-      \item<4-> BDA3 focuses on $S_\eff$ and not the Monte Carlo error directly\\
-        new R-hat paper discusses more about MCSEs for different quantities
+      \item<2-> $\tau$ describes how many dependent draws correspond to one independent draw
+      \item<3-> Here $S=NM$ (in BDA3 $N=nm$ and $n_\text{eff}=N/\tau$)
+      \item<4-> BDA3 focuses on $S_\text{eff}$ and not the Monte Carlo error directly
+%        new R-hat paper discusses more about MCSEs for different quantities
     \end{itemize}
   \end{itemize}
 \end{frame}
 
 \begin{frame}
 
-\frametitle{ Time series analysis}
+\frametitle{Autocorrelation}
 
   \begin{itemize}
   \item Estimation of the autocorrelation using several chains
@@ -879,13 +860,13 @@
       \hat{\rho}_n=1-\frac{W - \frac{1}{M}\sum_{m=1}^M \hat{\rho}_{n,m}}{2\widehat{\var}^{+}}
     \end{equation*}
     where $\hat{\rho}_{n,m}$ is autocorrelation at lag $n$ for chain $m$
-  \item<2-> This combines $\widehat{R}$ and autocorrelation estimates
-    \begin{itemize}
-    \item takes into account if the chains are not mixing (the chains have not converged)
-    \end{itemize}
-  \item<3-> BDA3 has slightly different and less accurate equation. The
+%  \item<2-> This combines $\widehat{R}$ and autocorrelation estimates
+%    \begin{itemize}
+%    \item takes into account if the chains are not mixing (the chains have not converged)
+%    \end{itemize}
+  \item<2-> BDA3 has slightly different and less accurate equation. The
     above equation is used in Stan 2.18+
-  \item<4-> Compared to a method which computes the autocorrelation
+  \item<3-> Compared to a method which computes the autocorrelation
     from a single chain, the multi-chain estimate has smaller variance
  \end{itemize}
 \end{frame}
@@ -894,7 +875,7 @@
 
 \begin{frame}
 
-\frametitle{ Time series analysis}
+\frametitle{Estimating $\tau$}
 
   \begin{itemize}
   \item Estimation of $\tau$
@@ -903,29 +884,29 @@
     \end{align*}
     where $\hat{\rho}_t$ is empirical autocorrelation
     \begin{itemize}
-    \item<2-> empirical autocorrelation function is noisy and thus
-      estimate of $\tau$ is noisy
+    \item<2-> empirical autocorrelation function is noisy %and thus
+%      estimate of $\tau$ is noisy
     \item<2-> noise is larger for longer lags (less observations)
     \item<3-> less noisy estimate is obtained by truncating
     \begin{align*}
       \hat{\tau} = 1 + 2 \sum_{t=1}^T \hat{\rho}_t
     \end{align*}
     \end{itemize}
-    \item<4-> As $\tau$ is estimated from a finite number of draws,
-      it's expectation is overoptimistic
-      \begin{itemize}
-      \item if $\hat{\tau}>MN/20$ then the estimate is unreliable
-
-      \end{itemize}
+%    \item<4-> As $\tau$ is estimated from a finite number of draws,
+%      it's expectation is overoptimistic
+%      \begin{itemize}
+%      \item if $\hat{\tau}>MN/20$ then the estimate is unreliable
+%
+%      \end{itemize}
     \end{itemize}
 \end{frame}
 
 \begin{frame}
 
-\frametitle{ Geyer's adaptive window estimator}
+\frametitle{Geyer's adaptive window estimator of $\tau$}
 
   \begin{itemize}
-  \item Truncation can be decided adaptively
+  \item Truncation $T$ can be decided adaptively
     \begin{itemize}
     \item for stationary, irreducible, recurrent Markov chain
     \item let $\Gamma_m=\rho_{2m}+\rho_{2m+1}$, which is sum of two
@@ -939,7 +920,7 @@
         $\hat{\Gamma}_1, \ldots, \hat{\Gamma}_m$ are positive
       \end{itemize}
   \vspace{0.5\baselineskip}
-      \includegraphics[width=6.5cm]{figs/Metrop1acf.pdf}
+      \includegraphics[width=6cm]{figs/Metrop1acf.pdf}
   \end{itemize}
 \end{frame}
 
@@ -951,19 +932,19 @@
 
 \begin{frame}
 
- \frametitle{ Effective sample size}
+ \frametitle{Effective sample size, $S_\text{eff}$}
 
-   Effective sample size $\ESS = S_\eff \approx S/\hat{\tau}$\\
+   Effective sample size $\ESS = S_\text{eff} \approx S/\hat{\tau}$\\
    \uncover<2->{
   \makebox[12cm][t]{
     \hspace{-.7cm}
      \begin{minipage}{12cm}
-     \includegraphics[width=6cm]{figs/Metrop1trace.pdf}
-     \includegraphics[width=6cm]{figs/Metrop1acf.pdf}\\
-     \includegraphics[width=6cm]{figs/Metrop1mcerr.pdf}
+     \includegraphics[width=5cm]{figs/Metrop1trace.pdf}
+     \includegraphics[width=5cm]{figs/Metrop1acf.pdf}\\
+     \includegraphics[width=5cm]{figs/Metrop1mcerr.pdf}
      \hspace{0cm}
-     \begin{minipage}[t][4cm][t]{6cm}
-       \vspace{-3.5cm}
+     \begin{minipage}[t][4cm][t]{5cm}
+       \vspace{-2.5cm}
        \begin{align*}
          \hat{\tau} & = 1 + 2 \sum_{t=1}^T \hat{\rho}_t\\
                  & \approx 24
@@ -979,7 +960,7 @@
 
  \frametitle{ Effective sample size}
 
-   Effective sample size $\ESS = S_\eff \approx S/\hat{\tau}$\\
+   Effective sample size $\ESS = S_\text{eff} \approx S/\hat{\tau}$\\
   \makebox[12cm][t]{
     \hspace{-.7cm}
      \begin{minipage}{12cm}
@@ -1003,7 +984,7 @@
 
  \frametitle{ Effective sample size}
 
-   Effective sample size $\ESS = S_\eff \approx S/\hat{\tau}$\\
+   Effective sample size $\ESS = S_\text{eff} \approx S/\hat{\tau}$\\
   \makebox[12cm][t]{
     \hspace{-.7cm}
      \begin{minipage}{12cm}

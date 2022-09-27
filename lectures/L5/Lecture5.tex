@@ -418,35 +418,35 @@
 \frametitle{ Why Metropolis algorithm works}
 
   \begin{itemize}
-  \item[2.] Prove that this stationary distribution is the desired target distribution $p(\theta|y)$
-    \begin{itemize}
-    \item[-] consider starting algorithm at time $t-1$ with a draw
-      $\theta_{t-1} \sim p(\theta|y)$
-    \item<2->[-] consider any two such points $\theta_a$ and $\theta_b$ drawn
-      from $p(\theta|y)$ and labeled so that
-      $p(\theta_b|y)\geq p(\theta_a|y)$
-    \item<3->[-] the unconditional probability density of a transition from $\theta_a$ to $\theta_b$ is
-      \vspace{-0.5\baselineskip}
-      \begin{equation*}
-        p(\theta_{t-1}=\theta_a,\theta_{t}=\theta_b)=
-        p(\theta_a|y)J_t(\theta_b|\theta_a),
-      \end{equation*}
-      \vspace{-1\baselineskip}
-    \item<4->[-] the unconditional probability density of a transition from $\theta_b$ to $\theta_a$ is
-      \vspace{-0.5\baselineskip}
-      \begin{eqnarray*}
-        p(\theta_{t}=\theta_a,\theta_{t-1}=\theta_b) & = &
-        p(\theta_b|y)J_t(\theta_a|\theta_b)\left(\frac{p(\theta_a|y)}{p(\theta_b|y)}\right)\\
-        \pause &  = &  p(\theta_a|y)J_t(\theta_a|\theta_b),
-      \end{eqnarray*}
-      \uncover<5->{
-      which is the same as the probability of transition from $\theta_a$ to $\theta_b$,
-      since we have required that $J_t(\cdot|\cdot)$ is symmetric}
-      \pause
-    \item<6->[-] since their joint distribution is symmetric, $\theta_t$ and
-      $\theta_{t-1}$ have the same marginal distributions, and so
-      $p(\theta|y)$ is the stationary distribution of the Markov chain of $\theta$
-    \end{itemize}
+  \item[2.] Prove that this stationary distribution is the desired target distribution $p(\theta|y)$: see book
+%    \begin{itemize}
+%    \item[-] consider starting algorithm at time $t-1$ with a draw
+%      $\theta_{t-1} \sim p(\theta|y)$
+%    \item<2->[-] consider any two such points $\theta_a$ and $\theta_b$ drawn
+%      from $p(\theta|y)$ and labeled so that
+%      $p(\theta_b|y)\geq p(\theta_a|y)$
+%    \item<3->[-] the unconditional probability density of a transition from $\theta_a$ to $\theta_b$ is
+%      \vspace{-0.5\baselineskip}
+%      \begin{equation*}
+%        p(\theta_{t-1}=\theta_a,\theta_{t}=\theta_b)=
+%        p(\theta_a|y)J_t(\theta_b|\theta_a),
+%      \end{equation*}
+%      \vspace{-1\baselineskip}
+%    \item<4->[-] the unconditional probability density of a transition from $\theta_b$ to $\theta_a$ is
+%      \vspace{-0.5\baselineskip}
+%      \begin{eqnarray*}
+%        p(\theta_{t}=\theta_a,\theta_{t-1}=\theta_b) & = &
+%        p(\theta_b|y)J_t(\theta_a|\theta_b)\left(\frac{p(\theta_a|y)}{p(\theta_b|y)}\right)\\
+%        \pause &  = &  p(\theta_a|y)J_t(\theta_a|\theta_b),
+%      \end{eqnarray*}
+%      \uncover<5->{
+%      which is the same as the probability of transition from $\theta_a$ to $\theta_b$,
+%      since we have required that $J_t(\cdot|\cdot)$ is symmetric}
+%      \pause
+%    \item<6->[-] since their joint distribution is symmetric, $\theta_t$ and
+%      $\theta_{t-1}$ have the same marginal distributions, and so
+%      $p(\theta|y)$ is the stationary distribution of the Markov chain of $\theta$
+%    \end{itemize}
   \end{itemize}
 
 \end{frame}

@@ -181,7 +181,7 @@ density_ratio(alpha_propose = 0.374, alpha_previous = 1.89,
 \item[h)] Do the same for $\beta$.
 \end{enumerate}
 
-\item In complex scenarios, visual assessment is not sufficient and $\widehat{R}$ is a more robust indicator of convergence of the Markov chains. Use $\widehat{R}$ for convergence analysis. You can either use Eq. (11.4) in BDA3 or the more recent version described \href{https://projecteuclid.org/euclid.ba/1593828229}{\textbf{here}}. You should specify which $\widehat{R}$ you used. In R the best choice is to use function {\tt Rhat} from package {\tt rstan}. Remember to remove the warm-up samples before computing $\widehat{R}$. Report the $\widehat{R}$ values for $\alpha$ and $\beta$ separately. Report the values for the proposal distribution you finally used.
+\item In complex scenarios, visual assessment is not sufficient and $\widehat{R}$ is a more robust indicator of convergence of the Markov chains. Use $\widehat{R}$ for convergence analysis. You can either use Eq. (11.4) in BDA3 or the more recent version described \href{https://arxiv.org/pdf/1903.08008.pdf}{\textbf{here}}. You should specify which $\widehat{R}$ you used. In R the best choice is to use function {\tt Rhat} from package {\tt rstan}. Remember to remove the warm-up samples before computing $\widehat{R}$. Report the $\widehat{R}$ values for $\alpha$ and $\beta$ separately. Report the values for the proposal distribution you finally used.
   \begin{enumerate}
   \item[a]) Describe briefly in your own words the basic idea of $\widehat{R}$ and how to to interpret the obtained $\widehat{R}$ values.
   \item[b]) Tell whether you obtained good $\widehat{R}$ with first

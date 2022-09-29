@@ -86,6 +86,7 @@
 \item Proposal distribution $J$ (i.e. $T$)\pause
 \item[+] better for correlated posteriors\pause
 \item[-] scale need to be tuned for efficient sampling
+\item[-] hard to propose in high dimensions (many small steps or many rejections)
 \end{itemize}
 \end{itemize}
 
@@ -97,8 +98,59 @@
 \frame{\sectionpage}
 
 % Motivation: Why HMC?
+\begin{frame}
+\frametitle{Why Hamiltonian Monte Carlo?}
+
+\begin{itemize}
+\item Want to build an \uured{efficient} Markov Chain
+\begin{itemize}
+\item We want to sample jointly all $\theta$
+\item We know the \uured{unnormalized} posterior $q(\theta|y)=Z \cdot p(\theta|y)$, were $Z$ is the normalization constant.
+\item Can we use this to create a good \uured{proposal} distribution $J$?
+\pause
+\item \uured{Hamiltonian Monte Carlo}!
+\end{itemize}
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{What is Hamiltonian Monte Carlo?}
+
+\begin{itemize}
+\item Idea from Physics (Mechanics):
+\begin{itemize}
+\item $\theta$: position
+\item $\psi$: momentum
+\end{itemize}
+
+\item We add momentum variables to our posterior
+\[
+ p(\psi,\theta | y) = p(\psi | \theta , y) \cdot p(\theta | y)\,,
+\]
+in practice we let $p(\psi | \theta , y) = p(\psi)$
+
+\item We can then define the Hamiltonian as
+\begin{align}
+H(\psi, \theta)  & = - \log(p(\psi) - \log(p(\theta | y))\\
+ & = K(\psi) + V(\theta)\,,
+\end{align}
+where $K(\psi)$ is the \uured{kinetic} energy and $V(\theta)$ is the \uured{potential} energy
+\item Hamiltonian Dynamics (\uured{preserve energy})
+\begin{align}
+\frac{d\theta}{dt} &=  \frac{\partial H}{\partial \psi} = \frac{\partial K}{\partial \psi}\\
+\frac{d\psi}{dt} &=  - \frac{\partial H}{\partial \theta} = \frac{\partial V}{\partial \theta}
+\end{align}
+
+\end{itemize}
+
+\end{frame}
+
 
 % What is HMC?
+
+% \href{https://chi-feng.github.io/mcmc-demo/app.html?algorithm=RandomWalkMH&target=standard}{demo}
 
 % Work through a mathematical example
 
@@ -138,8 +190,6 @@
 
 
 
-% TODO: add theory here
-
 \begin{frame}
 
 \frametitle{Hamiltonian Monte Carlo}
@@ -153,18 +203,18 @@
   \vspace{-0.5\baselineskip}
   \only<1>{\phantom{\includegraphics[width=7cm]{figs/hmcdemo01.pdf}}}
   \only<2>{\includegraphics[width=7cm]{figs/hmcdemo01.pdf}}
-  \only<3>{\includegraphics[width=9cm]{figs/hmcdemo02.pdf}}
-  \only<4>{\includegraphics[width=9cm]{figs/hmcdemo03.pdf}}
-  \only<5>{\includegraphics[width=9cm]{figs/hmcdemo04.pdf}}
-  \only<6>{\includegraphics[width=9cm]{figs/hmcdemo05.pdf}}
-  \only<7>{\includegraphics[width=9cm]{figs/hmcdemo06.pdf}}
-  \only<8>{\includegraphics[width=9cm]{figs/hmcdemo07.pdf}}
-  \only<9>{\includegraphics[width=9cm]{figs/hmcdemo08.pdf}}
-  \only<10>{\includegraphics[width=9cm]{figs/hmcdemo09.pdf}}
-  \only<11>{\includegraphics[width=9cm]{figs/hmcdemo10.pdf}}
-  \only<12>{\hspace{-5mm}\includegraphics[width=12cm]{figs/hmc1trace.pdf}}
-  \only<13>{\hspace{-5mm}\includegraphics[width=12cm]{figs/hmc1acf.pdf}}
-  \only<14>{\hspace{-5mm}\includegraphics[width=12cm]{figs/hmc1mcerr.pdf}}
+  \only<3>{\includegraphics[width=7cm]{figs/hmcdemo02.pdf}}
+  \only<4>{\includegraphics[width=7cm]{figs/hmcdemo03.pdf}}
+  \only<5>{\includegraphics[width=7cm]{figs/hmcdemo04.pdf}}
+  \only<6>{\includegraphics[width=7cm]{figs/hmcdemo05.pdf}}
+  \only<7>{\includegraphics[width=7cm]{figs/hmcdemo06.pdf}}
+  \only<8>{\includegraphics[width=7cm]{figs/hmcdemo07.pdf}}
+  \only<9>{\includegraphics[width=7cm]{figs/hmcdemo08.pdf}}
+  \only<10>{\includegraphics[width=7cm]{figs/hmcdemo09.pdf}}
+  \only<11>{\includegraphics[width=7cm]{figs/hmcdemo10.pdf}}
+  \only<12>{\hspace{-5mm}\includegraphics[width=9cm]{figs/hmc1trace.pdf}}
+  \only<13>{\hspace{-5mm}\includegraphics[width=9cm]{figs/hmc1acf.pdf}}
+  \only<14>{\hspace{-5mm}\includegraphics[width=9cm]{figs/hmc1mcerr.pdf}}
 \end{frame}
 
 \begin{frame}

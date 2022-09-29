@@ -142,51 +142,51 @@ where $K(\psi)$ is the \uured{kinetic} energy and $V(\theta)$ is the \uured{pote
 \frac{d\theta}{dt} &=  \frac{\partial H}{\partial \psi} = \frac{\partial K}{\partial \psi}\\
 \frac{d\psi}{dt} &=  - \frac{\partial H}{\partial \theta} = \frac{\partial V}{\partial \theta}
 \end{align}
+\item Let $V(\theta) = - \log(q(\theta|y))= - \log p(\theta) - \log p(y | \theta)$
+\item Let $\psi \sim N(0,M)$ where $M$ is the \uured{mass matrix}
+\item We need to choose $M$ in a smart way. Ideally we set $M^{-1}=Cov(\theta|y)$
+\end{itemize}
+\end{frame}
 
+
+\begin{frame}
+
+\frametitle{Simulating the Hamiltonian: The leapfrog integrator}
+
+\begin{itemize}
+\item
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Hamiltonian Monte Carlo Algorithm}
+
+\begin{itemize}
+\item test
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Hamiltonian Monte Carlo}
+
+\begin{itemize}
+\item Parameters: step size, leapfrog steps, M
+\item + If well tuned can be extremely efficient
+\item + Additional diagnostics
+\item - Can be difficult to tune (U-turns)
+\item - Costly to run (log density gradient evaluations)
 \end{itemize}
 
-\end{frame}
-
-
-% What is HMC?
-
-% \href{https://chi-feng.github.io/mcmc-demo/app.html?algorithm=RandomWalkMH&target=standard}{demo}
-
-% Work through a mathematical example
-
-
-
-
-
-
-\begin{frame}
-
-\frametitle{ Dynamic Hamiltonian Monte Carlo and NUTS}
-
-  \begin{itemize}
-  \item Chapter 12 presents some more advanced methods
-    \begin{itemize}
-    \item Chapter 12 includes Hamiltonian Monte Carlo and NUTS, which
-      is one of the most efficient methods
-      \begin{itemize}
-      \item uses gradient information
-      \item Hamiltonian dynamic simulation reduces random walk
-   \item Demo {\small \url{http://elevanth.org/blog/2017/11/28/build-a-better-markov-chain/}}
-      \end{itemize}
-    \end{itemize}
-  \end{itemize}
+\centering
+\href{https://chi-feng.github.io/mcmc-demo/app.html?algorithm=HamiltonianMC&target=standard}{demo}
 
 \end{frame}
 
-\begin{frame}
 
-\frametitle{ HMC / NUTS}
+% TODO: Work through a mathematical example
 
-  \vspace{-.5\baselineskip}
-  \includegraphics[width=\textwidth,clip]{figs/N250.pdf}\\
-  Source: Jonah Gabry
-
-\end{frame}
 
 
 
@@ -194,12 +194,12 @@ where $K(\psi)$ is the \uured{kinetic} energy and $V(\theta)$ is the \uured{pote
 
 \frametitle{Hamiltonian Monte Carlo}
 
-  \vspace{-0.5\baselineskip}
-  \begin{itemize}
-  \item Uses log density (negative log density is called energy)
-  \item Uses gradient of log density for more efficient sampling
-  \item Augments parameter space with momentum variables
-  \end{itemize}
+%  \vspace{-0.5\baselineskip}
+%  \begin{itemize}
+%  \item Uses log density (negative log density is called energy)
+%  \item Uses gradient of log density for more efficient sampling
+%  \item Augments parameter space with momentum variables
+%  \end{itemize}
   \vspace{-0.5\baselineskip}
   \only<1>{\phantom{\includegraphics[width=7cm]{figs/hmcdemo01.pdf}}}
   \only<2>{\includegraphics[width=7cm]{figs/hmcdemo01.pdf}}
@@ -214,34 +214,19 @@ where $K(\psi)$ is the \uured{kinetic} energy and $V(\theta)$ is the \uured{pote
   \only<11>{\includegraphics[width=7cm]{figs/hmcdemo10.pdf}}
   \only<12>{\hspace{-5mm}\includegraphics[width=9cm]{figs/hmc1trace.pdf}}
   \only<13>{\hspace{-5mm}\includegraphics[width=9cm]{figs/hmc1acf.pdf}}
-  \only<14>{\hspace{-5mm}\includegraphics[width=9cm]{figs/hmc1mcerr.pdf}}
+%  \only<14>{\hspace{-5mm}\includegraphics[width=9cm]{figs/hmc1mcerr.pdf}}
 \end{frame}
 
-\begin{frame}
 
-\frametitle{Hamiltonian Monte Carlo}
-
-  \begin{itemize}
-  \item Uses log density (negative log density is called energy)
-  \item Uses gradient of log density for more efficient sampling
-  \item Augments parameter space with momentum variables
-  \item Simulation of Hamiltonian dynamics reduces random walk
-    \begin{itemize}
-    \item Explanation of HMC with black board
-    \item \url{http://elevanth.org/blog/2017/11/28/build-a-better-markov-chain/}
-    \end{itemize}
-  \end{itemize}
-
-\end{frame}
+\subsection{No U-Turn Sampler (NUTS) / Dynamic HMC}
+%\frame{\sectionpage}
 
 \begin{frame}
-
 \frametitle{Hamiltonian Monte Carlo}
 
   \begin{itemize}
   \item Uses gradient of log density for more efficient sampling
   \item Alternating dynamic simulation and sampling energy level
-  \item<2-> Parameters: step size, number of steps in each chain
   \item<3-> No U-Turn Sampling (NUTS) and dynamic HMC
     \begin{itemize}
     \item adaptively selects number of steps to improve robustness and
@@ -262,11 +247,7 @@ where $K(\psi)$ is the \uured{kinetic} energy and $V(\theta)$ is the \uured{pote
 
 \end{frame}
 
-\subsection{No U-Turn Sampler (NUTS)}
-%\frame{\sectionpage}
-
 \begin{frame}
-
 \frametitle{Adaptive dynamic HMC in Stan}
 
   \begin{itemize}
@@ -293,6 +274,16 @@ where $K(\psi)$ is the \uured{kinetic} energy and $V(\theta)$ is the \uured{pote
   \item<8-> After warmup store iterations for inference
   \item<9-> See more details in Stan reference manual
 \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+
+\frametitle{ HMC / NUTS}
+
+  \vspace{-.5\baselineskip}
+  \includegraphics[width=\textwidth,clip]{figs/N250.pdf}\\
+  Source: Jonah Gabry
 
 \end{frame}
 
@@ -338,6 +329,16 @@ where $K(\psi)$ is the \uured{kinetic} energy and $V(\theta)$ is the \uured{pote
 
 \begin{frame}
 
+\frametitle{ HMC / NUTS}
+
+  \vspace{-.5\baselineskip}
+  \includegraphics[width=\textwidth,clip]{figs/N250.pdf}\\
+  Source: Jonah Gabry
+
+\end{frame}
+
+\begin{frame}
+
 \frametitle{Problematic distributions}
 
   \begin{itemize}
@@ -361,6 +362,7 @@ where $K(\psi)$ is the \uured{kinetic} energy and $V(\theta)$ is the \uured{pote
   \end{itemize}
 
 \end{frame}
+
 
 \begin{frame}
 

@@ -75,6 +75,11 @@ Below are some suggested complementary reading for the interested student.
 
 ## Video material
 
+## Introduction to Bayesian inference with Stan
+
+[Part 1](https://www.youtube.com/watch?v=ZRpo41l02KQ)
+[Part 2](https://www.youtube.com/watch?v=6cc4N1vT8pk)
+
 ### Aki Vehtari lectures
 
 Aki Vehtari at Aalto University has recorded lectures with very similar content as the content presented in the course.

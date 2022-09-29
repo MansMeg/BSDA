@@ -1,11 +1,13 @@
-\documentclass[10pt,handout]{beamer}
-%\documentclass[10pt]{beamer}
+%\documentclass[10pt,handout]{beamer}
+\documentclass[10pt]{beamer}
 \usepackage[english]{babel} % Anpassa efter svenska. Ger svensk logga.
 \usepackage[utf8]{inputenc} % Anpassa efter linux
 \usepackage{graphicx}
 \usepackage{hyperref}
 \usepackage{listings}
 \input{../common/lststan} % Stan listing
+
+\newcommand{\uured}[1]{\textcolor{uured}{#1}}
 
 \hypersetup{
     colorlinks=true,
@@ -51,8 +53,51 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-\section{Introduction}
+\section{MCMC recap}
+%\frame{\sectionpage}
+
+\begin{frame}
+\frametitle{Recap: MCMC, Gibbs and Metropolis}
+
+\begin{itemize}
+\item Markov Chain Monte Carlo
+\begin{itemize}
+\item A \uured{transition distribution} $T(\theta_0 \rightarrow \theta_1)$ with a unique \uured{stationary distribution}
+\item Target: setup $T$ so that $p(\theta|y)$ is the stationary distribution\pause
+\item [+] generic \pause
+\item [-] generates dependent draws (inefficiencies/low $S_\text{eff}$)
+\item [-] need to assess convergence to $p(\theta|y)$
+\end{itemize}
+\pause
+\item Gibbs sampling
+\begin{itemize}
+\item Conditional (or block) sampling of $\theta$
+\[
+\theta_j \sim p(\theta_j|\theta_{-j}, y)
+\]
+\pause
+\item[+] Often easy to construct \pause
+\item[-] Inefficient if posterior has correlated parameters
+\end{itemize}
+\pause
+\item Metropolis(-Hastings) sampling
+\begin{itemize}
+\item Joint (or block) sampling of $\theta$
+\item Proposal distribution $J$ (i.e. $T$)\pause
+\item[+] better for correlated posteriors\pause
+\item[-] scale need to be tuned for efficient sampling
+\end{itemize}
+\end{itemize}
+
+\end{frame}
+
+% TODO: Demo Gibbs + Metropolis-Hastings
+% TODO: Introduce the problem
+
+
+\section{Hamiltonian Monte Carlo}
 \frame{\sectionpage}
+
 
 
 \begin{frame}
@@ -96,6 +141,8 @@
 \begin{frame}
 
 \frametitle{Extra material for dynamic HMC}
+
+% TODO Add Demo
 
   \begin{itemize}
   \item Michael Betancourt (2018).  A Conceptual Introduction to
@@ -142,15 +189,17 @@
   \begin{itemize}
   \item demo12\_1: HMC
   \item \url{http://elevanth.org/blog/2017/11/28/build-a-better-markov-chain/}
-  \item rstan\_demo
-  \item rstanarm\_demo
-  \item \url{http://sumsar.net/blog/2017/01/bayesian-computation-with-stan-and-farmer-jons/}
+%  \item rstan\_demo
+%  \item rstanarm\_demo
+%  \item \url{http://sumsar.net/blog/2017/01/bayesian-computation-with-stan-and-farmer-jons/}
   \item \url{http://mc-stan.org/documentation/case-studies.html}
   \item \url{https://cran.r-project.org/package=rstan}
   \item \url{https://cran.r-project.org/package=rstanarm}
   \end{itemize}
 
 \end{frame}
+
+% TODO: add theory here
 
 \begin{frame}
 
@@ -163,8 +212,8 @@
   \item Augments parameter space with momentum variables
   \end{itemize}
   \vspace{-0.5\baselineskip}
-  \only<1>{\phantom{\includegraphics[width=9cm]{figs/hmcdemo01.pdf}}}
-  \only<2>{\includegraphics[width=9cm]{figs/hmcdemo01.pdf}}
+  \only<1>{\phantom{\includegraphics[width=7cm]{figs/hmcdemo01.pdf}}}
+  \only<2>{\includegraphics[width=7cm]{figs/hmcdemo01.pdf}}
   \only<3>{\includegraphics[width=9cm]{figs/hmcdemo02.pdf}}
   \only<4>{\includegraphics[width=9cm]{figs/hmcdemo03.pdf}}
   \only<5>{\includegraphics[width=9cm]{figs/hmcdemo04.pdf}}
@@ -224,13 +273,16 @@
 
 \end{frame}
 
+\subsection{No U-Turn Sampler (NUTS)}
+\frame{\sectionpage}
+
 \begin{frame}
 
 \frametitle{Adaptive dynamic HMC in Stan}
 
   \begin{itemize}
   \item Dynamic HMC using growing tree to increase simulation
-    trajectory until no-U-turn criterion stopping
+    trajectory until no-U-turn criterion stopping % TODO: Add criteria here
     \begin{itemize}
     \item max treedepth to keep computation in control
     \item<2-> pick a draw along the trajectory with probabilities adjusted
@@ -254,6 +306,9 @@
 \end{itemize}
 
 \end{frame}
+
+\subsection{HMC diagnostics}
+\frame{\sectionpage}
 
 \begin{frame}
 
@@ -318,9 +373,16 @@
 
 \end{frame}
 
+
+\section{Probabilistic programming}
+\frame{\sectionpage}
+
+% TODO: Add The Box loop here
+% TODO: Add Conceptual introduction to HMC as optional
+
 \begin{frame}
 
-\frametitle{Probabilistic programming language}
+\frametitle{Probabilistic programming languages}
 
   \begin{itemize}
   \item Wikipedia ``A probabilistic programming language (PPL) is a
@@ -349,12 +411,13 @@
     \item diagnostics
     \end{itemize}
   \item Many frameworks
-    Stan, PyMC3, Pyro (Uber), Edward (Google), Birch, ELFI, ...
+    Stan, PyMC3, Pyro (Uber), Edward (Google), Birch (Uppsala), ...
   \end{itemize}
 
 \end{frame}
 
-
+\section{Stan}
+\frame{\sectionpage}
 
 \begin{frame}
 

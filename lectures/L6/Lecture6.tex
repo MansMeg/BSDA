@@ -91,12 +91,19 @@
 
 \end{frame}
 
-% TODO: Demo Gibbs + Metropolis-Hastings
-% TODO: Introduce the problem
-
+% TODO: Add demo Gibbs + Metropolis-Hastings
 
 \section{Hamiltonian Monte Carlo}
 \frame{\sectionpage}
+
+% Motivation: Why HMC?
+
+% What is HMC?
+
+% Work through a mathematical example
+
+
+
 
 
 
@@ -121,14 +128,6 @@
 
 \begin{frame}
 
-\frametitle{ Example of uncertainty in modeling}
-
-  \includegraphics[width=10cm]{figs/fakel_postdraws.pdf}
-
-\end{frame}
-
-\begin{frame}
-
 \frametitle{ HMC / NUTS}
 
   \vspace{-.5\baselineskip}
@@ -138,66 +137,6 @@
 \end{frame}
 
 
-\begin{frame}
-
-\frametitle{Extra material for dynamic HMC}
-
-% TODO Add Demo
-
-  \begin{itemize}
-  \item Michael Betancourt (2018).  A Conceptual Introduction to
-    Hamiltonian Monte Carlo. \url{https://arxiv.org/abs/1701.02434}
-  \item Cole C. Monnahan, James T. Thorson, and Trevor A. Branch
-    (2016) Faster estimation of Bayesian models in ecology using
-    Hamiltonian Monte Carlo. \url{https://dx.doi.org/10.1111/2041-210X.12681}
-  \end{itemize}
-
-\end{frame}
-
-\begin{frame}
-
-\frametitle{Extra material for Stan}
-
-  \begin{itemize}
-  \item Andrew Gelman, Daniel Lee, and Jiqiang Guo (2015) Stan: A
-    probabilistic programming language for Bayesian inference and
-    optimization. \url{http://www.stat.columbia.edu/~gelman/research/published/stan_jebs_2.pdf}
-  \item Carpenter et al (2017). Stan: A probabilistic programming
-    language. Journal of Statistical Software
-    76(1). \url{https://dox.doi.org/10.18637/jss.v076.i01}
-  \item Stan User's Guide, Language Reference Manual, and Language
-    Function Reference (in html and pdf)
-    \url{https://mc-stan.org/users/documentation/}
-    \begin{itemize}
-    \item[-] easiest to start from Example Models in User's guide
-    \end{itemize}
-  \item Basics of Bayesian inference and Stan, part 1 Jonah Gabry \&
-    Lauren Kennedy (StanCon 2019 Helsinki tutorial)
-    \begin{itemize}
-    \item[-]
-      \url{https://www.youtube.com/watch?v=ZRpo41l02KQ&index=6&list=PLuwyh42iHquU4hUBQs20hkBsKSMrp6H0J}
-    \item[-] \url{https://www.youtube.com/watch?v=6cc4N1vT8pk&index=7&list=PLuwyh42iHquU4hUBQs20hkBsKSMrp6H0J}
-  \end{itemize}
-  \end{itemize}
-\end{frame}
-
-
-\begin{frame}
-
-\frametitle{Chapter 12 demos}
-
-  \begin{itemize}
-  \item demo12\_1: HMC
-  \item \url{http://elevanth.org/blog/2017/11/28/build-a-better-markov-chain/}
-%  \item rstan\_demo
-%  \item rstanarm\_demo
-%  \item \url{http://sumsar.net/blog/2017/01/bayesian-computation-with-stan-and-farmer-jons/}
-  \item \url{http://mc-stan.org/documentation/case-studies.html}
-  \item \url{https://cran.r-project.org/package=rstan}
-  \item \url{https://cran.r-project.org/package=rstanarm}
-  \end{itemize}
-
-\end{frame}
 
 % TODO: add theory here
 
@@ -274,7 +213,7 @@
 \end{frame}
 
 \subsection{No U-Turn Sampler (NUTS)}
-\frame{\sectionpage}
+%\frame{\sectionpage}
 
 \begin{frame}
 
@@ -369,6 +308,17 @@
     \item efficiency of exploration is reduced
     \item central limit theorem doesn't hold for mean and variance
     \end{itemize}
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Extra (optional) material for HMC}
+
+  \begin{itemize}
+  \item Michael Betancourt (2018).  A Conceptual Introduction to
+    Hamiltonian Monte Carlo. \url{https://arxiv.org/abs/1701.02434}
   \end{itemize}
 
 \end{frame}
@@ -1312,6 +1262,37 @@ functions {
   \end{itemize}
 
 \end{frame}
+
+
+
+
+\begin{frame}
+
+\frametitle{Extra material for Stan}
+
+  \begin{itemize}
+  \item Andrew Gelman, Daniel Lee, and Jiqiang Guo (2015) Stan: A
+    probabilistic programming language for Bayesian inference and
+    optimization. \url{http://www.stat.columbia.edu/~gelman/research/published/stan_jebs_2.pdf}
+  \item Carpenter et al (2017). Stan: A probabilistic programming
+    language. Journal of Statistical Software
+    76(1). \url{https://dox.doi.org/10.18637/jss.v076.i01}
+  \item Stan User's Guide, Language Reference Manual, and Language
+    Function Reference (in html and pdf)
+    \url{https://mc-stan.org/users/documentation/}
+    \begin{itemize}
+    \item[-] easiest to start from Example Models in User's guide
+    \end{itemize}
+  \item Basics of Bayesian inference and Stan, part 1 Jonah Gabry \&
+    Lauren Kennedy (StanCon 2019 Helsinki tutorial)
+    \begin{itemize}
+    \item[-]
+      \url{https://www.youtube.com/watch?v=ZRpo41l02KQ&index=6&list=PLuwyh42iHquU4hUBQs20hkBsKSMrp6H0J}
+    \item[-] \url{https://www.youtube.com/watch?v=6cc4N1vT8pk&index=7&list=PLuwyh42iHquU4hUBQs20hkBsKSMrp6H0J}
+  \end{itemize}
+  \end{itemize}
+\end{frame}
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

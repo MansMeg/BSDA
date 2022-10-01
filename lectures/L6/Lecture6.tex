@@ -144,6 +144,7 @@ where $K(\psi)$ is the \uured{kinetic} energy and $V(\theta)$ is the \uured{pote
 \end{align}
 \item Let $V(\theta) = - \log(q(\theta|y))= - \log p(\theta) - \log p(y | \theta)$
 \item Let $\psi \sim N(0,M)$ where $M$ is the \uured{mass matrix}
+\item Hence, $K(\psi) = - \log p(\psi) \propto 0.5 \psi^T M^{-1} \psi + C$
 \item We need to choose $M$ in a smart way. Ideally we set $M^{-1}=Cov(\theta|y)$
 \end{itemize}
 \end{frame}
@@ -154,7 +155,19 @@ where $K(\psi)$ is the \uured{kinetic} energy and $V(\theta)$ is the \uured{pote
 \frametitle{Simulating the Hamiltonian: The leapfrog integrator}
 
 \begin{itemize}
-\item
+\item We want to simulate from the Hamiltonian
+\begin{align}
+\frac{d\theta}{dt} &=  M^{-1} \psi\\
+\frac{d\psi}{dt} &=  \frac{\partial \log q(\theta|y)}{\partial \theta}
+\end{align}
+\item We can do this using a \uured{discrete} approximation: the leapfrog integrator
+\item We take $L$ leapfrog steps with step size $\epsilon$ as
+\begin{align}
+\psi \leftarrow &\psi + \frac{1}{2}\epsilon \frac{d\log q(\theta|y)}{d\theta}\\
+\theta \leftarrow& \epsilon M^{-1}\psi\\
+\psi \leftarrow &\psi + \frac{1}{2}\epsilon \frac{d\log q(\theta|y)}{d\theta}
+\end{align}
+\item Discretization introduce a small error that increases with $\epsilon$
 \end{itemize}
 \end{frame}
 
@@ -162,9 +175,17 @@ where $K(\psi)$ is the \uured{kinetic} energy and $V(\theta)$ is the \uured{pote
 
 \frametitle{Hamiltonian Monte Carlo Algorithm}
 
-\begin{itemize}
-\item test
-\end{itemize}
+\begin{enumerate}
+\item Sample momentum
+\[
+\psi_0 \sim N(0,M)
+\]
+\item Simulate values $(\theta^\star,\psi^\star)$ using the leapfrog integrator $L$ steps with stepsize $\epsilon$, starting from $(\theta_{t-1},\psi_0)$
+\item Accept the proposed values $(\theta^\star,\psi^\star)$ with probability
+\[
+r = \min \left( 1, \frac{q(\theta^\star|y)}{q(\theta_{t-1}|y)}\frac{p(\psi^\star)}{p(\psi_0)} \right)
+\]
+\end{enumerate}
 \end{frame}
 
 
@@ -176,6 +197,7 @@ where $K(\psi)$ is the \uured{kinetic} energy and $V(\theta)$ is the \uured{pote
 \item + If well tuned can be extremely efficient
 \item + Additional diagnostics
 \item - Can be difficult to tune (U-turns)
+\item - Bounded parameters needs handling
 \item - Costly to run (log density gradient evaluations)
 \end{itemize}
 

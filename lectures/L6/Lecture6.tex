@@ -119,55 +119,70 @@
 \frametitle{What is Hamiltonian Monte Carlo?}
 
 \begin{itemize}
+\item Add momentum variables to our posterior (\uured{canonical} distribution)
+\[
+ p(\psi,\theta | y) = p(\psi | \theta , y) \cdot p(\theta | y)\,,
+\]
+in practice we let $p(\psi | \theta , y) = p(\psi)$
+\pause
 \item Idea from Physics (Mechanics):
 \begin{itemize}
 \item $\theta$: position
 \item $\psi$: momentum
 \end{itemize}
-
-\item We add momentum variables to our posterior
-\[
- p(\psi,\theta | y) = p(\psi | \theta , y) \cdot p(\theta | y)\,,
-\]
-in practice we let $p(\psi | \theta , y) = p(\psi)$
-
-\item We can then define the Hamiltonian as
+\pause
+\item Define the Hamiltonian as
 \begin{align}
 H(\psi, \theta)  & = - \log(p(\psi) - \log(p(\theta | y))\\
  & = K(\psi) + V(\theta)\,,
 \end{align}
 where $K(\psi)$ is the \uured{kinetic} energy and $V(\theta)$ is the \uured{potential} energy
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{What is Hamiltonian Monte Carlo?}
+
+\begin{itemize}
 \item Hamiltonian Dynamics (\uured{preserve energy})
 \begin{align}
 \frac{d\theta}{dt} &=  \frac{\partial H}{\partial \psi} = \frac{\partial K}{\partial \psi}\\
 \frac{d\psi}{dt} &=  - \frac{\partial H}{\partial \theta} = \frac{\partial V}{\partial \theta}
 \end{align}
 \item Let $V(\theta) = - \log(q(\theta|y))= - \log p(\theta) - \log p(y | \theta)$
-\item Let $\psi \sim N(0,M)$ where $M$ is the \uured{mass matrix}
+\item Let $\psi \sim N(0, M)$ where $M$ is the \uured{mass matrix}
 \item Hence, $K(\psi) = - \log p(\psi) \propto 0.5 \psi^T M^{-1} \psi + C$
-\item We need to choose $M$ in a smart way. Ideally we set $M^{-1}=Cov(\theta|y)$
+\pause
+\item We need to choose $M$ in a smart way.
+\begin{enumerate}
+\item Ideally, $M^{-1}=Cov(\theta|y)$
+\item In practice, $M^{-1}=V(\theta|y)$
+\end{enumerate}
+% TODO: readup on the mass matrix and why inverse mass matrix is Cov
 \end{itemize}
 \end{frame}
 
 
 \begin{frame}
 
-\frametitle{Simulating the Hamiltonian: The leapfrog integrator}
+\frametitle{The leapfrog integrator}
 
 \begin{itemize}
-\item We want to simulate from the Hamiltonian
+\item We want to simulate Hamiltonian dynamics
 \begin{align}
 \frac{d\theta}{dt} &=  M^{-1} \psi\\
 \frac{d\psi}{dt} &=  \frac{\partial \log q(\theta|y)}{\partial \theta}
 \end{align}
-\item We can do this using a \uured{discrete} approximation: the leapfrog integrator
+\item A \uured{discrete} approximation: \uured{the leapfrog integrator}
+\pause
 \item We take $L$ leapfrog steps with step size $\epsilon$ as
 \begin{align}
 \psi \leftarrow &\psi + \frac{1}{2}\epsilon \frac{d\log q(\theta|y)}{d\theta}\\
-\theta \leftarrow& \epsilon M^{-1}\psi\\
+\theta \leftarrow& \theta + \epsilon M^{-1}\psi\\
 \psi \leftarrow &\psi + \frac{1}{2}\epsilon \frac{d\log q(\theta|y)}{d\theta}
 \end{align}
-\item Discretization introduce a small error that increases with $\epsilon$
+\pause
+\item Discretization introduce a error depending on $\epsilon$
 \end{itemize}
 \end{frame}
 
@@ -180,36 +195,15 @@ where $K(\psi)$ is the \uured{kinetic} energy and $V(\theta)$ is the \uured{pote
 \[
 \psi_0 \sim N(0,M)
 \]
+\pause
 \item Simulate values $(\theta^\star,\psi^\star)$ using the leapfrog integrator $L$ steps with stepsize $\epsilon$, starting from $(\theta_{t-1},\psi_0)$
+\pause
 \item Accept the proposed values $(\theta^\star,\psi^\star)$ with probability
 \[
 r = \min \left( 1, \frac{q(\theta^\star|y)}{q(\theta_{t-1}|y)}\frac{p(\psi^\star)}{p(\psi_0)} \right)
 \]
 \end{enumerate}
 \end{frame}
-
-
-\begin{frame}
-\frametitle{Hamiltonian Monte Carlo}
-
-\begin{itemize}
-\item Parameters: step size, leapfrog steps, M
-\item + If well tuned can be extremely efficient
-\item + Additional diagnostics
-\item - Can be difficult to tune (U-turns)
-\item - Bounded parameters needs handling
-\item - Costly to run (log density gradient evaluations)
-\end{itemize}
-
-\centering
-\href{https://chi-feng.github.io/mcmc-demo/app.html?algorithm=HamiltonianMC&target=standard}{demo}
-
-\end{frame}
-
-
-% TODO: Work through a mathematical example
-
-
 
 
 \begin{frame}
@@ -237,7 +231,36 @@ r = \min \left( 1, \frac{q(\theta^\star|y)}{q(\theta_{t-1}|y)}\frac{p(\psi^\star
   \only<12>{\hspace{-5mm}\includegraphics[width=9cm]{figs/hmc1trace.pdf}}
   \only<13>{\hspace{-5mm}\includegraphics[width=9cm]{figs/hmc1acf.pdf}}
 %  \only<14>{\hspace{-5mm}\includegraphics[width=9cm]{figs/hmc1mcerr.pdf}}
+
 \end{frame}
+
+
+\begin{frame}
+\frametitle{Hamiltonian Monte Carlo Summary}
+
+\begin{itemize}
+\item Parameters:
+\begin{itemize}
+\item[$\epsilon$] step size \pause
+\item[$L$] leapfrog steps\pause
+\item[$M$] mass matrix\pause
+\end{itemize}
+\item[+] Can be very efficient
+\item[+] Additional diagnostics
+\pause
+\item[-] Can be difficult to tune (U-turns)
+\item[-] Bounded parameters needs handling
+\item[-] Costly to run each iteration (log density gradient evaluations)
+\end{itemize}
+
+\centering
+\href{https://chi-feng.github.io/mcmc-demo/app.html?algorithm=HamiltonianMC&target=standard}{demo}
+
+\end{frame}
+
+
+% TODO: Work through a mathematical example
+
 
 
 \subsection{No U-Turn Sampler (NUTS) / Dynamic HMC}

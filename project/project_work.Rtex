@@ -131,7 +131,7 @@ To minimize the project work's total workload, I suggest you see the proposal as
 The Project outcome is a report in the ICML paper format that can be found \href{https://icml.cc/Conferences/2020/StyleAuthorInstructions}{[here]}.
 The ICML format is also available in overleaf here: \href{https://www.overleaf.com/latex/templates/icml-2019-submission-template/vkqjjvzjvhdc}{[here]}. We recommend using Overleaf for writing the report.
 
-The paper should consist of \emph{between three and a half (3.5) and four (4) pages}, excluding references and eventual appendices. The paper should include the following four (4) sections:
+The paper should consist of \emph{between three and a half (3.5) and four (4) pages}, excluding references and eventual appendices. The paper should include the following parts/sections:
 \begin{enumerate}
   \item Abstract
   \item Introduction (roughly 0.5 page)

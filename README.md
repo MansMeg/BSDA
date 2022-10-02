@@ -61,6 +61,8 @@ Optional literature
 - VSGYG19: Vehtari, Simpson, Gelman, Yuling and Gabry "Pareto smoothed importance sampling" (2019) arXiv preprint arXiv:1507.02646, [online](https://arxiv.org/abs/1507.02646) 
 - M17: McElreath, "Markov Chains: Why Walk When You Can Flow?" (2017), [online](http://elevanth.org/blog/2017/11/28/build-a-better-markov-chain/)
 - VGSCB19: Vehtari, Gelman, Simpson, Carpenter, Bürkner, "Rank-normalization, folding, and localization: An improved Rˆ for assessing convergence of MCMC" (2019) [online](https://arxiv.org/abs/1903.08008) 
+- B17: Betancourt "Diagnosing Biased Inference with Divergences" (2017)
+[online](https://mc-stan.org/users/documentation/case-studies/divergences_and_bias.html)
 
 
 ### Complementary Reading

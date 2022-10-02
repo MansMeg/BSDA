@@ -211,11 +211,12 @@ r = \min \left( 1, \frac{q(\theta^\star|y)}{q(\theta_{t-1}|y)}\frac{p(\psi^\star
 \frametitle{Hamiltonian Monte Carlo}
 
 %  \vspace{-0.5\baselineskip}
-%  \begin{itemize}
-%  \item Uses log density (negative log density is called energy)
+  \begin{itemize}
+  \item Bivariate Normal HMC example
 %  \item Uses gradient of log density for more efficient sampling
 %  \item Augments parameter space with momentum variables
-%  \end{itemize}
+  \end{itemize}
+
   \vspace{-0.5\baselineskip}
   \only<1>{\phantom{\includegraphics[width=7cm]{figs/hmcdemo01.pdf}}}
   \only<2>{\includegraphics[width=7cm]{figs/hmcdemo01.pdf}}
@@ -245,7 +246,7 @@ r = \min \left( 1, \frac{q(\theta^\star|y)}{q(\theta_{t-1}|y)}\frac{p(\psi^\star
 \item[$L$] leapfrog steps\pause
 \item[$M$] mass matrix\pause
 \end{itemize}
-\item[+] Can be very efficient
+\item[+] Can be very efficient ($S_\text{eff}$)
 \item[+] Additional diagnostics
 \pause
 \item[-] Can be difficult to tune (U-turns)
@@ -265,34 +266,54 @@ r = \min \left( 1, \frac{q(\theta^\star|y)}{q(\theta_{t-1}|y)}\frac{p(\psi^\star
 
 
 
-\subsection{No U-Turn Sampler (NUTS) / Dynamic HMC}
+\subsection{Dynamic HMC and NUTS}
 %\frame{\sectionpage}
 
 \begin{frame}
 \frametitle{Dynamic HMC}
 
   \begin{itemize}
-  \item Goal: Simplify the tuning of HMC
-  \item \uured{dynamic} HMC refers to \uured{dynamic} trajectory length of the leapfrog integrator (i.e. $L$ is chosen on the fly)
+  \item \uured{Goal:} Simplify/adapt the tuning of HMC
+  \item \uured{Dynamic} HMC refers to \uured{dynamic} trajectory length of the leapfrog integrator (i.e. $L$ is chosen on the fly) \pause
   \item The NUTS/dynamic algorithm:
   \begin{enumerate}
-    \item Grow a tree of leapfrog steps $L$
-    \item Simulate in two directions (to keep reversibility of Markov chain)
+    \item Grow a binary tree of leapfrog steps $L$
+    \item Grow (randomly) in two directions (to keep reversibility of Markov chain)
     \item Stop to grow tree when encounter a U-turn ($\theta_{t-1}-\theta_L)\cdot\psi$)
     \item Sample one of the step at the trajectory (higher probability further away)
   \end{enumerate}
+  \pause
   \item Dynamic simulation is discretized
   \begin{itemize}
-    \item small step size gives accurate simulation, but requires more log density evaluations
-    \item large step size reduces computation, but increases
-      simulation error which needs to be taken into account in the
-      Markov chain
-
+    \item small $\epsilon$ gives accurate simulation, but requires more log density evaluations
+    \item large $\epsilon$ reduces computation, but increases
+      simulation error
     \end{itemize}
 \end{itemize}
 
 \end{frame}
 
+\begin{frame}
+\frametitle{Dynamic Hamiltonian Monte Carlo Summary}
+
+\begin{itemize}
+\item Parameters:
+\begin{itemize}
+\item[$\epsilon$] step size \pause
+\item[$M$] mass matrix\pause
+\end{itemize}
+\item[+] Can be very efficient ($S_\text{eff}$)
+\item[+] Additional diagnostics
+\pause
+\item[-] Bounded parameters needs handling
+\item[-] Costly to run each iteration ($L$ log density gradient evaluations)
+\pause
+\end{itemize}
+
+\centering
+\href{https://chi-feng.github.io/mcmc-demo/app.html?algorithm=EfficientNUTS&target=standard}{demo}
+
+\end{frame}
 
 \begin{frame}
 
@@ -304,34 +325,34 @@ r = \min \left( 1, \frac{q(\theta^\star|y)}{q(\theta_{t-1}|y)}\frac{p(\psi^\star
 
 \end{frame}
 
-\subsection{HMC diagnostics}
+\section{HMC diagnostics}
 \frame{\sectionpage}
 
 \begin{frame}
 
-\frametitle{Max tree depth diagnostic}
+\frametitle{Max tree depth}
 
   \begin{itemize}
   \item Dynamic HMC specific diagnostic
   \item Indicates inefficiency in sampling leading to higher
     autocorrelations and lower ESS ($n_{\rm eff}$)
-  \item Different parameterizations matter
+  \item Different parameterizations can help/matter
   \end{itemize}
 \end{frame}
 
 
 \begin{frame}
-
 \frametitle{Divergences}
 
   \begin{itemize}
-  \item HMC specific: indicates that Hamiltonian dynamic simulation
+  \item HMC specific diagnostic
+  \item indicates that Hamiltonian dynamic simulation
     has problems with unexpected fast changes in log-density
-    \begin{itemize}
-    \item indicates possibility of biased estimates
-    \end{itemize}
+  \begin{itemize}
+  \item indicates possibility of biased estimates
+  \end{itemize}
   \item Different parameterizations matter
-  \item {\small \url{http://mc-stan.org/users/documentation/case-studies/divergences_and_bias.html}}
+  \item See Betancourt (2017)
      \only<1>{\phantom{\includegraphics[width=8cm]{figs/unnamed-chunk-6-1.png}}}
      \only<2>{\includegraphics[width=8cm]{figs/unnamed-chunk-6-1.png}}
      \only<3>{\includegraphics[width=8cm]{figs/unnamed-chunk-7-1.png}}
@@ -344,15 +365,6 @@ r = \min \left( 1, \frac{q(\theta^\star|y)}{q(\theta_{t-1}|y)}\frac{p(\psi^\star
   \end{itemize}
 \end{frame}
 
-\begin{frame}
-
-\frametitle{ HMC / NUTS}
-
-  \vspace{-.5\baselineskip}
-  \includegraphics[width=\textwidth,clip]{figs/N250.pdf}\\
-  Source: Jonah Gabry
-
-\end{frame}
 
 \begin{frame}
 
@@ -388,19 +400,27 @@ r = \min \left( 1, \frac{q(\theta^\star|y)}{q(\theta_{t-1}|y)}\frac{p(\psi^\star
   \begin{itemize}
   \item Michael Betancourt (2018).  A Conceptual Introduction to
     Hamiltonian Monte Carlo. \url{https://arxiv.org/abs/1701.02434}
+  \item Michael Betancourt (2017).  Diagnosing Biased Inference with Divergences. \url{https://mc-stan.org/users/documentation/case-studies/divergences_and_bias.html}
   \end{itemize}
 
 \end{frame}
 
 
-\section{Probabilistic programming}
+\section{Probabilistic Programming}
 \frame{\sectionpage}
 
-% TODO: Add The Box loop here
-% TODO: Add Conceptual introduction to HMC as optional
+
+\begin{frame}{The Box process: Probabilistic modeling}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\textwidth]{figs/Boxs_loop.png}
+    \caption{The Box approach (Box, 1976, Blei, 2014)}
+\end{figure}
+\end{frame}
+
 
 \begin{frame}
-
 \frametitle{Probabilistic programming languages}
 
   \begin{itemize}
@@ -410,10 +430,9 @@ r = \min \left( 1, \frac{q(\theta^\star|y)}{q(\theta_{t-1}|y)}\frac{p(\psi^\star
     \pause
   \item To make probabilistic programming useful
     \begin{itemize}
+    \item easy workflow to build and revise models
     \item inference has to be as automatic as possible
     \item diagnostics for telling if the automatic inference doesn't work
-    \item easy workflow (to reduce manual work)
-    \item fast enough (manual work replaced with automation)
     \end{itemize}
   \end{itemize}
 \end{frame}
@@ -423,7 +442,7 @@ r = \min \left( 1, \frac{q(\theta^\star|y)}{q(\theta_{t-1}|y)}\frac{p(\psi^\star
 \frametitle{Probabilistic programming}
 
   \begin{itemize}
-  \item Enables agile workflow for developing probabilistic models
+  \item Enables agile (incremental) workflow for developing probabilistic models
     \begin{itemize}
     \item language
     \item automated inference
@@ -573,8 +592,8 @@ parameters {
   \item Parameters may have constraints
   \item Stan makes transformation to unconstrained space and samples in unconstrained space
     \begin{itemize}
-    \item e.g. log transformation for <lower=a>
-    \item e.g. logit transformation for <lower=a,upper=b>
+    \item e.g. log transformation for \texttt{<lower=a>}
+    \item e.g. logit transformation for \texttt{<lower=a,upper=b>}
     \end{itemize}
   \item<2-> For these declared transformation Stan automatically takes
     into account the Jacobian of the transformation (see BDA3 p. 21)
@@ -913,11 +932,12 @@ mcmc_hist(draws, pars = 'oddsratio') +
   {\scriptsize
 \begin{lstlisting}
 check_treedepth(fit_bin2)
-check_energy(fit_bin2)
 check_div(fit_bin2)
 
 [1] "0 of 4000 iterations saturated the maximum tree depth of 10 (0%)"
 [1] "0 of 4000 iterations ended with a divergence (0%)"
+
+get_num_leapfrog_per_iteration(fit_bin2)
 \end{lstlisting}
   }
 
@@ -942,7 +962,7 @@ check_div(fit_bin2)
   \item Is there change in the temperature?
   \end{itemize}
   \begin{center}
-    \includegraphics[width=10cm]{figs/kilpis_data.pdf}
+    \includegraphics[width=8cm]{figs/kilpis_data.pdf}
   \end{center}
 
 \end{frame}
@@ -1081,7 +1101,7 @@ model {
   Posterior fit
 
   \begin{center}
-    \includegraphics[width=10cm]{figs/kilpis_lin_pfit.pdf}
+    \includegraphics[width=8cm]{figs/kilpis_lin_pfit.pdf}
   \end{center}
 
 \end{frame}
@@ -1093,7 +1113,7 @@ model {
   Posterior draws of alpha and beta
 
   \begin{center}
-    \includegraphics[width=10cm]{figs/kilpis_lin_mcmc_scatter.pdf}
+    \includegraphics[width=8cm]{figs/kilpis_lin_mcmc_scatter.pdf}
   \end{center}
 
 \end{frame}
@@ -1105,7 +1125,7 @@ model {
   Posterior draws of alpha and beta
 
   \begin{center}
-    \includegraphics[width=10cm]{figs/kilpis_lin_mcmc_scatter.pdf}
+    \includegraphics[width=18cm]{figs/kilpis_lin_mcmc_scatter.pdf}
   \end{center}
 
 {\scriptsize
@@ -1248,7 +1268,7 @@ fit_lin_t <- brm(temp ~ year, data = d_lin, family = student())
 
 Geomagnetic storms
 
-\includegraphics[width=12cm]{figs/stan_gpareto_geomev.png}
+\includegraphics[width=8cm]{figs/stan_gpareto_geomev.png}
 
 \end{frame}
 

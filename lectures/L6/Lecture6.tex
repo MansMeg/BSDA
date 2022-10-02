@@ -182,7 +182,7 @@ where $K(\psi)$ is the \uured{kinetic} energy and $V(\theta)$ is the \uured{pote
 \psi \leftarrow &\psi + \frac{1}{2}\epsilon \frac{d\log q(\theta|y)}{d\theta}
 \end{align}
 \pause
-\item Discretization introduce a error depending on $\epsilon$
+\item Discretization introduce a error depending on $\epsilon$ (not $L \epsilon$)
 \end{itemize}
 \end{frame}
 
@@ -250,7 +250,9 @@ r = \min \left( 1, \frac{q(\theta^\star|y)}{q(\theta_{t-1}|y)}\frac{p(\psi^\star
 \pause
 \item[-] Can be difficult to tune (U-turns)
 \item[-] Bounded parameters needs handling
-\item[-] Costly to run each iteration (log density gradient evaluations)
+\item[-] Ideally, we should adapt $\epsilon L$
+\item[-] Costly to run each iteration ($L$ log density gradient evaluations)
+\pause
 \end{itemize}
 
 \centering
@@ -267,64 +269,34 @@ r = \min \left( 1, \frac{q(\theta^\star|y)}{q(\theta_{t-1}|y)}\frac{p(\psi^\star
 %\frame{\sectionpage}
 
 \begin{frame}
-\frametitle{Hamiltonian Monte Carlo}
+\frametitle{Dynamic HMC}
 
   \begin{itemize}
-  \item Uses gradient of log density for more efficient sampling
-  \item Alternating dynamic simulation and sampling energy level
-  \item<3-> No U-Turn Sampling (NUTS) and dynamic HMC
-    \begin{itemize}
-    \item adaptively selects number of steps to improve robustness and
-      efficiency
-    \item dynamic HMC refers to dynamic trajectory length
-    \item to keep reversibility of Markov chain, need to simulate in two directions
-    \item {\footnotesize \url{http://elevanth.org/blog/2017/11/28/build-a-better-markov-chain/}}
-    \end{itemize}
-  \item<4-> Dynamic simulation is discretized
-    \begin{itemize}
+  \item Goal: Simplify the tuning of HMC
+  \item \uured{dynamic} HMC refers to \uured{dynamic} trajectory length of the leapfrog integrator (i.e. $L$ is chosen on the fly)
+  \item The NUTS/dynamic algorithm:
+  \begin{enumerate}
+    \item Grow a tree of leapfrog steps $L$
+    \item Simulate in two directions (to keep reversibility of Markov chain)
+    \item Stop to grow tree when encounter a U-turn ($\theta_{t-1}-\theta_L)\cdot\psi$)
+    \item Sample one of the step at the trajectory (higher probability further away)
+  \end{enumerate}
+  \item Dynamic simulation is discretized
+  \begin{itemize}
     \item small step size gives accurate simulation, but requires more log density evaluations
     \item large step size reduces computation, but increases
       simulation error which needs to be taken into account in the
       Markov chain
-    \item black board explanation of the effect of step size
+
     \end{itemize}
 \end{itemize}
 
 \end{frame}
 
-\begin{frame}
-\frametitle{Adaptive dynamic HMC in Stan}
-
-  \begin{itemize}
-  \item Dynamic HMC using growing tree to increase simulation
-    trajectory until no-U-turn criterion stopping % TODO: Add criteria here
-    \begin{itemize}
-    \item max treedepth to keep computation in control
-    \item<2-> pick a draw along the trajectory with probabilities adjusted
-      to take into account the error in the discretized dynamic
-      simulation
-    \item<3-> give bigger weight for tree parts further away to increase
-      probability of jumping further away
-    \end{itemize}
-  \item<4-> Mass matrix and step size adaptation in Stan
-    \begin{itemize}
-    \item<4-> mass matrix refers to having different scaling for different
-      parameters and optionally also rotation to reduce correlations
-    \item<5-> mass matrix and step size adjustment and are estimated
-      during initial adaptation phase
-    \item<6-> step size is adjusted to be as big as possible while keeping
-      discretization error in control (adapt\_delta)
-    \end{itemize}
-  \item<7-> After adaptation the algorithm parameters are fixed
-  \item<8-> After warmup store iterations for inference
-  \item<9-> See more details in Stan reference manual
-\end{itemize}
-
-\end{frame}
 
 \begin{frame}
 
-\frametitle{ HMC / NUTS}
+\frametitle{HMC / NUTS}
 
   \vspace{-.5\baselineskip}
   \includegraphics[width=\textwidth,clip]{figs/N250.pdf}\\
@@ -501,6 +473,37 @@ r = \min \left( 1, \frac{q(\theta^\star|y)}{q(\theta_{t-1}|y)}\frac{p(\psi^\star
     \item H-Bomb
     \end{itemize}
   \end{itemize}
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Adaptive dynamic HMC in Stan}
+
+  \begin{itemize}
+  \item Dynamic HMC using growing tree to increase simulation
+    trajectory until no-U-turn criterion stopping % TODO: Add criteria here
+    \begin{itemize}
+    \item max treedepth to keep computation in control
+    \item<2-> pick a draw along the trajectory with probabilities adjusted
+      to take into account the error in the discretized dynamic
+      simulation
+    \item<3-> give bigger weight for tree parts further away to increase
+      probability of jumping further away
+    \end{itemize}
+  \item<4-> Mass matrix and step size adaptation in Stan
+    \begin{itemize}
+    \item<4-> mass matrix refers to having different scaling for different
+      parameters and optionally also rotation to reduce correlations
+    \item<5-> mass matrix and step size adjustment and are estimated
+      during initial adaptation phase
+    \item<6-> step size is adjusted to be as big as possible while keeping
+      discretization error in control (adapt\_delta)
+    \end{itemize}
+  \item<7-> After adaptation the algorithm parameters are fixed
+  \item<8-> After warmup store iterations for inference
+  \item<9-> See more details in Stan reference manual
+\end{itemize}
 
 \end{frame}
 

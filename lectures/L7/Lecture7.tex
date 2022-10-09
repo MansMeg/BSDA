@@ -353,9 +353,14 @@
         }
       \end{xy}
     \end{minipage}
+    \pause
+  \item {\color{uured} What type of predicitive distributions can we have?}
+    \pause
   \item Can be used to predict the future quality produced by each machine and quality produced by a new similar machine
   \end{itemize}
 \end{frame}
+
+\subsection{8 schools example}
 
 \begin{frame}
 
@@ -474,17 +479,7 @@
 
 \begin{frame}
 
-\frametitle{Hierarchical model and group size}
-
-% Cant find these figures
-%    \hspace{0.2cm} Separate \hspace{4.3cm} Hierarchical
-%  \begin{minipage}[b]{12cm}
-%    {  \hspace{-0.7cm}~\includegraphics[width=6cm]{figs/radon2.pdf}\includegraphics[width=6cm]{figs/radon4.pdf}}
-%  \end{minipage}
-
-\end{frame}
-
-\begin{frame}
+\section{Exchangeability}
 
 \frametitle{Exchangeability}
 
@@ -494,7 +489,8 @@
     \item a joint model for data
     \item a joint prior for a set of parameters
     \end{itemize}
-  \item Less strict than independence
+  \item Less strict than independence (IID)
+  \item IID $\rightarrow$ exchangeability
   \end{itemize}
 \end{frame}
 
@@ -503,19 +499,18 @@
 \frametitle{Exchangeability}
 
   \begin{itemize}
-  \item \textit{Exchangeability}: Parameters
+  \item \textit{Exchangeability} \\ Parameters
     $\theta_1,\ldots,\theta_J$ (or observations $y_1,\ldots,y_J$) are
     exchangeable if the joint distribution $p$ is invariant to the
-    permutation of indices $(1,\ldots,J)$
-  \item e.g.
+    permutation of indices $(1,\ldots,J)$\\
+  e.g.
     \begin{equation*}
       p(\theta_1,\theta_2,\theta_3) = p(\theta_2,\theta_3,\theta_1)
     \end{equation*}
 
-  \item Exchangeability implies symmetry: If there is no information
+  \item Exchangeability implies symmetry: \\If there is no information
     which can be used \textit{a priori} to separate $\theta_j$ form
-    each other, we can assume exchangeability. ("Ignorance implies
-    exchangeability")
+    each other, we can assume exchangeability. ("Ignorance implies exchangeability")
 
   \end{itemize}
 \end{frame}
@@ -535,8 +530,7 @@
       experiments have been made in which laboratory
     \item a priori experiments are exchangeable
     \item model could have unknown parameter for the laboratory with a
-      conditional prior for rats assumed to come form the same place
-      (clustering model)
+      conditional prior for rats assumed to come form the same place (clustering model)
     \end{itemize}
   \end{itemize}
 \end{frame}
@@ -569,7 +563,7 @@
     \item<+-> all rats not exchangeable
     \item<+-> in a single laboratory rats exchangeable
     \item<+-> laboratories exchangeable
-    \item<+-> $\rightarrow$ hierarchical model
+    \item<+-> $\rightarrow$ hierarchical model can be used
     \end{itemize}
   \end{itemize}
 \end{frame}
@@ -651,16 +645,6 @@
 %    \end{itemize}
   \end{itemize}
 \end{frame}
-
- \begin{frame}
-
-\frametitle{Exchangeability}
-
-   \begin{itemize}
-   \item See more examples in the BDA\_notes\_ch5.pdf
-   \end{itemize}
-
- \end{frame}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

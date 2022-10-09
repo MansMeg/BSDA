@@ -158,6 +158,19 @@
 
 \end{frame}
 
+\begin{frame}
+\frametitle{Predictive distributions for hiearchical models}
+
+  \begin{itemize}
+    \item Two types of predictive distributions
+    \begin{enumerate}
+      \item A new observation in {\color{uured} an existing group}
+      \item A new observation in {\color{uured} a new group}
+    \end{enumerate}
+  \end{itemize}
+
+\end{frame}
+
 \subsection{Rats example}
 
 \begin{frame}
@@ -204,6 +217,7 @@
   \begin{itemize}
   \item Hierarchical binomial model for rats\\
     prior parameters {\color{red} $\alpha$} and {\color{red} $\beta$} are unknown
+\end{itemize}
     \begin{minipage}[t]{4cm}
       \xygraph{
         []              !O{y_j}
@@ -221,6 +235,7 @@
       }
     \end{minipage}
     %\pause
+  \begin{itemize}
     \item Joint posterior
       $p({\color{uulgr}\theta_1,\ldots,\theta_J},{\color{red}\alpha},{\color{red}\beta}|y)$
       \begin{itemize}
@@ -241,13 +256,10 @@
   \item Hyperprior $p({\color{red}\alpha,\beta})$?
     \begin{itemize}
     \item ${\color{red}\alpha,\beta}$ both affect the location and scale
-    \item BDA3 has
+    \item BDA3 (p. 110) has
       $p({\color{red}\alpha,\beta})\propto({\color{red}\alpha}+{\color{red}\beta})^{-5/2}$
-      \begin{itemize}
-      \item diffuse prior for location and scale (BDA3 p. 110)
-      \end{itemize}
     \end{itemize}
-    \item demo5\_1
+%    \item demo5\_1
     \end{itemize}
 \end{frame}
 
@@ -256,8 +268,8 @@
 \frametitle{Hierarchical binomial model: rats}
 
   \only<1>{\includegraphics[width=8cm]{figs/rats_posterior.pdf}}
-  \only<2>{\includegraphics[width=10cm]{figs/rats_hierdraws.pdf}}
-  \only<3>{\includegraphics[width=10cm]{figs/rats_hierprior.pdf}}
+  \only<2>{\includegraphics[width=8cm]{figs/rats_hierdraws.pdf}}
+  \only<3>{\includegraphics[width=8cm]{figs/rats_hierprior.pdf}}
   \only<4-5>{\vspace{-0.3\baselineskip}\includegraphics[width=6.7cm]{figs/rats_separate_less.pdf}\\}
   \only<5-6>{\vspace{-0.3\baselineskip}
     \includegraphics[width=6.7cm]{figs/rats_hier_less.pdf}\\}
@@ -267,6 +279,7 @@
 
 \end{frame}
 
+\subsection{Factory example}
 
 \begin{frame}
 
@@ -277,7 +290,7 @@
   \item Assume hierarchical model
     \begin{itemize}
     \item each machine has its own (average) quality $\theta_j$ and
-      common variance $\sigma^2$
+      {\color{uured} common variance} $\sigma^2$
     \end{itemize}
 \begin{minipage}[b]{4cm}
 \begin{xy}
@@ -297,9 +310,7 @@
  }
 \end{xy}
     \end{minipage}
-  \item Can be used to predict the future quality produced by each
-    machine and quality produced by a new similar machine
-%  \item Gibbs sampling exercise later
+  \item Can be used to predict the future quality produced by each machine and quality produced by a new similar machine
   \end{itemize}
 \end{frame}
 
@@ -312,7 +323,7 @@
   \item Assume hierarchical model
     \begin{itemize}
     \item each machine has its own (average) quality $\theta_j$ and
-      own variance $\sigma_j^2$
+      {\color{uured} own variance} $\sigma_j^2$
     \end{itemize}
 \hspace{-1cm}~\begin{minipage}[b]{4cm}
       \begin{xy}
@@ -335,9 +346,7 @@
         }
       \end{xy}
     \end{minipage}
-  \item Can be used to predict the future quality produced by each
-    machine and quality produced by a new similar machine
-%  \item Extra points for the Gibbs sampling exercise later
+  \item Can be used to predict the future quality produced by each machine and quality produced by a new similar machine
   \end{itemize}
 \end{frame}
 

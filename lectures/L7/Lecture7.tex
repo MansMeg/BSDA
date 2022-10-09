@@ -1,5 +1,5 @@
-\documentclass[10pt,handout]{beamer}
-%\documentclass[10pt]{beamer}
+%\documentclass[10pt,handout]{beamer}
+\documentclass[10pt]{beamer}
 \usepackage[english]{babel} % Anpassa efter svenska. Ger svensk logga.
 \usepackage[utf8]{inputenc} % Anpassa efter linux
 \usepackage{graphicx}
@@ -65,7 +65,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-\section{Introduction}
+\section{Hierarchical models}
 \frame{\sectionpage}
 
 \begin{frame}
@@ -73,7 +73,7 @@
 \frametitle{Hierarchical model}
 
   \begin{itemize}
-  \item Example: CVD treatment effectiveness
+  \item Example: Treatment effectiveness
     \begin{itemize}
     \item in hospital $j$ the survival probability is $\theta_j$
     \item observations $y_{ij}$ tell whether patient $i$ survived in
@@ -94,8 +94,7 @@
         \end{xy}
 %        \pause
       \item natural to think that $\theta_j$ have common population distribution
-      \item $\theta_j$ is not directly observed and the population
-        distribution is unknown
+      \item $\theta_j$ is not directly observed and the population distribution is unknown
     \end{itemize}
   \end{itemize}
 \end{frame}
@@ -104,13 +103,14 @@
 
 \frametitle{Hierarchical model: terms}
 
-\begin{overlayarea}{12cm}{5.5cm}
+\begin{overlayarea}{8cm}{4cm}
   \begin{itemize}
-  \item[Level 1:] observations given parameters $p(y_{ij}|\theta_j)$
-  \item<2->[Level 2:] parameters given hyperparameters
+  \item[Lvl 1:] observations given parameters $p(y_{ij}|\theta_j)$
+  \item<2->[Lvl 2:] parameters given hyperparameters
     $p(\theta_j|\tau)$
   \end{itemize}
-  \begin{minipage}[b]{4cm}
+  \begin{minipage}[b]{3cm}
+  \scriptsize
     \begin{xy}
       \xymatrix{
         p(\tau) & & \tau \ar[dl] \ar[d] \ar[drr] & & & \text{hyperparameter} \\
@@ -122,6 +122,7 @@
   \end{minipage}\\
 %  \only<1>{\hide[white]{-0.3}{-0.2}{0.13}{1.2}} %
 \end{overlayarea}
+\vspace{1cm}
   Joint posterior
   \begin{eqnarray*}
     p(\theta,\tau|y) & \propto & p(y|\theta,\tau) p(\theta,\tau) \\
@@ -131,7 +132,7 @@
 
 \begin{frame}
 
-\frametitle{Compare}
+\frametitle{Comparisons}
 	\begin{itemize}
     \item<+-> "Separate model" (model with separate/independent effects)
         \begin{xy}
@@ -139,7 +140,7 @@
             \cdots & \theta_n\ar[d] \\
             y_{1} & y_{2} & & y_{n} }
         \end{xy}
-     \item<+-> "Joint model" (model with a common effect / pooled model)
+     \item<+-> "Joint/pooled model" (model with a common effect / pooled model)
         \begin{xy}
           \xymatrix{
             & \theta \ar[dl] \ar[d] \ar[drr] & & &  \\
@@ -157,6 +158,7 @@
 
 \end{frame}
 
+\subsection{Rats example}
 
 \begin{frame}
 
@@ -170,7 +172,7 @@
     \item familiar binomial model example
     \end{itemize}
   \item<2-> Experiment has been repeated 71 times
-    {\scriptsize
+    {\tiny
       \begin{tabular}{r r r r r r r r r r}
         0/20 & 0/20 & 0/20 & 0/20 & 0/20 & 0/20 & 0/20 & 0/19 & 0/19 & 0/19 \\
         0/19 & 0/18 & 0/18 & 0/17 & 1/20 & 1/20 & 1/20 & 1/20 & 1/19 & 1/19 \\
@@ -189,8 +191,8 @@
 
 \frametitle{Hierarchical binomial model: rats}
 
-  \only<1>{\includegraphics[width=10cm]{figs/rats_pooled.pdf}}
-  \only<2>{\includegraphics[width=10cm]{figs/rats_separate.pdf}}
+  \only<1>{\includegraphics[width=9cm]{figs/rats_pooled.pdf}}
+  \only<2>{\includegraphics[width=9cm]{figs/rats_separate.pdf}}
 
 
 \end{frame}

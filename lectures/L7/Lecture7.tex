@@ -167,8 +167,14 @@
       \item A new observation in {\color{uured} an existing group}
       \item A new observation in {\color{uured} a new group}
     \end{enumerate}
+        \begin{xy}
+          \xymatrix{
+            & \tau \ar[dl] \ar[d] \ar[drr] & & &  \\
+            \theta_1\ar[d] & \theta_2\ar[d] &
+            \cdots & \theta_n\ar[d] \\
+            y_{1} & y_{2} & & y_{n} }
+        \end{xy}
   \end{itemize}
-
 \end{frame}
 
 \subsection{Rats example}
@@ -256,7 +262,7 @@
   \item Hyperprior $p({\color{red}\alpha,\beta})$?
     \begin{itemize}
     \item ${\color{red}\alpha,\beta}$ both affect the location and scale
-    \item BDA3 (p. 110) has
+    \item BDA3 (p. 110) has (vague)
       $p({\color{red}\alpha,\beta})\propto({\color{red}\alpha}+{\color{red}\beta})^{-5/2}$
     \end{itemize}
 %    \item demo5\_1

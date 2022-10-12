@@ -178,12 +178,14 @@ Your tasks are the following:
 
 \end{enumerate}
 
-\textbf{Hint!} Example resulting plots for the problem, with the fixes and the desired prior applied, are shown in Figure~\ref{fig1}. If you want, you can use these plots as a reference for testing if your modified Stan code produces similar results. However, running the inference and comparing the plots is not required.
+\textbf{Hint!} Example resulting plots for the problem, with the fixes and the desired prior applied, are shown in Figure~\ref{fig1}.  If you want, you can use these plots as a reference for testing if your modified Stan code produces similar results. However, running the inference and comparing the plots is not required.
+
+\emph{Note!} The example/test plots and results are based on data up to 2016. You should report your result for the whole period 2019.
 
 \begin{figure}[htb]
 \centering
    \includegraphics[width=0.56\textwidth]{assignment7_fig1.pdf}
-\caption{Example plots for the results obtained for the problem in the Question 1. In the first subplot, the red lines indicate the resulting 5 \%, 50 \%, and 95 \% posterior quantiles for the transformed parameter \texttt{mu} at each year.}\label{fig1}
+\caption{Example plots for the results obtained for the problem in the Question 1 with data until 2016. In the first subplot, the red lines indicate the resulting 5 \%, 50 \%, and 95 \% posterior quantiles for the transformed parameter \texttt{mu} at each year.}\label{fig1}
 \end{figure}
 
 \begin{lstlisting}[
@@ -226,7 +228,7 @@ generated quantities {
 
 \textbf{Note!} Assignment 8 build upon this part of the assignment, so it is important to get this assignment correct before you start with Assignment 8.
 
-The \texttt{factory} data in the \texttt{bsda} package contains quality control measurements from 6 machines in a factory (units of the measurements are irrelevant here). In the data file, each column contains the measurements for a single machine. Quality control measurements are expensive and time-consuming, so only 5 measurements were done for each machine. In addition to the existing machines, we are interested in the quality of another machine (the seventh machine). To read in the data, just use:
+The \texttt{factory} data in the \texttt{bsda} package contains quality control measurements from 6 machines in a factory. In the data file, each column contains the measurements for a single machine. Quality control measurements are expensive and time-consuming, so only 5 measurements were done for each machine. In addition to the existing machines, we are interested in the quality of another machine (the seventh machine). To read in the data, just use:
 
 <<echo=TRUE, eval=FALSE>>=
 library(bsda)

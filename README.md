@@ -63,6 +63,9 @@ Optional literature
 - VGSCB19: Vehtari, Gelman, Simpson, Carpenter, Bürkner, "Rank-normalization, folding, and localization: An improved Rˆ for assessing convergence of MCMC" (2019) [online](https://arxiv.org/abs/1903.08008) 
 - B17: Betancourt "Diagnosing Biased Inference with Divergences" (2017)
 [online](https://mc-stan.org/users/documentation/case-studies/divergences_and_bias.html)
+- B96: Bernardo "The Concept of Exchangeability and its Applications" (1996)
+[online](https://www.uv.es/~bernardo/Exchangeability.pdf)
+
 
 
 ### Complementary Reading

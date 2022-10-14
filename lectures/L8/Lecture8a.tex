@@ -1,5 +1,5 @@
-\documentclass[10pt,handout]{beamer}
-%\documentclass[10pt]{beamer}
+%\documentclass[10pt,handout]{beamer}
+\documentclass[10pt]{beamer}
 \usepackage[english]{babel} % Anpassa efter svenska. Ger svensk logga.
 \usepackage[utf8]{inputenc} % Anpassa efter linux
 \usepackage{graphicx}
@@ -65,17 +65,26 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-\section{Introduction}
+\section{Model Checking and Assessment}
 \frame{\sectionpage}
 
 
 
- \begin{frame}
+\begin{frame}{The Box process: Probabilistic modeling}
 
-\frametitle{Model checking -- overview}
+\begin{figure}
+    \centering
+    \includegraphics[width=1\textwidth]{figs/Boxs_loop.png}
+    \caption{The Box approach (Box, 1976, Blei, 2014)}
+\end{figure}
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Model assessment}
 
   \begin{itemize}
-  \item<+-> Sensibility with respect to additional information not used in modeling
+  \item<+-> Sensibility with respect to additional information not used in model
     \begin{itemize}
     \item e.g., if posterior would claim that hazardous chemical
       decreases probability of death
@@ -83,7 +92,7 @@
   \item<+-> External validation
     \begin{itemize}
     \item compare predictions to completely new observations
-    \item cf. relativity theory predictions
+%    \item cf. relativity theory predictions
     \end{itemize}
   \item<+-> Internal validation
     \begin{itemize}
@@ -94,14 +103,16 @@
 
 \end{frame}
 
-\begin{frame}[fragile]
+\section{Posterior predictive checking}
+\frame{\sectionpage}
 
+\begin{frame}[fragile]
 \frametitle{Posterior predictive checking -- example}
 
   \begin{itemize}
-  \item<1-> Newcomb's speed of light measurements
+  \item<1-> Newcombs speed of light measurements
     \begin{itemize}
-    \item model $y\sim\N(\mu,\sigma)$ with prior $(\mu,\log\sigma)\propto 1$
+    \item model $y \sim \N(\mu,\sigma)$ with prior $(\mu, \log \sigma) \propto 1$
     \end{itemize}
   \item<2-> Posterior predictive replicate $y^{\rm rep}$
     \begin{itemize}
@@ -114,29 +125,36 @@
 
 \end{frame}
 
+
 \begin{frame}
 
 \frametitle{Replicates vs. future observation}
 
   \begin{itemize}
   \item Predictive $\tilde{y}$ is the next not yet observed possible
-    observation. $y^{\mathrm{rep}}$ refers to replicating the whole
-    experiment (potentially with same values of $x$) and obtaining as
+    observation. \pause
+    % TODO: Add predictive distribution here
+    \item $y^{\mathrm{rep}}$ refers to replicating the \uured{whole
+    experiment} (potentially with same values of $x$)\\i.e. obtaining as
     many replicated observations as in the original data.
+    % TODO: Double check that y^rep is also a predictive distribution
   \end{itemize}
 
 \end{frame}
+
 
 \begin{frame}[fragile]
 
 \frametitle{Posterior predictive checking -- example}
 
   \begin{itemize}
-  \item<1-> Generate several replicated datasets $y^{\rm rep}$
+  \item<1-> Generate replicated datasets $y^{\rm rep}$
+  %\item<2-> Commonly done using Monte Carlo draws
+  % TODO: Double check how yrep is draw (ie using monte carlo draws)
   \item<2-> Compare to the original dataset
   \end{itemize}
   \vspace{-1\baselineskip}
-  \uncover<3->{\includegraphics[width=11.5cm]{figs/light_ppc_10hist.pdf}}
+  \uncover<3->{\includegraphics[width=9cm]{figs/light_ppc_10hist.pdf}}
 
 \end{frame}
 
@@ -151,11 +169,13 @@
     \begin{itemize}
     \item summary quantity for the observed data $T(y,\theta)$
     \item summary quantity for a replicated data $T(y^{\rep},\theta)$
-    \item can be easier to compare summary quantities than data sets
+    \item can be easier to compare summary quantities ($y^{\rep}$ statistics) than data sets
     \end{itemize}
   \end{itemize}
 
 \end{frame}
+
+% TODO: Define test statistic here from the book.
 
 \begin{frame}[fragile]
 
@@ -166,7 +186,30 @@
   \item<2-> Compute test statistic $\min(y^{\rm rep})$ for many replicated datasets
   \end{itemize}
   \vspace{-1.5\baselineskip}
-  \uncover<3->{\includegraphics[width=11cm]{figs/light_ppc_min.pdf}}
+  \uncover<3->{\includegraphics[width=9cm]{figs/light_ppc_min.pdf}}
+
+\end{frame}
+
+
+\begin{frame}[fragile]
+
+\frametitle{Posterior predictive checking -- example}
+
+  \begin{itemize}
+  \item<1-> Good test statistic is \href{https://en.wikipedia.org/wiki/Ancillary_statistic}{ancillary} (or almost)
+    \begin{itemize}
+    \item a statistic $T(X)$ that does not depend on the parameters of the model are ancillary\\e.g. in a normal model with \uured{known} $\sigma^2$,
+    \[
+    s^2 = \sum_i^n \frac{(x_i-\bar{x})^2}{n-1}\,,
+    \]
+    is ancillary ($\mu$ cancel out).
+    \end{itemize}
+  \item<2-> Bad test statistic is highly dependent of the parameters
+    \begin{itemize}
+    \item e.g. variance (or mean) for normal model with \uured{unknown} $\sigma^2$. If $\sigma^2$ changes so will $T(X)$.
+    \end{itemize}
+  \item<3-> We want to \uured{identify problems} in data not captured by the \uured{model}
+  \end{itemize}
 
 \end{frame}
 
@@ -174,28 +217,16 @@
 
 \frametitle{Posterior predictive checking -- example}
 
-  \begin{itemize}
-  \item<1-> Good test statistic is ancillary (or almost)
-    \begin{itemize}
-    \item ancillary if it depends only on observed data and if its
-      distribution is independent of the parameters of the model
-    \end{itemize}
-  \item<2-> Bad test statistic is highly dependent of the parameters
-    \begin{itemize}
-    \item e.g. variance for normal model
-    \end{itemize}
-  \end{itemize}
-  \vspace{-1.5\baselineskip}
-  \uncover<3->{\includegraphics[width=10cm]{figs/light_ppc_var.pdf}}
+  \includegraphics[width=9cm]{figs/light_ppc_var.pdf}
 
 \end{frame}
 
+
 \begin{frame}[fragile]
 
-\frametitle{Posterior predictive checking}
+\frametitle{Posterior predictive $p$-value}
 
   \begin{itemize}
-    \only<4->{\color{gray}}
   \item<1-> \textit{Posterior predictive $p$-value}
     \begin{eqnarray*}
       p & = & \Pr(T(y^{\rep},\theta)\geq T(y,\theta)|y)\\
@@ -204,41 +235,22 @@
     \end{eqnarray*}
     where $I$ is an indicator function
     \begin{itemize}
-    \item<2-> \only<4->{\color{gray}} having $(y^{\rep\,(s)},\theta^{(s)})$ from the posterior predictive
-      distribution, easy to compute
+    \item<2-> having $(y^{\rep\,(s)},\theta^{(s)})$ from the posterior predictive
+      distribution (Monte Carlo):
       \begin{equation*}
         T(y^{\rep (s)},\theta^{(s)})\geq T(y,\theta^{(s)}), \quad s=1,\ldots,S
       \end{equation*}
     \end{itemize}
     \vspace{-1.5\baselineskip}
-  \item<3-> Posterior predictive $p$-value (ppp-value) estimated whether
-    difference between the model and data could arise by chance
-  \item<4-> \color{black} Not commonly used, since the distribution of test
-    statistic has more information
+  \item<3-> Posterior predictive $p$-value (ppp-value):\\
+    \uured{could difference between the model and data  arise by chance}
+  \item<4-> Not commonly used, since the distribution of test
+    statistic $T(y,\theta)$ has more information
   \end{itemize}
 
 \end{frame}
 
-
-% \begin{frame}
-
-% \frametitle{Calibration of ppp-values}
-
-%   \begin{itemize}
-%   \item In the special case that the parameters $\theta$ are known (or
-%     estimated to a very high precision) or in which the test statistic
-%     $T(y)$ is ancillary (that is,
-%     if it depends only on observed data and if its distribution is
-%     independent of the parameters of the model) with a continuous
-%     distribution, the posterior predictive $p$-value
-%     $\Pr(T(y^{\rep})\!>\!T(y)|y)$ has a distribution that is uniform
-%     if the model is true.
-%   \item Under these conditions, $p$-values less than 0.1 occur 10\% of
-%     the time, $p$-values less than 0.05 occur 5\% of the time, and so
-%     forth.
-%   \end{itemize}
-
-% \end{frame}
+% TODOD: Add the special case when thtea is know then, p values follows a uniform distributions. See book.
 
 \begin{frame}[fragile]
 
@@ -260,8 +272,8 @@
   \item<2-> if $Pr(\tilde{y}_i|y)$ well calibrated, distribution of $p_i$
     would be uniform between 0 and 1
     \begin{itemize}
-    \item holds better for cross-validation predictive tests
-      (cross-validation Ch 7)
+    \item holds better for cross-validation predictive tests: $Pr(\tilde{y}_i|y_{-i})$
+      (cross-validation)
     \end{itemize}
   \end{itemize}
 
@@ -280,9 +292,10 @@
     would be uniform between 0 and 1
   \end{itemize}
   \vspace{-1.5\baselineskip}
-  \uncover<2->{\includegraphics[width=10cm]{figs/light_ppc_pit.pdf}}
+  \uncover<2->{\includegraphics[width=9cm]{figs/light_ppc_pit.pdf}}
 
 \end{frame}
+
 
 \begin{frame}
 
@@ -345,206 +358,90 @@
   \item High-resolution satellite data of aerosol optical depth
   \end{itemize}
   \begin{center}
-    \only<1>{\vspace{-1.8\baselineskip}\includegraphics[height=7cm]{figs/map-data.png}}
-    \only<2>{\vspace{-1.8\baselineskip}\includegraphics[height=7cm]{figs/plot1.png}}
-    \only<3>{\hspace{-3cm}\includegraphics[height=6.55cm]{figs/plot2.png}}
+    \only<1>{\vspace{-1.8\baselineskip}\includegraphics[height=6cm]{figs/map-data.png}}
+    \only<2>{\vspace{-1.8\baselineskip}\includegraphics[height=6cm]{figs/plot1.png}}
+    \only<3>{\hspace{-3cm}\includegraphics[height=5.55cm]{figs/plot2.png}}
 \end{center}
 \end{frame}
 
+
 \begin{frame}
 
-\frametitle{Example: Exposure to air pollution}
-
-  Prior predictive checking
+\frametitle{Example: Prior predictive checking}
 
   \begin{center}
-    \only<1>{\includegraphics[width=11cm]{figs/pm25_pp1a.pdf}}
-    \only<2>{\includegraphics[width=11cm]{figs/pm25_pp1b.pdf}}
-    \only<3>{\includegraphics[width=11cm]{figs/pm25_pp2.pdf}}
+    \only<1>{\includegraphics[width=8cm]{figs/pm25_pp1a.pdf}}
+    \only<2>{\includegraphics[width=8cm]{figs/pm25_pp1b.pdf}}
+    \only<3>{\includegraphics[width=8cm]{figs/pm25_pp2.pdf}}
 \end{center}
 \end{frame}
 
 \begin{frame}
 
-\frametitle{Example: Exposure to air pollution}
+\frametitle{Example: Marginal predictive distributions}
 
-  Posterior predictive checking -- marginal predictive distributions
 \begin{figure}
 \centering
-\begin{subfigure}{0.48\textwidth}
-\includegraphics[width=\textwidth]{figs/ppc_dens1.png}
+\includegraphics[width=0.9\textwidth]{figs/ppc_dens1.png}
 \caption{Model 1}
-\end{subfigure}
-~
-\begin{subfigure}{0.48\textwidth}
-\includegraphics[width=\textwidth]{figs/ppc_dens2.png}
-\caption{Model 2}
-\end{subfigure}
-% ~
-% \begin{subfigure}{0.31\textwidth}
-% \includegraphics[width=\textwidth]{ppc_dens3.png}
-% \caption{Model 3}
-% \end{subfigure}
 \end{figure}
 
 \end{frame}
 
 \begin{frame}
+\frametitle{Example: Marginal predictive distributions}
 
-\frametitle{Example: Exposure to air pollution}
-
-
-  Posterior predictive checking -- test statistic (skewness)
 \begin{figure}
 \centering
-\begin{subfigure}{0.31\textwidth}
-\includegraphics[width=\textwidth]{figs/ppc_skew1.png}
-\caption{Model 1}
-\end{subfigure}
-~
-\begin{subfigure}{0.31\textwidth}
-\includegraphics[width=\textwidth]{figs/ppc_skew2.png}
+\includegraphics[width=0.9\textwidth]{figs/ppc_dens2.png}
 \caption{Model 2}
-\end{subfigure}
-~
-\begin{subfigure}{0.31\textwidth}
-\includegraphics[width=\textwidth]{figs/ppc_skew3.png}
-\caption{Model 3}
-\end{subfigure}
-
 \end{figure}
 
 \end{frame}
 
 \begin{frame}
+\frametitle{Example: Marginal predictive distributions}
 
-\frametitle{Example: Exposure to air pollution}
-
-
-  Posterior predictive checking -- test statistic (median for groups)
-
-  \begin{figure}
+\begin{figure}
 \centering
-\begin{subfigure}{.31\textwidth}
-\includegraphics[width=\textwidth]{figs/ppc_med_grouped1.png}
-\caption{Model 1}
-\end{subfigure}
-~
-\begin{subfigure}{.31\textwidth}
-\includegraphics[width=\textwidth]{figs/ppc_med_grouped2.png}
-\caption{Model 2}
-\end{subfigure}
-~
-\begin{subfigure}{.31\textwidth}
-\includegraphics[width=\textwidth]{figs/ppc_med_grouped3.png}
+\includegraphics[width=0.9\textwidth]{figs/ppc_dens3.png}
 \caption{Model 3}
-\end{subfigure}
-
 \end{figure}
 
 \end{frame}
 
 
+\begin{frame}
+\frametitle{Example: Test statistic (skewness)}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.9\textwidth]{figs/ppc_skew1.png}
+\caption{Model 1}
+\end{figure}
+
+\end{frame}
 
 \begin{frame}
+\frametitle{Example: Test statistic (skewness)}
 
-\frametitle{Example: Exposure to air pollution}
+\begin{figure}
+\centering
+\includegraphics[width=0.9\textwidth]{figs/ppc_skew2.png}
+\caption{Model 2}
+\end{figure}
 
-
-  LOO predictive checking -- LOO-PIT
-
-\includegraphics[width=\textwidth]{figs/ppc_loo_pit_corrected_pm25.png}
-
-
-
-\vspace{2\baselineskip}
-{\scriptsize EDIT 2020: These plots use boundary corrected KDE which is a better choice than the non-boundary corrected KDE used in the plots in the
-paper.}
 
 \end{frame}
-
-\begin{frame}[fragile]
-
-\frametitle{Example of posterior predictive checking}
-
-    \includegraphics[width=11cm]{figs/mesquite_ppc.pdf}\\
-  \vspace{-0.1\baselineskip} {Predicting the yields of mesquite bushes.\\
-    \color{gray} \footnotesize
-    Gelman, Hill \& Vehtari (2020): Regression and Other Stories, Chapter 11.}\\
-
-\end{frame}
-
-\begin{frame}[fragile]
-
-\frametitle{Example of posterior predictive checking}
-
-  Diabetes prediction with logistic regression -
-  \href{https://avehtari.github.io/modelselection/diabetes.html}{diabetes demo}
-
-     \only<1>{\vspace{-.6\baselineskip}\includegraphics[width=8.5cm]{figs/diabetes_corrplot.pdf}}
-     \only<2>{PPC with binning for binary data\\ \includegraphics[width=11cm]{figs/diabetes_calibration_binned.pdf}}
-     \only<3>{PPC with non-linear regression for binary data\\ \includegraphics[width=11cm]{figs/diabetes_calibration_regression.pdf}}
-
-\end{frame}
-
-\begin{frame}[fragile]
-
-\frametitle{Posterior predictive checking}
-
-  \vspace{-0.2\parskip}
-  \begin{itemize}
-  \item demo demos\_rstan/ppc/poisson-ppc.Rmd
-  \end{itemize}
-
-  \vspace{-0.2\parskip}
-  {\color{gray}\footnotesize
-\begin{lstlisting}[language=Stan]
-data {
-  int<lower=1> N;
-  int<lower=0> y[N];
-}
-parameters {
-  real<lower=0> lambda;
-}
-model {
-  lambda ~ exponential(0.2);
-  y ~ poisson(lambda);
-}
-\end{lstlisting}
-  }
-  \vspace{-\parskip}
-  {\footnotesize
-\begin{lstlisting}[language=Stan]
-generated quantities {
-  real log_lik[N];
-  int y_rep[N];
-  for (n in 1:N) {
-    y_rep[n] = poisson_rng(lambda);
-    log_lik[n] = poisson_lpmf(y[n] | lambda);
-    }
-}
-\end{lstlisting}
- }
-\end{frame}
-
 
 \begin{frame}
+\frametitle{Example: Test statistic (skewness)}
 
-\frametitle{Further reading and examples}
-
-  \begin{itemize}
-  \item Jonah Gabry, Daniel Simpson, Aki Vehtari, Michael
-    Betancourt, and Andrew Gelman (2019). Visualization in Bayesian
-    workflow. \url{https://doi.org/10.1111/rssa.12378}.
-  \item Graphical posterior predictive checks using the bayesplot package
-    \url{http://mc-stan.org/bayesplot/articles/graphical-ppcs.html}
-  \item Another demo \href{http://avehtari.github.io/BDA_R_demos/demos_rstan/ppc/poisson-ppc.html}{demos\_rstan/ppc/poisson-ppc.Rmd}
-  \item Michael Betancourt's workflow case study with prior and posterior predictive checking
-    \begin{itemize}
-    \item for RStan \url{https://betanalpha.github.io/assets/case_studies/principled_bayesian_workflow.html}
-    \item for PyStan \url{https://github.com/betanalpha/jupyter_case_studies/blob/master/principled_bayesian_workflow/principled_bayesian_workflow.ipynb}
-    \end{itemize}
-  \end{itemize}
+\begin{figure}
+\centering
+\includegraphics[width=0.9\textwidth]{figs/ppc_skew3.png}
+\caption{Model 3}
+\end{figure}
 
 \end{frame}
 

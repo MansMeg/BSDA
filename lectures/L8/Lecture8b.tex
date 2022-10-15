@@ -372,13 +372,118 @@ elpd_diff        se
 
 \subsection{PSIS-LOO and \texttt{loo}}
 %\frame{\sectionpage}
+\begin{frame}{}
 
+\frametitle{ Fast cross-validation}
+
+\begin{enumerate}
+\item Pareto smoothed importance sampling LOO (PSIS-LOO)
+\item K-fold cross-validation
+\end{enumerate}
+
+\vspace{12\baselineskip}
+
+{\small see \href{http://link.springer.com/article/10.1007/s11222-016-9696-4}{Vehtari, Gelman \& Gabry (2017a)} and \url{mc-stan.org/loo/}}
+
+\end{frame}
 
 % How is done in practice?
 
-% PSIS-LOO
 
-% How done in stan
+
+\begin{frame}{}
+
+  \only<1>{\includegraphics[width=8cm]{figs/fakedata.pdf}}
+  \only<2>{\includegraphics[width=8cm]{figs/fakedraws.pdf}}
+  \only<3>{\includegraphics[width=8cm]{figs/fakepostpred.pdf}}
+  \only<4>{\includegraphics[width=8cm]{figs/fakepostpred18.pdf}}
+  \only<5-7>{\includegraphics[width=8cm]{figs/fakepsisdraws.pdf}}
+  \only<8-10>{\includegraphics[width=8cm]{figs/fakepsispostpred.pdf}}
+  \\
+  \only<2>{$\theta^{(s)} \sim p(\theta|x,y)$}
+  \only<3-4>{$\theta^{(s)} \sim p(\theta|x,y), \quad p(\tilde{y}|\tilde{x},x,y) \approx \frac{1}{S}\sum_{s=1}^S p(\tilde{y}|\tilde{x},\theta^{(s)})$ }
+  \only<5>{$\theta^{(s)} \sim p(\theta|x,y)$\\ \vspace{0.2\baselineskip}$ r_i^{(s)} = p(\theta^{(s)}|x_{-i},y_{-i}) / p(\theta^{(s)}|x,y)$ }
+  \only<6-8>{$\theta^{(s)} \sim p(\theta|x,y)$\\ \vspace{0.2\baselineskip} $ r_i^{(s)} = p(\theta^{(s)}|x_{-i},y_{-i}) / p(\theta^{(s)}|x,y) \propto 1/p(y_i|x_i,\theta^{(s)})$\\ \vspace{0.2\baselineskip} }
+  \only<7>{$\log(1/p(y_i|x_i,\theta^{(s)})) = -\mbox{log\_lik}[i]$}
+  \only<9-10>{$\theta^{(s)} \sim p(\theta|x,y)$\\ \vspace{0.2\baselineskip}
+    $ r_i^{(s)} = p(\theta^{(s)}|x_{-i},y_{-i}) / p(\theta^{(s)}|x,y) \propto 1/p(y_i|x_i,\theta^{(s)})$\\ \vspace{0.2\baselineskip}
+  $p(y_i|x_i,x_{-i},y_{-i}) \approx \sum_{s=1}^S [w_i^{(s)} p(y_i|x_i,\theta^{(s)})]$}\only<10>{, where $w \leftarrow \mbox{PSIS}(r)$}
+
+\end{frame}
+
+\begin{frame}{}
+
+  \only<1>{\includegraphics[width=8cm]{figs/fakepsisweights.pdf}}
+  \only<2->{\includegraphics[width=8cm]{figs/fakepsisweights4000.pdf}}
+  \\
+  \vspace{-\baselineskip}
+  \onslide<3->{n\_eff $\approx$ 459\\  \vspace{0.2\baselineskip}}
+  \onslide<4>{Pareto $\hat{k}$ $\approx$ 0.52
+  \vspace{-\parskip}
+    \begin{enumerate}
+    \item Pareto $\hat{k}$ estimates the tail shape which determines the convergence rate of PSIS. Less than 0.7 is ok.}
+\end{enumerate}
+  \onslide<3->{\vspace{0.1\baselineskip}\small see \href{http://link.springer.com/article/10.1007/s11222-016-9696-4}{Vehtari, Gelman \& Gabry (2017b)}}
+\end{frame}
+
+\begin{frame}[fragile]
+
+  \includegraphics[width=8cm]{figs/fakepks.pdf}
+
+\end{frame}
+
+\begin{frame}[fragile]
+
+  \only<1>{\includegraphics[width=8cm]{figs/fakepks.pdf}}
+  \only<2>{\includegraphics[width=8cm]{figs/fakeneffs.pdf}}
+  \\
+  {\scriptsize
+\begin{lstlisting}
+    Pareto k diagnostic values:
+                         Count Pct.    Min. n_eff
+(-Inf, 0.5]   (good)     18    90.0%   899
+ (0.5, 0.7]   (ok)        2    10.0%   459
+   (0.7, 1]   (bad)       0     0.0%   <NA>
+   (1, Inf)   (very bad)  0     0.0%   <NA>
+\end{lstlisting}
+}
+
+\end{frame}
+
+\begin{frame}[fragile]
+
+\frametitle{{\tt loo} package}
+
+  {\scriptsize
+    {\color{gray}
+\begin{lstlisting}
+ Computed from 4000 by 20 log-likelihood matrix
+
+         Estimate  SE
+elpd_loo    -29.5 3.3
+p_loo         2.7 1.0
+\end{lstlisting}
+      }
+\begin{lstlisting}
+------
+Monte Carlo SE of elpd_loo is 0.1.
+
+Pareto k diagnostic values:
+                         Count Pct.    Min. n_eff
+(-Inf, 0.5]   (good)     18    90.0%   899
+ (0.5, 0.7]   (ok)        2    10.0%   459
+   (0.7, 1]   (bad)       0     0.0%   <NA>
+   (1, Inf)   (very bad)  0     0.0%   <NA>
+
+All Pareto k estimates are ok (k < 0.7).
+See help('pareto-k-diagnostic') for details.
+\end{lstlisting}
+    }
+
+    {\vspace{2\baselineskip}\small see more in \href{http://link.springer.com/article/10.1007/s11222-016-9696-4}{Vehtari, Gelman \& Gabry (2017b)}}
+
+\end{frame}
+
 
 \begin{frame}[fragile]
 
@@ -474,134 +579,32 @@ See help('pareto-k-diagnostic') for details.
 
 
 
-\begin{frame}{}
 
-\frametitle{ Fast cross-validation}
 
-\begin{enumerate}
-\item Pareto smoothed importance sampling LOO (PSIS-LOO)
-\item K-fold cross-validation
-\end{enumerate}
 
-\vspace{12\baselineskip}
 
-{\small see \href{http://link.springer.com/article/10.1007/s11222-016-9696-4}{Vehtari, Gelman \& Gabry (2017a)} and \url{mc-stan.org/loo/}}
 
-\end{frame}
 
-%\begin{frame}{}
-%
-%  \only<1>{\includegraphics[width=8cm]{figs/fakedata.pdf}}
-%  \only<2>{\includegraphics[width=8cm]{figs/fakedraws.pdf}}
-%  \only<3>{\includegraphics[width=8cm]{figs/fakepostpred.pdf}}
-%  \only<4>{\includegraphics[width=8cm]{figs/fakepostpred18.pdf}}
-%  \only<5-7>{\includegraphics[width=8cm]{figs/fakepsisdraws.pdf}}
-%  \only<8-10>{\includegraphics[width=8cm]{figs/fakepsispostpred.pdf}}
-%  \\
-%  \only<2>{$\theta^{(s)} \sim p(\theta|x,y)$}
-%  \only<3-4>{$\theta^{(s)} \sim p(\theta|x,y), \quad p(\tilde{y}|\tilde{x},x,y) \approx \frac{1}{S}\sum_{s=1}^S p(\tilde{y}|\tilde{x},\theta^{(s)})$ }
-%  \only<5>{$\theta^{(s)} \sim p(\theta|x,y)$\\ \vspace{0.2\baselineskip}$ r_i^{(s)} = p(\theta^{(s)}|x_{-i},y_{-i}) / p(\theta^{(s)}|x,y)$ }
-%  \only<6-8>{$\theta^{(s)} \sim p(\theta|x,y)$\\ \vspace{0.2\baselineskip} $ r_i^{(s)} = p(\theta^{(s)}|x_{-i},y_{-i}) / p(\theta^{(s)}|x,y) \propto 1/p(y_i|x_i,\theta^{(s)})$\\ \vspace{0.2\baselineskip} }
-%  \only<7>{$\log(1/p(y_i|x_i,\theta^{(s)})) = -\mbox{log\_lik}[i]$}
-%  \only<9-10>{$\theta^{(s)} \sim p(\theta|x,y)$\\ \vspace{0.2\baselineskip}
-%    $ r_i^{(s)} = p(\theta^{(s)}|x_{-i},y_{-i}) / p(\theta^{(s)}|x,y) \propto 1/p(y_i|x_i,\theta^{(s)})$\\ \vspace{0.2\baselineskip}
-%  $p(y_i|x_i,x_{-i},y_{-i}) \approx \sum_{s=1}^S [w_i^{(s)} p(y_i|x_i,\theta^{(s)})]$}\only<10>{, where $w \leftarrow \mbox{PSIS}(r)$}
-%
-%\end{frame}
+\begin{frame}
+  \frametitle{Importance sampling}
 
-%\begin{frame}{}
-%
-%  \only<1>{\includegraphics[width=8cm]{fakepsisweights.pdf}}
-%  \only<2->{\includegraphics[width=8cm]{fakepsisweights4000.pdf}}
-%  \\
-%  \vspace{-\baselineskip}
-%  \onslide<3->{n\_eff $\approx$ 459\\  \vspace{0.2\baselineskip}}
-%  \onslide<4>{Pareto $\hat{k}$ $\approx$ 0.52
-%  \vspace{-\parskip}
-%    \begin{enumerate}
-%    \item Pareto $\hat{k}$ estimates the tail shape which determines the convergence rate of PSIS. Less than 0.7 is ok.}
-%\end{enumerate}
-%  \onslide<3->{\vspace{0.1\baselineskip}\small see \href{http://link.springer.com/article/10.1007/s11222-016-9696-4}{Vehtari, Gelman \& Gabry (2017b)}}
-%\end{frame}
+   \begin{itemize}
+   \item Having samples $\theta^s$ from $p(\theta^s|D)$
+     \begin{align*}
+       p(\tilde{y}_i|x_i,D_{-i})\approx\frac{\sum_{s=1}^Sp(\tilde{y}_i|\theta^s)w_i^s}{\sum_{s=1}^S w_i^s},
+     \end{align*}
+     where $w_i^s$ are importance weights and
+     \begin{align*}
+       w_i^s=\frac{p(\theta^s|x_i,D_{-i})}{p(\theta^s|D)}\propto\frac{1}{\color{red} p(y_i|\theta^s)}.
+     \end{align*}
+ \pause
+   \item If evaluated with $\tilde{y}_i=y_i$
+     \begin{align*}
+       p(y_i|x_i,D_{-i})\approx\frac{1}{\sum_{s=1}^S\frac{1}{p(y_i|\theta^s)}},
+     \end{align*}
+   \end{itemize}
 
-%\begin{frame}[fragile]
-%
-%  \includegraphics[width=8cm]{fakepks.pdf}
-%
-%\end{frame}
-
-%\begin{frame}[fragile]
-%
-%  \only<1>{\includegraphics[width=8cm]{fakepks.pdf}}
-%  \only<2>{\includegraphics[width=8cm]{fakeneffs.pdf}}
-%  \\
-%  {\scriptsize
-%\begin{lstlisting}
-%    Pareto k diagnostic values:
-%                         Count Pct.    Min. n_eff
-%(-Inf, 0.5]   (good)     18    90.0%   899
-% (0.5, 0.7]   (ok)        2    10.0%   459
-%   (0.7, 1]   (bad)       0     0.0%   <NA>
-%   (1, Inf)   (very bad)  0     0.0%   <NA>
-%\end{lstlisting}
-%}
-%
-%\end{frame}
-
-\begin{frame}[fragile]
-
-\frametitle{{\tt loo} package}
-
-  {\scriptsize
-    {\color{gray}
-\begin{lstlisting}
- Computed from 4000 by 20 log-likelihood matrix
-
-         Estimate  SE
-elpd_loo    -29.5 3.3
-p_loo         2.7 1.0
-\end{lstlisting}
-      }
-\begin{lstlisting}
-------
-Monte Carlo SE of elpd_loo is 0.1.
-
-Pareto k diagnostic values:
-                         Count Pct.    Min. n_eff
-(-Inf, 0.5]   (good)     18    90.0%   899
- (0.5, 0.7]   (ok)        2    10.0%   459
-   (0.7, 1]   (bad)       0     0.0%   <NA>
-   (1, Inf)   (very bad)  0     0.0%   <NA>
-
-All Pareto k estimates are ok (k < 0.7).
-See help('pareto-k-diagnostic') for details.
-\end{lstlisting}
-    }
-
-    {\vspace{2\baselineskip}\small see more in \href{http://link.springer.com/article/10.1007/s11222-016-9696-4}{Vehtari, Gelman \& Gabry (2017b)}}
-
-\end{frame}
-
-% \begin{frame}
-%   \frametitle{Importance sampling}
-
-%   \begin{itemize}
-%   \item Having samples $\theta^s$ from $p(\theta^s|D)$
-%     \begin{align*}
-%       p(\tilde{y}_i|x_i,D_{-i})\approx\frac{\sum_{s=1}^Sp(\tilde{y}_i|\theta^s)w_i^s}{\sum_{s=1}^S w_i^s},
-%     \end{align*}
-%     where $w_i^s$ are importance weights and
-%     \begin{align*}
-%       w_i^s=\frac{p(\theta^s|x_i,D_{-i})}{p(\theta^s|D)}\propto\frac{1}{\color{red} p(y_i|\theta^s)}.
-%     \end{align*}
-% % \pause
-% %   \item If evaluated with $\tilde{y}_i=y_i$
-% %     \begin{align*}
-% %       p(y_i|x_i,D_{-i})\approx\frac{1}{\sum_{s=1}^S\frac{1}{p(y_i|\theta^s)}},
-% %     \end{align*}
-%   \end{itemize}
-
-% \end{frame}
+ \end{frame}
 
 \begin{frame}[fragile]
 

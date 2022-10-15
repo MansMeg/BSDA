@@ -1,5 +1,5 @@
-\documentclass[10pt,handout]{beamer}
-%\documentclass[10pt]{beamer}
+%\documentclass[10pt,handout]{beamer}
+\documentclass[10pt]{beamer}
 \usepackage[english]{babel} % Anpassa efter svenska. Ger svensk logga.
 \usepackage[utf8]{inputenc} % Anpassa efter linux
 \usepackage{graphicx}
@@ -65,89 +65,95 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-\section{Introduction}
+\section{Model assessment and selection}
 \frame{\sectionpage}
 
-\begin{frame}
-
- \frametitle{Model assessment, selection and inference after selection}
-
-   \begin{enumerate}
-   \item Extra material at \url{https://avehtari.github.io/modelselection/}
-     \begin{enumerate}
-       \item Videos, Slides, Notebooks, References
-       \item The most relevant for the course is the first part of the
-         talk ``Model assessment, comparison and selection at Master
-         class in Bayesian statistics, CIRM, Marseille''
-     \end{enumerate}
-   \end{enumerate}
-
-\end{frame}
-
-\begin{frame}{}
-
-\frametitle{Predicting concrete quality}
-
+%\begin{frame}
+%\frametitle{Predicting cancer recurrence}
+%
 %  \begin{center}
-%    \includegraphics[width=5cm]{figs/slump1b.eps}
+%    \includegraphics[width=10cm]{figs/gistrisk.png}
 %  \end{center}
+%\end{frame}
 
-\end{frame}
+\subsection{Measures of predictive accuracy}
+%\frame{\sectionpage}
 
-\begin{frame}{}
+% - point prediction
+% MSE
 
-\frametitle{Predicting cancer recurrence}
+% - probability predictions
+% log likelihood (p 167)
 
-  \begin{center}
-    \includegraphics[width=11.5cm]{figs/gistrisk.png}
-  \end{center}
+% General goal
+% elpd def (7.1). What is the true model?
+% elppd def (7.1). What is the true model?
 
-\end{frame}
+% meaurements for a fitted model
+% lppd (and how it is fitted) (7.4 and 7.5)
+
+% Copy in the two predictive distributions here (hiearchical)
+
+
+
+\section{Information criteria}
+\frame{\sectionpage}
+
+% The problem with parameters in bayeisan stats
+
+% AIC and DIC with math
+% Limit p(y|\theta) with theta
+
+% WAIC
+
+\section{Cross-validation}
+\frame{\sectionpage}
+
+% Kopiera mina slides från AISTATS
+
+% + and minus with LOO: computational intensive
+
+% PSIS-LOO
+
+% How done in stan
+
+
+
 
 \begin{frame}
-
 \frametitle{Predictive performance}
 
-  \begin{itemize}
-  \item<1-> True predictive performance is found out by using it to make
-    predictions and comparing predictions to true observations
+\begin{itemize}
+   \item<1-> Modeling complex phenomena with models that are simplified\\
+   All models are wrong... but some are useful.
+  \item<2-> True predictive performance is found out by using it to \uured{make predictions} and comparing predictions to \uured{true observations}
     \begin{itemize}
       \item external validation
     \end{itemize}
-  \item<2-> Expected predictive performance
+  \item<3-> Expected predictive performance
     \begin{itemize}
-      \item approximates the external validation
-      \end{itemize}
+      \item \uured{approximates} the external validation
     \end{itemize}
+\end{itemize}
 
 \end{frame}
 
-% \begin{frame}{}
-
-% \frametitle{Model assessment, comparison, selection and averaging}
-
-%   \begin{enumerate}
-%   \item Modeling complex phenomena with models that
-%     are much simpler than the nature ($M$-open)
-%   \item<2-> Decision theoretical approch in spirit of
-%     \begin{enumerate}
-%     \item Lindley, Box, Rubin, Bernardo \& Smith, etc.
-%     \end{enumerate}
-%   \end{enumerate}
-
-% \end{frame}
+% TODO: Add slide on M-open, M-closed etc
 
 \begin{frame}
 
 \frametitle{Predictive performance}
 
   \begin{itemize}
-  \item We need to choose the utility/cost function
+  \item Model choice is a decision-theoretic problem (see next week)
+  \pause
+  \item We need to choose the utility/cost function to maximize in our decision
+  \pause
   \item Application specific utility/cost functions are important
     \begin{itemize}
       \item eg. money, life years, quality adjusted life years, etc.
     \end{itemize}
-    \pause
+  \pause
   \item If are interested overall in the goodness of the predictive distribution,
     or we don't know (yet) the application specific utility, then
     good information theoretically justified choice is log-score

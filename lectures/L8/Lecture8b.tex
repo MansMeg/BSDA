@@ -282,6 +282,38 @@ elpd_diff        se
 
 \end{frame}
 
+
+\begin{frame}
+
+\frametitle{ Sometimes cross-validation is not needed}
+
+\vspace{-0.5\baselineskip}
+
+  \begin{enumerate}
+  \item<2-> Posterior predictive checking is often sufficient\\
+    \vspace{0.5\baselineskip}
+    \includegraphics[width=11cm]{figs/mesquite_ppc.pdf}\\
+  \vspace{-0.1\baselineskip} {Predicting the yields of mesquite bushes.\\
+    \color{gray} \footnotesize
+    Gelman, Hill \& Vehtari (2020): Regression and Other Stories, Chapter 11.}\\
+  \vspace{-0.8\baselineskip}
+\end{enumerate}
+{\footnotesize
+  \begin{enumerate}
+  \item<3-> BDA3, Chapter 6
+  \vspace{-0.6\parskip}
+  \item<3-> Gabry, Simpson, Vehtari, Betancourt, Gelman
+    (2019). Visualization in Bayesian workflow. JRSS A, \url{https://doi.org/10.1111/rssa.12378}
+  \vspace{-0.6\parskip}
+  \item<3-> \url{mc-stan.org/bayesplot/articles/graphical-ppcs.html}
+  \vspace{-0.6\parskip}
+  \item<3-> \url{betanalpha.github.io/assets/case_studies/principled_bayesian_workflow.html}
+   \end{enumerate}}
+\end{frame}
+
+
+
+
 \subsection{When is LOO applicable}
 %\frame{\sectionpage}
 
@@ -674,6 +706,29 @@ generated quantities {
 \subsection{Comparison and selection}
 %\frame{\sectionpage}
 
+\begin{frame}{}
+
+\frametitle{Cross-validation for model assessment}
+
+\begin{enumerate}
+\item CV is good for model assessment when application specific utility/cost functions are used
+  \begin{enumerate}
+  \item e.g. 90\% absolute error
+  \end{enumerate}
+\item<2-> Also useful in model checking in similar way as posterior
+  predictive checking (PPC)
+  \begin{enumerate}
+  \item model misspecification diagnostics\\ (e.g. Pareto-$k$ and p\_loo)
+  \item checking calibration of leave-one-out predictive posteriors
+    (ppc\_loo\_pit in bayesplot)
+  \end{enumerate}
+  {\small see demos \url{avehtari.github.io/modelselection/}}
+\end{enumerate}
+
+\end{frame}
+
+
+
 
 \subsection{Additional reading}
 %\frame{\sectionpage}
@@ -721,6 +776,28 @@ generated quantities {
 \end{frame}
 
 
+%\begin{frame}{}
+
+%\frametitle{ Marginal likelihood / Bayes factor}
+
+%\vspace{-0.3\baselineskip}
+%\begin{enumerate}
+%\item Like leave-future-out 1-step-ahead cross-validation but starting with 0 observations\\
+%  \onslide<3->{- which makes it very sensitive to prior}
+%  \onslide<4->{and \\- unstable in case of misspecified
+%    models}\uncover<5->{ also asymptotically}
+%\end{enumerate}
+%\vspace{-0.5\baselineskip}
+%  \onslide<2->{\includegraphics[width=9.4cm]{figs/lake3bf.pdf}}
+
+%\end{frame}
+
+
+
+
+
+
+
 \section{To move up}
 \frame{\sectionpage}
 
@@ -728,138 +805,62 @@ generated quantities {
 
 
 
-\begin{frame}{}
 
-\frametitle{ Marginal likelihood / Bayes factor}
+ \begin{frame}{}
 
-\vspace{-0.3\baselineskip}
-\begin{enumerate}
-\item Like leave-future-out 1-step-ahead cross-validation but starting with 0 observations\\
-  \onslide<3->{- which makes it very sensitive to prior}
-  \onslide<4->{and \\- unstable in case of misspecified
-    models}\uncover<5->{ also asymptotically}
-\end{enumerate}
-\vspace{-0.5\baselineskip}
-  \onslide<2->{\includegraphics[width=9.4cm]{figs/lake3bf.pdf}}
+ \frametitle{ Model comparison}
 
-\end{frame}
+ \begin{enumerate}
+ \item ``A popular hypothesis has it that primates with larger brains
+   produce more energetic milk, so that brains can grow quickly'' (from
+   Statistical Rethinking)
+   \begin{enumerate}
+     \item Model 1: formula = kcal.per.g $\sim$ neocortex
+     \item Model 2: formula = kcal.per.g $\sim$ neocortex + log(mass)
+   \end{enumerate}
+ \end{enumerate}
 
-\begin{frame}{}
-
-\frametitle{ Cross-validation for model assessment}
-
-\begin{enumerate}
-\item CV is good for model assessment when application specific utility/cost functions are used
-  \begin{enumerate}
-  \item e.g. 90\% absolute error
-  \end{enumerate}
-\item<2-> Also useful in model checking in similar way as posterior
-  predictive checking (PPC)
-  \begin{enumerate}
-  \item model misspecification diagnostics\\ (e.g. Pareto-$k$ and p\_loo)
-  \item checking calibration of leave-one-out predictive posteriors
-    (ppc\_loo\_pit in bayesplot)
-  \end{enumerate}
-  {\small see demos \url{avehtari.github.io/modelselection/}}
-\end{enumerate}
-
-\end{frame}
-
-\begin{frame}
-
- \frametitle{Radon example}
-
-   PSIS-LOO diagnostics
-   \includegraphics[width=.8\textwidth]{figs/radon1k.pdf}
-
-{\small see \href{http://link.springer.com/article/10.1007/s11222-016-9696-4}{Vehtari, Gelman \& Gabry (2017a)}}
+ \vspace{10\baselineskip}
+ {\small \url{mc-stan.org/loo/articles/loo2-example.html}}
 
  \end{frame}
 
+ \begin{frame}
 
-\begin{frame}
+   \only<1-2>{\includegraphics[width=8cm]{figs/milkelpdloo.pdf}}
+   \only<3>{\includegraphics[width=8cm]{figs/milkelpdloo2.pdf}}
+   \\
+   \only<2-3>{Model 1 elpd\_loo $\approx$ 3.7, SE=1.8\\
+   Model 2 elpd\_loo $\approx$ 8.4, SE=2.8}
 
-\frametitle{ Sometimes cross-validation is not needed}
+ \end{frame}
 
-\vspace{-0.5\baselineskip}
+ \begin{frame}[fragile]
 
-  \begin{enumerate}
-  \item<2-> Posterior predictive checking is often sufficient\\
-    \vspace{0.5\baselineskip}
-    \includegraphics[width=11cm]{figs/mesquite_ppc.pdf}\\
-  \vspace{-0.1\baselineskip} {Predicting the yields of mesquite bushes.\\
-    \color{gray} \footnotesize
-    Gelman, Hill \& Vehtari (2020): Regression and Other Stories, Chapter 11.}\\
-  \vspace{-0.8\baselineskip}
-\end{enumerate}
-{\footnotesize
-  \begin{enumerate}
-  \item<3-> BDA3, Chapter 6
-  \vspace{-0.6\parskip}
-  \item<3-> Gabry, Simpson, Vehtari, Betancourt, Gelman
-    (2019). Visualization in Bayesian workflow. JRSS A, \url{https://doi.org/10.1111/rssa.12378}
-  \vspace{-0.6\parskip}
-  \item<3-> \url{mc-stan.org/bayesplot/articles/graphical-ppcs.html}
-  \vspace{-0.6\parskip}
-  \item<3-> \url{betanalpha.github.io/assets/case_studies/principled_bayesian_workflow.html}
-   \end{enumerate}}
+   {\includegraphics[width=8cm]{figs/milkelpddiff.pdf}}
+   \\
+   {\scriptsize
+ \begin{lstlisting}
+ Model comparison:
+ (negative 'elpd_diff' favors 1st model, positive favors 2nd)
+
+ elpd_diff        se
+       4.7       2.7
+ \end{lstlisting}}
+
+ \end{frame}
+
+ \begin{frame}
+
+ \frametitle{Arsenic well example -- Model comparison}
+
+
+    \includegraphics[width=.8\textwidth]{figs/arsenic12d.pdf}
+
+    An estimated difference in ${\rm elpd}_{\rm loo}$ of 16.4 with SE of 4.4.
+
+ {\small see \href{http://link.springer.com/article/10.1007/s11222-016-9696-4}{Vehtari, Gelman \& Gabry (2017a)}}
 \end{frame}
-
-% \begin{frame}{}
-
-% \frametitle{ Model comparison}
-
-% \begin{enumerate}
-% \item ``A popular hypothesis has it that primates with larger brains
-%   produce more energetic milk, so that brains can grow quickly'' (from
-%   Statistical Rethinking)
-%   \begin{enumerate}
-%     \item Model 1: formula = kcal.per.g $\sim$ neocortex
-%     \item Model 2: formula = kcal.per.g $\sim$ neocortex + log(mass)
-%   \end{enumerate}
-% \end{enumerate}
-
-% \vspace{10\baselineskip}
-% {\small \url{mc-stan.org/loo/articles/loo2-example.html}}
-
-% \end{frame}
-
-% \begin{frame}
-
-%   \only<1-2>{\includegraphics[width=8cm]{milkelpdloo.pdf}}
-%   \only<3>{\includegraphics[width=8cm]{milkelpdloo2.pdf}}
-%   \\
-%   \only<2-3>{Model 1 elpd\_loo $\approx$ 3.7, SE=1.8\\
-%   Model 2 elpd\_loo $\approx$ 8.4, SE=2.8}
-
-% \end{frame}
-
-% \begin{frame}[fragile]
-
-%   {\includegraphics[width=8cm]{milkelpddiff.pdf}}
-%   \\
-%   {\scriptsize
-% \begin{lstlisting}
-% Model comparison:
-% (negative 'elpd_diff' favors 1st model, positive favors 2nd)
-
-% elpd_diff        se
-%       4.7       2.7
-% \end{lstlisting}}
-
-% \end{frame}
-
-% \begin{frame}
-
-% \frametitle{Arsenic well example -- Model comparison}
-
-
-%    \includegraphics[width=.8\textwidth]{arsenic12d.pdf}
-
-%    An estimated difference in ${\rm elpd}_{\rm loo}$ of 16.4 with SE of 4.4.
-
-% {\small see \href{http://link.springer.com/article/10.1007/s11222-016-9696-4}{Vehtari, Gelman \& Gabry (2017a)}}
-% \end{frame}
 
 \begin{frame}{}
 
@@ -889,6 +890,8 @@ generated quantities {
   Model 2 elpd\_loo $\approx$ -1938, SE=17}
 
 \end{frame}
+
+
 
 \begin{frame}[fragile]
 

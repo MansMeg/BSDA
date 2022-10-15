@@ -68,57 +68,6 @@
 \section{Model assessment and selection}
 \frame{\sectionpage}
 
-%\begin{frame}
-%\frametitle{Predicting cancer recurrence}
-%
-%  \begin{center}
-%    \includegraphics[width=10cm]{figs/gistrisk.png}
-%  \end{center}
-%\end{frame}
-
-\subsection{Measures of predictive accuracy}
-%\frame{\sectionpage}
-
-% - point prediction
-% MSE
-
-% - probability predictions
-% log likelihood (p 167)
-
-% General goal
-% elpd def (7.1). What is the true model?
-% elppd def (7.1). What is the true model?
-
-% meaurements for a fitted model
-% lppd (and how it is fitted) (7.4 and 7.5)
-
-% Copy in the two predictive distributions here (hiearchical)
-
-
-
-\section{Information criteria}
-\frame{\sectionpage}
-
-% The problem with parameters in bayeisan stats
-
-% AIC and DIC with math
-% Limit p(y|\theta) with theta
-
-% WAIC
-
-\section{Cross-validation}
-\frame{\sectionpage}
-
-% Kopiera mina slides från AISTATS
-
-% + and minus with LOO: computational intensive
-
-% PSIS-LOO
-
-% How done in stan
-
-
-
 
 \begin{frame}
 \frametitle{Predictive performance}
@@ -145,59 +94,93 @@
 \frametitle{Predictive performance}
 
   \begin{itemize}
-  \item Model choice is a decision-theoretic problem (see next week)
+  \item Model choice is a (model-)decision-theoretic problem \\ (see next week)
   \pause
-  \item We need to choose the utility/cost function to maximize in our decision
+  \item Choose the model function to maximize our utility
   \pause
   \item Application specific utility/cost functions are important
     \begin{itemize}
       \item eg. money, life years, quality adjusted life years, etc.
     \end{itemize}
   \pause
-  \item If are interested overall in the goodness of the predictive distribution,
-    or we don't know (yet) the application specific utility, then
-    good information theoretically justified choice is log-score
+  \item General utility: \uured{overall in the goodness of the predictive distribution}
+  \begin{itemize}
+    \item we don't know (yet) the application specific utility
+  \end{itemize}
+    then good information theoretically justified choice is log-score
       \begin{align*}
-        \log p(y^{\text{rep}} | y, M),
+        \log p(y^{\text{rep}} | y, M)
       \end{align*}
+    % TODO: Increase this part on theoretical justification
 \end{itemize}
 
 \end{frame}
 
-\begin{frame}{}
+\subsection{Measures of predictive accuracy}
+%\frame{\sectionpage}
 
-\frametitle{Outline}
+% - point prediction
+% MSE
+% Residuals y - pred y
 
-  \begin{enumerate}
-  \item What is cross-validation
-    {\color{gray}
-  \begin{enumerate}
-    \item Leave-one-out cross-validation (elpd\_loo, p\_loo)
-    \item Uncertainty in LOO (SE)
-    \end{enumerate}
-    }
-  \item When is cross-validation applicable?
-    {\color{gray}
-    \begin{enumerate}
-    \item data generating mechanisms and prediction tasks
-    \item leave-many-out cross-validation
-    \end{enumerate}
-    }
-  \item Fast cross-validation
-    {\color{gray}
-    \begin{enumerate}
-    \item PSIS and diagnostics in loo package (Pareto k, n\_eff, Monte Carlo SE)
-    \item K-fold cross-validation
-    \end{enumerate}
-    }
-  \item {\footnotesize Related methods (WAIC, *IC, BF)}
-  \item Model comparison and selection (elpd\_diff, se)
-  \item Model averaging with Bayesian stacking
-  % \item<2-> Part 2: Projective Inference in High-dimensional Problems:
-  %   Prediction and Feature Selection
-  \end{enumerate}
+% - probability predictions
+% log likelihood (p 167)
 
-\end{frame}
+% General goal
+% elpd def (7.1). What is the true model?
+% elppd def (7.1). What is the true model?
+
+% meaurements for a fitted model
+% lppd (and how it is fitted) (7.4 and 7.5)
+
+% Copy in the two predictive distributions here (hiearchical)
+
+\section{Cross-validation}
+\frame{\sectionpage}
+
+% Kopiera mina slides från AISTATS
+
+% + and minus with LOO: computational intensive
+
+% Add example slides here
+
+\subsection{When is LOO applicable}
+%\frame{\sectionpage}
+
+% Move summary slide here. Also add the p_true here
+
+% You need to specify the data generating process. this is an assumption
+
+% Time series - extrapolation is more problematic
+
+% rats example
+
+\subsection{PSIS-LOO and \texttt{loo}}
+%\frame{\sectionpage}
+
+
+% How is done in practice?
+
+% PSIS-LOO
+
+% How done in stan
+
+\subsection{Comparison and selection}
+%\frame{\sectionpage}
+
+\section{Information criteria}
+\frame{\sectionpage}
+
+% The problem with parameters in bayeisan stats
+
+% AIC and DIC with math
+% Limit p(y|\theta) with theta
+
+% WAIC
+
+
+
+
 
 \begin{frame}[fragile]
 
@@ -236,24 +219,24 @@ elpd_diff        se
 
 \begin{frame}{}
 
-  \only<1>{\includegraphics[width=10cm]{figs/fake1.pdf}}
-  \only<2>{\includegraphics[width=10cm]{figs/fake2.pdf}}
-  \only<3>{\includegraphics[width=10cm]{figs/fake3.pdf}}
-  \only<4>{\includegraphics[width=10cm]{figs/fake4.pdf}}
-  \only<5>{\includegraphics[width=10cm]{figs/fake4b.pdf}}
-  \only<6>{\includegraphics[width=10cm]{figs/fake4.pdf}}
-  \only<7>{\includegraphics[width=10cm]{figs/fake4s.pdf}}
-  \only<8-9>{\includegraphics[width=10cm]{figs/fake5.pdf}}
-  \only<10>{\includegraphics[width=10cm]{figs/fake5n.pdf}}
-  \only<11>{\includegraphics[width=10cm]{figs/fake6.pdf}}
-  \only<12>{\includegraphics[width=10cm]{figs/fake7.pdf}}
+  \only<1>{\includegraphics[width=8cm]{figs/fake1.pdf}}
+  \only<2>{\includegraphics[width=8cm]{figs/fake2.pdf}}
+  \only<3>{\includegraphics[width=8cm]{figs/fake3.pdf}}
+  \only<4>{\includegraphics[width=8cm]{figs/fake4.pdf}}
+  \only<5>{\includegraphics[width=8cm]{figs/fake4b.pdf}}
+  \only<6>{\includegraphics[width=8cm]{figs/fake4.pdf}}
+  \only<7>{\includegraphics[width=8cm]{figs/fake4s.pdf}}
+  \only<8-9>{\includegraphics[width=8cm]{figs/fake5.pdf}}
+  \only<10>{\includegraphics[width=8cm]{figs/fake5n.pdf}}
+  \only<11>{\includegraphics[width=8cm]{figs/fake6.pdf}}
+  \only<12>{\includegraphics[width=8cm]{figs/fake7.pdf}}
   \\
   \onslide<9>{\color{red} $p(\tilde{y}|\tilde{x}=18,x,y)=\int p(\tilde{y}|\tilde{x}=18,\theta)p(\theta|x,y)d\theta$\\ \vspace{0.5\baselineskip}}
 \end{frame}
 
 \begin{frame}{}
 
-  {\includegraphics[width=10cm]{figs/fake7r.pdf}}
+  {\includegraphics[width=8cm]{figs/fake7r.pdf}}
   \\
   \onslide<2->{{\color{blue} $y_{18} - E[p(\tilde{y}|\tilde{x}=18,x_{-18},y_{-18})]$}\\ \vspace{0.5\baselineskip}}
   \onslide<3->{Can be use to compute, e.g., RMSE, $R^2$, 90\% error}
@@ -262,7 +245,7 @@ elpd_diff        se
 
 \begin{frame}{}
 
-  {\includegraphics[width=10cm]{figs/fake8.pdf}}
+  {\includegraphics[width=8cm]{figs/fake8.pdf}}
   \\
   \onslide<2>{\color{uulgr} $p(\tilde{y}|\tilde{x}=18,x_{-18},y_{-18})=\int p(\tilde{y}|\tilde{x}=18,\theta)p(\theta|x_{-18},y_{-18})d\theta$}
 
@@ -270,8 +253,8 @@ elpd_diff        se
 
 \begin{frame}{}
 
-  \only<1-2>{\includegraphics[width=10cm]{figs/fake8pd.pdf}}
-  \only<3>{\includegraphics[width=10cm]{figs/fake8loopd.pdf}}
+  \only<1-2>{\includegraphics[width=8cm]{figs/fake8pd.pdf}}
+  \only<3>{\includegraphics[width=8cm]{figs/fake8loopd.pdf}}
   \\
   \onslide<2->{\color{red} $p(\tilde{y}=y_{18}|\tilde{x}=18,x,y) \approx 0.07$\\ \vspace{0.5\baselineskip}}
   \onslide<3>{\color{uulgr} $p(\tilde{y}=y_{18}|\tilde{x}=18,x_{-18},y_{-18}) \approx 0.03$}
@@ -280,8 +263,8 @@ elpd_diff        se
 
 \begin{frame}{}
 
-  \only<1>{\includegraphics[width=10cm]{figs/fake8loopds.pdf}}
-  \only<2->{\includegraphics[width=10cm]{figs/fake8loolpds.pdf}}
+  \only<1>{\includegraphics[width=8cm]{figs/fake8loopds.pdf}}
+  \only<2->{\includegraphics[width=8cm]{figs/fake8loolpds.pdf}}
   \\ \vspace{-0.5\baselineskip}
   \only<1>{\color{blue} $p(y_i|x_i,x_{-i},y_{-i}), \quad i=1,\ldots,20$}
   \only<2>{\color{blue} $\log p(y_i|x_i,x_{-i},y_{-i}), \quad i=1,\ldots,20$}
@@ -297,8 +280,8 @@ elpd_diff        se
 
 \begin{frame}{}
 
-  \only<1>{\includegraphics[width=10cm]{figs/fakedfixed.pdf}}
-  \only<2->{\includegraphics[width=10cm]{figs/fakedrandom.pdf}}
+  \only<1>{\includegraphics[width=8cm]{figs/fakedfixed.pdf}}
+  \only<2->{\includegraphics[width=8cm]{figs/fakedrandom.pdf}}
   \\ \vspace{-0.5\baselineskip}
   \only<1>{LOO is ok for fixed / designed $x$. SE is uncertainty about $y|x$.\\ \vspace{0.2\baselineskip}}
   \only<2->{LOO is ok for random $x$. SE is uncertainty about $y|x$ and $x$.\\ \vspace{0.2\baselineskip}}
@@ -339,9 +322,9 @@ See help('pareto-k-diagnostic') for details.
 
 \begin{frame}{}
 
-  \only<1>{\includegraphics[width=10cm]{figs/lake1data.pdf}}
-  \only<2>{\includegraphics[width=10cm]{figs/lake1gp.pdf}}
-  \only<3->{\includegraphics[width=10cm]{figs/lake1gpptest.pdf}}
+  \only<1>{\includegraphics[width=8cm]{figs/lake1data.pdf}}
+  \only<2>{\includegraphics[width=8cm]{figs/lake1gp.pdf}}
+  \only<3->{\includegraphics[width=8cm]{figs/lake1gpptest.pdf}}
   \\
   \only<4>{Extrapolation is more difficult}
 
@@ -349,7 +332,7 @@ See help('pareto-k-diagnostic') for details.
 
 \begin{frame}{}
 
-  \includegraphics[width=10cm]{figs/lake2data.pdf}
+  \includegraphics[width=8cm]{figs/lake2data.pdf}
 
 
   {Can LOO or other cross-validation be used with time series?}
@@ -358,10 +341,10 @@ See help('pareto-k-diagnostic') for details.
 
 \begin{frame}{}
 
-  \only<1>{\includegraphics[width=10cm]{figs/lake3loo.pdf}}
-  \only<2>{\includegraphics[width=10cm]{figs/lake3stepahead.pdf}}
-  \only<3>{\includegraphics[width=10cm]{figs/lake3tenstepahead.pdf}}
-  \only<4>{\includegraphics[width=10cm]{figs/lake3stepaheadblock.pdf}}
+  \only<1>{\includegraphics[width=8cm]{figs/lake3loo.pdf}}
+  \only<2>{\includegraphics[width=8cm]{figs/lake3stepahead.pdf}}
+  \only<3>{\includegraphics[width=8cm]{figs/lake3tenstepahead.pdf}}
+  \only<4>{\includegraphics[width=8cm]{figs/lake3stepaheadblock.pdf}}
   \\
   \only<1>{Leave-one-out cross-validation is ok for assessing conditional model}
   \only<2>{Leave-future-out cross-validation is better for predicting future}
@@ -372,12 +355,12 @@ See help('pareto-k-diagnostic') for details.
 
 \begin{frame}{}
 
-  \only<1>{\includegraphics[width=10cm]{figs/rats1data.pdf}}
-  \only<2>{\includegraphics[width=10cm]{figs/rats1loo.pdf}}
-  \only<3>{\includegraphics[width=10cm]{figs/rats1step.pdf}}
-  \only<4>{\includegraphics[width=10cm]{figs/rats1onetime.pdf}}
-  \only<5>{\includegraphics[width=10cm]{figs/rats1onerat.pdf}}
-  \only<6>{\includegraphics[width=10cm]{figs/rats1init.pdf}}
+  \only<1>{\includegraphics[width=8cm]{figs/rats1data.pdf}}
+  \only<2>{\includegraphics[width=8cm]{figs/rats1loo.pdf}}
+  \only<3>{\includegraphics[width=8cm]{figs/rats1step.pdf}}
+  \only<4>{\includegraphics[width=8cm]{figs/rats1onetime.pdf}}
+  \only<5>{\includegraphics[width=8cm]{figs/rats1onerat.pdf}}
+  \only<6>{\includegraphics[width=8cm]{figs/rats1init.pdf}}
   \\
   \only<1>{Can LOO or other cross-validation be used with hierarchical data?}
   \only<2->{Yes!}
@@ -417,12 +400,12 @@ See help('pareto-k-diagnostic') for details.
 
 %\begin{frame}{}
 %
-%  \only<1>{\includegraphics[width=10cm]{figs/fakedata.pdf}}
-%  \only<2>{\includegraphics[width=10cm]{figs/fakedraws.pdf}}
-%  \only<3>{\includegraphics[width=10cm]{figs/fakepostpred.pdf}}
-%  \only<4>{\includegraphics[width=10cm]{figs/fakepostpred18.pdf}}
-%  \only<5-7>{\includegraphics[width=10cm]{figs/fakepsisdraws.pdf}}
-%  \only<8-10>{\includegraphics[width=10cm]{figs/fakepsispostpred.pdf}}
+%  \only<1>{\includegraphics[width=8cm]{figs/fakedata.pdf}}
+%  \only<2>{\includegraphics[width=8cm]{figs/fakedraws.pdf}}
+%  \only<3>{\includegraphics[width=8cm]{figs/fakepostpred.pdf}}
+%  \only<4>{\includegraphics[width=8cm]{figs/fakepostpred18.pdf}}
+%  \only<5-7>{\includegraphics[width=8cm]{figs/fakepsisdraws.pdf}}
+%  \only<8-10>{\includegraphics[width=8cm]{figs/fakepsispostpred.pdf}}
 %  \\
 %  \only<2>{$\theta^{(s)} \sim p(\theta|x,y)$}
 %  \only<3-4>{$\theta^{(s)} \sim p(\theta|x,y), \quad p(\tilde{y}|\tilde{x},x,y) \approx \frac{1}{S}\sum_{s=1}^S p(\tilde{y}|\tilde{x},\theta^{(s)})$ }
@@ -437,8 +420,8 @@ See help('pareto-k-diagnostic') for details.
 
 %\begin{frame}{}
 %
-%  \only<1>{\includegraphics[width=10cm]{fakepsisweights.pdf}}
-%  \only<2->{\includegraphics[width=10cm]{fakepsisweights4000.pdf}}
+%  \only<1>{\includegraphics[width=8cm]{fakepsisweights.pdf}}
+%  \only<2->{\includegraphics[width=8cm]{fakepsisweights4000.pdf}}
 %  \\
 %  \vspace{-\baselineskip}
 %  \onslide<3->{n\_eff $\approx$ 459\\  \vspace{0.2\baselineskip}}
@@ -452,14 +435,14 @@ See help('pareto-k-diagnostic') for details.
 
 %\begin{frame}[fragile]
 %
-%  \includegraphics[width=10cm]{fakepks.pdf}
+%  \includegraphics[width=8cm]{fakepks.pdf}
 %
 %\end{frame}
 
 %\begin{frame}[fragile]
 %
-%  \only<1>{\includegraphics[width=10cm]{fakepks.pdf}}
-%  \only<2>{\includegraphics[width=10cm]{fakeneffs.pdf}}
+%  \only<1>{\includegraphics[width=8cm]{fakepks.pdf}}
+%  \only<2>{\includegraphics[width=8cm]{fakeneffs.pdf}}
 %  \\
 %  {\scriptsize
 %\begin{lstlisting}
@@ -586,9 +569,9 @@ generated quantities {
 
 \begin{frame}{}
 
-  \only<1>{\includegraphics[width=10cm]{figs/lake4data.pdf}}
-  \only<2>{\includegraphics[width=10cm]{figs/lake4pred.pdf}}
-  \only<3>{\includegraphics[width=10cm]{figs/lake4psisrefits.pdf}}
+  \only<1>{\includegraphics[width=8cm]{figs/lake4data.pdf}}
+  \only<2>{\includegraphics[width=8cm]{figs/lake4pred.pdf}}
+  \only<3>{\includegraphics[width=8cm]{figs/lake4psisrefits.pdf}}
 
   \vspace{3\baselineskip}
   \only<3> {\small \url{mc-stan.org/loo/articles/loo2-lfo.html}}
@@ -618,11 +601,11 @@ generated quantities {
 
 \begin{frame}{}
 
-  \only<1>{\includegraphics[width=10cm]{figs/lake3kfoldbal1.pdf}}
-  \only<2>{\includegraphics[width=10cm]{figs/lake3kfoldbal2.pdf}}
-  \only<3>{\includegraphics[width=10cm]{figs/lake3kfoldrand.pdf}}
-  \only<4>{\includegraphics[width=10cm]{figs/rats1kfoldrand.pdf}}
-  \only<5->{\includegraphics[width=10cm]{figs/rats1oneratb.pdf}}
+  \only<1>{\includegraphics[width=8cm]{figs/lake3kfoldbal1.pdf}}
+  \only<2>{\includegraphics[width=8cm]{figs/lake3kfoldbal2.pdf}}
+  \only<3>{\includegraphics[width=8cm]{figs/lake3kfoldrand.pdf}}
+  \only<4>{\includegraphics[width=8cm]{figs/rats1kfoldrand.pdf}}
+  \only<5->{\includegraphics[width=8cm]{figs/rats1oneratb.pdf}}
   \\
   \only<6>{kfold\_split\_random()\\ \vspace{0.2\baselineskip}
   kfold\_split\_balanced()\\ \vspace{0.2\baselineskip}
@@ -759,8 +742,8 @@ generated quantities {
 
 % \begin{frame}
 
-%   \only<1-2>{\includegraphics[width=10cm]{milkelpdloo.pdf}}
-%   \only<3>{\includegraphics[width=10cm]{milkelpdloo2.pdf}}
+%   \only<1-2>{\includegraphics[width=8cm]{milkelpdloo.pdf}}
+%   \only<3>{\includegraphics[width=8cm]{milkelpdloo2.pdf}}
 %   \\
 %   \only<2-3>{Model 1 elpd\_loo $\approx$ 3.7, SE=1.8\\
 %   Model 2 elpd\_loo $\approx$ 8.4, SE=2.8}
@@ -769,7 +752,7 @@ generated quantities {
 
 % \begin{frame}[fragile]
 
-%   {\includegraphics[width=10cm]{milkelpddiff.pdf}}
+%   {\includegraphics[width=8cm]{milkelpddiff.pdf}}
 %   \\
 %   {\scriptsize
 % \begin{lstlisting}
@@ -816,7 +799,7 @@ generated quantities {
 \frametitle{Arsenic well example -- Model comparison}
 
   {\includegraphics[width=6.5cm]{figs/arsenicelpdloo.pdf}}
-  % \only<3>{\includegraphics[width=10cm]{milkelpdloo2.pdf}}
+  % \only<3>{\includegraphics[width=8cm]{milkelpdloo2.pdf}}
   \\
   {Model 1 elpd\_loo $\approx$ -1952, SE=16\\
   Model 2 elpd\_loo $\approx$ -1938, SE=17}

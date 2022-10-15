@@ -285,11 +285,26 @@ elpd_diff        se
 \subsection{When is LOO applicable}
 %\frame{\sectionpage}
 
+\begin{frame}{}
 
-% Move summary slide here. Also add the p_true here
+\frametitle{ Summary of data generating mechanisms and prediction tasks}
+
+\begin{enumerate}
+\item You have to make some assumptions on data generating mechanism
+\item Use the knowledge of the prediction task if available
+\item Cross-validation can be used to analyse different parts, even if
+  there is no clear prediction task
+\end{enumerate}
+
+ \vspace{6.5\baselineskip}
+{ \small see \href{http://dx.doi.org/10.1214/12-SS102}{Vehtari \& Ojanen (2012)} and \url{andrewgelman.com/2018/08/03/loo-cross-validation-approaches-valid/}}
+
+\end{frame}
+
+% TODO: Also add the p_true here
 
 % You need to specify the data generating process. this is an assumption
-
+% Approximate how this looks p_true
 
 
 \begin{frame}{}
@@ -305,7 +320,53 @@ elpd_diff        se
 \end{frame}
 
 
-% Time series - extrapolation is more problematic
+
+\begin{frame}{}
+
+  \only<1>{\includegraphics[width=8cm]{figs/lake1data.pdf}}
+  \only<2>{\includegraphics[width=8cm]{figs/lake1gp.pdf}}
+  \only<3->{\includegraphics[width=8cm]{figs/lake1gpptest.pdf}}
+  \\
+  \only<4>{Extrapolation is more difficult}
+
+\end{frame}
+
+\begin{frame}{}
+
+  \includegraphics[width=8cm]{figs/lake2data.pdf}
+
+
+  {Can LOO or other cross-validation be used with time series?}
+
+\end{frame}
+
+\begin{frame}{}
+
+  \only<1>{\includegraphics[width=8cm]{figs/lake3loo.pdf}}
+  \only<2>{\includegraphics[width=8cm]{figs/lake3stepahead.pdf}}
+  \only<3>{\includegraphics[width=8cm]{figs/lake3tenstepahead.pdf}}
+  \only<4>{\includegraphics[width=8cm]{figs/lake3stepaheadblock.pdf}}
+  \\
+  \only<1>{Leave-one-out cross-validation is ok for assessing conditional model}
+  \only<2>{Leave-future-out cross-validation is better for predicting future}
+  \only<3>{$m$-step-ahead cross-validation is better for predicting further future}
+  \only<4>{$m$-step-ahead leave-a-block-out cross-validation}
+
+\end{frame}
+
+\begin{frame}{}
+
+  \only<1>{\includegraphics[width=8cm]{figs/rats1data.pdf}}
+  \only<2>{\includegraphics[width=8cm]{figs/rats1loo.pdf}}
+  \only<3>{\includegraphics[width=8cm]{figs/rats1step.pdf}}
+  \only<4>{\includegraphics[width=8cm]{figs/rats1onetime.pdf}}
+  \only<5>{\includegraphics[width=8cm]{figs/rats1onerat.pdf}}
+  \only<6>{\includegraphics[width=8cm]{figs/rats1init.pdf}}
+  \\
+  \only<1>{Can LOO or other cross-validation be used with hierarchical data?}
+  \only<2->{Yes!}
+
+\end{frame}
 
 % rats example
 
@@ -410,68 +471,8 @@ See help('pareto-k-diagnostic') for details.
 
 
 
-\begin{frame}{}
-
-  \only<1>{\includegraphics[width=8cm]{figs/lake1data.pdf}}
-  \only<2>{\includegraphics[width=8cm]{figs/lake1gp.pdf}}
-  \only<3->{\includegraphics[width=8cm]{figs/lake1gpptest.pdf}}
-  \\
-  \only<4>{Extrapolation is more difficult}
-
-\end{frame}
-
-\begin{frame}{}
-
-  \includegraphics[width=8cm]{figs/lake2data.pdf}
 
 
-  {Can LOO or other cross-validation be used with time series?}
-
-\end{frame}
-
-\begin{frame}{}
-
-  \only<1>{\includegraphics[width=8cm]{figs/lake3loo.pdf}}
-  \only<2>{\includegraphics[width=8cm]{figs/lake3stepahead.pdf}}
-  \only<3>{\includegraphics[width=8cm]{figs/lake3tenstepahead.pdf}}
-  \only<4>{\includegraphics[width=8cm]{figs/lake3stepaheadblock.pdf}}
-  \\
-  \only<1>{Leave-one-out cross-validation is ok for assessing conditional model}
-  \only<2>{Leave-future-out cross-validation is better for predicting future}
-  \only<3>{$m$-step-ahead cross-validation is better for predicting further future}
-  \only<4>{$m$-step-ahead leave-a-block-out cross-validation}
-
-\end{frame}
-
-\begin{frame}{}
-
-  \only<1>{\includegraphics[width=8cm]{figs/rats1data.pdf}}
-  \only<2>{\includegraphics[width=8cm]{figs/rats1loo.pdf}}
-  \only<3>{\includegraphics[width=8cm]{figs/rats1step.pdf}}
-  \only<4>{\includegraphics[width=8cm]{figs/rats1onetime.pdf}}
-  \only<5>{\includegraphics[width=8cm]{figs/rats1onerat.pdf}}
-  \only<6>{\includegraphics[width=8cm]{figs/rats1init.pdf}}
-  \\
-  \only<1>{Can LOO or other cross-validation be used with hierarchical data?}
-  \only<2->{Yes!}
-
-\end{frame}
-
-\begin{frame}{}
-
-\frametitle{ Summary of data generating mechanisms and prediction tasks}
-
-\begin{enumerate}
-\item You have to make some assumptions on data generating mechanism
-\item Use the knowledge of the prediction task if available
-\item Cross-validation can be used to analyse different parts, even if
-  there is no clear prediction task
-\end{enumerate}
-
- \vspace{6.5\baselineskip}
-{ \small see \href{http://dx.doi.org/10.1214/12-SS102}{Vehtari \& Ojanen (2012)} and \url{andrewgelman.com/2018/08/03/loo-cross-validation-approaches-valid/}}
-
-\end{frame}
 
 \begin{frame}{}
 

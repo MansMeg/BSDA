@@ -247,12 +247,63 @@ where ${\color{uured}\tilde{y}_i}$ is an unseen observation generated from the t
 
 \end{frame}
 
+
+\begin{frame}[fragile]
+
+\frametitle{Stan and {\tt loo} package}
+
+  {\scriptsize
+\begin{lstlisting}
+ Computed from 4000 by 20 log-likelihood matrix
+
+         Estimate  SE
+elpd_loo    -29.5 3.3
+p_loo         2.7 1.0
+------
+Monte Carlo SE of elpd_loo is 0.1.
+
+Pareto k diagnostic values:
+                         Count Pct.    Min. n_eff
+(-Inf, 0.5]   (good)     18    90.0%   899
+ (0.5, 0.7]   (ok)        2    10.0%   459
+   (0.7, 1]   (bad)       0     0.0%   <NA>
+   (1, Inf)   (very bad)  0     0.0%   <NA>
+
+All Pareto k estimates are ok (k < 0.7).
+See help('pareto-k-diagnostic') for details.
+
+Model comparison:
+(negative 'elpd_diff' favors 1st model, positive favors 2nd)
+
+elpd_diff        se
+     -0.2       0.1
+\end{lstlisting}
+}
+
+\end{frame}
+
 \subsection{When is LOO applicable}
 %\frame{\sectionpage}
+
 
 % Move summary slide here. Also add the p_true here
 
 % You need to specify the data generating process. this is an assumption
+
+
+
+\begin{frame}{}
+
+  \only<1>{\includegraphics[width=8cm]{figs/fakedfixed.pdf}}
+  \only<2->{\includegraphics[width=8cm]{figs/fakedrandom.pdf}}
+  \\ \vspace{-0.5\baselineskip}
+  \only<1>{LOO is ok for fixed / designed $x$. SE is uncertainty about $y|x$.\\ \vspace{0.2\baselineskip}}
+  \only<2->{LOO is ok for random $x$. SE is uncertainty about $y|x$ and $x$.\\ \vspace{0.2\baselineskip}}
+  \onslide<3>{Covariate shift can be handled with importance weighting or modelling}
+  \onslide<1->{\\ \small see \href{http://dx.doi.org/10.1214/12-SS102}{Vehtari \& Ojanen (2012)} and \url{andrewgelman.com/2018/08/03/loo-cross-validation-approaches-valid/}}
+
+\end{frame}
+
 
 % Time series - extrapolation is more problematic
 
@@ -267,24 +318,6 @@ where ${\color{uured}\tilde{y}_i}$ is an unseen observation generated from the t
 % PSIS-LOO
 
 % How done in stan
-
-\subsection{Comparison and selection}
-%\frame{\sectionpage}
-
-\section{Information criteria}
-\frame{\sectionpage}
-
-% The problem with parameters in bayeisan stats
-
-% AIC and DIC with math
-% Limit p(y|\theta) with theta
-
-% WAIC
-
-
-\section{To move up}
-\frame{\sectionpage}
-
 
 \begin{frame}[fragile]
 
@@ -321,21 +354,7 @@ elpd_diff        se
 \end{frame}
 
 
-
-\begin{frame}{}
-
-  \only<1>{\includegraphics[width=8cm]{figs/fakedfixed.pdf}}
-  \only<2->{\includegraphics[width=8cm]{figs/fakedrandom.pdf}}
-  \\ \vspace{-0.5\baselineskip}
-  \only<1>{LOO is ok for fixed / designed $x$. SE is uncertainty about $y|x$.\\ \vspace{0.2\baselineskip}}
-  \only<2->{LOO is ok for random $x$. SE is uncertainty about $y|x$ and $x$.\\ \vspace{0.2\baselineskip}}
-  \onslide<3>{Covariate shift can be handled with importance weighting or modelling}
-  \onslide<1->{\\ \small see \href{http://dx.doi.org/10.1214/12-SS102}{Vehtari \& Ojanen (2012)} and \url{andrewgelman.com/2018/08/03/loo-cross-validation-approaches-valid/}}
-
-\end{frame}
-
 \begin{frame}[fragile]
-
 \frametitle{{\tt loo} package}
 
   {\scriptsize
@@ -363,6 +382,33 @@ See help('pareto-k-diagnostic') for details.
 \end{lstlisting}}
 }
 \end{frame}
+
+\subsection{Comparison and selection}
+%\frame{\sectionpage}
+
+
+\subsection{Additional reading}
+%\frame{\sectionpage}
+
+
+\section{Information criteria}
+\frame{\sectionpage}
+
+% The problem with parameters in bayeisan stats
+
+% AIC and DIC with math
+% Limit p(y|\theta) with theta
+
+% WAIC
+
+
+\section{To move up}
+\frame{\sectionpage}
+
+
+
+
+
 
 \begin{frame}{}
 

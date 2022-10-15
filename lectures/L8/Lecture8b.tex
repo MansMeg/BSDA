@@ -549,41 +549,6 @@ See help('pareto-k-diagnostic') for details.
 }
 \end{frame}
 
-\subsection{Comparison and selection}
-%\frame{\sectionpage}
-
-
-\subsection{Additional reading}
-%\frame{\sectionpage}
-
-
-\section{Information criteria}
-\frame{\sectionpage}
-
-% The problem with parameters in bayeisan stats
-
-% AIC and DIC with math
-% Limit p(y|\theta) with theta
-
-% WAIC
-
-
-\section{To move up}
-\frame{\sectionpage}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 \begin{frame}
   \frametitle{Importance sampling}
@@ -631,10 +596,6 @@ generated quantities {
 \end{lstlisting}
   }
 
-  \begin{enumerate}
-  \item<3-> RStanARM and BRMS compute log\_lik by default
-  \end{enumerate}
-
 \end{frame}
 
 \begin{frame}{}
@@ -661,7 +622,7 @@ generated quantities {
 
 \end{frame}
 
-\begin{frame}{}
+\begin{frame}{PSIS-LOO for time series}
 
   \only<1>{\includegraphics[width=8cm]{figs/lake4data.pdf}}
   \only<2>{\includegraphics[width=8cm]{figs/lake4pred.pdf}}
@@ -671,6 +632,9 @@ generated quantities {
   \only<3> {\small \url{mc-stan.org/loo/articles/loo2-lfo.html}}
 
 \end{frame}
+
+\subsection{K-fold cross-validation}
+
 
 \begin{frame}{}
 
@@ -707,6 +671,24 @@ generated quantities {
 
 \end{frame}
 
+\subsection{Comparison and selection}
+%\frame{\sectionpage}
+
+
+\subsection{Additional reading}
+%\frame{\sectionpage}
+
+
+\section{Information criteria}
+\frame{\sectionpage}
+
+% The problem with parameters in bayeisan stats
+
+% AIC and DIC with math
+% Limit p(y|\theta) with theta
+
+% WAIC
+
 \begin{frame}{}
 
 \frametitle{ WAIC vs PSIS-LOO}
@@ -737,6 +719,14 @@ generated quantities {
 \end{enumerate}
 
 \end{frame}
+
+
+\section{To move up}
+\frame{\sectionpage}
+
+
+
+
 
 \begin{frame}{}
 

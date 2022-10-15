@@ -312,6 +312,38 @@ elpd_diff        se
 \end{frame}
 
 
+\begin{frame}{}
+
+\frametitle{ Sometimes cross-validation is not needed}
+
+\begin{enumerate}
+\item<+-> For some very simple cases you may assume that true model
+  is included in the list of models considered ($M$-closed)
+  \begin{enumerate}
+  \item<+-> see predictive model selection in $M$-closed case by
+    San Martini and Spezzaferri (1984)
+  \item<+-> but you should not force your design of experiment or
+    analysis to stay in the simplified world
+  \end{enumerate}
+% \item<+-> For fully non-parametric models you may assume that true model
+%   is included in the list of models considered ($M$-closed)
+%   \begin{enumerate}
+%   \item<+-> related to talk by Chris Holmes
+%   \item<.-> see
+%     \href{http://dx.doi.org/10.1214/12-SS102}{Vehtari \& Ojanen
+%       (2012)} for earlier references
+% \item<+-> posterior convergence rate can be slow for fully non-parametric models
+% \end{enumerate}
+\item<+-> In nested case, often easier and
+  more accurate to analyse posterior distribution of more complex
+  model directly \\
+  {\small \url{avehtari.github.io/modelselection/betablockers.html}}
+   % \begin{enumerate}
+   %   \item<3-> need to do some model checking anyway
+   % \end{enumerate}
+\end{enumerate}
+
+\end{frame}
 
 
 \subsection{When is LOO applicable}
@@ -729,83 +761,6 @@ generated quantities {
 
 
 
-
-\subsection{Additional reading}
-%\frame{\sectionpage}
-
-
-\section{Information criteria}
-\frame{\sectionpage}
-
-% The problem with parameters in bayeisan stats
-
-% AIC and DIC with math
-% Limit p(y|\theta) with theta
-
-% WAIC
-
-\begin{frame}{}
-
-\frametitle{ WAIC vs PSIS-LOO}
-
-\begin{enumerate}
-  \item<2-> WAIC has same assumptions as LOO
-  \item<3-> PSIS-LOO is more accurate
-  \item<4-> PSIS-LOO has much better diagnostics
-  \item<5-> LOO makes the prediction assumption more clear,\\ which
-    helps if K-fold-CV is needed instead
-  \item<6-> Multiplying by -2 doesn't give any benefit\\ (Watanabe
-    didn't multiply by -2)
-\end{enumerate}
-
-\vspace{6\baselineskip}
-{\small see \href{http://link.springer.com/article/10.1007/s11222-016-9696-4}{Vehtari, Gelman \& Gabry (2017a)}}
-\end{frame}
-
-\begin{frame}{}
-
-\frametitle{ *IC}
-
-\begin{enumerate}
-  \item AIC uses maximum likelihood estimate for prediction
-  \item DIC uses posterior mean for prediction
-  \item BIC is an approximation for marginal likelihood
-  \item TIC, NIC, RIC, PIC, BPIC, QIC, AICc, ...
-\end{enumerate}
-
-\end{frame}
-
-
-%\begin{frame}{}
-
-%\frametitle{ Marginal likelihood / Bayes factor}
-
-%\vspace{-0.3\baselineskip}
-%\begin{enumerate}
-%\item Like leave-future-out 1-step-ahead cross-validation but starting with 0 observations\\
-%  \onslide<3->{- which makes it very sensitive to prior}
-%  \onslide<4->{and \\- unstable in case of misspecified
-%    models}\uncover<5->{ also asymptotically}
-%\end{enumerate}
-%\vspace{-0.5\baselineskip}
-%  \onslide<2->{\includegraphics[width=9.4cm]{figs/lake3bf.pdf}}
-
-%\end{frame}
-
-
-
-
-
-
-
-\section{To move up}
-\frame{\sectionpage}
-
-
-
-
-
-
  \begin{frame}{}
 
  \frametitle{ Model comparison}
@@ -911,34 +866,6 @@ model1 -14.4       6.1
 
 \end{frame}
 
-% \begin{frame}
-
-% \frametitle{ Sometimes cross-validation is not needed}
-
-% \vspace{-0.5\baselineskip}
-
-%   \begin{enumerate}
-%   \item Posterior predictive checking is often sufficient\\
-%     \vspace{0.5\baselineskip}
-%     \includegraphics[width=11cm]{mesquite_ppc.pdf}\\
-%   \vspace{-0.1\baselineskip} {Predicting the yields of mesquite bushes.\\
-%     \color{gray} \footnotesize
-%     Gelman, Hill \& Vehtari (2019): Regression and Other Stories, Chapter 11.}\\
-%   \vspace{-0.8\baselineskip}
-% \end{enumerate}
-% {\footnotesize
-%   \begin{enumerate}
-%   \item BDA3, Chapter 6
-%   \vspace{-0.6\parskip}
-%   \item Gabry, Simpson, Vehtari, Betancourt, Gelman
-%     (2019). Visualization in Bayesian workflow. JRSS A, \url{https://doi.org/10.1111/rssa.12378}
-%   \vspace{-0.6\parskip}
-%   \item \url{mc-stan.org/bayesplot/articles/graphical-ppcs.html}
-%   \vspace{-0.6\parskip}
-%   \item \url{betanalpha.github.io/assets/case_studies/principled_bayesian_workflow.html}
-%    \end{enumerate}}
-% \end{frame}
-
 \begin{frame}[fragile]
 
 \frametitle{Arsenic well example -- Model comparison}
@@ -962,38 +889,83 @@ model1 -14.4       6.1
 \end{frame}
 
 
+
+\subsection{Additional reading}
+%\frame{\sectionpage}
+
+
+\section{Information criteria}
+\frame{\sectionpage}
+
+% The problem with parameters in bayeisan stats
+
+% AIC and DIC with math
+% Limit p(y|\theta) with theta
+
+% WAIC
+
 \begin{frame}{}
 
-\frametitle{ Sometimes cross-validation is not needed}
+\frametitle{ WAIC vs PSIS-LOO}
 
 \begin{enumerate}
-\item<+-> For some very simple cases you may assume that true model
-  is included in the list of models considered ($M$-closed)
-  \begin{enumerate}
-  \item<+-> see predictive model selection in $M$-closed case by
-    San Martini and Spezzaferri (1984)
-  \item<+-> but you should not force your design of experiment or
-    analysis to stay in the simplified world
-  \end{enumerate}
-% \item<+-> For fully non-parametric models you may assume that true model
-%   is included in the list of models considered ($M$-closed)
-%   \begin{enumerate}
-%   \item<+-> related to talk by Chris Holmes
-%   \item<.-> see
-%     \href{http://dx.doi.org/10.1214/12-SS102}{Vehtari \& Ojanen
-%       (2012)} for earlier references
-% \item<+-> posterior convergence rate can be slow for fully non-parametric models
-% \end{enumerate}
-\item<+-> In nested case, often easier and
-  more accurate to analyse posterior distribution of more complex
-  model directly \\
-  {\small \url{avehtari.github.io/modelselection/betablockers.html}}
-   % \begin{enumerate}
-   %   \item<3-> need to do some model checking anyway
-   % \end{enumerate}
+  \item<2-> WAIC has same assumptions as LOO
+  \item<3-> PSIS-LOO is more accurate
+  \item<4-> PSIS-LOO has much better diagnostics
+  \item<5-> LOO makes the prediction assumption more clear,\\ which
+    helps if K-fold-CV is needed instead
+  \item<6-> Multiplying by -2 doesn't give any benefit\\ (Watanabe
+    didn't multiply by -2)
+\end{enumerate}
+
+\vspace{6\baselineskip}
+{\small see \href{http://link.springer.com/article/10.1007/s11222-016-9696-4}{Vehtari, Gelman \& Gabry (2017a)}}
+\end{frame}
+
+\begin{frame}{}
+
+\frametitle{ *IC}
+
+\begin{enumerate}
+  \item AIC uses maximum likelihood estimate for prediction
+  \item DIC uses posterior mean for prediction
+  \item BIC is an approximation for marginal likelihood
+  \item TIC, NIC, RIC, PIC, BPIC, QIC, AICc, ...
 \end{enumerate}
 
 \end{frame}
+
+
+%\begin{frame}{}
+
+%\frametitle{ Marginal likelihood / Bayes factor}
+
+%\vspace{-0.3\baselineskip}
+%\begin{enumerate}
+%\item Like leave-future-out 1-step-ahead cross-validation but starting with 0 observations\\
+%  \onslide<3->{- which makes it very sensitive to prior}
+%  \onslide<4->{and \\- unstable in case of misspecified
+%    models}\uncover<5->{ also asymptotically}
+%\end{enumerate}
+%\vspace{-0.5\baselineskip}
+%  \onslide<2->{\includegraphics[width=9.4cm]{figs/lake3bf.pdf}}
+
+%\end{frame}
+
+
+
+
+
+
+
+\section{To move up}
+\frame{\sectionpage}
+
+
+
+
+
+
 
 \begin{frame}{}
 

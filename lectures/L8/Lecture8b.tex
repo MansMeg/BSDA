@@ -119,6 +119,39 @@
 \subsection{Measures of predictive accuracy}
 %\frame{\sectionpage}
 
+\begin{frame}
+
+\frametitle{Measures of predictive accuracy}
+
+\begin{itemize}
+  \item Point predictions
+    \begin{itemize}
+      \item Point residuals
+      \begin{align*}
+        e_i =  y_i - E(y_i|\theta,y)\,,
+      \end{align*}
+      where
+      \begin{align*}
+        E(y_i|\theta,y) = \int y_i p(y_i|y) dy_i\,,
+      \end{align*}
+      i.e. the expected predicted value
+      \pause
+      \item Mean squared (prediction) error (MSE)
+      \begin{align*}
+        \frac{1}{n}\sum^n_i [y_i - E(y_i|\theta,y)]^2 \,.
+      \end{align*}
+    \end{itemize}
+  \pause
+  \item Probabilistic predictions
+  \begin{itemize}
+    \item
+  \end{itemize}
+
+
+\end{itemize}
+
+\end{frame}
+
 % - point prediction
 % MSE
 % Residuals y - pred y

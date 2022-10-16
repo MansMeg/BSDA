@@ -122,9 +122,8 @@
 \begin{frame}
 
 \frametitle{Measures of predictive accuracy: Points predictions}
-\begin{itemize}
+
 %  \item Scoring \uured{function}:
-  \item Point predictions
     \begin{itemize}
       \item Point residuals
       \begin{align*}
@@ -141,7 +140,6 @@
         \frac{1}{n}\sum^n_i [y_i - E(y_i|\theta,y)]^2 \,.
       \end{align*}
     \end{itemize}
-\end{itemize}
 
 
 \end{frame}
@@ -157,20 +155,22 @@
 %      b. Local
       \item The log score (a local and proper scoring rule)
       \begin{align*}
-         \log (p(y|\theta))
+         \log p(y|\theta)
       \end{align*}
-      proportional to MSE if constant variance
+%      proportional to MSE if constant variance
+% TODO: Add example of different prediction normal distributions and the density
+% TODO: Add calibration
       \pause
       \item The log predictive density (lpd)
       \begin{align*}
-        \text{lpd} & = \log (p(y|y))\\
+        \text{lpd} & = \log p(y|y)\\
         & = \log \int p(y|\theta) p(\theta|y) d\theta
       \end{align*}
       \pause
       \item The lpd is usually approximated with the point lpd
       \begin{align*}
         \text{lppd} & = \sum_i^n \log \, p(y_i|y)\\
-        & \approx \log \, p(y|y)
+        & \approx \log p(y|y)
       \end{align*}
       \item Estimation using MCMC
       \begin{align*}

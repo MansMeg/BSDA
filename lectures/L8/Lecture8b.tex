@@ -96,7 +96,7 @@
 \item Model choice is a (model-)decision-theoretic problem \\ (see next week)
 \item Evaluate the \uured{utility} of a model $M$ for new \uured{unseen data} $\tilde{y}$:
 \[
-U_M = \int u(\tilde{y}) p_\text{true}({\color{uured}\tilde{y}}) d{\color{uured}\tilde{y}}\,,
+U = \int u(\tilde{y}) p_\text{true}({\color{uured}\tilde{y}}) d{\color{uured}\tilde{y}}\,,
 \]
 where ${\color{uured}\tilde{y}}$ is an unseen observation generated from the true data generating process $p_\text{text}({\color{uured}\tilde{y}})$, and $y$ are observed data and $u(\tilde{y})$ is a utility function.
 \pause
@@ -117,9 +117,9 @@ where ${\color{uured}\tilde{y}}$ is an unseen observation generated from the tru
   \begin{itemize}
     \item we don't know (yet) the application specific utility
   \end{itemize}
-    then good information theoretically justified choice is log-score
+    then good information theoretically justified choice is log-score for model $M$
       \begin{align*}
-        \log p(y^{\text{rep}} | y, M)
+        \log p_M (y | y)
       \end{align*}
     \pause
     \item We want the "best" model to \uured{explain the data}
@@ -133,32 +133,31 @@ where ${\color{uured}\tilde{y}}$ is an unseen observation generated from the tru
 
 \begin{frame}
 
-\frametitle{Measures of predictive accuracy: Points predictions}
+\frametitle{(Bayesian) Points Prediction Accuracy}
 
 %  \item Scoring \uured{function}:
     \begin{itemize}
       \item Point residuals
       \begin{align*}
-        e_i =  y_i - E(y_i|\theta,y)\,,
+        e_i =  y_i - E(\tilde{y}|y)\,,
       \end{align*}
       where
       \begin{align*}
-        E(y_i|\theta,y) = \int y_i p(y_i|y) dy_i\,,
+        E(\tilde{y}|y) = \int \tilde{y} p(\tilde{y}|y) d\tilde{y}\,,
       \end{align*}
       i.e. the expected predicted value
       \pause
       \item Mean squared (prediction) error (MSE)
       \begin{align*}
-        \frac{1}{n}\sum^n_i [y_i - E(y_i|\theta,y)]^2 \,.
+        \frac{1}{n}\sum^n_i [y_i - E(\tilde{y}|y)]^2 \,.
       \end{align*}
     \end{itemize}
-
 
 \end{frame}
 
 
 \begin{frame}
-\frametitle{Measures of predictive accuracy: Probabilistic predictions}
+\frametitle{Probabilistic predictions}
 
     \begin{itemize}
     % TODO: Add scoring rules in lecture

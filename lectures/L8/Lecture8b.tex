@@ -89,6 +89,18 @@
 
 % TODO: Add slide on M-open, M-closed etc
 
+
+\begin{frame}{Goal of model evaluation: The decision problem}
+
+\begin{itemize}
+\item Evaluate the utility of model $M$ for new \uured{unseen data} $\tilde{y}$:
+\[
+u_M = \int u(\tilde{y}) p_\text{true}({\color{uured}\tilde{y}}) d{\color{uured}\tilde{y}}\,,
+\]
+where ${\color{uured}\tilde{y}}$ is an unseen observation generated from the true data generating process $p_\text{text}({\color{uured}\tilde{y}})$, and $y$ are observed data and $u(\tilde{y})$ is a utility function.
+\end{itemize}
+\end{frame}
+
 \begin{frame}
 
 \frametitle{Predictive performance}
@@ -181,26 +193,24 @@
 \end{frame}
 
 
+\subsection{Model evaluation}
+%\frame{\sectionpage}
 
-\begin{frame}{Background and Motivation}
-
-
-% General goal
-% elpd def (7.1). What is the true model?
-% elppd def (7.1). What is the true model?
+\begin{frame}{Goal of model evaluation}
 
 \begin{itemize}
-\item Evaluate how model $M$ \emph{generalizes} to unseen data \\(the \emph{expected log predictive density}):
+\item Evaluate how model $M$ \uured{generalizes to unseen data} $\tilde{y}$\\(the \emph{expected log predictive density}):
 \[
-\text{elpd}_M= \int \log p_M({\color{uured}\tilde{y}_i}|y) p_\text{true}({\color{uured}\tilde{y}_i}) d{\color{uured}\tilde{y}_i}\,,
+\text{elpd}_M= \int \log p_M({\color{uured}\tilde{y}}|y) p_\text{true}({\color{uured}\tilde{y}}) d{\color{uured}\tilde{y}}\,,
 \]
-where ${\color{uured}\tilde{y}_i}$ is an unseen observation generated from the true data generating process $p_t({\color{uured}\tilde{y}_i})$, and $y$ are observed data.
+where ${\color{uured}\tilde{y}}$ is an unseen observation generated from the true data generating process $p_\text{text}({\color{uured}\tilde{y}})$, and $y$ are observed data.
+\item The expectation is with respect to $p_\text{true}$ ($f$ in BDA3)
+\item But $p_\text{true}$ is (almost always) \uured{unknown}.
+\item Wwe can have other scoring functions instead of $\log p_M({\color{uured}\tilde{y}}|y)$
 \end{itemize}
 \end{frame}
 
 
-% meaurements for a fitted model
-% lppd (and how it is fitted) (7.4 and 7.5)
 
 % Copy in the two predictive distributions here (hiearchical)
 
@@ -217,8 +227,6 @@ where ${\color{uured}\tilde{y}_i}$ is an unseen observation generated from the t
 %%%% WE APPROXIMATE with loo
 \end{itemize}
 \end{frame}
-
-%%% First eq slide: Describe overall the idea that we want to predict the future performance.
 
 
 \begin{frame}{Leave-one-out cross-validation (LOO-CV)}

@@ -150,8 +150,6 @@
 \begin{frame}
 \frametitle{Measures of predictive accuracy: Probabilistic predictions}
 
-\begin{itemize}
-  \item Probabilistic predictions
     \begin{itemize}
     % TODO: Add scoring rules in lecture
 %      \item Scoring \uured{rules}:
@@ -166,20 +164,19 @@
       \item The log predictive density (lpd)
       \begin{align*}
         \text{lpd} & = \log (p(y|y))\\
-        & = \log \int (p(y|\theta) p(\theta|y) d\theta )
+        & = \log \int p(y|\theta) p(\theta|y) d\theta
       \end{align*}
       \pause
       \item The lpd is usually approximated with the point lpd
       \begin{align*}
-        \text{lppd} & = \sum_i^n \log (p(y_i|y))\\
-        & \approx \log (p(y|y))
+        \text{lppd} & = \sum_i^n \log \, p(y_i|y)\\
+        & \approx \log \, p(y|y)
       \end{align*}
       \item Estimation using MCMC
       \begin{align*}
         \text{lppd} & = \sum_i^n \log \left(\frac{1}{S} \sum^S_s p(y_i|\theta_{s})) \right)
       \end{align*}
   \end{itemize}
-\end{itemize}
 
 \end{frame}
 

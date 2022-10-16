@@ -353,33 +353,46 @@ See help('pareto-k-diagnostic') for details.
 % + and minus with LOO: computational intensive
 % The ideas from importance sampling will come back.
 
+\begin{frame}
+
+\frametitle{Pro and cons with LOO-CV}
+
+  \begin{enumerate}
+  \item[+] Intuitive
+  \item[+] Robust
+  \item[+] Good theoretical properties
+  \pause
+  \item[-] Can be costly (naive LOO-CV mean $n$ posterior computations)
+  \end{enumerate}
+
+\end{frame}
 
 \begin{frame}
 
-\frametitle{ Sometimes cross-validation is not needed}
+\frametitle{Sometimes cross-validation is not needed}
 
 \vspace{-0.5\baselineskip}
 
-  \begin{enumerate}
-  \item<2-> Posterior predictive checking is often sufficient\\
+  \begin{itemize}
+  \item Posterior predictive checking can be sufficient\\
     \vspace{0.5\baselineskip}
     \includegraphics[width=8cm]{figs/mesquite_ppc.pdf}\\
   \vspace{-0.1\baselineskip} {Predicting the yields of mesquite bushes.\\
     \color{gray} \footnotesize
     Gelman, Hill \& Vehtari (2020): Regression and Other Stories, Chapter 11.}\\
   \vspace{-0.8\baselineskip}
-\end{enumerate}
-{\footnotesize
-  \begin{enumerate}
-  \item<3-> BDA3, Chapter 6
-  \vspace{-0.6\parskip}
+  \end{itemize}
+%{\footnotesize
+%  \begin{enumerate}
+%  \item<3-> BDA3, Chapter 6
+%  \vspace{-0.6\parskip}
 %  \item<3-> Gabry, Simpson, Vehtari, Betancourt, Gelman
 %    (2019). Visualization in Bayesian workflow. JRSS A, \url{https://doi.org/10.1111/rssa.12378}
 %  \vspace{-0.6\parskip}
 %  \item<3-> \url{mc-stan.org/bayesplot/articles/graphical-ppcs.html}
 %  \vspace{-0.6\parskip}
 %  \item<3-> \url{betanalpha.github.io/assets/case_studies/principled_bayesian_workflow.html}
-   \end{enumerate}}
+%   \end{enumerate}}
 \end{frame}
 
 

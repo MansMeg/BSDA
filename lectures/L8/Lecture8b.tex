@@ -579,23 +579,24 @@ See help('pareto-k-diagnostic') for details.
 
 
 
-
 \begin{frame}
   \frametitle{Importance sampling for LOO-CV}
 
    \begin{itemize}
-   \item Having samples $\theta^s$ from $p(\theta^s|D)$
+   \item Let $f = p(\tilde{y}_i|y_{-i})$, $g = p(\theta|y)$, and $q = p(\theta|y_{-i})$
+   \pause
+   \item Having samples $\theta^s$ from $p(\theta^s|y)$
      \begin{align*}
-       p(\tilde{y}_i|x_i,D_{-i})\approx\frac{\sum_{s=1}^Sp(\tilde{y}_i|\theta^s)w_i^s}{\sum_{s=1}^S w_i^s},
+       p(\tilde{y}_i|y_{-i})\approx\frac{\sum_{s=1}^S p(\tilde{y}_i|\theta^s) w_i^s}{\sum_{s=1}^S w_i^s},
      \end{align*}
      where $w_i^s$ are importance weights and
      \begin{align*}
-       w_i^s=\frac{p(\theta^s|x_i,D_{-i})}{p(\theta^s|D)}\propto\frac{1}{\color{red} p(y_i|\theta^s)}.
+       w_i^s=\frac{p(\theta^s|y_{-i})}{p(\theta^s|y)}\propto\frac{1}{\color{red} p(y_i|\theta^s)}.
      \end{align*}
  \pause
    \item If evaluated with $\tilde{y}_i=y_i$
      \begin{align*}
-       p(y_i|x_i,D_{-i})\approx\frac{1}{\sum_{s=1}^S\frac{1}{p(y_i|\theta^s)}},
+       p(y_i|y_{-i})\approx\frac{1}{\sum_{s=1}^S\frac{1}{p(y_i|\theta^s)}},
      \end{align*}
    \end{itemize}
 

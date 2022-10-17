@@ -93,16 +93,17 @@
 \begin{frame}{Goal of model evaluation}
 
 \begin{itemize}
-\item Model choice is a (model-)decision-theoretic problem \\ (see next week)
+\item Model choice is a (model-)decision-theoretic problem
+\pause
 \item Evaluate the \uured{utility} of a model $M$ for new \uured{unseen data} $\tilde{y}$:
 \[
 U = \int u(\tilde{y}) p_\text{true}({\color{uured}\tilde{y}}) d{\color{uured}\tilde{y}}\,,
 \]
 where ${\color{uured}\tilde{y}}$ is an unseen observation generated from the true data generating process $p_\text{text}({\color{uured}\tilde{y}})$, and $y$ are observed data and $u(\tilde{y})$ is a utility function.
-\pause
-  \item Choose the model function to \uured{maximize our utility}
   \pause
   \item The expectation is with respect to $p_\text{true}$ ($f$ in BDA3)
+  \pause
+  \item Choose the model function to \uured{maximize our utility}
 \end{itemize}
 \end{frame}
 
@@ -117,11 +118,11 @@ where ${\color{uured}\tilde{y}}$ is an unseen observation generated from the tru
   \pause
   \item General utility: \uured{overall in the goodness of the predictive distribution}
   \begin{itemize}
-    \item we don't know (yet) the application specific utility
-  \end{itemize}
+    \item we don't know (yet) the application specific utility\\
     then good information theoretically justified choice is log-score for model $M$
+  \end{itemize}
       \begin{align*}
-        \log p_M (y | y)
+        \log p_M (y^\text{rep} | y)
       \end{align*}
     \pause
     \item We want the "best" model to \uured{explain the data}
@@ -141,17 +142,17 @@ where ${\color{uured}\tilde{y}}$ is an unseen observation generated from the tru
     \begin{itemize}
       \item Point residuals
       \begin{align*}
-        e_i =  y_i - E(\tilde{y}|y)\,,
+        e_i =  y_i - E(\tilde{y}_i|y)\,,
       \end{align*}
       where
       \begin{align*}
-        E(\tilde{y}|y) = \int \tilde{y} p(\tilde{y}|y) d\tilde{y}\,,
+        E(\tilde{y}|y) = \int \tilde{y}_i p(\tilde{y}_i|y) d\tilde{y}\,,
       \end{align*}
-      i.e. the expected predicted value
+      i.e. the \uured{expected predicted value}
       \pause
       \item Mean squared (prediction) error (MSE)
       \begin{align*}
-        \frac{1}{n}\sum^n_i [y_i - E(\tilde{y}|y)]^2 \,.
+        \text{MSE} = \frac{1}{n}\sum^n_i [y_i - E(\tilde{y}_i|y)]^2 \,.
       \end{align*}
     \end{itemize}
 
@@ -166,20 +167,21 @@ where ${\color{uured}\tilde{y}}$ is an unseen observation generated from the tru
 %      \item Scoring \uured{rules}:
 %      a. Proper:
 %      b. Local
-      \item The log score (a local and proper scoring rule)
+      \item The log score (a local and proper scoring rule)* % Do example on blackboard
       \begin{align*}
          \log p(y|\theta)
       \end{align*}
 %      proportional to MSE if constant variance
 % TODO: Add example of different prediction normal distributions and the density
 % TODO: Add calibration
-      \pause
-      \item The log predictive density (lpd)
-      \begin{align*}
-        \text{lpd} & = \log p(y|y)\\
-        & = \log \int p(y|\theta) p(\theta|y) d\theta
-      \end{align*}
-      \pause
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Probabilistic predictions}
+
+    \begin{itemize}
       \item The lpd is usually approximated with the log \uured{point} predictive density (lppd or just lpd)
       \begin{align*}
         \text{lppd} & = \sum_i^n \log \, p(y_i|y)\\
@@ -381,6 +383,9 @@ See help('pareto-k-diagnostic') for details.
     \color{gray} \footnotesize
     Gelman, Hill \& Vehtari (2020): Regression and Other Stories, Chapter 11.}\\
   \vspace{-0.8\baselineskip}
+  \pause
+%  \item For some very simple cases you may assume that true model  is included in the list of models considered % TODO: Add discussion on M-closed etc ($M$-closed)
+  \item In nested case, often easier and more accurate to analyse posterior distribution of more complex model directly
   \end{itemize}
 %{\footnotesize
 %  \begin{enumerate}
@@ -396,19 +401,19 @@ See help('pareto-k-diagnostic') for details.
 \end{frame}
 
 
-\begin{frame}{}
+%\begin{frame}{}
 
-\frametitle{ Sometimes cross-validation is not needed}
+%\frametitle{Sometimes cross-validation is not needed}
 
-\begin{enumerate}
-\item<+-> For some very simple cases you may assume that true model
-  is included in the list of models considered ($M$-closed)
-  \begin{enumerate}
-  \item<+-> see predictive model selection in $M$-closed case by
-    San Martini and Spezzaferri (1984)
-  \item<+-> but you should not force your design of experiment or
-    analysis to stay in the simplified world
-  \end{enumerate}
+%\begin{enumerate}
+%\item<+-> For some very simple cases you may assume that true model
+%  is included in the list of models considered ($M$-closed)
+%  \begin{enumerate}
+%  \item<+-> see predictive model selection in $M$-closed case by
+%    San Martini and Spezzaferri (1984)
+%  \item<+-> but you should not force your design of experiment or
+%    analysis to stay in the simplified world
+%  \end{enumerate}
 % \item<+-> For fully non-parametric models you may assume that true model
 %   is included in the list of models considered ($M$-closed)
 %   \begin{enumerate}
@@ -418,20 +423,20 @@ See help('pareto-k-diagnostic') for details.
 %       (2012)} for earlier references
 % \item<+-> posterior convergence rate can be slow for fully non-parametric models
 % \end{enumerate}
-\item<+-> In nested case, often easier and
-  more accurate to analyse posterior distribution of more complex
-  model directly \\
-  {\small \url{avehtari.github.io/modelselection/betablockers.html}}
+%\item<+-> In nested case, often easier and
+%  more accurate to analyse posterior distribution of more complex
+% model directly %\\
+%  {\small \url{avehtari.github.io/modelselection/betablockers.html}}
    % \begin{enumerate}
    %   \item<3-> need to do some model checking anyway
    % \end{enumerate}
-\end{enumerate}
+%\end{enumerate}
 
-\end{frame}
+%\end{frame}
 
 
 \subsection{When is LOO applicable}
-%\frame{\sectionpage}
+\frame{\subsectionpage}
 
 \begin{frame}{}
 

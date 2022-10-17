@@ -475,9 +475,9 @@ See help('pareto-k-diagnostic') for details.
   \only<1>{\includegraphics[width=8cm]{figs/fakedfixed.pdf}}
   \only<2->{\includegraphics[width=8cm]{figs/fakedrandom.pdf}}
   \\ \vspace{-0.5\baselineskip}
-  \only<1>{LOO is ok for fixed / designed $x$. SE is uncertainty about $y|x$.\\ \vspace{0.2\baselineskip}}
-  \only<2->{LOO is ok for random $x$. SE is uncertainty about $y|x$ and $x$.\\ \vspace{0.2\baselineskip}}
-  \onslide<3>{Covariate shift can be handled with importance weighting or modelling}
+  \only<1>{LOO is ok for fixed / designed $x$: $p_\text{true}(y|x)$}% SE is uncertainty about $y|x$.\\ \vspace{0.2\baselineskip}}
+  \only<2->{LOO is ok for random $x$. $p_\text{true}(y,x)$ }%SE is uncertainty about $y|x$ and $x$.\\ \vspace{0.2\baselineskip}}
+  %\onslide<3>{Covariate shift can be handled with importance weighting or modelling}
   % TODO: Move to reading
 %  \onslide<1->{\\ \small see \href{http://dx.doi.org/10.1214/12-SS102}{Vehtari \& Ojanen (2012)} and \url{andrewgelman.com/2018/08/03/loo-cross-validation-approaches-valid/}}
 
@@ -485,26 +485,26 @@ See help('pareto-k-diagnostic') for details.
 
 
 
-\begin{frame}{}
+\begin{frame}{$p_\text{true}$ extrapolation}
 
   \only<1>{\includegraphics[width=8cm]{figs/lake1data.pdf}}
   \only<2>{\includegraphics[width=8cm]{figs/lake1gp.pdf}}
   \only<3->{\includegraphics[width=8cm]{figs/lake1gpptest.pdf}}
   \\
-  \only<4>{Extrapolation is more difficult}
+  \only<3>{Extrapolation is more difficult}
 
 \end{frame}
 
-\begin{frame}{}
+\begin{frame}{LOO for time series data}
 
   \includegraphics[width=8cm]{figs/lake2data.pdf}
 
-
-  {Can LOO or other cross-validation be used with time series?}
+  \centering
+  $p_\text{true}$ for time series?
 
 \end{frame}
 
-\begin{frame}{}
+\begin{frame}{LOO for time series}
 
   \only<1>{\includegraphics[width=8cm]{figs/lake3loo.pdf}}
   \only<2>{\includegraphics[width=8cm]{figs/lake3stepahead.pdf}}
@@ -518,7 +518,7 @@ See help('pareto-k-diagnostic') for details.
 
 \end{frame}
 
-\begin{frame}{}
+\begin{frame}{LOO for hiearchical data}
 
   \only<1>{\includegraphics[width=8cm]{figs/rats1data.pdf}}
   \only<2>{\includegraphics[width=8cm]{figs/rats1loo.pdf}}
@@ -532,27 +532,74 @@ See help('pareto-k-diagnostic') for details.
 
 \end{frame}
 
-% rats example
 
-\subsection{PSIS-LOO and \texttt{loo}}
-%\frame{\sectionpage}
+\subsection{Fast LOO-CV}
+\frame{\subsectionpage}
+
 \begin{frame}{}
 
-\frametitle{ Fast cross-validation}
+\frametitle{Fast cross-validation}
 
 \begin{enumerate}
 \item Pareto smoothed importance sampling LOO (PSIS-LOO)
+\pause
 \item K-fold cross-validation
 \end{enumerate}
 
 \vspace{12\baselineskip}
 
-{\small see \href{http://link.springer.com/article/10.1007/s11222-016-9696-4}{Vehtari, Gelman \& Gabry (2017a)} and \url{mc-stan.org/loo/}}
+% TODO: Move
+% {\small see \href{http://link.springer.com/article/10.1007/s11222-016-9696-4}{Vehtari, Gelman \& Gabry (2017a)} and \url{mc-stan.org/loo/}}
 
 \end{frame}
 
-% How is done in practice?
+\begin{frame}
 
+\frametitle{Recap: Importance sampling}
+
+  %\begin{itemize}
+  %   \vspace{-.5\baselineskip}
+   %\item[-] Proposal does not need to have a higher value everywhere
+   %\end{itemize}
+   \begin{center}
+     \vspace{-1\baselineskip}
+     \only<1-2>{\includegraphics[width=9cm]{figs/importancesamp1.pdf}}
+     \only<3>{\includegraphics[width=9cm]{figs/importancesamp2.pdf}}
+     \vspace{-1\baselineskip}
+     \only<2->{
+   \begin{eqnarray*}
+      \E[f(\theta)] \approx \frac{\sum_s w_s f(\theta^{(s)})}{\sum_s
+      w_s}, \qquad \text{where} \quad
+      w_s =  \frac{q(\theta^{(s)})}{g(\theta^{(s)})} \qquad
+   \end{eqnarray*}
+   }
+   \end{center}
+
+\end{frame}
+
+
+
+
+\begin{frame}
+  \frametitle{Importance sampling for LOO-CV}
+
+   \begin{itemize}
+   \item Having samples $\theta^s$ from $p(\theta^s|D)$
+     \begin{align*}
+       p(\tilde{y}_i|x_i,D_{-i})\approx\frac{\sum_{s=1}^Sp(\tilde{y}_i|\theta^s)w_i^s}{\sum_{s=1}^S w_i^s},
+     \end{align*}
+     where $w_i^s$ are importance weights and
+     \begin{align*}
+       w_i^s=\frac{p(\theta^s|x_i,D_{-i})}{p(\theta^s|D)}\propto\frac{1}{\color{red} p(y_i|\theta^s)}.
+     \end{align*}
+ \pause
+   \item If evaluated with $\tilde{y}_i=y_i$
+     \begin{align*}
+       p(y_i|x_i,D_{-i})\approx\frac{1}{\sum_{s=1}^S\frac{1}{p(y_i|\theta^s)}},
+     \end{align*}
+   \end{itemize}
+
+ \end{frame}
 
 
 \begin{frame}{}
@@ -714,26 +761,6 @@ See help('pareto-k-diagnostic') for details.
 \end{frame}
 
 
-\begin{frame}
-  \frametitle{Importance sampling}
-
-   \begin{itemize}
-   \item Having samples $\theta^s$ from $p(\theta^s|D)$
-     \begin{align*}
-       p(\tilde{y}_i|x_i,D_{-i})\approx\frac{\sum_{s=1}^Sp(\tilde{y}_i|\theta^s)w_i^s}{\sum_{s=1}^S w_i^s},
-     \end{align*}
-     where $w_i^s$ are importance weights and
-     \begin{align*}
-       w_i^s=\frac{p(\theta^s|x_i,D_{-i})}{p(\theta^s|D)}\propto\frac{1}{\color{red} p(y_i|\theta^s)}.
-     \end{align*}
- \pause
-   \item If evaluated with $\tilde{y}_i=y_i$
-     \begin{align*}
-       p(y_i|x_i,D_{-i})\approx\frac{1}{\sum_{s=1}^S\frac{1}{p(y_i|\theta^s)}},
-     \end{align*}
-   \end{itemize}
-
- \end{frame}
 
 \begin{frame}[fragile]
 

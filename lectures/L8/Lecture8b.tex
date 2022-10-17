@@ -362,6 +362,10 @@ See help('pareto-k-diagnostic') for details.
 % + and minus with LOO: computational intensive
 % The ideas from importance sampling will come back.
 
+
+\subsection{When is LOO applicable}
+\frame{\subsectionpage}
+
 \begin{frame}
 
 \frametitle{Pro and cons with LOO-CV}
@@ -388,8 +392,7 @@ See help('pareto-k-diagnostic') for details.
     \includegraphics[width=8cm]{figs/mesquite_ppc.pdf}\\
   \vspace{-0.1\baselineskip} {Predicting the yields of mesquite bushes.\\
     \color{gray} \footnotesize
-    Gelman, Hill \& Vehtari (2020): Regression and Other Stories, Chapter 11.}\\
-  \vspace{-0.8\baselineskip}
+    Gelman, Hill \& Vehtari (2020, Ch. 11)}
   \pause
 %  \item For some very simple cases you may assume that true model  is included in the list of models considered % TODO: Add discussion on M-closed etc ($M$-closed)
   \item In nested case, often easier and more accurate to analyse posterior distribution of more complex model directly
@@ -442,32 +445,32 @@ See help('pareto-k-diagnostic') for details.
 %\end{frame}
 
 
-\subsection{When is LOO applicable}
-\frame{\subsectionpage}
 
 \begin{frame}{}
 
-\frametitle{ Summary of data generating mechanisms and prediction tasks}
+\frametitle{Data generating mechanisms and prediction tasks}
 
 \begin{enumerate}
-\item You have to make some assumptions on data generating mechanism
+\item You have to make some assumptions on data generating mechanism $p_\text{true}$
+\[
+\text{elpd}_M= \int \log p_M({\color{uured}\tilde{y}}|y) p_\text{true}({\color{uured}\tilde{y}}) d{\color{uured}\tilde{y}}\,,
+\]
 \item Use the knowledge of the prediction task if available
 \item Cross-validation can be used to analyse different parts, even if
   there is no clear prediction task
 \end{enumerate}
 
- \vspace{6.5\baselineskip}
-{ \small see \href{http://dx.doi.org/10.1214/12-SS102}{Vehtari \& Ojanen (2012)} and \url{andrewgelman.com/2018/08/03/loo-cross-validation-approaches-valid/}}
+% TODO: Move to recommended reading
+% \vspace{6.5\baselineskip}
+%{ \small see \href{http://dx.doi.org/10.1214/12-SS102}{Vehtari \& Ojanen (2012)} and \url{andrewgelman.com/2018/08/03/loo-cross-validation-approaches-valid/}}
 
 \end{frame}
-
-% TODO: Also add the p_true here
 
 % You need to specify the data generating process. this is an assumption
 % Approximate how this looks p_true
 
 
-\begin{frame}{}
+\begin{frame}{$x$ in $p_\text{true}$}
 
   \only<1>{\includegraphics[width=8cm]{figs/fakedfixed.pdf}}
   \only<2->{\includegraphics[width=8cm]{figs/fakedrandom.pdf}}
@@ -475,7 +478,8 @@ See help('pareto-k-diagnostic') for details.
   \only<1>{LOO is ok for fixed / designed $x$. SE is uncertainty about $y|x$.\\ \vspace{0.2\baselineskip}}
   \only<2->{LOO is ok for random $x$. SE is uncertainty about $y|x$ and $x$.\\ \vspace{0.2\baselineskip}}
   \onslide<3>{Covariate shift can be handled with importance weighting or modelling}
-  \onslide<1->{\\ \small see \href{http://dx.doi.org/10.1214/12-SS102}{Vehtari \& Ojanen (2012)} and \url{andrewgelman.com/2018/08/03/loo-cross-validation-approaches-valid/}}
+  % TODO: Move to reading
+%  \onslide<1->{\\ \small see \href{http://dx.doi.org/10.1214/12-SS102}{Vehtari \& Ojanen (2012)} and \url{andrewgelman.com/2018/08/03/loo-cross-validation-approaches-valid/}}
 
 \end{frame}
 

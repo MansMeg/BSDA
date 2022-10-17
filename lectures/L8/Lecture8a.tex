@@ -250,7 +250,10 @@
 
 \end{frame}
 
-% TODOD: Add the special case when thtea is know then, p values follows a uniform distributions. See book.
+% TODO: Add the special case when thtea is know then, p values follows a uniform distributions. See book.
+\subsection{Marginal Predictive Checking}
+\frame{\subsectionpage}
+
 
 \begin{frame}[fragile]
 
@@ -264,7 +267,8 @@
       \begin{align*}
         p_i = \mbox{Pr}(T(y_i^{\rep}) \leq T(y_i) | y)
       \end{align*}
-      if $T(y_i)=y_i$
+      \pause
+    \item<2-> if $T(y_i)=y_i$
       \begin{align*}
         p_i = \mbox{Pr}(y_i^{\rep} \leq y_i | y)
       \end{align*}
@@ -288,7 +292,7 @@
     \begin{align*}
       p_i = p(y_i^{\rep} \leq y_i | y)
     \end{align*}
-  \item if $p(\tilde{y}_i|y)$ is well calibrated, distribution of $p_i$'s
+  if $p(\tilde{y}_i|y)$ is well calibrated, distribution of $p_i$'s
     would be uniform between 0 and 1
   \end{itemize}
   \vspace{-1.5\baselineskip}
@@ -296,6 +300,9 @@
 
 \end{frame}
 
+
+\subsection{Sensitivity analysis}
+\frame{\subsectionpage}
 
 \begin{frame}
 
@@ -323,6 +330,10 @@
     \end{itemize}
 
 \end{frame}
+
+\subsection{Example}
+\frame{\subsectionpage}
+
 
 \begin{frame}
 
@@ -362,6 +373,27 @@
     \only<2>{\vspace{-1.8\baselineskip}\includegraphics[height=6cm]{figs/plot1.png}}
     \only<3>{\hspace{-3cm}\includegraphics[height=5.55cm]{figs/plot2.png}}
 \end{center}
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Example: Exposure to air pollution}
+
+  \begin{itemize}
+  \item Three models:
+  \begin{enumerate}
+  \item Linear regression
+  \[
+  y_{ij} \sim N(\beta_0 + \beta_1 x_{ij}, \sigma^2)
+  \]
+  \item Hiearchical linear regression (WHO super regions)
+  \item Hiearchical linear regression (clustered super regions)
+  \[
+  y_{ij} \sim N(\beta_0 \beta_{0j} + (\beta_1 + \beta_{1j}) x_{ij}, \sigma^2)
+  \]
+  \end{enumerate}
+  where $y_{ij}$ is the log of $\text{PM}_{2.5}$ concentration and $x_{ij}$ is the satellite estimate, and $j \in \{1,...,J \}$ is the super-region indicator.
+  \end{itemize}
 \end{frame}
 
 

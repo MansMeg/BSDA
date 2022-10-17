@@ -1102,9 +1102,14 @@ model1 -14.4       6.1
   \[
     \text{elpd}_\text{AIC} = \sum_i \log p(y_i|\hat{\theta}_\text{MLE}) - k
   \]
+  \item AIC
+  \[
+    \text{AIC} = - 2 \text{elpd}_\text{AIC}
+  \]
 \end{enumerate}
 
 \end{frame}
+
 
 \begin{frame}{}
 
@@ -1116,12 +1121,15 @@ model1 -14.4       6.1
     \text{elpd}_\text{AIC} = \sum_i \log p(y_i|\hat{\theta}_\text{Bayes}) - p_\text{DIC}
   \]
   \item We estimate the number of effeicient parameters with
+
+  \item DIC
   \[
-  p_\text{DIC} =
+    \text{DIC} = - 2 \text{elpd}_\text{DIC}
   \]
 \end{enumerate}
 
 \end{frame}
+
 
 
 

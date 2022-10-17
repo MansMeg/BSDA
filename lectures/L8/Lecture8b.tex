@@ -251,20 +251,21 @@ where ${\color{uured}\tilde{y}_i}$ is an unseen observation generated from the t
 \pause
 \item Hold out observation $i$ and try to predict $y_i$ based on $\mathbf{y}_{-i}$
 %\pause
-\item Estimation of $\text{elpd}_M$ using leave-one-out cross-validation
+\item Estimation of $\text{elpd}_M$ using \uured{leave-one-out cross-validation}
 \small
 \begin{align*}
 \text{elpd}_\text{loo} = & \sum^n_{i=1} \log p_M(y_i|\mathbf{y}_{-i}) \\
  = & \sum^n_{i=1} \log \int p_M(y_i|\theta) p(\theta|\mathbf{y}_{-i})d\theta
 \end{align*}
+\pause
 \item \uured{Analogy:} Monte Carlo approximation using our data
 \item Similar to \uured{jack-knife resampling}
 %\pause
 %\item Pareto-Smoothed Importance Sampling (PSIS) can be used to efficiently compute each ${\color{uured}\pi_i}$ (see Gelfand, 1996 and Vehtari et. al., 2019)
 \pause
-\item The elpd, lpd and efficient number of parameters (p)
+\item The elpd, lpd and efficient number of parameters ($p_\text{loo}$)
 \[
-\text{elpd}_\text{loo} = \text{lpd}_\text{loo} + p_\text{loo}
+\text{elpd}_\text{loo} = \text{lpd} + p_\text{loo}
 \]
 \end{itemize}
 \end{frame}

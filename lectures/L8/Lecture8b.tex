@@ -591,15 +591,33 @@ See help('pareto-k-diagnostic') for details.
      \end{align*}
      where $w_i^s$ are importance weights and
      \begin{align*}
-       w_i^s=\frac{p(\theta^s|y_{-i})}{p(\theta^s|y)}\propto\frac{1}{\color{red} p(y_i|\theta^s)}.
-     \end{align*}
- \pause
-   \item If evaluated with $\tilde{y}_i=y_i$
-     \begin{align*}
-       p(y_i|y_{-i})\approx\frac{1}{\sum_{s=1}^S\frac{1}{p(y_i|\theta^s)}},
+       w_i^s=\frac{p(\theta^s|y_{-i})}{p(\theta^s|y)}.
      \end{align*}
    \end{itemize}
 
+ \end{frame}
+
+\begin{frame}
+  \frametitle{Importance sampling for LOO-CV}
+
+   \begin{itemize}
+   \item We get a nice solution
+     \begin{align*}
+       w_i^s=\frac{p(\theta^s|y_{-i})}{p(\theta^s|y)} = \frac{\frac{p(\theta^s) \prod_{j \neq i} p(y_j | \theta^s)}{p(y_{-i})}}{\frac{p(\theta^s) \prod_j p(y_j | \theta^s)}{p(y)}}\propto\frac{1}{\color{red} p(y_i|\theta^s)}.
+     \end{align*}
+ \pause
+   \item If evaluated with $\tilde{y}_i=y_i$
+        \begin{align*}
+       p(\tilde{y}_i|y_{-i})\approx\frac{\sum_{s=1}^S p(\tilde{y}_i|\theta^s) w_i^s}{\sum_{s=1}^S w_i^s} = \frac{1}{\sum_{s=1}^S\frac{1}{p(y_i|\theta^s)}},
+     \end{align*}
+     and
+    \begin{align*}
+       \log w^{(s)}_i = - \log p(y_i|\theta^{(s)}) %= - \text{log_lik[i]}
+    \end{align*}
+%    \pause
+%    \item What $\theta^{(s)}$ will give large weights?
+% TODO: Add normal likelihood with known variance and compute the weights as an example.
+   \end{itemize}
  \end{frame}
 
 
@@ -614,14 +632,17 @@ See help('pareto-k-diagnostic') for details.
   \\
   \only<2>{$\theta^{(s)} \sim p(\theta|x,y)$}
   \only<3-4>{$\theta^{(s)} \sim p(\theta|x,y), \quad p(\tilde{y}|\tilde{x},x,y) \approx \frac{1}{S}\sum_{s=1}^S p(\tilde{y}|\tilde{x},\theta^{(s)})$ }
-  \only<5>{$\theta^{(s)} \sim p(\theta|x,y)$\\ \vspace{0.2\baselineskip}$ r_i^{(s)} = p(\theta^{(s)}|x_{-i},y_{-i}) / p(\theta^{(s)}|x,y)$ }
-  \only<6-8>{$\theta^{(s)} \sim p(\theta|x,y)$\\ \vspace{0.2\baselineskip} $ r_i^{(s)} = p(\theta^{(s)}|x_{-i},y_{-i}) / p(\theta^{(s)}|x,y) \propto 1/p(y_i|x_i,\theta^{(s)})$\\ \vspace{0.2\baselineskip} }
+  \only<5>{$\theta^{(s)} \sim p(\theta|x,y)$\\ \vspace{0.2\baselineskip}$ w_i^{(s)} = p(\theta^{(s)}|x_{-i},y_{-i}) / p(\theta^{(s)}|x,y)$ }
+  \only<6-8>{$\theta^{(s)} \sim p(\theta|x,y)$\\ \vspace{0.2\baselineskip} $ w_i^{(s)} = p(\theta^{(s)}|x_{-i},y_{-i}) / p(\theta^{(s)}|x,y) \propto 1/p(y_i|x_i,\theta^{(s)})$\\ \vspace{0.2\baselineskip} }
   \only<7>{$\log(1/p(y_i|x_i,\theta^{(s)})) = -\mbox{log\_lik}[i]$}
   \only<9-10>{$\theta^{(s)} \sim p(\theta|x,y)$\\ \vspace{0.2\baselineskip}
-    $ r_i^{(s)} = p(\theta^{(s)}|x_{-i},y_{-i}) / p(\theta^{(s)}|x,y) \propto 1/p(y_i|x_i,\theta^{(s)})$\\ \vspace{0.2\baselineskip}
-  $p(y_i|x_i,x_{-i},y_{-i}) \approx \sum_{s=1}^S [w_i^{(s)} p(y_i|x_i,\theta^{(s)})]$}\only<10>{, where $w \leftarrow \mbox{PSIS}(r)$}
+    $ w_i^{(s)} = p(\theta^{(s)}|x_{-i},y_{-i}) / p(\theta^{(s)}|x,y) \propto 1/p(y_i|x_i,\theta^{(s)})$\\ \vspace{0.2\baselineskip}
+  $p(y_i|x_i,x_{-i},y_{-i}) \approx \sum_{s=1}^S [w_i^{(s)} p(y_i|x_i,\theta^{(s)})]$}%\only<10>{, where $w \leftarrow \mbox{PSIS}(r)$}
 
 \end{frame}
+
+
+
 
 \begin{frame}{}
 

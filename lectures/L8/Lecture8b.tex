@@ -641,7 +641,19 @@ See help('pareto-k-diagnostic') for details.
 
 \end{frame}
 
+\begin{frame}
 
+\frametitle{Recap: Pareto smoothed importance sampling}
+
+  \begin{itemize}
+  \item Pareto-Smoothed Importance sampling smooth the weights according to a Generalized Pareto($k$) distribution
+  \item Pareto-$k$ diagnostic estimate the number of existing moments ($\lfloor 1/k \rfloor$)
+  \item<2-> Finite variance and central limit theorem for $k<1/2$
+  \item<3-> Finite mean and generalized central limit theorem for $k<1$,
+    but pre-asymptotic constant grows impractically large for $k>0.7$
+  \item<4-> Hence $k>0.7$ can be used to indicate what observation that can "hold-out" using IS
+  \end{itemize}
+\end{frame}
 
 
 \begin{frame}{}
@@ -653,10 +665,8 @@ See help('pareto-k-diagnostic') for details.
   \onslide<3->{n\_eff $\approx$ 459\\  \vspace{0.2\baselineskip}}
   \onslide<4>{Pareto $\hat{k}$ $\approx$ 0.52
   \vspace{-\parskip}
-    \begin{enumerate}
-    \item Pareto $\hat{k}$ estimates the tail shape which determines the convergence rate of PSIS. Less than 0.7 is ok.}
-\end{enumerate}
-  \onslide<3->{\vspace{0.1\baselineskip}\small see \href{http://link.springer.com/article/10.1007/s11222-016-9696-4}{Vehtari, Gelman \& Gabry (2017b)}}
+Pareto $\hat{k}$ estimates the tail shape which determines the convergence rate of PSIS. Less than 0.7 is ok.}
+% TODO: Move to reading  \onslide<3->{\vspace{0.1\baselineskip}\small see \href{http://link.springer.com/article/10.1007/s11222-016-9696-4}{Vehtari, Gelman \& Gabry (2017b)}}
 \end{frame}
 
 \begin{frame}[fragile]
@@ -684,112 +694,10 @@ See help('pareto-k-diagnostic') for details.
 \end{frame}
 
 \begin{frame}[fragile]
-
-\frametitle{{\tt loo} package}
-
-  {\scriptsize
-    {\color{gray}
-\begin{lstlisting}
- Computed from 4000 by 20 log-likelihood matrix
-
-         Estimate  SE
-elpd_loo    -29.5 3.3
-p_loo         2.7 1.0
-\end{lstlisting}
-      }
-\begin{lstlisting}
-------
-Monte Carlo SE of elpd_loo is 0.1.
-
-Pareto k diagnostic values:
-                         Count Pct.    Min. n_eff
-(-Inf, 0.5]   (good)     18    90.0%   899
- (0.5, 0.7]   (ok)        2    10.0%   459
-   (0.7, 1]   (bad)       0     0.0%   <NA>
-   (1, Inf)   (very bad)  0     0.0%   <NA>
-
-All Pareto k estimates are ok (k < 0.7).
-See help('pareto-k-diagnostic') for details.
-\end{lstlisting}
-    }
-
-    {\vspace{2\baselineskip}\small see more in \href{http://link.springer.com/article/10.1007/s11222-016-9696-4}{Vehtari, Gelman \& Gabry (2017b)}}
-
-\end{frame}
-
-
-\begin{frame}[fragile]
-
-\frametitle{Stan and {\tt loo} package}
-
-  {\scriptsize
-\begin{lstlisting}
- Computed from 4000 by 20 log-likelihood matrix
-
-         Estimate  SE
-elpd_loo    -29.5 3.3
-p_loo         2.7 1.0
-------
-Monte Carlo SE of elpd_loo is 0.1.
-
-Pareto k diagnostic values:
-                         Count Pct.    Min. n_eff
-(-Inf, 0.5]   (good)     18    90.0%   899
- (0.5, 0.7]   (ok)        2    10.0%   459
-   (0.7, 1]   (bad)       0     0.0%   <NA>
-   (1, Inf)   (very bad)  0     0.0%   <NA>
-
-All Pareto k estimates are ok (k < 0.7).
-See help('pareto-k-diagnostic') for details.
-
-Model comparison:
-(negative 'elpd_diff' favors 1st model, positive favors 2nd)
-
-elpd_diff        se
-     -0.2       0.1
-\end{lstlisting}
-}
-
-\end{frame}
-
-
-\begin{frame}[fragile]
-\frametitle{{\tt loo} package}
-
-  {\scriptsize
-\begin{lstlisting}
- Computed from 4000 by 20 log-likelihood matrix
-
-         Estimate  SE
-elpd_loo    -29.5 3.3
-p_loo         2.7 1.0
-\end{lstlisting}
-      {\color{gray}
-\begin{lstlisting}
-------
-Monte Carlo SE of elpd_loo is 0.1.
-
-Pareto k diagnostic values:
-                         Count Pct.    Min. n_eff
-(-Inf, 0.5]   (good)     18    90.0%   899
- (0.5, 0.7]   (ok)        2    10.0%   459
-   (0.7, 1]   (bad)       0     0.0%   <NA>
-   (1, Inf)   (very bad)  0     0.0%   <NA>
-
-All Pareto k estimates are ok (k < 0.7).
-See help('pareto-k-diagnostic') for details.
-\end{lstlisting}}
-}
-\end{frame}
-
-
-
-\begin{frame}[fragile]
-
-\frametitle{Stan code }
+\frametitle{Stan code}
 
   \vspace{\baselineskip}
-  $ \log(r_i^{(s)}) = \log(1/p(y_i|x_i,\theta^{(s)})) = {\color{red}-\mbox{log\_lik}[i]}$
+  $ \log(w_i^{(s)}) = \log(1/p(y_i|x_i,\theta^{(s)})) = {\color{red}-\mbox{log\_lik}[i]}$
   \vspace{\baselineskip}
 
   \pause
@@ -811,25 +719,28 @@ generated quantities {
 
 \end{frame}
 
+
+
 \begin{frame}{}
 
-\frametitle{ Pareto smoothed importance sampling LOO}
+
+\frametitle{PSIS-LOO}
 
 \begin{enumerate}
-\item PSIS-LOO for hierarchical models
+  \item PSIS-LOO for hierarchical models
   \begin{enumerate}
-  \item leave-one-group out is challenging for PSIS-LOO\\ \vspace{0.2\baselineskip}
-    {\small see Merkel, Furr and Rabe-Hesketh
-      (2018) for an approach using quadrature integration}
+  \item leave-one-group out is challenging for PSIS-LOO%\\ \vspace{0.2\baselineskip}
+%    {\small see Merkel, Furr and Rabe-Hesketh
+%      (2018) for an approach using quadrature integration}
   \end{enumerate}
   \item<2-> PSIS-LOO for non-factorizable models
-    \begin{enumerate}
-    \item {\url{mc-stan.org/loo/articles/loo2-non-factorizable.html}}
-    \end{enumerate}
+  %  \begin{enumerate}
+ %   \item {\url{mc-stan.org/loo/articles/loo2-non-factorizable.html}}
+%    \end{enumerate}
   \item<3-> PSIS-LOO for time series
   \begin{enumerate}
-  \item Approximate leave-future-out cross-validation \\ \vspace{0.2\baselineskip}
-    {\url{mc-stan.org/loo/articles/loo2-lfo.html}}
+  \item Approximate leave-future-out cross-validation %\\ \vspace{0.2\baselineskip}
+%    {\url{mc-stan.org/loo/articles/loo2-lfo.html}}
   \end{enumerate}
 \end{enumerate}
 

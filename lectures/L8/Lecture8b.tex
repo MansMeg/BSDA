@@ -359,9 +359,6 @@ See help('pareto-k-diagnostic') for details.
 
 \end{frame}
 
-% + and minus with LOO: computational intensive
-% The ideas from importance sampling will come back.
-
 
 \subsection{When is LOO applicable}
 \frame{\subsectionpage}
@@ -533,9 +530,6 @@ See help('pareto-k-diagnostic') for details.
 \end{frame}
 
 
-\subsection{Fast LOO-CV}
-\frame{\subsectionpage}
-
 \begin{frame}{}
 
 \frametitle{Fast cross-validation}
@@ -552,6 +546,9 @@ See help('pareto-k-diagnostic') for details.
 % {\small see \href{http://link.springer.com/article/10.1007/s11222-016-9696-4}{Vehtari, Gelman \& Gabry (2017a)} and \url{mc-stan.org/loo/}}
 
 \end{frame}
+
+\subsection{PSIS LOO-CV}
+\frame{\subsectionpage}
 
 \begin{frame}
 
@@ -719,17 +716,41 @@ generated quantities {
 
 \end{frame}
 
+\begin{frame}[fragile]
+\frametitle{Stan and {\tt loo} package}
 
+  {\scriptsize
+\begin{lstlisting}
+ Computed from 4000 by 20 log-likelihood matrix
 
-\begin{frame}{}
+         Estimate  SE
+elpd_loo    -29.5 3.3
+p_loo         2.7 1.0
+------
+Monte Carlo SE of elpd_loo is 0.1.
 
+Pareto k diagnostic values:
+                         Count Pct.    Min. n_eff
+(-Inf, 0.5]   (good)     18    90.0%   899
+ (0.5, 0.7]   (ok)        2    10.0%   459
+   (0.7, 1]   (bad)       0     0.0%   <NA>
+   (1, Inf)   (very bad)  0     0.0%   <NA>
 
+All Pareto k estimates are ok (k < 0.7).
+See help('pareto-k-diagnostic') for details.
+\end{lstlisting}
+}
+
+\end{frame}
+
+\begin{frame}
 \frametitle{PSIS-LOO}
 
 \begin{enumerate}
   \item PSIS-LOO for hierarchical models
   \begin{enumerate}
-  \item leave-one-group out is challenging for PSIS-LOO%\\ \vspace{0.2\baselineskip}
+  \item leave-one-group out is challenging for PSIS-LOO
+  %\\ \vspace{0.2\baselineskip}
 %    {\small see Merkel, Furr and Rabe-Hesketh
 %      (2018) for an approach using quadrature integration}
   \end{enumerate}
@@ -757,17 +778,40 @@ generated quantities {
 
 \end{frame}
 
-\subsection{K-fold cross-validation}
 
+\subsection{K-fold CV}
+\frame{\subsectionpage}
 
 \begin{frame}{}
 
-\frametitle{ K-fold cross-validation}
+\frametitle{K-fold cross-validation}
+
+\begin{itemize}
+\item We can approximate $elpd_\text{loo}$ using K-fold CV
+\pause
+\begin{enumerate}
+\item \texttt{for k in K}
+  \begin{enumerate}
+  \item hold $1/K$ observations out (i.e. $y_{-y(k)}$)
+  \item compute $p(\theta|y_{-y(k)})$
+  \item compute lpd for $y_{-y(k)}$
+  \end{enumerate}
+\item sum the lpd over $K$ folds
+\end{enumerate}
+\pause
+\item We only need to estimate $K$ models
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{}
+
+\frametitle{K-fold cross-validation}
 
 \begin{enumerate}
 \item K-fold cross-validation can approximate LOO
   \begin{enumerate}
-    \item all uses for LOO
+    \item can be used all uses for LOO
   \end{enumerate}
 \item K-fold cross-validation can be used for hierarchical models
   \begin{enumerate}
@@ -789,14 +833,11 @@ generated quantities {
   \only<4>{\includegraphics[width=8cm]{figs/rats1kfoldrand.pdf}}
   \only<5->{\includegraphics[width=8cm]{figs/rats1oneratb.pdf}}
   \\
-  \only<6>{kfold\_split\_random()\\ \vspace{0.2\baselineskip}
-  kfold\_split\_balanced()\\ \vspace{0.2\baselineskip}
-  kfold\_split\_stratified()}
+%  \only<6>{kfold\_split\_random()\\ \vspace{0.2\baselineskip}
+%  kfold\_split\_balanced()\\ \vspace{0.2\baselineskip}
+%  kfold\_split\_stratified()}
 
 \end{frame}
-
-\subsection{Comparison and selection}
-%\frame{\sectionpage}
 
 \begin{frame}{}
 
@@ -804,9 +845,9 @@ generated quantities {
 
 \begin{enumerate}
 \item CV is good for model assessment when application specific utility/cost functions are used
-  \begin{enumerate}
-  \item e.g. 90\% absolute error
-  \end{enumerate}
+%  \begin{enumerate}
+%  \item e.g. 90\% absolute error
+%  \end{enumerate}
 \item<2-> Also useful in model checking in similar way as posterior
   predictive checking (PPC)
   \begin{enumerate}
@@ -814,16 +855,18 @@ generated quantities {
   \item checking calibration of leave-one-out predictive posteriors
     (ppc\_loo\_pit in bayesplot)
   \end{enumerate}
-  {\small see demos \url{avehtari.github.io/modelselection/}}
+%  {\small see demos \url{avehtari.github.io/modelselection/}}
 \end{enumerate}
 
 \end{frame}
 
+\subsection{Model Comparison}
+\frame{\subsectionpage}
 
 
- \begin{frame}{}
+\begin{frame}{}
 
- \frametitle{ Model comparison}
+\frametitle{Model comparison}
 
  \begin{enumerate}
  \item ``A popular hypothesis has it that primates with larger brains
@@ -835,12 +878,12 @@ generated quantities {
    \end{enumerate}
  \end{enumerate}
 
- \vspace{10\baselineskip}
- {\small \url{mc-stan.org/loo/articles/loo2-example.html}}
+% \vspace{10\baselineskip}
+% {\small \url{mc-stan.org/loo/articles/loo2-example.html}}
 
- \end{frame}
+\end{frame}
 
- \begin{frame}
+\begin{frame}
 
    \only<1-2>{\includegraphics[width=8cm]{figs/milkelpdloo.pdf}}
    \only<3>{\includegraphics[width=8cm]{figs/milkelpdloo2.pdf}}
@@ -848,9 +891,9 @@ generated quantities {
    \only<2-3>{Model 1 elpd\_loo $\approx$ 3.7, SE=1.8\\
    Model 2 elpd\_loo $\approx$ 8.4, SE=2.8}
 
- \end{frame}
+\end{frame}
 
- \begin{frame}[fragile]
+\begin{frame}[fragile]
 
    {\includegraphics[width=8cm]{figs/milkelpddiff.pdf}}
    \\
@@ -940,13 +983,13 @@ model1 -14.4       6.1
 
     {\tt se\_diff} and normal approximation for the uncertainty in the
     difference is good only if models are well specified and the
-    number of observations is relatively big (more details in a
-    forthcoming article).
+    number of observations is relatively big.
 
 %\vspace{9\baselineskip}
 %    {\scriptsize \hspace{6cm} see \href{http://link.springer.com/article/10.1007/s11222-016-9696-4}{Vehtari, Gelman \& Gabry (2017a)}}
 
 \end{frame}
+
 
 
 \begin{frame}{}
@@ -956,20 +999,20 @@ model1 -14.4       6.1
   \begin{enumerate}
   \item<2-> Continuous expansion including all models?
     \begin{enumerate}
-    \item and then analyse the posterior distribution directly\\
-        {\small \url{avehtari.github.io/modelselection/betablockers.html}}
-      \item sparse priors like regularized horseshoe prior instead of variable selection\\
-        {\small video, refs and demos at
-          \url{avehtari.github.io/modelselection/}}
+    \item and then analyse the posterior distribution directly
+  %      {\small \url{avehtari.github.io/modelselection/betablockers.html}}
+      \item sparse priors like regularized horseshoe prior instead of variable selection
+  %      {\small video, refs and demos at
+    %      \url{avehtari.github.io/modelselection/}}
     \end{enumerate}
-  \item<3-> Model averaging with BMA or Bayesian stacking?\\
-    {\small \url{mc-stan.org/loo/articles/loo2-example.html}}
+  \item<3-> Model averaging with BMA or Bayesian stacking?
+    %{\small \url{mc-stan.org/loo/articles/loo2-example.html}}
   \item<4-> In a nested case choose simpler if assuming some cost for
-    extra parts?\\
-    {\small \url{andrewgelman.com/2018/07/26/parsimonious-principle-vs-integration-uncertainties/}}
+    extra parts?
+%    {\small \url{andrewgelman.com/2018/07/26/parsimonious-principle-vs-integration-uncertainties/}}
   \item<5-> In a nested case choose more complex if you want to take
-    into account all the uncertainties.\\
-    {\small \url{andrewgelman.com/2018/07/26/parsimonious-principle-vs-integration-uncertainties/}}
+    into account all the uncertainties.%\\
+%    {\small \url{andrewgelman.com/2018/07/26/parsimonious-principle-vs-integration-uncertainties/}}
   \end{enumerate}
 
 \end{frame}
@@ -999,6 +1042,8 @@ model1 -14.4       6.1
 \end{frame}
 
 \begin{frame}
+
+
 
 \frametitle{Selection induced bias and overfitting}
 

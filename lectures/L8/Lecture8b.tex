@@ -1121,7 +1121,13 @@ model1 -14.4       6.1
     \text{elpd}_\text{AIC} = \sum_i \log p(y_i|\hat{\theta}_\text{Bayes}) - p_\text{DIC}
   \]
   \item We estimate the number of effeicient parameters with
-
+  \[
+  p_\text{DIC1} = 2 (\log p(y|\hat{\theta}_\text{Bayes}) - \E_{p(\theta|y)} (\log p(y|\theta)) )
+  \]
+  or
+  \[
+  p_\text{DIC2} = 2 V_{p(\theta|y)} (\log p(y|\theta))
+  \]
   \item DIC
   \[
     \text{DIC} = - 2 \text{elpd}_\text{DIC}
@@ -1130,10 +1136,33 @@ model1 -14.4       6.1
 
 \end{frame}
 
+\begin{frame}{}
+
+\frametitle{Watanabe Information Criteria}
+
+\begin{enumerate}
+  \item Watanabe information criteria
+  \[
+    \text{elpd}_\text{WAIC} = \sum_i \log \uured{p(y_i|y)} - p_\text{WAIC}
+  \]
+  \item We estimate the number of efficient parameters with
+  \[
+  p_\text{WAIC1} = 2 \sum^n_i (\log \E_{p(\theta|y)}(p(y_i|\theta)) - \E_{p(\theta|y)} (\log p(y_i|\theta)))
+  \]
+  or
+  \[
+  p_\text{WAIC2} = 2 \sum^n_i (V_{p(\theta|y)} (\log p(y_i|\theta)) )
+  \]
+  \item WAIC
+  \[
+    \text{WAIC} = - 2 \text{elpd}_\text{WAIC}
+  \]
+  \item WAIC can be seen as an approximation of the $elpd_\text{loo}$
+\end{enumerate}
+
+\end{frame}
 
 
-
-% WAIC
 
 \begin{frame}{}
 
@@ -1153,18 +1182,18 @@ model1 -14.4       6.1
 %{\small see \href{http://link.springer.com/article/10.1007/s11222-016-9696-4}{Vehtari, Gelman \& Gabry (2017a)}}
 \end{frame}
 
-\begin{frame}{}
+%\begin{frame}{}
 
-\frametitle{ *IC}
+%\frametitle{ *IC}
 
-\begin{enumerate}
-  \item AIC uses maximum likelihood estimate for prediction
-  \item DIC uses posterior mean for prediction
-  \item BIC is an approximation for marginal likelihood
-  \item TIC, NIC, RIC, PIC, BPIC, QIC, AICc, ...
-\end{enumerate}
+%\begin{enumerate}
+%  \item AIC uses maximum likelihood estimate for prediction
+%  \item DIC uses posterior mean for prediction
+%  \item BIC is an approximation for marginal likelihood
+%  \item TIC, NIC, RIC, PIC, BPIC, QIC, AICc, ...
+%\end{enumerate}
 
-\end{frame}
+%\end{frame}
 
 
 \section{Model averaging and Stacking}

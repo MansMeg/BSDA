@@ -265,7 +265,7 @@ where ${\color{uured}\tilde{y}_i}$ is an unseen observation generated from the t
 \pause
 \item The elpd, lpd and efficient number of parameters ($p_\text{loo}$)
 \[
-\text{elpd}_\text{loo} = \text{lpd} + p_\text{loo}
+\text{elpd}_\text{loo} = \text{lpd} - p_\text{loo}
 \]
 \end{itemize}
 \end{frame}
@@ -1088,16 +1088,48 @@ model1 -14.4       6.1
 \section{Information criteria}
 \frame{\sectionpage}
 
-% The problem with parameters in bayeisan stats
+\begin{frame}{}
 
-% AIC and DIC with math
-% Limit p(y|\theta) with theta
+\frametitle{Akaike Information Criteria}
+
+\begin{enumerate}
+  \item Remember the relationship between the elpd and the lpd
+  \[
+    \text{elpd}_\text{loo} = \sum_i \log p(y_i|y) - p_\text{loo}
+  \]
+  \pause
+  \item Akaike information criteria
+  \[
+    \text{elpd}_\text{AIC} = \sum_i \log p(y_i|\hat{\theta}_\text{MLE}) - k
+  \]
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame}{}
+
+\frametitle{Deviance Information Criteria}
+
+\begin{enumerate}
+  \item Deviance information criteria
+  \[
+    \text{elpd}_\text{AIC} = \sum_i \log p(y_i|\hat{\theta}_\text{Bayes}) - p_\text{DIC}
+  \]
+  \item We estimate the number of effeicient parameters with
+  \[
+  p_\text{DIC} =
+  \]
+\end{enumerate}
+
+\end{frame}
+
+
 
 % WAIC
 
 \begin{frame}{}
 
-\frametitle{ WAIC vs PSIS-LOO}
+\frametitle{WAIC vs PSIS-LOO}
 
 \begin{enumerate}
   \item<2-> WAIC has same assumptions as LOO
@@ -1109,8 +1141,8 @@ model1 -14.4       6.1
     didn't multiply by -2)
 \end{enumerate}
 
-\vspace{6\baselineskip}
-{\small see \href{http://link.springer.com/article/10.1007/s11222-016-9696-4}{Vehtari, Gelman \& Gabry (2017a)}}
+%\vspace{6\baselineskip}
+%{\small see \href{http://link.springer.com/article/10.1007/s11222-016-9696-4}{Vehtari, Gelman \& Gabry (2017a)}}
 \end{frame}
 
 \begin{frame}{}
@@ -1127,9 +1159,18 @@ model1 -14.4       6.1
 \end{frame}
 
 
-\section{Model averaging}
+\section{Model averaging and Stacking}
 \frame{\sectionpage}
 
+\begin{frame}{}
+
+\frametitle{Special lecture!}
+
+\begin{enumerate}
+  \item Special lecture on model averaging and stacking next week!
+\end{enumerate}
+
+\end{frame}
 
 %\begin{frame}{}
 
@@ -1162,8 +1203,6 @@ model1 -14.4       6.1
 %  \end{enumerate}
 
 %\end{frame}
-
-
 
 
 \section{Summary}

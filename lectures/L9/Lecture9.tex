@@ -52,7 +52,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \setlength{\parskip}{3mm}
-\title[]{{\color{black}Bayesian Statistics and Data Analysis \\ Lecture 8b}}
+\title[]{{\color{black}Bayesian Statistics and Data Analysis \\ Lecture 9}}
 \author[]{M{\aa}ns Magnusson \\ Department of Statistics, Uppsala University \\ Thanks to Aki Vehtari, Aalto University}
 \date{}
 
@@ -65,7 +65,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-\section{Introduction}
+\section{Bayesian decision theory}
 \frame{\sectionpage}
 
 
@@ -74,26 +74,30 @@
 \frametitle{Bayesian decision theory}
 
   \begin{itemize}
-  \item<+-> Potential decisions $d$
-    \begin{itemize}
-      \item or actions $a$
-    \end{itemize}
-  \item<+-> Potential consequences $x$
+  \item<+-> Potential decisions (or actions) $d \in D$ ($a$)
+  \pause
+  \item<+-> Potential consequences (or outcomes) $x$
     \begin{itemize}
       \item $x$ may be categorical, ordinal, real, scalar, vector, etc.
     \end{itemize}
-  \item<+-> Probability distributions of consequences given decisions $p(x|d)$
+    \pause
+  \item<+-> Probability distribution of outcome given decision $p(x|d)$
     \begin{itemize}
-    \item in decision making the decisions are controlled and thus $p(d)$ does not exist
+    \item in decision making the decisions are controlled and thus $p(d)$ does not exist/are fixed
     \end{itemize}
+    \pause
   \item<+->  Utility function $U(x)$ maps consequences to real value
     \begin{itemize}
       \item e.g. euro or expected lifetime
       \item instead of utility sometimes cost or loss is defined
     \end{itemize}
-    \vspace{-1mm}
-  \item<+-> Expected utility  $E[U(x)|d]=\int U(x) p(x|d) dx$
-  \item<+-> Choose decision $d^*$, which maximizes the expected utility
+  \pause
+  \item<+-> Expected utility for a decision $d$
+  \[
+  E[U(x)|d]=\int U(x) p(x|d) dx
+  \]
+  \pause
+  \item<+-> \uured{Optimal decision}: $d^*$, which maximizes the expected utility
     \begin{equation*}
       d^*=\arg\max_d E[U(x)|d]
     \end{equation*}
@@ -103,28 +107,57 @@
 
 \begin{frame}
 
+\frametitle{Integrating inference and decisions}
+
+  \begin{itemize}
+    \item<+-> To make an optimal decision we need $p(x|d)$
+    \pause
+    \item<+-> In many situations we can approximate $p(x|d) \approx p(x)$
+    \pause
+    \item<+-> The benefit of Bayesian inference: We can use $p(x|d, y)$ i.e. integrating data in decision making
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Challenges in decision making}
+
+  \begin{itemize}
+  \item Actual utility functions are rarely linear
+  \item<2-> What is the cost of human life?
+  \item<3-> Multipel parties having different utilities
+  \end{itemize}
+
+\end{frame}
+
+\section{Examples}
+\frame{\sectionpage}
+
+\begin{frame}
+
 \frametitle{Example of decision making: 2 choices}
 
 \begin{itemize}
-\item<+-> Helen is going to pick mushrooms in a forest, while she notices a
-  paw print which could made by a dog or a wolf
+\item<+-> Helen is going to pick mushrooms in a forest, while she notices a paw print which could made by a dog or a wolf
 \item<+-> Helen measures that the length of the paw print is 14 cm and
   goes home to Google how big paws dogs and wolves have, and tries
   then to infer which animal has made the paw print
-  \includegraphics[width=11cm]{figs/hatutus_likelihoods}
+  \includegraphics[width=8cm]{figs/hatutus_likelihoods}
   observed length has been marked with a horizontal line
 \item<+-> Likelihood of wolf is 0.92 (alternative being dog)
 \end{itemize}
 
 \end{frame}
 
+
+
 \begin{frame}
 
 \frametitle{Example of decision making}
 
   \begin{itemize}
-  \item<+-> Helen assumes also that in her living area there are about one
-    hundred times more free running dogs than wolves, that is {\em a
+  \item<+-> Helen assumes also that in her living area there are about one hundred times more free running dogs than wolves, that is {\em a
       priori} probability for wolf, before observation is 1\%.
   \item<+-> Likelihood and posterior
     \begin{center}\leavevmode
@@ -194,8 +227,11 @@
 
   \begin{itemize}
   \item<+-> Maximum likelihood decision would be to assume that there is a wolf
+  \pause
   \item<+-> Maximum posterior decision would be to assume that there is a dog
+  \pause
   \item<+-> Maximum utility decision is to stay home, even if it is more likely that the animal is dog
+    \pause
   \item<+-> Example illustrates that the uncertainties (probabilities)
     related to all consequences need to be carried on until final
     decision making
@@ -204,37 +240,6 @@
 \end{frame}
 
 
-\begin{frame}
-
-\frametitle{Example of decision making: several choices}
-
-\begin{itemize}
-  \item Prof. Gelman has a jar of quarters
-    \begin{itemize}
-    \item he first drew a line on the side of the jar and then
-      filled the jar up to the line, and so the number coins was not
-      chosen beforehand
-    \item Prof. Gelman does not know the number of coins in the jar
-    \item<2-> Prof. Gelman gives the class a chance to win the coins if
-      they guess the number of coins correctly (someone else has
-      counted the coins without telling Gelman)
-    \item<2-> How should the students make the decision?
-    \end{itemize}
-\end{itemize}
-
-\end{frame}
-
-\begin{frame}
-
-\frametitle{Challenges in decision making}
-
-  \begin{itemize}
-  \item Actual utility functions are rarely linear
-  \item<2-> What is the cost of human life?
-  \item<3-> Multipel parties having different utilities
-  \end{itemize}
-
-\end{frame}
 
 \begin{frame}
 
@@ -274,8 +279,7 @@
   \item Which experiment would give most additional information
     \begin{itemize}
     \item decide values $x_{n+1}$ for the next experiment
-    \item which values of $x_{n+1}$ would reduce the posterior
-      uncertainty most
+    \item which values of $x_{n+1}$ would reduce the posterior uncertainty most
     \end{itemize}
   \item Example
     \begin{itemize}
@@ -289,109 +293,41 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}
-
-\frametitle{Bayesian optimization}
-
-  \begin{itemize}
-  \item Design of experiment
-  \item Used to optimize, for example,
-    \begin{itemize}
-    \item machine learning / deep learning model structures,
-      regularization, and learning algorithm parameters
-    \item material science
-    \item engines
-    \item drug testing
-    \item part of Bayesian inference for stochastic simulators
-    \end{itemize}
-  \end{itemize}
-
-\end{frame}
-
-\begin{frame}
-
-\frametitle{Bayesian optimization}
-
-    \includegraphics[width=10cm]{figs/bayesopt_1d_regular_iter1-crop.pdf}
-
-\end{frame}
-
-\begin{frame}
-
-\frametitle{Bayesian optimization}
-
-    \includegraphics[width=10cm]{figs/bayesopt_1d_regular_iter2-crop.pdf}
-
-\end{frame}
-
-\begin{frame}
-
-\frametitle{Bayesian optimization}
-
-    \includegraphics[width=10cm]{figs/bayesopt_1d_regular_iter3-crop.pdf}
-
-\end{frame}
-
-\begin{frame}
-
-\frametitle{Bayesian optimization}
-
-    \includegraphics[width=10cm]{figs/bayesopt_1d_regular_iter4-crop.pdf}
-
-\end{frame}
-\begin{frame}
-
-\frametitle{Bayesian optimization}
-
-    \includegraphics[width=10cm]{figs/bayesopt_1d_regular_iter5-crop.pdf}
-
-\end{frame}
-\begin{frame}
-
-\frametitle{Bayesian optimization}
-
-    \includegraphics[width=10cm]{figs/bayesopt_1d_regular_iter6-crop.pdf}
-
-\end{frame}
-\begin{frame}
-
-\frametitle{Bayesian optimization}
-
-    \includegraphics[width=10cm]{figs/bayesopt_1d_regular_iter7-crop.pdf}
-
-\end{frame}
-\begin{frame}
-
-\frametitle{Bayesian optimization}
-
-    \includegraphics[width=10cm]{figs/bayesopt_1d_regular_iter8-crop.pdf}
-
-\end{frame}
-\begin{frame}
-
-\frametitle{Bayesian optimization}
-
-    \includegraphics[width=10cm]{figs/bayesopt_1d_regular_iter9-crop.pdf}
-
-\end{frame}
-\begin{frame}
-
-\frametitle{Bayesian optimization}
-
-    \includegraphics[width=10cm]{figs/bayesopt_1d_regular_iter10-crop.pdf}
-
-\end{frame}
 
 \begin{frame}
 
 \frametitle{Model selection as decision problem}
 
-  \begin{itemize}
-  \item Expected utility of using the model in the future
-  \end{itemize}
+\begin{itemize}
+\item Evaluate how model $M$ \uured{generalizes to unseen data} $\tilde{y}$\\(the \emph{expected log predictive density}):
+\[
+\text{elpd}_M= \int \log p_M({\color{uured}\tilde{y}}|y) p_\text{true}({\color{uured}\tilde{y}}) d{\color{uured}\tilde{y}}\,,
+\]
+where ${\color{uured}\tilde{y}}$ is an unseen observation generated from the true data generating process $p_\text{true}({\color{uured}\tilde{y}})$, and $y$ are observed data.
+\item $\log p_M({\color{uured}\tilde{y}}|y)$ is the log score (the utility of the model)
+\pause
+\item Formally, our decision is to choose the model $M^\star$.
+\end{itemize}
 
 \end{frame}
 
+% TODO: Add Hollis example here as an example
+
+\section{Course Evaluation}
+\frame{\sectionpage}
+
+\begin{frame}
+
+\frametitle{Course Evaluation}
+
+\begin{itemize}
+\item What was good? What was fun?
+\item What can be improved? What was annoying?
+\item Did you get what you expected?
+\item How can I get you to speak more during class?
+\end{itemize}
+
+\end{frame}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -145,9 +145,13 @@ We also supply a Google Colab assignment template with all R packages installed 
 
 Students should return the computer assignments no later than **Sunday 23.59 each week**. A second possibility to turn in assignments is possible after the end of the course. For a detailed list of deadlines, see the [course plan](https://docs.google.com/spreadsheets/d/e/2PACX-1vTMN6pWULQIs_klRyunyS3OiQZ5ty67Smljo6gcxc1dQ68c4dDoZlSJTmDowYixvPZpANqDhSIA40Cs/pubhtml).
 
-After the last (second) possible time to turn in the assignment no more chances will be given. In this case, you will be failed on the course and you will need to retake the course next year.
+There are two complementary turn-ins of assignments, the last day of the course and roughly 2-4 weeks after the course ends. After the last possible time to turn in the assignment no more chances will be given. In this case, you will be failed on the course and you will need to retake the course next year.
+
+
 
 Each assignment will be graded and evaluated within 10 working days.
+
+Students are not allowed to show your assignments (text or code) to anyone. Only discuss the assignments with other students. The student that show their assignment to anyone else could also be considered to cheat. Similarly, on zoom labs, only screen share when you are in a separate zoom room with teaching assistants.
 
 ### Bayesian Model Averaging
 A guest lecture will be given on by Ph.D. student [Valentin Zulj](https://katalog.uu.se/empinfo/?id=N19-813).

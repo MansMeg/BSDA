@@ -75,11 +75,11 @@ knitr::opts_chunk$set(size = "small")
 
 \section{Project Instructions}
 
-The last two weeks will focus on a course project where 2-3 students choose data and will do a bayesian analysis of a  real-world dataset.
+The last two weeks will focus on a course project where 2-3 students choose data and will do a Bayesian analysis of a  real-world dataset.
 
 Requirements for the projects are:
 \begin{itemize}
-\item Your project should be a Bayesidan Data Analysis using Stan.
+\item Your project should be a Bayesian Data Analysis using Stan (you can use \texttt{brms} or \texttt{rstanarm} if you like. Although, this is easier and will be considered when grading, i.e. it will be harder to get a VG in the mini-project.
 \item Real data should be used (see below for details).
 \item At least two different models should be estimated and compared.
 \end{itemize}
@@ -168,8 +168,9 @@ Additional requirements and hints for the report:
 \begin{enumerate}
 \item All Figures using color should have a color-blind friendly color palette. See \href{http://www.cookbook-r.com/Graphs/Colors_(ggplot2)/#a-colorblind-friendly-palette}{here} and \href{https://rdrr.io/cran/ggthemes/man/colorblind.html}{here}.
 \item Before you turn in the project, do a language check with a tool such as Grammarly. A project will poor english (errors that would have been spotted with a tool such as Grammarly) will affect your grade downwards.
-\item The final report should look like a research paper, i.e. try to avoid bullet list and get a good flow in the text.
+\item The final report should look like a research paper, i.e. try to avoid bullet list and get a good flow in the text. Also do not refer to the report as a mini-project. See it as a real report (or short paper).
 \item You should use correct reference systems. A tip is to use \texttt{\\citet}, \texttt{\\citep}, and \texttt{\\bibtex}. This will also simplify your future thesis work.
+
 \end{enumerate}
 
 

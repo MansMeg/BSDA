@@ -44,6 +44,8 @@ There are two follow up deadlines (or follow-up corrections) during the course. 
 The project can also be turned in a second time a month after the end of the course. Then the student(s) need to submit both a project report, a PDF with presentation slides and a link to a video presentation of the mini-project.
 *Projects submitted in after the first deadline cannot get VG*.
 
+In the case not anyone can attend the oral presentation known in advance, you can still pass and get a VG if you submit the project report, slides and a recorded video presentation 23.59 before the day of the presentation.
+
 ## Course Literature and Video Material
 Below are the main references for the course.
 

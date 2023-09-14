@@ -41,6 +41,9 @@ On each assignment, if everything is correct (>90% of points), a VG point will b
 ### Reassessing grades
 Grades are not subject to appeal. However, a grading decision must be reassessed if it is clearly incorrect. Grades can never be lowered. If students want grades to be reassessed, they should contact the course administration who will distribute a form for reassessment the students have to fill out. 
 
+### Re-taking the course
+If you fail or drop-out from the course you will need to re-take all assignments and redo the mini-project next time the course is given.
+
 ## Follow up and late submissions
 There are two follow up deadlines (or follow-up corrections) during the course. First, the assignments can be submitted again at the deadline of the project work. Then additional submissions of assignments will be corrected. Also, roughly one month after the end of the course, assignments can be turned in again. *Assignments submitted in after the first deadline cannot get VG*.
 

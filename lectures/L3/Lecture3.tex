@@ -1,6 +1,6 @@
 %\documentclass[10pt,handout]{beamer}
 \documentclass[10pt]{beamer}
-\usepackage[english]{babel} % Anpassa efter svenska. Ger svensk logga.
+\usepackage{babel} % Anpassa efter svenska. Ger svensk logga.
 \usepackage[utf8]{inputenc} % Anpassa efter linux
 \usepackage{graphicx}
 \usepackage{hyperref}
@@ -164,7 +164,7 @@
 \begin{itemize}
 \item Observation model
   \begin{align*}
-   \frac{1}{\sqrt{2\pi}\sigma}\exp\left(-\frac{1}{2\sigma^2}(y-\theta)^2 \right)
+   \frac{1}{\sqrt{2\pi}\sigma}\exp\left(-\frac{1}{2\sigma^2}(y-\mu)^2 \right)
    \end{align*}
 \item Uninformative prior
   \begin{align*}
@@ -280,7 +280,7 @@
     \sigma^{-n-2}\exp\left(-\frac{1}{2\sigma^2}(n-1)s^2\right) \cdot} \\
     & \uncover<3->{&\int
     \exp\left(-\frac{n}{2\sigma^2}(\bar{y}-\mu)^2\right) d\mu}\\
-    \uncover<4->{\color{gray} Note! & & \color{gray} \int \frac{1}{\sqrt{2\pi}\sigma} \exp\left(-\frac{1}{2\sigma^2}(y-\theta)^2\right) d\theta = 1}\\
+    \uncover<4->{\color{gray} Note! & & \color{gray} \int \frac{1}{\sqrt{2\pi}\sigma} \exp\left(-\frac{1}{2\sigma^2}(y-\mu)^2\right) d\mu = 1}\\
     & \uncover<5->{\propto &
     \sigma^{-n-2}\exp\left(-\frac{1}{2\sigma^2}(n-1)s^2\right)\sqrt{2\pi\sigma^2/n}}\\
     & \uncover<6->{\propto &
@@ -296,7 +296,7 @@
   \item[] Known mean
     \begin{align*}
       \sigma^2 \mid y & \sim \Invchi2(n,v)\\
-      \text{where} \quad v&=\frac{1}{n}\sum_{i=1}^{n}(y_i-\theta)^2
+      \text{where} \quad v&=\frac{1}{n}\sum_{i=1}^{n}(y_i-\mu)^2
     \end{align*}
     \pause
   \item[] Unknown mean

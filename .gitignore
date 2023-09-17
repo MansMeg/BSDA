@@ -13,4 +13,5 @@ lectures/*/*.toc
 lectures/*/*.nav
 lectures/*/*.snm
 lectures/*/*.vrb
+lectures/*/*.aux
 */tmp/*

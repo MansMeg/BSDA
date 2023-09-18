@@ -1,4 +1,4 @@
-\documentclass[11pt,a4paper,english]{article}
+\documentclass[11pt,a4paper]{article}
 \usepackage[latin1]{inputenc}
 \usepackage{hyperref}
 \usepackage{listings}
@@ -169,6 +169,11 @@ The paper should consist of \emph{between three and a half (3.5) and four (4) pa
   \begin{itemize}
     \item Conclusions from the results.
     \item Discussion of problems and potential improvements and other models
+  \end{itemize}
+  \item Acknowledgements (optional)
+  \begin{itemize}
+    \item If you are willing to let me use your project report as an example in the next course, please state that in the Acknowledgements. Just add the following sentence: "We hereby grant our consent for the utilization of this project report as a reference material within the context of future editions of the course."
+    \item Other people you might want to thank.
   \end{itemize}
 \end{enumerate}
 

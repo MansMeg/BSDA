@@ -1,6 +1,6 @@
 %\documentclass[10pt,handout]{beamer}
 \documentclass[10pt]{beamer}
-\usepackage[english]{babel} % Anpassa efter svenska. Ger svensk logga.
+\usepackage{babel} % Anpassa efter svenska. Ger svensk logga.
 \usepackage[utf8]{inputenc} % Anpassa efter linux
 \usepackage{graphicx}
 \usepackage{hyperref}
@@ -238,7 +238,7 @@
 
   \vspace{-0.5\baselineskip}
   \begin{itemize}
-  \item With {\it conditionally} conjugate priors, the sampling from
+  \item With \uured{conditionally conjugate} priors, the sampling from
     the conditional distributions is easy for wide range of models
   \item<2-> BUGS / WinBUGS / OpenBUGS / JAGS
   \item<3-> No algorithm parameters to tune
@@ -456,7 +456,7 @@
 \frametitle{Metropolis-Hastings algorithm}
 
   \begin{itemize}
-  \item Generalization of Metropolis algorithm for non-symmetric proposal distributions
+  \item Generalization of Metropolis algorithm for \uured{non-symmetric} proposal distributions
     \begin{itemize}
     \item acceptance ratio includes ratio of proposal distributions
       \begin{equation*}
@@ -547,8 +547,35 @@
 
 \end{frame}
 
-\section{Diagnostics}
-%\frame{\sectionpage}
+\section{MCMC Diagnostics}
+\frame{\sectionpage}
+
+\begin{frame}
+
+\frametitle{Gibbs sampling as a special case}
+
+  \begin{itemize}
+  \item Specific case of Metropolis-Hastings algorithm
+    \begin{itemize}
+    \item single updated (or blocked)
+    \item proposal distribution is the conditional distribution\\
+      $\rightarrow$ proposal and target distributions are same\\
+      $\rightarrow$ acceptance probability is $1$
+    \end{itemize}
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+
+\frametitle{What we want to know}
+
+  \begin{enumerate}
+  \item Has the chains \uured{converged} to the posterior distribution?
+  \item How many \uured{efficient} samples do I have?
+  \end{enumerate}
+
+\end{frame}
 
 \subsection{Warm-up}
 %\frame{\sectionpage}
@@ -945,6 +972,9 @@
          \hat{\tau} & = 1 + 2 \sum_{t=1}^T \hat{\rho}_t\\
                  & \approx 24
        \end{align*}
+               \begin{align*}
+         \hat{S}_\text{eff} & = \frac{4500}{24} \approx  188
+       \end{align*}
      \end{minipage}
    \end{minipage}
    }
@@ -969,6 +999,9 @@
        \begin{align*}
          \hat{\tau} & = 1 + 2 \sum_{t=1}^T \hat{\rho}_t\\
                  & \approx 104
+       \end{align*}
+               \begin{align*}
+         \hat{S}_\text{eff} & = \frac{4500}{104} \approx  43
        \end{align*}
      \end{minipage}
    \end{minipage}
@@ -995,6 +1028,9 @@
          \hat{\tau} & = 1 + 2 \sum_{t=1}^T \hat{\rho}_t\\
                  & \approx 63
        \end{align*}
+        \begin{align*}
+         \hat{S}_\text{eff} & = \frac{4500}{63} \approx  71
+       \end{align*}
      \end{minipage}
    \end{minipage}
    }
@@ -1002,7 +1038,7 @@
 \end{frame}
 
 \section{Difficult geometries}
-%\frame{\sectionpage}
+\frame{\sectionpage}
 
 \begin{frame}
 
@@ -1017,17 +1053,21 @@
     \begin{itemize}
     \item optimal proposal depends on location
     \end{itemize}
+    \begin{center}
+      \href{https://chi-feng.github.io/mcmc-demo/app.html?algorithm=RandomWalkMH&target=funnel}{demo}
+    \end{center}
   \item<3-> Multimodal
     \begin{itemize}
     \item difficult to move from one mode to another
     \end{itemize}
+        \begin{center}
+      \href{https://chi-feng.github.io/mcmc-demo/app.html?algorithm=RandomWalkMH&target=multimodal}{demo}
+    \end{center}
   \item<4-> Long-tailed with non-finite variance and mean
     \begin{itemize}
     \item central limit theorem for expectations does not hold
     \end{itemize}
-    \begin{center}
-      \href{https://chi-feng.github.io/mcmc-demo/app.html?algorithm=RandomWalkMH&target=standard}{demo}
-    \end{center}
+
   \end{itemize}
 
 \end{frame}

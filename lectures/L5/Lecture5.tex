@@ -204,9 +204,9 @@
   \item Basic algorithm, for $j \in \{1,...,J\}$ {
       \begin{align*}
          \text{sample $\theta_{j,t}$ from} \quad & p(\theta_j|\theta_{-j,t-1}, y),\\
-      \text{where} \quad
-         \theta_{j,t-1} = & (\theta_{1,J},\dots,\theta_{j-1,t},
-        \theta_{j+1,t-1},\dots,\theta_{t-1,J})
+      \text{where} \quad 
+          \theta_{-j,t-1} = & (\theta_{1,t},\dots,\theta_{j-1,t}, 
+          \theta_{j+1,t-1},\dots,\theta_{J,t-1})
       \end{align*}
       }
   \item Will converge (in total variation) to $p(\theta|y)$ as $N\rightarrow\infty$\pause

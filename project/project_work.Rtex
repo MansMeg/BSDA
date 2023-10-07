@@ -122,17 +122,31 @@ The following data sets should not be used in the project:
 
 
 \subsection{Project Proposal}
-Students need to turn in a half-page project and data description by and get approval for the proposed project. The project proposal must include the following pieces.
+Students need to turn in a one-page project proposal and data description by and get approval for the proposed project. The Project proposal should follow the ICML paper format that can be found \href{https://icml.cc/Conferences/2020/StyleAuthorInstructions}{[here]}.
+The ICML format is also available in overleaf here: \href{https://www.overleaf.com/latex/templates/icml-2019-submission-template/vkqjjvzjvhdc}{[here]}. We recommend using Overleaf for writing the proposal.
 
 \emph{The project proposal should include all the group members names!}
 
-\begin{itemize}
-  \item Description of the problem/area/idea.
-  \item Description of the data, e.g. the number of observations, the number of groups (if you intend to use a hierarchical model), what is the dependent variable etc.
-  \item Describe the most basic model you will use/start from in math (using LaTeX equations).
-\end{itemize}
+\begin{enumerate}
+  \item Title
+  \begin{itemize}
+    \item The title should describe the problem and be like a real article title, i.e. don't write "Mini-project:" or similar in the title.
+  \end{itemize}
+  \item Abstract (1 paragraph)
+  \item Introduction (roughly 0.5 page)
+  \begin{itemize}
+    \item Description of the problem/area/idea.
+  \end{itemize}
+  \item Data (roughly 0.5 page)
+  \begin{itemize}
+    \item Description of the data, e.g. the number of observations, the number of groups (if you intend to use a hierarchical model), what is the dependent variable etc.
+  \end{itemize}
+  \item Models (roughly 0.25 page)
+  \begin{itemize}
+    \item Describe the most basic model you will use/start from in math (using LaTeX equations).
+  \end{itemize}
+\end{enumerate}
 
-To minimize the project work's total workload, I suggest you see the proposal as a first draft of Sections 1 and 2 of the project report (see below). Then you will already have written the first part of your project report.
 
 \subsection{Project Report}
 \label{project_report}
@@ -140,20 +154,24 @@ To minimize the project work's total workload, I suggest you see the proposal as
 The Project outcome is a report in the ICML paper format that can be found \href{https://icml.cc/Conferences/2020/StyleAuthorInstructions}{[here]}.
 The ICML format is also available in overleaf here: \href{https://www.overleaf.com/latex/templates/icml-2019-submission-template/vkqjjvzjvhdc}{[here]}. We recommend using Overleaf for writing the report.
 
-The paper should consist of \emph{between three and a half (3.5) and four (4) pages}, excluding references and eventual appendices. Write the report as you would do in a real situation, i.e. do not refer to the paper as a "mini-project" or similar. The paper should include the following parts/sections:
+The paper should consist of \emph{between three and a half (3.5) and four (4) pages}, excluding references and eventual appendices. Write the report as you would do in a real situation, i.e. do not refer to the paper as a "mini-project" or similar.
+
+\emph{The project report should include all the group members names!}
+
+The paper should include the following parts/sections:
 \begin{enumerate}
   \item Title
   \begin{itemize}
     \item The title should describe the problem and be like a real article title, i.e. don't write "Mini-project:" or similar in the title.
   \end{itemize}
-  \item Abstract
+  \item Abstract (1 paragraph)
   \item Introduction (roughly 0.5 page)
   \begin{itemize}
     \item Description of the problem.
   \end{itemize}
   \item Data (roughly 0.5 page)
   \begin{itemize}
-    \item Description of the data.
+    \item Description of the data, e.g. the number of observations, the number of groups (if you intend to use a hierarchical model), what is the dependent variable etc.
   \end{itemize}
   \item Models (roughly 0.5 page)
   \begin{itemize}

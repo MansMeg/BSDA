@@ -1,6 +1,6 @@
 %\documentclass[10pt,handout]{beamer}
 \documentclass[10pt]{beamer}
-\usepackage[english]{babel} % Anpassa efter svenska. Ger svensk logga.
+\usepackage{babel} % Anpassa efter svenska. Ger svensk logga.
 \usepackage[utf8]{inputenc} % Anpassa efter linux
 \usepackage{graphicx}
 \usepackage{hyperref}
@@ -64,6 +64,16 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\begin{frame}
+
+\frametitle{Assignment 6 }
+
+  \begin{itemize}
+  \item Difficulties with stan: R-studio can check stan syntax + take small steps
+  \item Repetition - there is a purpose behind this.
+  \item $\hat{R}$ as a posterior statistic of interest
+  \end{itemize}
+\end{frame}
 
 \section{Hierarchical models}
 \frame{\sectionpage}
@@ -509,7 +519,9 @@
     \begin{equation*}
       p(\theta_1,\theta_2,\theta_3) = p(\theta_2,\theta_3,\theta_1)
     \end{equation*}
-
+\pause
+  \uured{Can we come up with a situation where this doesn't hold?}
+\pause
   \item Exchangeability implies symmetry: \\If there is no information
     which can be used \textit{a priori} to separate $\theta_j$ form
     each other, we can assume exchangeability. ("Ignorance implies exchangeability")
@@ -565,7 +577,10 @@
     \item<+-> all rats not exchangeable
     \item<+-> in a single laboratory rats exchangeable
     \item<+-> laboratories exchangeable
-    \item<+-> $\rightarrow$ hierarchical model can be used
+
+    \pause
+
+    $\rightarrow$ hierarchical model can be used
     \end{itemize}
   \end{itemize}
 \end{frame}
@@ -583,7 +598,7 @@
     \end{itemize}
   \item<2-> Partial exchangeability
     \begin{itemize}
-    \item if the observations can be grouped (a priori), then use
+    \item if the observations can be grouped (a priori), then we can use a
       hierarchical model
     \end{itemize}
 \end{itemize}
@@ -595,7 +610,7 @@
 
   \begin{itemize}
   \item The simplest form of the exchangeability (but not the only
-    one) for the parameters $\theta$ conditional independence
+    one) for the parameters $\theta$ is \uured{conditional independence}
     \begin{equation*}
       p(x_1,\ldots,x_J|\theta)=\prod_{j=1}^J p(x_j|\theta)
     \end{equation*}
@@ -607,46 +622,25 @@
     \begin{equation*}
       p(x_1,\ldots,x_J)=\int \left[\prod_{j=1}^J p(x_j|\theta)\right]p(\theta)d\theta
     \end{equation*}
-
-  %   \vspace{-6mm}
-  % \item marginal distribution of $\theta$
-  %   \begin{equation*}
-  %     p(\theta)=\int \left[\prod_{j=1}^J p(\theta_j|\phi)\right]p(\phi)d\phi
-  %   \end{equation*}
-  % \item mixture of iid distributions
    \end{itemize}
 \end{frame}
 
-\begin{frame}
+%\begin{frame}
 
-\frametitle{Exchangeability - Counter example}
+%\frametitle{Exchangeability - Counter example}
 
-  \begin{itemize}
-  \item A six sided die with probabilities (a finite sequence!)
-    $\theta_1,\ldots,\theta_6$
-    \begin{itemize}
-    \item without additional knowledge $\theta_1,\ldots,\theta_6$
-      exchangeable
-    \item due to the constraint $\sum_{j=1}^6\theta_j$, parameters
-      are not independent and thus joint distribution can not be
-      presented as iid mixture
-    \end{itemize}
-    % \item Tehtävä 5.2+
-%    \pause
-%  \item Esimerkki: Noppa jonka sivujen todennäköisyydet
-%    $\theta_1,\ldots,\theta_{1000000}$
+%  \begin{itemize}
+%  \item A six sided die with probabilities (a finite sequence!)
+%    $\theta_1,\ldots,\theta_6$
 %    \begin{itemize}
-%      \item nopan sivun arvo pariton tai parillinen
-%      \item vaikka $\theta_1,\ldots,\theta_{1000000}$ eivät
-%        riippumattomia, jos tutkitaan parittomien ja parillisten
-%        sivujen todennäköisyyksiä, pienellä nopanheittojen määrällä
-%        ($n \ll 1000000$)
-%        voidaan toimia aivan kuin $\theta_1,\ldots,\theta_{1000000}$
-%        riippumattomia
-%      \item vrt. de Finettin lause
+%    \item without additional knowledge $\theta_1,\ldots,\theta_6$
+%      exchangeable
+%    \item due to the constraint $\sum_{j=1}^6\theta_j$, parameters
+%      are not independent and thus joint distribution can not be
+%      presented as iid mixture
 %    \end{itemize}
-  \end{itemize}
-\end{frame}
+%  \end{itemize}
+%\end{frame}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

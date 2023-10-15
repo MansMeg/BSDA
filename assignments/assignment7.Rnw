@@ -106,6 +106,7 @@ knitr::opts_chunk$set(size = "small")
 
 \subsubsection*{Information on this assignment}
 This assignment is related to Chapter 5.
+\vspace{3mm}
 
 \textbf{Reading instructions:} Chapter 5 in BDA3, see reading instructions.
 

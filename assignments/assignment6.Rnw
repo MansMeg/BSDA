@@ -97,6 +97,7 @@ knitr::opts_chunk$set(size = "small")
 \subsubsection*{Information on this assignment}
 This assignment is related to Chapters 10 and 11.
 
+\vspace{3mm}
 \textbf{Reading instructions:} Chapter 10 and 11 in BDA3, see reading instructions.
 
 % \textbf{Grading instructions:} The grading will be done in peergrade. All grading questions and evaluations for assignment 6 can be found \href{https://avehtari.github.io/BDA_course_Aalto/assignments/assignment6_rubric.html}{\textbf{here}}.
@@ -133,7 +134,7 @@ Use the Gaussian prior
 
 \textbf{Hint!} You will need Stan functions \texttt{multi\_normal} and \texttt{binomial\_logit} for implementing the prior and observation model, respectively. In Stan code, it is easiest to declare a variable (say \texttt{theta}) which is a two-element vector so that the first value denotes $\alpha$ and latter one $\beta$. This is because the \texttt{multi\_normal} function that you need for implementing the prior requires a vector as an input.
 
-\item Use $\widehat{R}$ for convergence analysis. You can either use Eq. (11.4) in BDA3 or the later version that can be found \href{https://arxiv.org/abs/1903.08008}{\textbf{here}}. You should specify which $\widehat{R}$ you used. In R the best choice is to use function \texttt{Rhat} from package \texttt{rstan} (see \texttt{?rstan::Rhat}). To check $\widehat{R}$ and other diagnostics, you can also call \texttt{monitor(fit)}, where \texttt{fit} is the fit object returned by Stan's sampling function. Report the $\widehat{R}$ values both for $\alpha$ and $\beta$ and discuss the convergence of the chains.
+\item Use $\widehat{R}$ for convergence analysis. You can either use Eq. (11.4) in BDA3 or the later version that can be found \href{https://arxiv.org/abs/1903.08008}{\textbf{here}}. You should specify which $\widehat{R}$ you used. In R the best choice is to use function \texttt{Rhat} from package \texttt{rstan} (see \texttt{?rstan::Rhat}). To check $\widehat{R}$ and other diagnostics, you can also call \texttt{print(fit)}, where \texttt{fit} is the fit object returned by Stan's sampling function. Report the $\widehat{R}$ values both for $\alpha$ and $\beta$ and discuss the convergence of the chains.
 \textbf{Briefly explain in your own words how to interpret the obtained} $\widehat{R}$ \textbf{values}.
 
 \item Plot the draws for $\alpha$ and $\beta$ (scatter plot) and include this plot in your report. You can compare the results to Figure~3.3b in BDA3 to verify that your code gives sensible results. Notice though that the results in Figure~3.3b are generated from posterior with a uniform prior, so even when your algorithm works perfectly, the results will look slightly different (although fairly similar).

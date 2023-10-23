@@ -1,6 +1,6 @@
 %\documentclass[10pt,handout]{beamer}
 \documentclass[10pt]{beamer}
-\usepackage[english]{babel} % Anpassa efter svenska. Ger svensk logga.
+\usepackage{babel} % Anpassa efter svenska. Ger svensk logga.
 \usepackage[utf8]{inputenc} % Anpassa efter linux
 \usepackage{graphicx}
 \usepackage{hyperref}
@@ -311,7 +311,28 @@ where ${\color{uured}\tilde{y}}$ is an unseen observation generated from the tru
 
 \end{frame}
 
-% TODO: Add Hollis example here as an example
+\begin{frame}
+\frametitle{Automated decision-making and Discrimination}
+
+Work of Holli Sargeant:
+
+\begin{itemize}
+\item Automated decision-making in an ML-context
+\[
+d^\star = \sum_d u(y,d) \hat{p}(y|d,x)\,,
+\]
+where $y$ is indicates if a person defaults, $d$ is the decision on weather granting a loan or not, $\hat{p}$ is a prediction model, and $u(y,d)$ is the utility of a bank.
+\pause
+\item Conditional statistical parity
+\[
+\mathbb{E}_x\left[\hat{p}(y|x) \mid x_l, x_p\right] = \mathbb{E}_x\left[\hat{p}(y|x)\mid x_l\right]\,,
+\label{eq_cond_stat_parity}
+\]
+where $x_l$ is legitimate factors and $x_p$ are protected attributes.
+\end{itemize}
+
+\end{frame}
+
 
 \section{Course Evaluation}
 \frame{\sectionpage}
@@ -322,8 +343,11 @@ where ${\color{uured}\tilde{y}}$ is an unseen observation generated from the tru
 
 \begin{itemize}
 \item What was good? What was fun?
+\pause
 \item What can be improved? What was annoying?
+\pause
 \item Did you get what you expected?
+\pause
 \item How can I get you to speak more during class?
 \end{itemize}
 

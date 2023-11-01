@@ -114,6 +114,8 @@ If you have a hard time finding a dataset to use, there are a lot of available d
 \item The machine learning competition site Kaggle: \href{https://www.kaggle.com/}{[here]}
 \end{itemize}
 
+\emph{Hint!} Use a data set with a natural grouping (e.g. patients in hospitals, car emissions by different brands, data with a time dimension etc) since that will help you to use ideas of hiearchical modeling from later in the course.
+
 The following data sets should not be used in the project:
 \begin{itemize}
 \item Titanic (R data set)
@@ -127,24 +129,22 @@ The ICML format is also available in overleaf here: \href{https://www.overleaf.c
 
 \emph{The project proposal should include all the group members names!}
 
+In the Project proposal part 1, the following parts should be included. See Project report below on the details on each section.
+
 \begin{enumerate}
   \item Title
-  \begin{itemize}
-    \item The title should describe the problem and be like a real article title, i.e. don't write "Mini-project:" or similar in the title.
-  \end{itemize}
   \item Abstract (1 paragraph)
   \item Introduction (roughly 0.5 page)
-  \begin{itemize}
-    \item Description of the problem/area/idea.
-  \end{itemize}
   \item Data (roughly 0.5 page)
-  \begin{itemize}
-    \item Description of the data, e.g. the number of observations, the number of groups (if you intend to use a hierarchical model), what is the dependent variable etc.
-  \end{itemize}
   \item Models (roughly 0.25 page)
-  \begin{itemize}
-    \item Describe the most basic model you will use/start from in math (using LaTeX equations).
-  \end{itemize}
+  \emph{Note!} For proposal pt 1, you only need the most simple model to model the actual data.
+\end{enumerate}
+
+For Project Proposal part 2, you need to also add:
+
+\begin{enumerate}
+  \item The first model in Stan code in the appendix.
+  \item The first model estimated and added to the Results section of the project proposal.
 \end{enumerate}
 
 
@@ -166,6 +166,7 @@ The paper should include the following parts/sections:
   \end{itemize}
   \item Abstract (1 paragraph)
   \item Introduction (roughly 0.5 page)
+  \emph{Note!} The introduction should be as an introduction to an article, i.e. describe the problem and include at least one reference.
   \begin{itemize}
     \item Description of the problem.
   \end{itemize}
@@ -173,14 +174,15 @@ The paper should include the following parts/sections:
   \begin{itemize}
     \item Description of the data, e.g. the number of observations, the number of groups (if you intend to use a hierarchical model), what is the dependent variable etc.
   \end{itemize}
-  \item Models (roughly 0.5 page)
+  \item Models and methods (roughly 0.5 page)
   \begin{itemize}
-    \item Description of the models
+    \item Description of the models \emph{Note!} Stan code for all models should be included as an Appendix.
     \item Description of how the models were compared (LOO/WAIC)
   \end{itemize}
   \item Results (roughly 1.5-2 pages)
   \begin{itemize}
-    \item Results of the different models
+    \item Results of the different models.
+    \item Estimated parameters of interest together with their posterior uncertainty.
     \item Which model does seem to work the best, and why?
   \end{itemize}
   \item Conclusions (roughly 0.5-1 pages)
@@ -193,15 +195,21 @@ The paper should include the following parts/sections:
     \item If you are willing to let me use your project report as an example in the next course, please state that in the Acknowledgements. Just add the following sentence: "We hereby grant our consent for the utilization of this project report as a reference material within the context of future editions of the course."
     \item Other people you might want to thank.
   \end{itemize}
+  \item Appendix
 \end{enumerate}
 
-Additional requirements and hints for the report:
+Additional requirements for the report:
 \begin{enumerate}
 \item All Figures using color should have a color-blind friendly color palette. See \href{http://www.cookbook-r.com/Graphs/Colors_(ggplot2)/#a-colorblind-friendly-palette}{here} and \href{https://rdrr.io/cran/ggthemes/man/colorblind.html}{here}.
-\item Before you turn in the project, do a language check with a tool such as Grammarly. A project will poor english (errors that would have been spotted with a tool such as Grammarly) will affect your grade downwards.
-\item The final report should look like a research paper, i.e. try to avoid bullet list and get a good flow in the text. Also do not refer to the report as a mini-project. See it as a real report (or short paper).
+\item The final report should look like a research paper/article, i.e. try to avoid bullet list and get a good flow in the text. Also do not refer to the report as a mini-project. See it as a real report (or short paper).
+\item All model included in the report should have the Stan code included in the appendix.
 \item You should use correct reference systems. A tip is to use \texttt{\\citet}, \texttt{\\citep}, and \texttt{\\bibtex}. This will also simplify your future thesis work.
+\item You should include some (or all) estimated parameters together with their uncertainty and $\hat{R}$ and interpret them in the report.
+\end{enumerate}
 
+Additional hints for the report:
+\begin{enumerate}
+\item Before you turn in the project, do a language check with a tool such as Grammarly. A project will poor english (errors that would have been spotted with a tool such as Grammarly) will affect your grade downwards.
 \end{enumerate}
 
 
@@ -241,6 +249,7 @@ To pass the report (G), the following criterias should be fulfilled:
 
 \begin{enumerate}
 \item The report should be turned in and follow the general outline of Section \ref{project_report}.
+\item The report should follow the additional requirements in Section \ref{project_report}.
 \item show basic knowledge and understanding of the core concepts of the course by using concepts correctly
 \item show an understanding in when certain methods should be used or not, and how
 \item use at least two (2) different models and compare them in a correct way

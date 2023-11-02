@@ -174,7 +174,7 @@ Your tasks are the following:
   how you carried out your prior implementation, e.g.\ ``Added line
   \dots in block \dots''.
 
-\item[d)] In a similar way, add a weakly informative prior for the
+\item[d)] In a similar way, add a proprt and weakly informative prior for the
   intercept \texttt{alpha} and explain how you chose the prior.
 
 \end{enumerate}
@@ -236,20 +236,22 @@ library(bsda)
 data("factory")
 @
 
-For this problem, you'll use the following Gaussian models:
+For this problem, you'll use the following three Gaussian models:
 \begin{itemize}
 \item a separate model, in which each machine has its own model/parameters
 \item a pooled model, in which all measurements are combined and there is no distinction between machines
 \item a hierarchical model, which has a hierarchical structure as described in BDA3 Section 11.6.
 \end{itemize}
 
-As in the model described in the book, use the same measurement standard deviation $\sigma$ for all the groups in the hierarchical model. In the separate model, however, use separate measurement standard deviation $\sigma_j$ for each group $j$. You should use weakly informative priors for all your models.
+As in the model described in the book, use the same measurement standard deviation $\sigma$ for all the groups in the hierarchical model. In the separate model, however, use separate measurement standard deviation $\sigma_j$ for each group $j$. You should use a $N(100,100)$ for $\mu$ parameters and $N^+(0,50)$, i.e. truncated Normal priors for $\sigma$ parameters in the model.
 
-The provided Stan code in Listing~\ref{listing2} given on the next page is an example of the separate model (but with very strange results, why?). This separate model can be summarized mathematically as:
+The provided Stan code in Listing~\ref{listing2} given on the next page is an example of the separate model (but with very strange results, why?).
+
+Change the Stan code to a separate model that can be summarized mathematically as:
 \begin{align*}
     y_{ij} &\sim N(\mu_j,\sigma_j)\\
-    \mu_{j} &\sim N(0,1)\\
-    \sigma_{j} &\sim \Invchi2(10)
+    \mu_{j} &\sim N(100,100)\\
+    \sigma_{j} &\sim N^+(0,50)
 \end{align*}
 
 To run Stan for that model, simply use:
@@ -274,7 +276,7 @@ cat("Inference for Stan model: 5cbfa723dd8fb382e0b647b3943db079.\n4 chains, each
 cat("              mean se_mean   sd      2.5%       25%       50%\nmu[1]       0.11    0.01  0.98   -1.81   -0.56    0.12    0.77\nmu[2]       0.10    0.01  1.00   -1.86   -0.56    0.10    0.79\n...\n")
 @
 
-\textbf{Note!} These are \emph{not} the results you would expect to turn in your report. You will need to change the code for the separate model as well.
+\textbf{Note!} These are \emph{not} the results you would expect to turn in your report. You will need to change the code for the separate model code as well.
 
 For \emph{each of the three models} (separate, pooled, hierarchical),
 your tasks are the following:
@@ -283,25 +285,19 @@ your tasks are the following:
 \item [a)] Describe the model with mathematical notation (as is done
   for the separate model above). Also describe in words the difference
   between the three models.
-\item [b)] Implement the model in Stan and include the code in the
-  report. Use weakly informative priors for all your models.
-\item [c)] Using the model (with weakly informative priors) report,
-  comment on and, if applicable, plot histograms for the following
-  distributions:
+\item [b)] Implement the model in Stan with the above mentioned weak priors and include the code in the report. Note that you might get divergent transitions. You should only use inference when there is no divergent transitions. To solve the issue, you can either change \texttt{adapt\_delta} or reparametrize the model (see how  \href{https://mc-stan.org/docs/stan-users-guide/reparameterization.html#hierarchical-models-and-the-non-centered-parameterization}{here}). If you compute the posterior correct, you should get that $\sigma_{1,separate} \approx 26.7$, $\sigma_{hiearchical} \approx 15.2$, and $\sigma_{pooled} \approx 18.8$.
+\item [c)] Using the models, with the specified weakly informative priors, report the expectation/mean (and 90\% uncertainty intervals), comment on it and, if applicable, plot histograms for the following distributions:
   \begin{itemize}
-  \item [i)] the posterior distribution of the mean of the quality
-    measurements of the sixth machine.
-  \item [ii)] the predictive distribution for another quality
+  \item [i)] the posterior distribution of the mean ($\mu$) of the quality
+    measurements of the sixth machine
+  \item [ii)] the predictive distribution $p(\tilde{y})$ for another quality
     measurement of the sixth machine.
-  \item [iii)] the posterior distribution of the mean of the quality
+  \item [iii)] the posterior distribution of the mean ($\mu$) of the quality
     measurements of a seventh machine (not in the data).
   \end{itemize}
-\item [d)] Report the posterior expectation for $\mu_1$ with a 90\%
-  credible interval but using a $\operatorname{normal}(0,10)$ prior
-  for the $\mu$ parameter(s) and a $\operatorname{Gamma}(1,1)$ prior
-  for the $\sigma$ parameter(s). For the hierarchical model, use the
-  $\operatorname{normal}(0,10)$ and $\operatorname{Gamma}(1,1)$ as
-  hyper-priors.
+  \item [d)] Visualize the posterior $p(\theta|y)$ and $p(\log \tau|y)$ in the hiearchcial model, where $\tau$ is the hyperprior sd parameter and $\theta$ is hyperprior mean. Interpret these parameters.
+\item [e)] Visualize the posterior $p(\mu_3,\log \tau|y)$, where $\tau$ is the hyperprior sd parameter. Describe the distribution and reason about the 'funnel' shape. What does it mean for the relationship between $\mu_3$ and $\log \tau$?
+\item [f)] Now change the prior for the $\sigma$, residual parameter(s), to a $\operatorname{Gamma}(1,1)$. What happens? Why?
 \end{itemize}
 
 \begin{lstlisting}[
@@ -328,7 +324,7 @@ parameters {
 model {
   // priors
   for (j in 1:J){
-    mu[j] ~ normal(0, 1);
+    mu[j] ~ t(10, 10, 10);
     sigma[j] ~ inv_chi_square(10);
   }
 

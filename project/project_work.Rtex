@@ -123,7 +123,7 @@ The following data sets should not be used in the project:
 \end{itemize}
 
 
-\subsection{Project Proposal}
+\subsection{Project Proposal (Part 1 and Part 2)}
 Students need to turn in a one-page project proposal and data description by and get approval for the proposed project. The Project proposal should follow the ICML paper format that can be found \href{https://icml.cc/Conferences/2020/StyleAuthorInstructions}{[here]}.
 The ICML format is also available in overleaf here: \href{https://www.overleaf.com/latex/templates/icml-2019-submission-template/vkqjjvzjvhdc}{[here]}. We recommend using Overleaf for writing the proposal.
 
@@ -137,13 +137,13 @@ In the Project proposal part 1, the following parts should be included. See Proj
   \item Introduction (roughly 0.5 page)
   \item Data (roughly 0.5 page)
   \item Models (roughly 0.25 page)
-  \emph{Note!} For proposal pt 1, you only need the most simple model to model the actual data.
+  \emph{Note!} For proposal part 1, you only need the most simple model to model the actual data.
 \end{enumerate}
 
-For Project Proposal part 2, you need to also add:
+For Project Proposal part 2, you need to add the following to your report:
 
 \begin{enumerate}
-  \item The first model in Stan code in the appendix.
+  \item Stan code in the appendix for the first proposed model (from part 1)
   \item The first model estimated and added to the Results section of the project proposal.
 \end{enumerate}
 
@@ -268,7 +268,7 @@ To pass the mini-project with distinction (VG), the following criterias also app
 \begin{enumerate}
 \item show deep knowledge knowledge and understanding of the core concepts and how to adapt them in a good way to a new situation
 \item connect the analysis in the report with other areas in statistics or previous courses taken in the masters program, i.e. not just repeat what has been done in previous labs.
-\item use models that has not been part of the BSDA course
+\item use models that has not been part of the BSDA course (but for example presented in other courses)
 \end{enumerate}
 
 

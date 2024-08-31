@@ -207,7 +207,7 @@
   \item Observed (known) covariates: $x$
   \item We assume \emph{exchangeability} of the observations:
 \[
-p(y_1,...,y_n)
+p(y_1,...,y_n) = p(y_\pi(1),...,y_\pi(n))
 \]
   \end{itemize}
 \end{frame}
@@ -231,7 +231,7 @@ p(y_1,...,y_n)
   \pause
   \item Conditioning on observed data $y$ to calculate the posterior distribution $p(\theta|y)$%: calculating and interpreting the appropriate posterior distribution—the conditional probability distribution of the unobserved quantities of ultimate interest, given the observed data.
   \pause
-  \item Evaluate the model. If not satisfied, go back to 1.% Evaluating the fit of the model and the implications of the resulting posterior distribution: how well does the model fit the data, are the substantive conclusions reasonable, and how sensitive are the results to the modeling assumptions in step 1? In response, one can alter or expand the model and repeat the three steps.
+  \item Evaluate the model. If not satisfied, go back to 1. Else use the model.% Evaluating the fit of the model and the implications of the resulting posterior distribution: how well does the model fit the data, are the substantive conclusions reasonable, and how sensitive are the results to the modeling assumptions in step 1? In response, one can alter or expand the model and repeat the three steps.
    \end{enumerate}
 \end{frame}
 
@@ -240,7 +240,7 @@ p(y_1,...,y_n)
   \begin{itemize}
   \item Bayesian conclusions about $\theta$ or $\tilde{y}$ are made using probabilities, {\color{uured} conditional on data} $y$
   \pause
-  \item We state our uncertainty about $\theta$ or $\tilde{y}$ as distributions
+  \item We state our uncertainty about $\theta$ or $\tilde{y}$ as \uured{distributions}
   \pause
   \begin{itemize}
     \item potentially observed: $p(\tilde{y}|y)$
@@ -279,7 +279,7 @@ p(y_1,...,y_n)
   \pause
   \item $p(\theta|y)$ summarize our knowledge about $\theta$
   \pause
-  \item Bayesian statistics obey the \emph{likelihood principle}: data only affects $p(\theta|y)$ through the likelihood $p(y|\theta)$
+  \item Bayesian statistics obey the \emph{likelihood principle}: \\ data only affects $p(\theta|y)$ through the likelihood $p(y|\theta)$
   \end{itemize}
 \end{frame}
 
@@ -488,7 +488,7 @@ p(\tilde{y}|y,\tilde{x}) = \int Po(\exp(\alpha + \beta \tilde{x})) p(\alpha, \be
 \frame{\sectionpage}
 
 \begin{frame}{Computation}
-  We need to be able to compute expectations with respect to posterior
+  We need to be able to compute expectations with respect to a posterior
   distribution $p(\theta|y)$
   \begin{align*}
     \E_{\theta|y}\left[ g(\theta) \right] = \int p(\theta|y)g(\theta) d\theta
@@ -672,50 +672,50 @@ generated quantities {
 %
 %\end{frame}
 
-\begin{frame}{Ambiguous notation in statistics}
-
-  \begin{itemize}
-  \item[] In $p(y|\theta)$
-    \pause
-  \begin{itemize}
-  \item[-] $y$ can be variable or (observed) value
-    \begin{itemize}
-    \item[] we could clarify by using $p(Y|\theta)$ or $p(y|\theta)$
-    \end{itemize}
-    \pause
-  \item[-] $\theta$ can be variable or value
-    \begin{itemize}
-    \item[] we could clarify by using $p(y|\Theta)$ or $p(y|\theta)$
-    \end{itemize}
-    \pause
-  \item[-] $p$ can be a discrete or continuous function of $y$ or $\theta$
-    \begin{itemize}
-    \item[] we could clarify by using $P_Y$, $P_\Theta$, $p_Y$ or $p_\Theta$
-    \end{itemize}
-    \pause
-\item[-]
-  $P_Y(Y|\Theta=\theta)$ is a probability mass function, sampling distribution, observation model
-    \pause
-\item[-]
-$P(Y=y|\Theta=\theta)$ is a probability
-    \pause
-\item[-]
-$P_\Theta(Y=y|\Theta)$ is a likelihood function (can be discrete or continuous)
-    \pause
-\item[-] $p_Y(Y|\Theta=\theta)$ is a probability density function, sampling distribution, observation model
-    \pause
-\item[-] $p(Y=y|\Theta=\theta)$ is a density
-    \pause
-\item[-] $p_\Theta(Y=y|\Theta)$ is a likelihood function (can be discrete or continuous)
+%\begin{frame}{Ambiguous notation in statistics}
+%
+%  \begin{itemize}
+%  \item[] In $p(y|\theta)$
+%    \pause
+%  \begin{itemize}
+%  \item[-] $y$ can be variable or (observed) value
+%    \begin{itemize}
+%    \item[] we could clarify by using $p(Y|\theta)$ or $p(y|\theta)$
+%    \end{itemize}
+%    \pause
+%  \item[-] $\theta$ can be variable or value
+%    \begin{itemize}
+%    \item[] we could clarify by using $p(y|\Theta)$ or $p(y|\theta)$
+%    \end{itemize}
+%    \pause
+%  \item[-] $p$ can be a discrete or continuous function of $y$ or $\theta$
+%    \begin{itemize}
+%    \item[] we could clarify by using $P_Y$, $P_\Theta$, $p_Y$ or $p_\Theta$
+%    \end{itemize}
+%    \pause
+%\item[-]
+%  $P_Y(Y|\Theta=\theta)$ is a probability mass function, sampling distribution, observation model
+%    \pause
+%\item[-]
+%$P(Y=y|\Theta=\theta)$ is a probability
+%    \pause
+%\item[-]
+%$P_\Theta(Y=y|\Theta)$ is a likelihood function (can be discrete or continuous)
+%    \pause
+%\item[-] $p_Y(Y|\Theta=\theta)$ is a probability density function, sampling distribution, observation model
+%    \pause
+%\item[-] $p(Y=y|\Theta=\theta)$ is a density
+%    \pause
+%\item[-] $p_\Theta(Y=y|\Theta)$ is a likelihood function (can be discrete or continuous)
 %    \pause
 %  \item[-] $y$ and $\theta$ can also be mix of continuous and discrete
 %    \pause
 %    \item[-] Due to the sloppines sometimes likelihood is used to refer
 %$P_{Y,\theta}(Y|\Theta)$, $p_{Y,\theta}(Y|\Theta)$
 
-  \end{itemize}
-\end{itemize}
-\end{frame}
+%  \end{itemize}
+%\end{itemize}
+%\end{frame}
 
 
 

@@ -70,7 +70,7 @@ Is the computed mean in 2 c) close to ...?
 - No
 - Yes
 
-### Q8 - 1 point
+### Q8a - 1 point
 
 Is the variance in 2 c) close to ...?
 
@@ -78,14 +78,24 @@ Is the variance in 2 c) close to ...?
 - Yes
 
 
-### Q9 - 1 point
+### Q8b - 1 point
 
 Is the interval in 2 d) roughly [..., ...]? Remember that since the interval is computed from random samples, there is variation but the interval should be roughly the same!
 
 - No
 - Yes
 
+
 ## Exercise 3
+
+### Q9a - 1 point
+Is the final likelihood correct?
+
+### Q9a - 1 point
+Is there multiple steps showing how to compute the likelihood analytically?
+
+
+## Exercise 4
 
 ### Q10 - 1 point
 

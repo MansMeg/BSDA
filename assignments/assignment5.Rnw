@@ -189,7 +189,7 @@ density_ratio(alpha_propose = 0.374, alpha_previous = 1.89,
     modify the proposal distribution.
   \end{enumerate}
 
-\item Plot the draws for $\alpha$ and $\beta$ (scatter plot) and include this plot in your report. You can compare the results to Figure~3.3b in BDA3 to verify that your code gives sensible results. Notice though that the results in Figure~3.3b are generated from posterior with a uniform prior, so even when if your algorithm works perfectly, the results will look slightly different (although fairly similar).
+\item Plot the draws for $\alpha$ and $\beta$ (scatter plot) and include this plot in your report. If you have a large sample, make sure that the plot is readable by decreasing opacity or only plotting a random subset of the samples. You can compare the results to Figure~3.3b in BDA3 to verify that your code gives sensible results. Notice though that the results in Figure~3.3b are generated from posterior with a uniform prior, so even when if your algorithm works perfectly, the results will look slightly different (although fairly similar).
 \end{enumerate}
 
 \end{document}

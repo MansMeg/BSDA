@@ -122,7 +122,7 @@ Don't include \texttt{markmyassignment} results in the report.
 
 \newpage
 
-\subsection*{Inference for binomial proportion (Computer)}
+\section{Inference for binomial proportion (Computer)}
 
 Algae status is monitored in 274 sites at Finnish lakes and rivers.
 The observations for the 2008 algae status at each site are presented
@@ -187,6 +187,28 @@ beta_low(prior_alpha = 2, prior_beta = 10, data = algae_test, pi_0 = 0.2)
 \end{enumerate}
 \textbf{Hint!} With a conjugate prior, a closed-form posterior is Beta form (see
 equations in the book). Useful functions: {\tt dbeta}, {\tt pbeta}, {\tt qbeta} in R.
+
+
+\section{Inference for count data (Computer)}
+
+As a next step we will analyze count data. We will use the \texttt{warpbreaks} data from the R \texttt{datasets} package that describe the number of breaks when warping (use \texttt{?warpbreaks} to get more information. We will analyze the \texttt{breaks} variable using a Poisson model.
+
+<<echo=TRUE,eval=TRUE>>=
+library(datasets)
+data("warpbreaks")
+head(warpbreaks$breaks)
+mean(warpbreaks$breaks)
+length(warpbreaks$breaks)
+@
+
+
+\begin{enumerate}[a)]
+\item Derive posterior (analytically) using a Poisson likelihood with parameter $\lambda$ and a Gamma prior with $\alpha$ (\texttt{shape} in the R \texttt{*gamma}-functions) and $\beta$ (\texttt{rate} in the R \texttt{*gamma}-functions). Start with the likelihood and prior and show analytically that the prior and posterior is conjugate.
+\item Compute the (analytical) posterior for the \texttt{warbreaks} \texttt{breaks} variable for any prior hyperparameter $\alpha$ and $\beta$.
+\item Create a 95\% credible interval, using R, for the $\lambda$ parameter using the 2.5\% upper and lower percentile of the posterior distribution for $\lambda$. Use a $Gamma(\alpha = 1,\beta=0.1)$ prior. Include your code on how you compute this.
+\item What distribution is the posterior predictive distribution, $p(\tilde{y}|y)$ in this case (see Section 2.6 in BDA3)? Describe the distribution and the parameters you have for the predictive distribution conditioned on the \texttt{warpbreaks} data. In R the distribution can be found in the stats library, but differently parametrized. Hence, compute the R parametrized distribution, i.e. using the \texttt{prob} and \texttt{size} parameter, where \texttt{rate = prob/(1 - prob)} and \texttt{shape = size} (see details in the R function for more information).
+\item Simulate data from the predictive distribution and create one histogram for the predictive distribution and one for the \texttt{breaks} variable with the same range in both plots on the x axis (see \texttt{xlim = c(5,75)}). Is the Poisson model a good model for the breaks data? Why or why not?
+\end{enumerate}
 
 
 \end{document}

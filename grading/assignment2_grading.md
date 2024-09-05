@@ -91,3 +91,56 @@ For the e) part, is there some comparison and discussion of results obtained wit
 - Yes, but the results and conclusions are clearly wrong
 - Yes
 
+### Q11 - 1 point
+
+For the a) part, is the analytical posterior correctly derived?
+
+- No
+- Yes
+
+### Q11 - 1 point
+
+For the a) part, is the analytical posterior correctly derived?
+
+- No
+- Yes
+
+### Q12 - 1 point
+
+For the b) part, are the posterior alpha and beta correct?
+
+- No
+- No, only one 
+- Yes, both
+
+### Q13 - 1 point
+
+For the c) part, are the posterior 95% credible interval correct (up to the second decimal)?
+
+- No
+- No, only one part
+- Yes, both
+
+### Q14 - 1 point
+
+For the d) part, is the right distribution identified?
+
+- No
+- Yes, both
+
+### Q15 - 1 point
+
+For the d) part, is the prob and size parameters correct?
+
+- No
+- No, only one
+- Yes, both
+
+
+### Q16 - 1 point
+
+For the e) part, is the analysis correct?
+
+- No
+- Yes
+

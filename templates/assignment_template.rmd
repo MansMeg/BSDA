@@ -21,7 +21,7 @@ Here general information is included that is needed for administrative/course pu
 
 # Introduction
 
-This rmd-file is a template with format instructions for Assignments in the Machine learning course at Uppsala University. R markdown is a convenient way of writing exercise reports by combining text and R code using markdown syntax. To create your assignment, remove the formatting instructions, and use this file as a template. Keep the header (the first lines of this file between two lines of ---). Set the author name to your name, and set the title to match the assignment number.
+This rmd-file is a template with format instructions for Assignments in the BSDA course at Uppsala University. R markdown is a convenient way of writing exercise reports by combining text and R code using markdown syntax. To create your assignment, remove the formatting instructions, and use this file as a template. Keep the header (the first lines of this file between two lines of ---). Set the author name to 'Anonymous Student', and set the title to match the assignment number.
 
 R markdown makes it easy to make a structured document with section and subsection titles, textual explanations, equations, code, and figures in a logical order. When you make changes to the code and re-run the notebook or "knit" (render) it to PDF, the relevant code is re-run, and the figures and results are updated without the need to copy and paste (which is prone to errors).
 

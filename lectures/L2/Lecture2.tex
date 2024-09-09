@@ -1,6 +1,6 @@
 %\documentclass[10pt,handout]{beamer}
 \documentclass[10pt]{beamer}
-\usepackage[english]{babel} % Anpassa efter svenska. Ger svensk logga.
+\usepackage{babel} % Anpassa efter svenska. Ger svensk logga.
 \usepackage[utf8]{inputenc} % Anpassa efter linux
 \usepackage{graphicx}
 \usepackage{hyperref}
@@ -392,7 +392,7 @@
       &\uncover<3->{ = \text{Beta}(\theta|\alpha+y,\beta+n-y)}
     \end{align*}
     \vskip -2mm
-  \item<4-> $(\alpha-1)$ and $(\beta-1)$ can considered to be number of prior observations
+  \item<4-> $\alpha$ and $\beta$ can considered to be number of prior observations
   \item<4-> Uniform prior when $\alpha=1$ and $\beta=1$
   \end{itemize}
 \end{frame}
@@ -829,6 +829,21 @@ blue-green algae levels.
   \end{itemize}
 \end{frame}
 
-
+\begin{frame}
+  \frametitle{Poisson model}
+  \begin{itemize}
+  \item Poisson likelihood/model: $Po(\lambda)$
+  \item Used for \uured{count} data
+  \pause
+  \item Let $X \sim Po(\lambda)$, then
+  \[
+  E(X) = V(X) = \lambda
+  \]
+  \pause
+  \item The gamma distribution is a conjugate prior - what is the posterior?
+  \pause
+  \item Today: Mostly the negative binomial is used for count data
+  \end{itemize}
+\end{frame}
 
 \end{document}

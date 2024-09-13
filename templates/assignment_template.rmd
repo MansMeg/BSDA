@@ -42,7 +42,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Below are examples of how to load packages that are used in the assignment
 
-```{r, eval=FALSE}
+```{r, include=FALSE}
 library(ggplot2)
 ```
 

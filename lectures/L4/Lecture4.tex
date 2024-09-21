@@ -54,18 +54,6 @@
 % Be more clear in the evaluation. "Some questions could be more clear" I cant use that. Please state what can be more clear and why.
 
 
-
-\begin{frame}
-
-\frametitle{Assignment 3}
-
-  \begin{itemize}
-  \item If anything is unclear: check the grading criteria
-  \item Why not email me or Väinö with assignment questions?
-  \end{itemize}
-
-\end{frame}
-
 \section{Introduction}
 % \frame{\sectionpage}
 
@@ -233,24 +221,39 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
 \frame{\sectionpage}
 
 \begin{frame}
-
-
 \frametitle{Monte Carlo integration/method}
 
   \begin{itemize}
     \item Numerically (deterministic) compute an integral (midpoint) using $S$ sample points
     \[
-      I^a_b(h) = \int^a_b h(\theta) d\theta \approx \sum_s^S h(\theta_s) \frac{w_s}{S}
+      I^a_b(h) = \int^a_b h(\theta) d\theta \approx \sum_s^S h(\theta_s) \Delta \theta_s
     \]
     where
     \[
-    w_s = b - a
+    \Delta \theta_s = \frac{w_s}{S}\, \text{and} \, w_s = b - a
     \]
     and
     \[
-    \theta_i = a - (s + 0.5) \delta\theta
+    \theta_s = a - (s + 0.5) w_s / S \, (\text{i.e. the midpoint of interval }s)
     \]
     \pause
+   \item Remember the definition of the Reimann Sum:
+   \begin{align*}
+   {\displaystyle I_R=\sum _{i=1}^{S}f(x_{s}^{*})\,\Delta x_{s},}
+     \end{align*}
+   where
+      \begin{align*}
+   {\displaystyle I_R \rightarrow \int f(x) dx \, \text{as} \, S \rightarrow \infty}
+  \end{align*}
+
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Monte Carlo integration/method}
+
+  \begin{itemize}
     \item In Gelman et al (2013) notation and for a posteriors $p(\theta|y)$
     \[
       E_{p(\theta|y)}(h(\theta)) = \int h(\theta) p(\theta|y) d\theta \approx \sum_s^S h(\theta_s) p(\theta_s|y) \frac{w_s}{S}
@@ -263,6 +266,7 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
   \end{itemize}
 
 \end{frame}
+
 
 %    A (stochastic) numerical technique to approximate integrals
 %    \item Main benefit: The error is $n^{-1/2}$ irrespective of dimension

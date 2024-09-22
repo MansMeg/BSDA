@@ -263,7 +263,13 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
         \[
       E_{p(\theta|y)}(h(\theta)) = \int h(\theta) p(\theta|y) d\theta \approx \frac{1}{S} \sum_s^S h(\theta_s)
     \]
+    \pause
+    \begin{align*}
+    E_{p(\theta|y)}\left( \frac{1}{S}\sum_s^S h(\theta_s)\right) & = \frac{1}{S} \sum_s^S E_{p(\theta|y)}  \left( h(\theta_s)\right) \\
+    & = \int h(\theta) p(\theta|y) d\theta
+    \end{align*}
   \end{itemize}
+
 
 \end{frame}
 
@@ -354,6 +360,36 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
   \]
   i.e. for $d > 8$ Monte Carlo is better.
   \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Grid sampling and curse of dimensionality}
+
+  \begin{itemize}
+      \item 10 parameters
+      \item if we don't know beforehand where the posterior mass is
+        \begin{itemize}
+          \item need to choose wide box for the grid
+          \item need to have enough grid points to get some of them
+            where essential mass is
+        \end{itemize}
+      \only<1>{{\color{uured} Can we do this?}}
+      \item e.g. 50 or 1000 grid points per dimension
+        \begin{itemize}
+        \item[$\rightarrow$] 50$^{10} \approx$ 1e17 grid points
+        \item[$\rightarrow$] 1000$^{10} \approx$ 1e30 grid points
+        \end{itemize}
+      \pause
+      \item R and my current laptop can compute density of normal
+        distribution about 20 million times per second
+        \begin{itemize}
+        \item[$\rightarrow$] evaluation in 1e17 grid points would take
+           150 years %triljoona vuotta
+        \item[$\rightarrow$] evaluation in 1e30 grid points would take
+           1 500 billion years %triljoona vuotta
+        \end{itemize}
+ \end{itemize}
 
 \end{frame}
 
@@ -639,37 +675,6 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
 
 \end{frame}
 
-
-\begin{frame}
-\frametitle{Grid sampling and curse of dimensionality}
-
-  \begin{itemize}
-      \item 10 parameters
-      \item if we don't know beforehand where the posterior mass is
-        \begin{itemize}
-          \item need to choose wide box for the grid
-          \item need to have enough grid points to get some of them
-            where essential mass is
-        \end{itemize}
-      \only<1>{{\color{uured} Can we do this?}}
-      \item e.g. 50 or 1000 grid points per dimension
-        \begin{itemize}
-        \item[$\rightarrow$] 50$^{10} \approx$ 1e17 grid points
-        \item[$\rightarrow$] 1000$^{10} \approx$ 1e30 grid points
-        \end{itemize}
-      \pause
-      \item R and my current laptop can compute density of normal
-        distribution about 20 million times per second
-        \begin{itemize}
-        \item[$\rightarrow$] evaluation in 1e17 grid points would take
-           150 years %triljoona vuotta
-        \item[$\rightarrow$] evaluation in 1e30 grid points would take
-           1 500 billion years %triljoona vuotta
-        \end{itemize}
- \end{itemize}
-
-\end{frame}
-
 \section{Indirect sampling}
 \frame{\sectionpage}
 
@@ -893,7 +898,7 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
        \begin{center}
        \only<1>{\includegraphics[width=8cm]{figs/bioassayisw1.pdf}}
        \only<2>{\includegraphics[width=8cm]{figs/bioassayisw2.pdf}}
-       \only<3>{\includegraphics[width=8cm]{figs/bioassayisw3.pdf}}
+%       \only<3>{\includegraphics[width=8cm]{figs/bioassayisw3.pdf}}
   \end{center}
 
 \end{frame}

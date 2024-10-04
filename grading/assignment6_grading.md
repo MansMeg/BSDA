@@ -65,3 +65,65 @@ Is the Stan model code included?
 - Plot included, but the results do not look correct (0.5p)
 - Plot included, and the results look roughly correct
 
+
+## Linear model: drowning data with Stan
+
+### Q8 - 1p
+
+Is the source code included?
+
+- No
+- Yes
+
+### Q9 - 1p
+
+Is the full resulting modiﬁed Stan model code presented in the report?
+
+- No
+- Yes
+
+### Q10 - 1p
+
+Fix #1: Is there a ﬁx for ... ?
+
+- It has not been discussed that ...
+- It has been discussed that ..., but there is no ﬁx presented for it or the ﬁx is clearly wrong
+- There is a ﬁx presented for ..., that clearly solves the problem
+
+### Q11 - 1p
+
+Fix #2: Is there a ﬁx for ...?
+
+- It has not been discussed that ...
+- It has been discussed that ..., but there is no ﬁx presented for it or the ﬁx is clearly wrong
+- There is a ﬁx presented for ... that clearly solves the problem
+
+### Q12 - 1p
+
+Fix #3: Is there a ﬁx for ...?
+
+- It has not been discussed, that ...
+- It has been discussed that ..., but there is no ﬁx presented for it or the ﬁx is clearly wrong (0.5p)
+- There is a ﬁx presented for ... that clearly solves the problem
+
+### Q13 - 1p
+
+Is there a suitable numerical value of approximately ... presented for $\sigma_{\beta}$ (or ... for $\sigma_{\beta}^2$)?
+
+- No
+- Yes
+
+### Q14 - 1p
+
+Does the report discuss and correctly present how the desired prior can be implemented in the model code?
+
+- No
+- Yes
+
+### Q15 - 1p
+
+Does the report discuss and also correctly present a prior for the intercept?
+
+- No
+- Yes
+

@@ -342,34 +342,99 @@ r = \min \left( 1, \frac{q(\theta^\star|y)}{q(\theta_{t-1}|y)}\frac{p(\psi^\star
   \end{itemize}
 \end{frame}
 
+\begin{frame}
+\frametitle{Divergent transitions}
+
+% What
+\begin{itemize}
+  \item HMC specific diagnostic
+  \pause
+  \item The Hamiltonian $H(\theta, \psi) $ should remain roughly constant throughout the trajectory:
+  \[
+  H(\theta_{start}, \psi_{start}) \approx H(\theta_{end}, \psi_{end})
+  \]
+  \item A large difference between the initial and final Hamiltonian indicates a divergent transition:
+  \[
+  H(\theta_{start}, \psi_{start}) - H(\theta_{end}, \psi_{end}) >> 0
+  \]
+  \item indicates that Hamiltonian dynamic simulation has problems with unexpected fast changes in log-density
+  \item possibility of biased estimates
+\end{itemize}
+%\end{frame}
+
+% Why
+
+
+\end{frame}
 
 \begin{frame}
-\frametitle{Divergences}
+\frametitle{Divergent transitions}
 
-  \begin{itemize}
-  \item HMC specific diagnostic
-  \item indicates that Hamiltonian dynamic simulation
-    has problems with unexpected fast changes in log-density
-  \begin{itemize}
-  \item indicates possibility of biased estimates
-  \end{itemize}
-  \item Different parameterizations matter
-  \item See Betancourt (2017)
-     \only<1>{\phantom{\includegraphics[width=8cm]{figs/unnamed-chunk-6-1.png}}}
-     \only<2>{\includegraphics[width=8cm]{figs/unnamed-chunk-6-1.png}}
-     \only<3>{\includegraphics[width=8cm]{figs/unnamed-chunk-7-1.png}}
-     \only<4>{\includegraphics[width=8cm]{figs/unnamed-chunk-9-1.png}}
-     \only<5>{\includegraphics[width=8cm]{figs/unnamed-chunk-12-1.png}}
-     \only<6>{\includegraphics[width=8cm]{figs/unnamed-chunk-13-1.png}}
-     \only<7>{\includegraphics[width=8cm]{figs/unnamed-chunk-15-1.png}}
-     \only<8>{\includegraphics[width=8cm]{figs/unnamed-chunk-21-1.png}}
-     \only<9>{\includegraphics[width=8cm]{figs/unnamed-chunk-31-1.png}}
-  \end{itemize}
+% Why
+\begin{itemize}
+  \item Why do we get divergent transitions?
+  \begin{enumerate}
+    \item Step size too large
+    \begin{itemize}
+      \item Do not approximate the trajectory
+    \end{itemize}
+    \pause
+    \item Highly curved posterior geometry
+    \begin{itemize}
+      \item Small changes in position can result in very large changes in the gradient (momentum)
+      \item Unstable trajectory
+      \item Common in hiearhical models
+    \end{itemize}
+    \pause
+    \item Tight correlations between parameters
+    \begin{itemize}
+      \item Small changes in position can result in very large changes in the gradient (momentum)
+      \item small movements in one parameter may cause disproportionately large movements in another
+    \end{itemize}
+    \end{enumerate}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Divergent transitions}
+
+% Solutions
+\begin{itemize}
+  \item Solutions:
+  \begin{enumerate}
+    \item Decrease step size/Increase number of leapfrog steps
+    \pause
+    \item Reparameterization
+    \begin{itemize}
+      \item Reparameterizing the model to reduce correlations between parameters or to make the posterior geometry more regular can help, e.g. in hiearhical models
+    \end{itemize}
+    \pause
+    \item Use a better Metric (Mass Matrix)
+    \pause
+    \item Use other samplers that uses the Hessian, e.g. Riemannian Manifold HMC (but it has its own drawbacks)
+    \end{enumerate}
+\end{itemize}
+
 \end{frame}
 
 
 \begin{frame}
+\frametitle{Divergences (Betancourt, 2017)}
 
+%     \only<1>{\phantom{\includegraphics[width=8cm]{figs/unnamed-chunk-6-1.png}}}
+%     \only<2>{\includegraphics[width=8cm]{figs/unnamed-chunk-6-1.png}}
+%     \only<3>{\includegraphics[width=8cm]{figs/unnamed-chunk-7-1.png}}
+     \only<1>{\includegraphics[width=8cm]{figs/unnamed-chunk-9-1.png}}
+%     \only<2>{\includegraphics[width=8cm]{figs/unnamed-chunk-12-1.png}}
+%     \only<3>{\includegraphics[width=8cm]{figs/unnamed-chunk-13-1.png}}
+     \only<2>{\includegraphics[width=8cm]{figs/unnamed-chunk-15-1.png}}
+     \only<3>{\includegraphics[width=8cm]{figs/unnamed-chunk-21-1.png}}
+     \only<4>{\includegraphics[width=8cm]{figs/unnamed-chunk-31-1.png}}
+\end{frame}
+
+
+\begin{frame}
 \frametitle{Problematic distributions}
 
   \begin{itemize}
@@ -955,19 +1020,19 @@ get_num_leapfrog_per_iteration(fit_bin2)
 
 \end{frame}
 
-\begin{frame}
+%\begin{frame}
+%
+%\frametitle{Kilpisjärvi summer temperature}
+%
+%  \begin{itemize}
+%  \item Temperature at Kilpisjärvi in June, July and August from 1952 to 2013
+%  \item Is there change in the temperature?
+%  \end{itemize}
+%  \begin{center}
+%    \includegraphics[width=8cm]{figs/kilpis_data.pdf}
+%  \end{center}
 
-\frametitle{Kilpisjärvi summer temperature}
-
-  \begin{itemize}
-  \item Temperature at Kilpisjärvi in June, July and August from 1952 to 2013
-  \item Is there change in the temperature?
-  \end{itemize}
-  \begin{center}
-    \includegraphics[width=8cm]{figs/kilpis_data.pdf}
-  \end{center}
-
-\end{frame}
+%\end{frame}
 
 \begin{frame}[fragile]
 
@@ -1086,60 +1151,60 @@ model {
 }
 \end{frame}
 
-\begin{frame}
+%\begin{frame}
 
-\frametitle{Priors}
+%\frametitle{Priors}
+%
+%  \begin{itemize}
+%  \item Prior for temperature increase?
+%  \end{itemize}
+%
+%\end{frame}
 
-  \begin{itemize}
-  \item Prior for temperature increase?
-  \end{itemize}
+%\begin{frame}
 
-\end{frame}
+%\frametitle{Kilpisjärvi summer temperature}
 
-\begin{frame}
+%  Posterior fit
+%
+%  \begin{center}
+%    \includegraphics[width=8cm]{figs/kilpis_lin_pfit.pdf}
+%  \end{center}
 
-\frametitle{Kilpisjärvi summer temperature}
+%\end{frame}
 
-  Posterior fit
+%\begin{frame}[fragile]
 
-  \begin{center}
-    \includegraphics[width=8cm]{figs/kilpis_lin_pfit.pdf}
-  \end{center}
+%\frametitle{Kilpisjärvi summer temperature}
 
-\end{frame}
+%  Posterior draws of alpha and beta
 
-\begin{frame}[fragile]
+%  \begin{center}
+%    \includegraphics[width=8cm]{figs/kilpis_lin_mcmc_scatter.pdf}
+%  \end{center}
 
-\frametitle{Kilpisjärvi summer temperature}
+%\end{frame}
 
-  Posterior draws of alpha and beta
+%\begin{frame}[fragile]
 
-  \begin{center}
-    \includegraphics[width=8cm]{figs/kilpis_lin_mcmc_scatter.pdf}
-  \end{center}
+%\frametitle{Kilpisjärvi summer temperature}
 
-\end{frame}
+%  Posterior draws of alpha and beta
 
-\begin{frame}[fragile]
+%  \begin{center}
+%    \includegraphics[width=18cm]{figs/kilpis_lin_mcmc_scatter.pdf}
+%  \end{center}
 
-\frametitle{Kilpisjärvi summer temperature}
+%{\scriptsize
+%\begin{lstlisting}
+%There were 14 transitions after warmup that exceeded the maximum
+%treedepth. Increase max_treedepth above 10. See
+%http://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded
+%Examine the pairs() plot to diagnose sampling problems
+%\end{lstlisting}
+%}
 
-  Posterior draws of alpha and beta
-
-  \begin{center}
-    \includegraphics[width=18cm]{figs/kilpis_lin_mcmc_scatter.pdf}
-  \end{center}
-
-{\scriptsize
-\begin{lstlisting}
-There were 14 transitions after warmup that exceeded the maximum
-treedepth. Increase max_treedepth above 10. See
-http://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded
-Examine the pairs() plot to diagnose sampling problems
-\end{lstlisting}
-}
-
-\end{frame}
+%\end{frame}
 
 \begin{frame}[fragile]
 

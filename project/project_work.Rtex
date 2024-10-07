@@ -122,6 +122,8 @@ The following data sets should not be used in the project:
 \item mtcars (R data set)
 \end{itemize}
 
+Also, two different groups are not allowed to use the same dataset.
+
 
 \subsection{Project Proposal (Part 1 and Part 2)}
 Students need to turn in a one-page project proposal and data description by and get approval for the proposed project. The Project proposal should follow the ICML paper format that can be found \href{https://icml.cc/Conferences/2020/StyleAuthorInstructions}{[here]}.
@@ -258,7 +260,7 @@ To pass the report (G), the following criterias should be fulfilled:
 \item The report should follow the additional requirements in Section \ref{project_report}.
 \item show basic knowledge and understanding of the core concepts of the course by using concepts correctly
 \item show an understanding in when certain methods should be used or not, and how
-\item use at least two (2) different models and compare them in a correct way
+\item use at least two  (2) \emph{Bayesian} different models and compare them in a correct way (two linear regression models with different covariates is an example of two different models)
 \item state what has been done in the report with clarity, good english and rigour so it is easy for a reader to understand and follow the paper.
 \item correctly use references in the report following the guideline of the template in Section \ref{project_report}
 \end{enumerate}

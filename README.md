@@ -73,7 +73,7 @@ Optional literature
 [online](https://mc-stan.org/users/documentation/case-studies/divergences_and_bias.html)
 - B96: Bernardo "The Concept of Exchangeability and its Applications" (1996)
 [online](https://www.uv.es/~bernardo/Exchangeability.pdf)
-
+- B20: Hiearchical modeling [online](https://betanalpha.github.io/assets/case_studies/hierarchical_modeling.html)
 
 
 ### Complementary Reading

@@ -637,6 +637,30 @@
 \section{Computational aspects}
 \frame{\sectionpage}
 
+\begin{frame}
+\frametitle{The funnel posterior }
+
+  \begin{itemize}
+  \item Hiearchical models
+  \begin{itemize}
+  \item Group-level or global parameters, e.g.
+  \[
+  \tau \sim p(\tau)
+  \]
+  \item Local or individual-level parameters
+  \[
+  \theta_i \sim \mathcal{N}(0, \tau)
+  \]
+  \end{itemize}
+  \item Creates a "funnel-like" posterior geometry:
+  %  This causes the joint posterior distribution to have the shape of a funnel: wide at the top (corresponding to high values of \(\tau\)) and narrow at the bottom (corresponding to small values of \(\tau\)).
+  \item Comes from the variance in the different layers:
+  \begin{itemize}
+  \item When $\tau$ is small, the $\theta_i$'s are concentrated around 0
+  \item When $\tau$ is large, the $\theta_i$'s are widely dispersed
+  \end{itemize}
+  \end{itemize}
+\end{frame}
 
 
 \end{document}

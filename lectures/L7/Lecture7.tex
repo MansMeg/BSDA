@@ -652,15 +652,15 @@
   \]
   \item Local or individual-level parameters
   \[
-  \theta_i \sim \mathcal{N}(0, \tau)
+  \phi_i \sim \mathcal{N}(0, \tau)
   \]
   \end{itemize}
   \item Creates a "funnel-like" posterior geometry:
   %  This causes the joint posterior distribution to have the shape of a funnel: wide at the top (corresponding to high values of \(\tau\)) and narrow at the bottom (corresponding to small values of \(\tau\)).
   \item Comes from the variance in the different layers:
   \begin{itemize}
-  \item When $\tau$ is small, the $\theta_i$'s are concentrated around 0
-  \item When $\tau$ is large, the $\theta_i$'s are widely dispersed
+  \item When $\tau$ is small, the $\phi_i$'s are concentrated around 0
+  \item When $\tau$ is large, the $\phi_i$'s are widely dispersed
   \end{itemize}
   \end{itemize}
 \end{frame}
@@ -676,10 +676,7 @@
   \item Divergences: HMC will risk divergencies (also a good diagnostic)
   %Sampling methods like HMC can suffer from divergences or very slow mixing when trying to sample from both the narrow and wide regions of the funnel-shaped posterior.
   \end{enumerate}
-  \item Solving the issue
-  \begin{enumerate}
-  \item
-  \end{enumerate}
+
   \end{itemize}
 
 \end{frame}
@@ -688,16 +685,28 @@
 \begin{frame}
 \frametitle{Handling the funnel}
 
-  \begin{itemize}
-  \item Solving the issue
   \begin{enumerate}
-  \item Reduce step size %(\texttt{adapt_delta} closer to 1)
+  \item Reduce step size (\texttt{adapt\_delta} closer to 1)
   \item Reparametrize using non-centered parametrization
-  % Centered here
-  % Noncentered here
+  \begin{enumerate}
+  \item Centered parametrization
+  \[
+  \phi_i \sim N(\mu, \tau)
+  \]
+  \pause
+  \item Non-centered parametrization
+  \[
+  \eta_i \sim N(0, 1)
+  \]
+  \[
+  \phi_i = \mu + \tau \eta_i
+  \]
   \end{enumerate}
-  \end{itemize}
-
+  \end{enumerate}
+  \vspace{0mm}
+  \center
+  {\includegraphics[width=7cm]{figs/centered_noncentered.png}}\\
+  \tiny{Betancourt (2020)}
 \end{frame}
 
 

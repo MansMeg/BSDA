@@ -652,15 +652,15 @@
   \]
   \item Local or individual-level parameters
   \[
-  \phi_i \sim \mathcal{N}(0, \tau)
+  \theta_i \sim \mathcal{N}(0, \tau)
   \]
   \end{itemize}
   \item Creates a "funnel-like" posterior geometry:
   %  This causes the joint posterior distribution to have the shape of a funnel: wide at the top (corresponding to high values of \(\tau\)) and narrow at the bottom (corresponding to small values of \(\tau\)).
   \item Comes from the variance in the different layers:
   \begin{itemize}
-  \item When $\tau$ is small, the $\phi_i$'s are concentrated around 0
-  \item When $\tau$ is large, the $\phi_i$'s are widely dispersed
+  \item When $\tau$ is small, the $\theta_i$'s are concentrated around 0
+  \item When $\tau$ is large, the $\theta_i$'s are widely dispersed
   \end{itemize}
   \end{itemize}
 \end{frame}
@@ -669,15 +669,15 @@
 \begin{frame}
 \frametitle{Why problematic?}
 
-  \begin{itemize}
-  \item Challenges
   \begin{enumerate}
   \item Pathological geometry: difficult to explore efficiently % When \(\tau\) is small, the \(\theta_i\)'s are constrained into a narrow region, which makes it difficult for sampling algorithms to explore the parameter space effectively. The region of small \(\tau\) is highly curved and tightly constrained, making it hard to sample efficiently.
-  \item Divergences: HMC will risk divergencies (also a good diagnostic)
-  %Sampling methods like HMC can suffer from divergences or very slow mixing when trying to sample from both the narrow and wide regions of the funnel-shaped posterior.
-  \end{enumerate}
 
-  \end{itemize}
+  \item Divergences: HMC will risk divergencies \\(also a good diagnostic)
+  %Sampling methods like HMC can suffer from divergences or very slow mixing when trying to sample from both the narrow and wide regions of the funnel-shaped posterior.
+\center
+  {\includegraphics[width=6cm]{figs/diver.png}}\\
+  \tiny{Betancourt (2020)}
+  \end{enumerate}
 
 \end{frame}
 
@@ -691,15 +691,16 @@
   \begin{enumerate}
   \item Centered parametrization
   \[
-  \phi_i \sim N(\mu, \tau)
+  \theta_i \sim N(\mu, \tau)
   \]
   \pause
+  \vspace{-3mm}
   \item Non-centered parametrization
   \[
   \eta_i \sim N(0, 1)
   \]
   \[
-  \phi_i = \mu + \tau \eta_i
+  \theta_i = \mu + \tau \eta_i
   \]
   \end{enumerate}
   \end{enumerate}

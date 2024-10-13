@@ -479,6 +479,10 @@
 
 \section{Exchangeability}
 \frame{\sectionpage}
+% In other words exchangeability is not a fundamental property of a system being observed but rather a consequence of how we choose to observe that system!
+
+% In any principled modeling application we have to remain diligent in recognizing that exchangeability is an assumption, and one that cannot be made without careful consideration. Knowledge about the source of heterogeneity can drastically improve inferences, and we should consider exploiting that information whenever possible. Only when we don't have that knowledge, or don't have the resources to properly exploit it, will exchangeability be a reasonable assumption.
+
 
 \begin{frame}
 
@@ -538,7 +542,6 @@
   \end{itemize}
 \end{frame}
 
-% \note{Elinolojen parantaminen vaikutti
 \begin{frame}
 
 \frametitle{Exchangeability and additional information}
@@ -661,6 +664,26 @@
   \end{itemize}
   \end{itemize}
 \end{frame}
+
+
+\begin{frame}
+\frametitle{Why problematic?}
+
+  \begin{itemize}
+  \item Challenges
+  \begin{enumerate}
+  \item Pathological geometry: difficult to explore efficiently % When \(\tau\) is small, the \(\theta_i\)'s are constrained into a narrow region, which makes it difficult for sampling algorithms to explore the parameter space effectively. The region of small \(\tau\) is highly curved and tightly constrained, making it hard to sample efficiently.
+  \item Divergences: HMC will risk divergencies (also a good diagnostic)
+  %Sampling methods like HMC can suffer from divergences or very slow mixing when trying to sample from both the narrow and wide regions of the funnel-shaped posterior.
+  \end{enumerate}
+  \item Solving the issue
+  \begin{enumerate}
+  \item
+  \end{enumerate}
+  \end{itemize}
+
+\end{frame}
+
 
 
 \end{document}

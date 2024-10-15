@@ -1,6 +1,6 @@
 %\documentclass[10pt,handout]{beamer}
 \documentclass[10pt]{beamer}
-\usepackage[english]{babel} % Anpassa efter svenska. Ger svensk logga.
+\usepackage{babel} % Anpassa efter svenska. Ger svensk logga.
 \usepackage[utf8]{inputenc} % Anpassa efter linux
 \usepackage{graphicx}
 \usepackage{hyperref}
@@ -154,7 +154,31 @@ where ${\color{uured}\tilde{y}}$ is an unseen observation generated from the tru
       \begin{align*}
         \text{MSE} = \frac{1}{n}\sum^n_i [y_i - E(\tilde{y}_i|y)]^2 \,.
       \end{align*}
+      \pause
+      \item But how do we evaluate the \uured{posterior predictive distribution}?
     \end{itemize}
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Probabilistic predictions: Scoring rules}
+
+  \begin{itemize}
+      \item Scoring \uured{rules}: \emph{How well does the predictive distribution align with observation?}
+      \[
+      S(F,y)\,,
+      \]
+      where $S(F,y) \in \mathbb{R}$, $F$ is a density, and $y$ is an observation.
+      \pause
+      \item \uured{Proper scoring rules}: $S(F,y)$ is minimized when the forecasted distribution matches the (true) distribution of the observation
+            \[
+            \mathbb{E}_{y \sim p_{true}}[S(p_{true},y)]\leq \mathbb {E}_{y\sim p_{true}}[S(F,y)]\,,
+            \]
+            where $p_{true}$ is the true data generating process.
+        \pause
+      \item \uured{Local scoring rules}: $S(p_{true},y_i)$ only depend on the actual observation $y_i$
+  \end{itemize}
 
 \end{frame}
 
@@ -163,22 +187,17 @@ where ${\color{uured}\tilde{y}}$ is an unseen observation generated from the tru
 \frametitle{Probabilistic predictions}
 
     \begin{itemize}
-    % TODO: Add scoring rules in lecture
-%      \item Scoring \uured{rules}:
-%      a. Proper:
-%      b. Local
-      \item The log score (a local and proper scoring rule)* % Do example on blackboard
+      \item The log score (a local and proper scoring rule) % Do example on blackboard
       \begin{align*}
-         \log p(y|\theta)
+         S(p(\tilde{y}|y),y_i) = \log p(y_i|y)
       \end{align*}
 %      proportional to MSE if constant variance
 % TODO: Add example of different prediction normal distributions and the density
-% TODO: Add calibration
       \pause
       \item The log predictive density (lpd)
       \begin{align*}
         \text{lpd} & = \log p(y|y)\\
-        & = \log \int p(y|\theta) p(\theta|y) d\theta
+        & =  \log \int  p(y|\theta) p(\theta|y) d\theta
       \end{align*}
   \end{itemize}
 
@@ -235,9 +254,9 @@ where ${\color{uured}\tilde{y}}$ is an unseen observation generated from the tru
 \begin{itemize}
 \item Evaluate how model $M$ \emph{generalizes} to unseen data \\(the \emph{expected log predictive density}):
 \[
-\text{elpd}_M= \int \log p_M({\color{uured}\tilde{y}_i}|y) p_\text{true}({\color{uured}\tilde{y}_i}) d{\color{uured}\tilde{y}_i}\,,
+\text{elpd}_{M}= \int \log p_M({\color{uured}\tilde{y}}|y) p_\text{true}({\color{uured}\tilde{y}}) d{\color{uured}\tilde{y}}\,,
 \]
-where ${\color{uured}\tilde{y}_i}$ is an unseen observation generated from the true data generating process $p_\text{true}({\color{uured}\tilde{y}_i})$, and $y$ are observed data.
+where ${\color{uured}\tilde{y}}$ are unseen observations generated from the true data generating process $p_\text{true}({\color{uured}\tilde{y}})$, and $y$ are observed data.
 \pause
 \item Can we approximate $p_\text{true}(\tilde{y}_i)$?
 \end{itemize}
@@ -258,8 +277,8 @@ where ${\color{uured}\tilde{y}_i}$ is an unseen observation generated from the t
  = & \sum^n_{i=1} \log \int p_M(y_i|\theta) p(\theta|\mathbf{y}_{-i})d\theta
 \end{align*}
 \pause
-\item \uured{Analogy:} Monte Carlo approximation using our data
-\item Similar to \uured{jack-knife resampling}
+\item \uured{Analogy:} Monte Carlo approximation using our data: $y \sim p_\text{true}({\tilde{y}})$
+%\item Similar to \uured{jack-knife resampling}
 %\pause
 %\item Pareto-Smoothed Importance Sampling (PSIS) can be used to efficiently compute each ${\color{uured}\pi_i}$ (see Gelfand, 1996 and Vehtari et. al., 2019)
 \pause
@@ -648,7 +667,7 @@ See help('pareto-k-diagnostic') for details.
   \item<2-> Finite variance and central limit theorem for $k<1/2$
   \item<3-> Finite mean and generalized central limit theorem for $k<1$,
     but pre-asymptotic constant grows impractically large for $k>0.7$
-  \item<4-> Hence $k>0.7$ can be used to indicate what observation that can "hold-out" using IS
+  \item<4-> Hence $k>0.7$ can be used to indicate what observation that can be "held-out" using IS
   \end{itemize}
 \end{frame}
 
@@ -661,7 +680,7 @@ See help('pareto-k-diagnostic') for details.
   \vspace{-\baselineskip}
   \onslide<3->{n\_eff $\approx$ 459\\  \vspace{0.2\baselineskip}}
   \onslide<4>{Pareto $\hat{k}$ $\approx$ 0.52
-  \vspace{-\parskip}
+%  \vspace{-\parskip}
 Pareto $\hat{k}$ estimates the tail shape which determines the convergence rate of PSIS. Less than 0.7 is ok.}
 % TODO: Move to reading  \onslide<3->{\vspace{0.1\baselineskip}\small see \href{http://link.springer.com/article/10.1007/s11222-016-9696-4}{Vehtari, Gelman \& Gabry (2017b)}}
 \end{frame}
@@ -681,10 +700,10 @@ Pareto $\hat{k}$ estimates the tail shape which determines the convergence rate 
 \begin{lstlisting}
     Pareto k diagnostic values:
                          Count Pct.    Min. n_eff
-(-Inf, 0.5]   (good)     18    90.0%   899
- (0.5, 0.7]   (ok)        2    10.0%   459
-   (0.7, 1]   (bad)       0     0.0%   <NA>
-   (1, Inf)   (very bad)  0     0.0%   <NA>
+(-Inf, 0.5]   (good)     18    90.0\%   899
+ (0.5, 0.7]   (ok)        2    10.0\%   459
+   (0.7, 1]   (bad)       0     0.0\%   <NA>
+   (1, Inf)   (very bad)  0     0.0\%   <NA>
 \end{lstlisting}
 }
 
@@ -872,8 +891,8 @@ See help('pareto-k-diagnostic') for details.
    produce more energetic milk, so that brains can grow quickly'' (from
    Statistical Rethinking)
    \begin{enumerate}
-     \item Model 1: formula = kcal.per.g $\sim$ neocortex
-     \item Model 2: formula = kcal.per.g $\sim$ neocortex + log(mass)
+     \item Model 1 (blue): formula = kcal.per.g $\sim$ neocortex
+     \item Model 2 (red): formula = kcal.per.g $\sim$ neocortex + log(mass)
    \end{enumerate}
  \end{enumerate}
 
@@ -1118,7 +1137,7 @@ model1 -14.4       6.1
 \begin{enumerate}
   \item Deviance information criteria
   \[
-    \text{elpd}_\text{AIC} = \sum_i \log p(y_i|\hat{\theta}_\text{Bayes}) - p_\text{DIC}
+    \text{elpd}_\text{DIC} = \sum_i \log p(y_i|\hat{\theta}_\text{Bayes}) - p_\text{DIC}
   \]
   \item We estimate the number of effeicient parameters with
   \[
@@ -1258,11 +1277,11 @@ model1 -14.4       6.1
     trust your model
   \item \only<3>{\color{gray}}Different variants of cross-validation
     are useful in different scenarios
-  \item \only<4>{\color{gray}}Cross-validation has high variance, and
-    {\bf if} you trust your model you can beat cross-validation in
-    accuracy
+%  \item \only<4>{\color{gray}}Cross-validation has high variance, and
+%    {\bf if} you trust your model you can beat cross-validation in
+%    accuracy
   \end{enumerate}
-  \only<5>{~}
+  \only<4>{~}
 
 \end{frame}
 

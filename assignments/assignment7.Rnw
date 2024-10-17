@@ -112,7 +112,7 @@ This assignment is related to Chapter 5.
 
 \input{general_info_reporting_accuracy.tex}
 
-\input{general_info_rstan.tex}
+%\input{general_info_rstan.tex}
 
 
 \newpage
@@ -189,7 +189,7 @@ your tasks are the following:
   \end{itemize}
   \item [d)] Visualize the posterior $p(\theta|y)$ and $p(\log \tau|y)$ in the hiearchcial model, where $\tau$ is the hyperprior sd parameter and $\theta$ is hyperprior mean. Interpret these parameters.
 \item [e)] Visualize the posterior $p(\mu_3,\log \tau|y)$, where $\tau$ is the hyperprior sd parameter. Describe the distribution and reason about the 'funnel' shape. What does it mean for the relationship between $\mu_3$ and $\log \tau$?
-\item [f)] Now change the prior for the $\sigma$, residual parameter(s), to a $\operatorname{Gamma}(1,1)$. What happens? Why?
+\item [f)] Now change the prior for the $\sigma$, residual parameter(s), to a $\operatorname{Gamma}(1,1)$. What happens? Why? Report the mean and 90\% CI for the mean ($\mu$) of the quality measurements of the sixth machine.
 \end{itemize}
 
 \begin{lstlisting}[

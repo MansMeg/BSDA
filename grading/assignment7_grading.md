@@ -74,11 +74,17 @@ For the Pooled/Hiearchical and separate model (1p each) c) iii): the posterior d
 
 ### Q8 - 3p
 
-For the Pooled/Hiearchical and separate model (1p each): When using the prior of Normal(0,10) and Gamma(1,1) for mu
-parameter(s) and sigma parameter(s), the posterior for mu for machine 1 has 90% credibility intervals close to ...
+For the Pooled/Hiearchical and separate model (1p each): When using the prior of Gamma(1,1) for sigma parameter(s), the posterior for mu for machine 6 has 90% credibility intervals close to ...
 
 - No or incorrect answer
 - Answer is only partially correct (0.5p)
 - Answers look correct
+
+### Q9 - 1p
+
+In f), is a reasonable explanation given?
+
+- No or incorrect answer
+- Yes
 
 

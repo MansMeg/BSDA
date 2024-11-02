@@ -178,7 +178,7 @@ your tasks are the following:
   for the separate model above). Also describe in words the difference
   between the three models.
 \item [b)] Implement the model in Stan with the above mentioned weak priors and include the code in the report. Note that you might get divergent transitions. You should only use inference when there is no divergent transitions. To solve the issue, you can either change \texttt{adapt\_delta} or reparametrize the model (see how  \href{https://mc-stan.org/docs/stan-users-guide/reparameterization.html#hierarchical-models-and-the-non-centered-parameterization}{here}). If you compute the posterior correct, you should get that $\sigma_{1,separate} \approx 26.7$, $\sigma_{hiearchical} \approx 15.2$, and $\sigma_{pooled} \approx 18.8$.
-\item [c)] Using the models, with the specified weakly informative priors, report the expectation/mean (and 90\% uncertainty intervals), comment on it and, if applicable, plot histograms for the following distributions:
+\item [c)] Using the models, with the specified weakly informative priors, report the expectation/mean (and 90\% uncertainty intervals) formatted in a table, comment on it and, if applicable, plot histograms for the following distributions:
   \begin{itemize}
   \item [i)] the posterior distribution of the mean ($\mu$) of the quality
     measurements of the sixth machine

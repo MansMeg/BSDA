@@ -50,26 +50,26 @@ For the Pooled/Hiearchical and separate model (1p each) b): Is there a related S
 
 For the Pooled/Hiearchical and separate model (1p each) c) i): the posterior distribution of the mean of the quality measurements of the sixth machine.
 
-- No discussion, histogram (or motivation of not including a histogram) or clearly incorrect response
-- Only comment or histogram (or motivation of not including a histogram) (0.5p)
-- Both comment and histogram (or motivation of not including a histogram)
+- No means, CIs, discussion, histogram (or motivation of not including a histogram) or clearly incorrect response
+- Only means, CIs, comment or histogram (or motivation of not including a histogram) (0.5p)
+- Both means, CIs, comment and histogram (or motivation of not including a histogram)
 
 ### Q6 - 3p
 
 For the Pooled/Hiearchical and separate model (1p each) c) ii): the predictive distribution of a quality measurement from the sixth machine
 
-- No discussion, histogram (or motivation of not including a histogram) or clearly incorrect response
-- Only comment or histogram (or motivation of not including a histogram) (0.5p)
-- Both comment and histogram (or motivation of not including a histogram)
+- No means, CIs, discussion, histogram (or motivation of not including a histogram) or clearly incorrect response
+- Only means, CIs, comment or histogram (or motivation of not including a histogram) (0.5p)
+- Both means, CIs, comment and histogram (or motivation of not including a histogram)
 
 
 ### Q7 - 3p
 
 For the Pooled/Hiearchical and separate model (1p each) c) iii): the posterior distribution of the mean of the quality measurements of the seventh machine
 
-- No discussion, histogram (or motivation of not including a histogram) or clearly incorrect response
-- Only comment or histogram (or motivation of not including a histogram) (0.5p)
-- Both comment and histogram (or motivation of not including a histogram)
+- No means, CIs, discussion, histogram (or motivation of not including a histogram) or clearly incorrect response
+- Only means, CIs, comment or histogram (or motivation of not including a histogram) (0.5p)
+- Both means, CIs, comment and histogram (or motivation of not including a histogram)
 
 
 ### Q8 - 3p

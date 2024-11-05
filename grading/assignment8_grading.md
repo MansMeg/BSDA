@@ -36,13 +36,19 @@ Is the source code included?
 
 ### Q4 - 1p
 
-Are the PSIS-LOO values correctly calculated? The correct values are approximately: pooled: -XXX, separate: -XXX, hierarchical: -XXX.
+Are the log-likelihood values calculated in the Stan code?
+- No, or clearly incorrectly
+- Yes
+
+### Q5 - 1p
+
+Are the PSIS-LOO values correct? They are approximately: pooled: -XXX, separate: -XXX, hierarchical: -XXX.
 
 - None correct
 - One or two correct (0.5p)
 - All correct
 
-### Q5 - 1p
+### Q6 - 1p
 
 Are the k-values reported (visualized or tabulated) for each of the three models?
 
@@ -50,7 +56,7 @@ Are the k-values reported (visualized or tabulated) for each of the three models
 - For one or two models (0.5p)
 - For all the models
 
-### Q6 - 1p
+### Q7 - 1p
 
 Are the p_eff values correctly calculated? The correct values are approximately: pooled: X.X, separate: X.X, hierarchical: X.X.
 
@@ -58,14 +64,21 @@ Are the p_eff values correctly calculated? The correct values are approximately:
 - One or two correct (0.5p)
 - All correct
 
-### Q7 - 1p
+### Q8 - 1p
+
+Does the discussion on the effective number of parameters make sense?
+
+- No
+- Yes
+
+### Q9 - 1p
 
 Is the interpretation of the k-values correct? 
 
 - No
 - Yes
 
-### Q8 - 1p
+### Q10 - 1p
 
 Are the obtained values interpreted right, that is, is the right model is selected?
 

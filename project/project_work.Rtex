@@ -213,6 +213,7 @@ The paper should include the following parts/sections:
 \item All Figures using color should have a color-blind friendly color palette. See \href{http://www.cookbook-r.com/Graphs/Colors_(ggplot2)/#a-colorblind-friendly-palette}{here} and \href{https://rdrr.io/cran/ggthemes/man/colorblind.html}{here}.
 \item The final report should look like a research paper/article, i.e. try to avoid bullet list and get a good flow in the text. Also do not refer to the report as a mini-project. See it as a real report (or short paper).
 \item All model included in the report should have the Stan code included in the appendix.
+\item All legends in figures and text in tables should be the same size as the body text in the report.
 \item You should use correct reference systems. A tip is to use \texttt{\\citet}, \texttt{\\citep}, and \texttt{\\bibtex}. This will also simplify your future thesis work.
 \item You should include some (or all) estimated parameters together with their uncertainty and $\hat{R}$ and interpret them in the report. You are free to include them in the appendix.
 \end{enumerate}

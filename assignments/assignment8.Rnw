@@ -136,7 +136,7 @@ The report should include the following parts.
 
 \subsection*{2. Model assessment: Standard LOO-CV for factory data with Stan (1.5 points, only required for VG)}
 
-PSIS LOO-CV approximates standard leave out cross validation. To compare the two, implement standard leave one out cross validation for the separate model.
+PSIS LOO-CV approximates standard leave-one-out cross validation. To compare the two, implement standard leave one out cross validation for the separate model.
 
 \begin{enumerate}
 \item Include your code

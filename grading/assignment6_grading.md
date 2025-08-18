@@ -37,9 +37,9 @@ Is the Stan model code included?
 1. Does the implemented Stan-model seem to be working?
 
 - No implementation
-- Model implemented but results not visualized/reported (1p)
-- Model implemented, but the results seem weird (1p)
-- Model seems to work correctly
+- Model implemented but results not visualized/reported or clearly incorrect (1p)
+- Results are incorrect due to a minor mistake (2p)
+- Yes, and the posterior means are roughly [...] for alpha and [...] for beta (3p)
 
 ### Q5 - 1p
 

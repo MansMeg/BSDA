@@ -15,6 +15,8 @@ Is the report anonymous?
 - No
 - Yes
 
+## Task 1
+
 ### Q2b - 1 point
 Does the report follow the formatting instructions?
 
@@ -88,3 +90,19 @@ Are the obtained values interpreted right, that is, is the right model is select
 - Some results missing/wrong, but the interpretation is correct (based on the results obtained) (0.5p)
 - Results correct and interpretation correct
 
+## Task 2
+
+### Q11 - 1p
+
+Is an implementation of leave-one-out cross validation included?
+
+- No, or clearly incorrect
+- Incorrect due to a minor mistake (0.5)
+- Yes
+
+### Q12 - 0.5p
+
+Is the elpd-loo-cv value for the separate model roughly [...] ?
+
+- No
+- Yes

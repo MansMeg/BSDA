@@ -179,6 +179,7 @@ density_ratio(alpha_propose = 0.374, alpha_previous = 1.89,
 \item[f)] The number of Metropolis chains used. It is important that multiple Metropolis chains are run for evaluating convergence (see BDA Section 11.4, and lecture 5.2).
 \item[g)] Plot all chains for $\alpha$ in a single line-plot. Overlapping the chains in this way helps in visually assessing whether chains have converged or not.
 \item[h)] Do the same for $\beta$.
+\item[i)] Report the posterior mean for $\alpha$ and $\beta$.
 \end{enumerate}
 
 \item In complex scenarios, visual assessment is not sufficient and $\widehat{R}$ is a more robust indicator of convergence of the Markov chains. Use $\widehat{R}$ for convergence analysis. You can either use Eq. (11.4) in BDA3 or the more recent version described \href{https://arxiv.org/pdf/1903.08008.pdf}{\textbf{here}}. You should specify which $\widehat{R}$ you used. In R the best choice is to use function {\tt Rhat} from package {\tt rstan}. Remember to remove the warm-up samples before computing $\widehat{R}$. Report the $\widehat{R}$ values for $\alpha$ and $\beta$ separately. Report the values for the proposal distribution you finally used.

@@ -95,11 +95,11 @@ Also read about the PSIS-LOO that in \href{https://link.springer.com/article/10.
 
 \input{general_info_reporting_accuracy.tex}
 
-\input{general_info_rstan.tex}
+%\input{general_info_rstan.tex}
 
 \newpage
 
-\subsection*{Model assessment: LOO-CV for factory data with Stan}
+\subsection*{1. Model assessment: PSIS LOO-CV for factory data with Stan}
 
 Use leave-one-out cross-validation (LOO-CV) to assess the predictive performance of the pooled, separate and hierarchical Gaussian models for the factory dataset (see the second exercise in Assignment 7). To read in the data, just use:
 <<echo=TRUE, eval=FALSE>>=
@@ -134,6 +134,15 @@ The report should include the following parts.
     \item Both the Stan and R code should be included in your report.
 \end{enumerate}
 
+\subsection*{2. Model assessment: Standard LOO-CV for factory data with Stan (1.5 points, only required for VG)}
+
+PSIS LOO-CV approximates standard leave out cross validation. To compare the two, implement standard leave one out cross validation for the separate model.
+
+\begin{enumerate}
+\item Include your code
+\item Report the $\text{elpd}_\text{loo-cv}$ value for the separate model
+\item Compare the value to the one obtained via PSIS-LOO.
+\end{enumerate}
 
 \end{document}
 

@@ -46,7 +46,7 @@ the number of digits reported must follow the rule given in the assignment.
 - Yes, but they are not following the rule in the assignment ... (0.5p)
 - Yes, and they are ...
 
-### Q5 - 1 point
+### Q5a - 1 point
 
 Are the quantiles and their MCSEs of alpha and beta in b) reported? Note that the number of digits reported must follow the rule given in the assignment.
 
@@ -54,9 +54,23 @@ Are the quantiles and their MCSEs of alpha and beta in b) reported? Note that th
 - Yes, but they are not following the rule in the assignment ... (0.5p)
 - Yes, and they are ...
 
-### Q6 - 1 point
+### Q5b - 1 point
+
+Is the explanation of the Monte Carlo standard error in b) correct/reasonable?
+
+- No
+- Yes
+
+### Q6a - 1 point
 
 Is the source code for the function in c) reported?
+
+- No or clearly incorrect
+- Yes
+
+### Q6b - 1 point
+
+Does the explanation for using log ratios make sense?
 
 - No
 - Yes
@@ -94,9 +108,16 @@ How is the answer?
 - Something is a bit wrong (0.5p)
 - Explanation is sensible
 
-### Q11 - 1 point
+### Q11a - 1 point
 
 Is the source code for the function in h) reported?
+
+- No or clearly incorrect
+- Yes
+
+### Q11b - 1 point
+
+Does the explanation of importance sampling in h) make sense?
 
 - No
 - Yes

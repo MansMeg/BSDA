@@ -94,13 +94,19 @@ In 1 b), is the implementation of the `metropolis_bioassay` function included?
 
 ### Q12 - 1 point
 
+2 i) Are the posterior means roughly [...] for alpha and [...] for beta?
+- No
+- Yes
+
+### Q13 - 1 point
+
 Is there a discussion on the convergence of the chains? 
 
 - No discussion on convergence.
 - Yes, but the discussion is not convincing. (0.5p)
 - Yes, discussed in the report.
 
-### Q13 - 1 point
+### Q14 - 1 point
 
 Is it mentioned which implementation of Rhat is used ?
 
@@ -108,11 +114,11 @@ Is it mentioned which implementation of Rhat is used ?
 - Yes
 
 
-### Q14 - 1 point
+### Q15 - 1 point
 
 Is the brief correct description of Rhat included? 
 
-### Q15 - 1 point
+### Q16 - 1 point
 
 Are the Rhat-values for alpha and beta reported?
 
@@ -122,7 +128,7 @@ Are the Rhat-values for alpha and beta reported?
 - Yes, but only for alpha or beta (0.5p)
 - Yes, single values both for alpha and beta
 
-### Q16 - 1 point
+### Q17 - 1 point
 
 Is the interpretation of Rhat values correct?
 
@@ -130,7 +136,7 @@ Is the interpretation of Rhat values correct?
 - Somewhat correct (0.5p)
 - Interpretation correct
 
-### Q17 - 1 point
+### Q18 - 1 point
 
 Does the report contain a scatter plot of the draws of alpha and beta? Do the results look reasonable?
 

@@ -108,7 +108,7 @@ This assignment is related to Chapters 10 and 11.
 
 \input{general_info_reporting_accuracy.tex}
 
-\input{general_info_rstan.tex}
+%\input{general_info_rstan.tex}
 
 \newpage
 
@@ -117,7 +117,7 @@ This assignment is related to Chapters 10 and 11.
 Replicate the computations for the bioassay example of section 3.7 (BDA3) using Stan.
 
 \begin{enumerate}
-\item Write down the model for the bioassay data in Stan syntax. For instructions in reporting your implementation, you can refer to parts 2 c) - g) in Assignment 5. More information on the bioassay data can be found in Section 3.7 of the course book. To get access to data, use the following code:
+\item Write down the model for the bioassay data in Stan syntax. For instructions in reporting your implementation, you can refer to parts 2 c) - g) in Assignment 5. Also report the posterior means of $\alpha$ and $\beta$. More information on the bioassay data can be found in Section 3.7 of the course book. To get access to data, use the following code:
 
 <<echo=TRUE, eval=FALSE>>=
 library(bsda)

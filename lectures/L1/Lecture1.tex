@@ -157,31 +157,48 @@
 \end{frame}
 
 
-\section{Bayesian Statistical Inference}
+\section{Bayesian Thinking}
 \frame{\sectionpage}
 
-\begin{frame}{Probability in Bayesian Statistics}
+\begin{frame}{Probability in Bayesian Thinking}
 
   \begin{itemize}
   \item Uncertainty and knowledge is expressed as probability distributions, why? \pause
-  \begin{itemize}
     \item Analogy to physical randomness
     \item Knowledge as coherence of bets (the Dutch book)
-    % TODO: Add link to Wikipedia
-  \end{itemize}
+     \\ Example: If you say: P(rain) = 0.7 and P(no rain) = 0.4, those add up to 1.1 (too high).\\
+A bookmaker could then take both bets from you and be sure to profit, because you’ve made your odds \\ \uured{incoherent}.
   \pause
   \item Everyone can have their own 'subjective' uncertainty, e.g.  P(rain tomorrow), P(Magdalena Andersson will be the next primeminister)
   \item Frequency arguments can be difficult in some situations: P(other life in the universe)
-  \pause
-  \item {\color{uured} Bayesian epistemiology}
-  \begin{itemize}
-  \item State of knowledge is a probability distribution,
-  \item e.g. unlike Popperian aproaches, we can talk about P(black swan)
-  \item Research in Philisophy of Science
-  \end{itemize}
   \end{itemize}
 \end{frame}
 
+\begin{frame}{Bayesian epistemiology}
+
+\pause
+
+% the theory of knowledge, especially with regard to its methods, validity, and scope, and the distinction between justified belief and opinion
+
+
+  \begin{itemize}
+    \item What is \uured{epistemiology}?
+    \pause
+    \\ "the theory of knowledge" (Wikipedia)
+    \pause
+    \item Bayesian epistemiology:
+    \pause
+    \begin{itemize}
+    \item State of knowledge is a probability distribution,
+    \item e.g. unlike Popperian aproaches, we can talk about P(black swan)
+    \item (New) Research in Philisophy of Science
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+
+\section{Bayesian Statistical inference}
+\frame{\sectionpage}
 
 \begin{frame}{Statistical inference}
   \begin{itemize}
@@ -191,23 +208,6 @@
     \item {\color{uured} potentially observed}: future observations, treatment effects
     \item {\color{uured} parameters}: data-generating process (e.g. regression coefficients)
     \end{itemize}
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{Parameters, data, and predictions}
-
-  \begin{itemize}
-  \item Model parameters: $\theta = (\theta_1,...,\theta_p)$
-  \item Observed data: $y = (y_1,...,y_n)$
-    \begin{itemize}
-    \item $y_i$ can be a vector and is assumed to be random
-    \end{itemize}
-  \item Potentially observed data: $\tilde{y} = (\tilde{y}_1,...,\tilde{y}_m)$
-  \item Observed (known) covariates: $x$
-  \item We assume \emph{exchangeability} of the observations:
-\[
-p(y_1,...,y_n) = p(y_\pi(1),...,y_\pi(n))
-\]
   \end{itemize}
 \end{frame}
 
@@ -222,6 +222,28 @@ p(y_1,...,y_n) = p(y_\pi(1),...,y_\pi(n))
   \end{itemize}
 
 \end{frame}
+
+\begin{frame}{Parameters, data, and predictions}
+
+  \begin{itemize}
+  \item Model parameters: $\theta = (\theta_1,...,\theta_p)$
+  \item Observed data: $y = (y_1,...,y_n)$
+    \begin{itemize}
+    \item $y_i$ can be a vector and is assumed to come from a \uured{data generating process} (probabilistic model)
+    \end{itemize}
+  \item Potentially observed data: $\tilde{y} = (\tilde{y}_1,...,\tilde{y}_m)$
+  \item Observed (known) covariates: $x$
+  \pause
+  \item I'm sloppy: e.g. often implicitly condition on $x$, i.e. $p(\theta|y) = p(\theta|y, x)$
+%  \pause
+%  \item We assume \emph{exchangeability} of the observations (more later):
+%\[
+%p(y_1,...,y_n) = p(y_\pi(1),...,y_\pi(n))
+%\]
+  \end{itemize}
+\end{frame}
+
+
 
 \begin{frame}{The basic steps of Bayesian inference}
 
@@ -245,7 +267,6 @@ p(y_1,...,y_n) = p(y_\pi(1),...,y_\pi(n))
     \item potentially observed: $p(\tilde{y}|y)$
     \item parameters: $p(\theta|y)$
   \end{itemize}
-  \item We implicitly condition on $x$, i.e. $p(\theta|y) = p(\theta|y, x)$
   \end{itemize}
 \end{frame}
 

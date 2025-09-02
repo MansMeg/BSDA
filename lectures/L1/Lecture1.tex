@@ -313,7 +313,7 @@ A bookmaker could then take both bets from you and be sure to profit, because yo
   p(\tilde{y}|y) = \int p(\tilde{y}|\theta) p(\theta|y) d\theta
   \]
   \item The \emph{posterior predictive distribution}
-  \item 'An average of conditional predictions over the posterior distribution'
+  % \item 'An average of conditional predictions over the posterior distribution'
   \end{itemize}
 \end{frame}
 
@@ -349,8 +349,8 @@ A bookmaker could then take both bets from you and be sure to profit, because yo
     describes the {\color{uured} aleatoric} uncertainty \vspace{\baselineskip}
   \item Likelihood: $p(y|\theta)=L(\theta|y)$
     as a function of $\theta$
-    given fixed $y$ provides information about epistemic uncertainty,
-    but is not a probability distribution, why?
+    given fixed $y$ provides information about epistemic uncertainty.%,
+    but is not a probability distribution. %, why?
     \vspace{\baselineskip}
   \item<2-> Bayes rule combines the likelihood with prior uncertainty
     $p(\theta)$ and transforms them to updated posterior uncertainty $p(\theta|y)$
@@ -494,6 +494,7 @@ p(\tilde{y}|y,\tilde{x}) = \int Po(\exp(\alpha + \beta \tilde{x})) p(\alpha, \be
     \item model checking and evaluation
     \item easier interpretation of uncertainty intervals
     \end{itemize}
+    \pause
   \item Complications of Bayesian approach
     \begin{itemize}
     \item most models does not have nice analytical posteriors

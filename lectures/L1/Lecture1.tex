@@ -528,7 +528,7 @@ p(\tilde{y}|y,\tilde{x}) = \int Po(\exp(\alpha + \beta \tilde{x})) p(\alpha, \be
 \frame{\sectionpage}
 
 \begin{frame}{Computation}
-  We need to be able to compute expectations with respect to a posterior
+  We want to compute expectations with respect to a posterior
   distribution $p(\theta|y)$
   \begin{align*}
     \E_{\theta|y}\left[ g(\theta) \right] = \int p(\theta|y)g(\theta) d\theta
@@ -541,7 +541,8 @@ p(\tilde{y}|y,\tilde{x}) = \int Po(\exp(\alpha + \beta \tilde{x})) p(\alpha, \be
     \end{itemize}
   \item Monte Carlo, Markov chain Monte Carlo
     \begin{itemize}
-    \item generic
+    \item generic, high-quality
+    \item computationally expensive
     \end{itemize}
   \item Distributional approximations
     \begin{itemize}
@@ -578,9 +579,31 @@ p(\tilde{y}|y,\tilde{x}) = \int Po(\exp(\alpha + \beta \tilde{x})) p(\alpha, \be
   \begin{itemize}
   \item Two groups of patients: treatment and control
     \begin{itemize}
-    \item Binary outcome
+    \item Binary outcome (1 treatment, 0 no treatment)
     \item Is the treatment useful?
     \end{itemize}
+
+    \item Model:\\
+    Likelihood
+    \[
+    y_0 \sim Bin(\theta_0, N_0)
+    \]
+    \[
+    y_1 \sim Bin(\theta_1, N_1)
+    \]
+    \pause
+    Prior
+    \[
+    \theta_0 \sim Beta(1, 1)
+    \]
+    \[
+    \theta_1 \sim Beta(1, 1)
+    \]
+    \pause
+    Goal (odds ratio), e.g. $P(OR>1)$
+    \[
+    OR = \frac{\frac{\theta_1}{1-\theta_1}}{\frac{\theta_0}{1-\theta_0}}
+    \]
   \end{itemize}
 
 \end{frame}
@@ -592,22 +615,22 @@ p(\tilde{y}|y,\tilde{x}) = \int Po(\exp(\alpha + \beta \tilde{x})) p(\alpha, \be
 data {
   int<lower=0> N1;
   int<lower=0> y1;
-  int<lower=0> N2;
-  int<lower=0> y2;
+  int<lower=0> N0;
+  int<lower=0> y0;
 }
 parameters {
   real<lower=0,upper=1> theta1;
-  real<lower=0,upper=1> theta2;
+  real<lower=0,upper=1> theta0;
 }
 model {
   theta1 ~ beta(1,1);
-  theta2 ~ beta(1,1);
+  theta0 ~ beta(1,1);
   y1 ~ binomial(N1, theta1);
-  y2 ~ binomial(N2, theta2);
+  y0 ~ binomial(N0, theta0);
 }
 generated quantities {
   real oddsratio;
-  oddsratio = (theta2/(1-theta2))/(theta1/(1-theta1));
+  oddsratio = (theta1/(1-theta1))/(theta0/(1-theta0));
 }
   \end{lstlisting}
 }
@@ -624,6 +647,7 @@ generated quantities {
   \end{lstlisting}
 }
 \end{frame}
+
 
 \begin{frame}{Modeling nature}
 
@@ -655,7 +679,7 @@ generated quantities {
     \vspace{\baselineskip}
   \item Representing uncertainty with probabilities
     \vspace{\baselineskip}
-  \item Updating uncertainty
+  \item Updating uncertainty using data
     \vspace{\baselineskip}
   %   \pause
   % \item Additional reading material in Noppa (see Lecture 1)
@@ -684,9 +708,9 @@ generated quantities {
 \begin{frame}{Rest of the course}
 
   \begin{itemize}
-  \item Basic models which can be used as building blocks
+  \item Basic models which can be used as building blocks for complex ones
     \vspace{\baselineskip}
-  \item Basic computation of posterior distributions
+  \item Basic computation of posterior and predictive distributions
     \vspace{\baselineskip}
   \item Typical simple scientific data analysis cases
      \begin{itemize}

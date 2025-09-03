@@ -72,7 +72,7 @@ All exercises in the assignment should start with a header fully specifying that
 
 # Exercise 1) Describe the concept of aleatoric uncertainty.
 
-Subtasks in each assignment should be numbered and use header (in rmd use ##). Also include the question here. As an example:
+Subtasks in each assignment should be enumerated and use header (in rmd use ##). Also include the question here. As an example:
 
 ## a) What is a cumulative density function?
 

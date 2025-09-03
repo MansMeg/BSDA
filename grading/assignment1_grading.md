@@ -85,17 +85,7 @@ Is the interval in 2 d) roughly [..., ...]? Remember that since the interval is 
 - No
 - Yes
 
-
 ## Exercise 3
-
-### Q9a - 1 point
-Is the final likelihood correct?
-
-### Q9a - 1 point
-Is there multiple steps showing how to compute the likelihood analytically?
-
-
-## Exercise 4
 
 ### Q10 - 1 point
 
@@ -119,7 +109,7 @@ Is the advice reasonable and well motivated?
 - Yes
 
 
-## Exercise 5
+## Exercise 4
 
 ### Q13 - 1 point
 
@@ -146,7 +136,7 @@ b) How is the answer for what box is most probable?
 - Probabilities are computed correctly for all boxes given that the picked ball is red, the answers are ... and it is **not** explicitly said that the most probable box is box .... (0.5p)
 - Probabilities are computed correctly for all boxes given that the picked ball is red, the answers are ... and it is explicitly said that the most probable box is box .... 
 
-## Exercise 6
+## Exercise 5
 
 ### Q16 - 1 point
 

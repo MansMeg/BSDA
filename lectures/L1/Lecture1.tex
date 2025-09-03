@@ -157,10 +157,10 @@
 \end{frame}
 
 
-\section{Bayesian Thinking}
+\section{Bayesian Reasoning}
 \frame{\sectionpage}
 
-\begin{frame}{Probability in Bayesian Thinking}
+\begin{frame}{Probability in Bayesian Reasoning}
 
   \begin{itemize}
   \item Uncertainty and knowledge is expressed as probability distributions, why? \pause
@@ -487,20 +487,39 @@ p(\tilde{y}|y,\tilde{x}) = \int Po(\exp(\alpha + \beta \tilde{x})) p(\alpha, \be
   \begin{itemize}
   \item Benefits of Bayesian approach
     \begin{itemize}
+    \item uncertainty is the foundation
+    \item easier interpretation of uncertainty intervals
     \item integrate over uncertainties to focus to interesting parts
     \item straight-forward predictive distributions
     \item use relevant prior information
-    \item hierarchical models
+    \item straight-forward hierarchical models
     \item model checking and evaluation
-    \item easier interpretation of uncertainty intervals
+    \item easier to build and evaluate very complex models
     \end{itemize}
     \pause
   \item Complications of Bayesian approach
     \begin{itemize}
     \item most models does not have nice analytical posteriors
     \item we need to \emph{approximate} our posterior
-    \item can be computationally costly
+    \item can be computationally costly/take long time to estimate complex models
     \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Example: Swedish vote intention estimation}
+
+  \begin{itemize}
+  \item Estimation of Swedish vote intention\\
+  \url{https://www.bottenada.se/}
+  \begin{itemize}
+  \item approximately 29 000 parameters \\(every party, every week, since the 90ies)
+  \item dynamic house bias
+  \item autoregressive industry bias
+  \item elections are known
+  \item composite data
+  \end{itemize}
+  \pause
+  \item But it takes 12 h to estimate the model
   \end{itemize}
 \end{frame}
 

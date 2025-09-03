@@ -119,7 +119,7 @@ Is the advice reasonable and well motivated?
 - Yes
 
 
-## Exercise 4
+## Exercise 5
 
 ### Q13 - 1 point
 
@@ -146,7 +146,7 @@ b) How is the answer for what box is most probable?
 - Probabilities are computed correctly for all boxes given that the picked ball is red, the answers are ... and it is **not** explicitly said that the most probable box is box .... (0.5p)
 - Probabilities are computed correctly for all boxes given that the picked ball is red, the answers are ... and it is explicitly said that the most probable box is box .... 
 
-## Exercise 5
+## Exercise 6
 
 ### Q16 - 1 point
 

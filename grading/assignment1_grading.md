@@ -85,17 +85,7 @@ Is the interval in 2 d) roughly [..., ...]? Remember that since the interval is 
 - No
 - Yes
 
-
 ## Exercise 3
-
-### Q9a - 1 point
-Is the final likelihood correct?
-
-### Q9a - 1 point
-Is there multiple steps showing how to compute the likelihood analytically?
-
-
-## Exercise 4
 
 ### Q10 - 1 point
 

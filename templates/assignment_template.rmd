@@ -165,4 +165,4 @@ The language used in the course is English. Hence the report needs to be written
 
 # Jupyter Notebook and other report formats
 
-You are allowed to use any format to produce your report. For example, you can use Jupyter Notebooks, as long as you abide by the instructions in this template.
+You are allowed to use any format to produce your report. For example, you can use Jupyter Notebooks, as long as you abide by the instructions in this template. In addition, the report needs to be exported as a PDF, and has to have reasonable aspect ratio (A4) and font size.

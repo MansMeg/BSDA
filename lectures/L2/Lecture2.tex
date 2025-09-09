@@ -52,6 +52,45 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
+
+\section{Posterior distributions}
+%\frame{\sectionpage}
+
+\begin{frame}
+  \frametitle{Assignment 1}
+
+  \begin{itemize}
+  \item "The formatting was quite time-consuming and could be improved."\pause
+  \item "Maybe the first exercise could be slightly adjusted to be a bit more interesting and fun to work
+with." \pause
+  \item "I would appreciate exploring the concepts of aleatoric and
+epsitemic uncertainity in greater length. Maybe one of the exercises could be about writing about
+these concepts more thoroughly." \pause
+\item "A more detailed, question-specific example for using markmyassignment would be very helpful. "
+  \end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Master theses using Stan}
+
+\begin{itemize}
+\item Joint supervision and work with researchers and students (PhD and masters)
+\item For students that want to work with research
+\pause
+\item Multiple project (two from stats and three from IT) on Stan and Bayes:
+\pause
+\item Projects
+\begin{itemize}
+\item Modelling of pollen data in Ancient greece (with Anton Bonnier)
+\item Modelling proteins in pharmacometrics
+\end{itemize}
+\pause
+\item Deadline to show interest this \emph{Sunday at 23.59}.
+\end{itemize}
+\end{frame}
+
+
 \section{Posterior distributions}
 %\frame{\sectionpage}
 
@@ -753,6 +792,8 @@ blue-green algae levels.
   \only<2>{\includegraphics[width=8cm]{figs/pguessprior.pdf}}
   \only<3>{\includegraphics[width=8cm]{figs/ppost.pdf}}
 
+  Blue: data point(s), Red: Prior, Purple: Posterior
+
 \end{frame}
 
 \begin{frame}
@@ -794,7 +835,7 @@ blue-green algae levels.
     \item If $\tau_0\rightarrow\infty$ when $n$ fixed\\
       or if $n\rightarrow\infty$ when $\tau_0$ fixed
       \begin{equation*}
-        p(\theta|y) \approx \N(\theta|\bar{y},\sigma^2/n)
+        p(\theta|y) \rightarrow^d \N(\theta|\bar{y},\sigma^2/n)
       \end{equation*}
       \pause
       \item Find the {\color{uured}sufficient statistic} for $\theta$!

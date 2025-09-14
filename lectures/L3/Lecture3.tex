@@ -455,7 +455,7 @@
 \begin{frame}{Gaussian - conjugate prior}
 
   \begin{itemize}
-  \item[-] Conjugate prior has to have a form
+  \item[-] Conjugate prior on the form
     $p(\sigma^2)p(\mu \mid \sigma^2)$\\
     \pause
   \item[-] Handy parameterization
@@ -525,15 +525,28 @@
 
   \begin{itemize}
   \item[-] Extension of binomial to $K$ categories
-  \item[-] Observation model (Categorical distribution, $n=1$)\\
-  $y_i = (0,1,0,0,0)$ - {\color{uured} what is $K$ here?}
+  \item[-] Observation model: {\color{uured}Multinomial model}
+  \[
+  \mathbf{y} \sim \text{MN}(\mathbf{y}|\theta,m)
+  \]
   \pause
     \begin{align*}
-      p(y  \mid  \theta) \propto \prod_{k=1}^K \theta_j^{y_j},
+      p(\mathbf{y}  \mid  \theta, m) \propto \prod_{k=1}^K \theta_j^{y_j},
     \end{align*}
     \begin{align*}
       \text{where } \sum_k^K \theta_k = 1\,, \text{ and } \forall \theta_k > 0
     \end{align*}
+  \pause
+  \item[-] Example: $\mathbf{y}_i = (0,1,0,6,30)$ - {\color{uured} what is $K$ here?}
+  \pause
+  \item[-] Categorical distribution: $\text{MN}(\mathbf{y}|\mathbf{p},m = 1)$
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}{Prior for the multinomial model}
+
+  \begin{itemize}
   \item[-] {\color{uured} What is important when choosing the prior for $\theta$?}
   \pause
   \item[-] Conjugate prior: The Dirichlet distribution
@@ -541,24 +554,24 @@
     p(\theta) \propto \prod_{k=1}^K \theta_k^{\alpha_k-1},
   \end{align*}
   \begin{align*}
-      \text{where } \forall \alpha_k > 0
+      \text{where} \forall \alpha_k > 0, \sum_k^K \theta_k = 1\,, \text{ and } \forall \theta_k > 0
   \end{align*}
+  \pause
+  \item[-] {\color{uured} What is the connection to the Beta distribution?}
   \end{itemize}
+
 \end{frame}
 
-\begin{frame}{Multinomial model for categorical data: The posterior}
+\begin{frame}{Posterior for the multinomial model}
 
-  \begin{itemize}
-  \item The posterior $p(\theta|y)$
     \begin{align*}
       p(\theta \mid y) & \propto p(y \mid \theta) p(\theta)\\
        \uncover<2->{& \propto \prod_{k=1}^K \theta_k^{\alpha_k-1} \prod^n_i \prod_{k=1}^K \theta_k^{y_{k,i}}}\\
        \uncover<3->{& = \prod_{k=1}^K \theta_k^{\alpha_k-1} \prod_{k=1}^K \theta_k^{\sum^n_i y_{k,i}}}\\
-       \uncover<4->{& = \prod_{k=1}^K \theta_k^{\alpha_k - 1 + \sum^n_i y_{k,i}}}
+       \uncover<4->{& = \prod_{k=1}^K \theta_k^{\alpha_k - 1 + \sum^n_i y_{k,i}}}\\
+       \uncover<5->{& = \text{Dir}(...,\alpha_k + \sum^n_i y_{k,i},...)}
     \end{align*}
 
-  \uncover<5->{\item The posterior is $p(\theta|y) = \text{Dir}(\alpha + \sum y)$}
-  \end{itemize}
 \end{frame}
 
 \subsection{Multivariate Gaussian}

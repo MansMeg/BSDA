@@ -378,7 +378,8 @@
     \begin{align*}
     \uncover<1->{p(\mu|y) &\propto {\only<1>{\color{blue}}[(n-1)s^2+n(\mu-\bar{y})^2]^{-n/2}}\\}
     \uncover<2->{&\propto \left[1+\frac{n(\mu-\bar{y})^2}{(n-1)s^2}\right]^{-n/2}\\}
-    \uncover<3->{p(\mu \mid y) & = t_{n-1}(\mu \mid \bar{y},s^2/n) \color{gray} \quad \text{Student's $t$}}
+    \uncover<3->{\color{gray} p(x|\mu_\star,\sigma_\star,\nu_\star) & \color{gray} = {\displaystyle {\frac {\Gamma {\left({\frac {\nu_\star +1}{2}}\right)}}{{\sqrt {\pi \nu_\star \sigma_\star^2}}\,\Gamma {\left({\frac {\nu_\star }{2}}\right)}}}\left(1+{\frac {1}{\nu_\star }\frac {(x - \mu_\star)^2}{\sigma_\star^2}}\right)^{-{\frac {\nu_\star +1}{2}}}}\\}
+    \uncover<4->{p(\mu \mid y) & = \underbrace{t(\mu \mid \mu_\star=\bar{y},\sigma_\star=s^2/n,\nu_\star=n-1)}_{\text{Student's $t$}}}
     \end{align*}
 
 \end{frame}

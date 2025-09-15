@@ -91,6 +91,8 @@ For the e) part, is there some comparison and discussion of results obtained wit
 - Yes, but the results and conclusions are clearly wrong
 - Yes
 
+## Exercise 2
+
 ### Q11 - 1 point
 
 For the a) part, is the analytical posterior correctly derived?

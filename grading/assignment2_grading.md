@@ -100,13 +100,6 @@ For the a) part, is the analytical posterior correctly derived?
 - No
 - Yes
 
-### Q11 - 1 point
-
-For the a) part, is the analytical posterior correctly derived?
-
-- No
-- Yes
-
 ### Q12 - 1 point
 
 For the b) part, are the posterior alpha and beta correct?

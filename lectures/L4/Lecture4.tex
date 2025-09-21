@@ -226,7 +226,14 @@
 
   \begin{itemize}
     \item Now lets use the Riemann sum to approximate the Riemann integral!
-
+    \pause
+    \begin{align*}
+         {\displaystyle \int _{a}^{b}f(x)\,dx \approx \sum _{s=1}^{S}f(x_{s}^{*})\,\Delta x_{s},}
+    \end{align*}
+    \item A simple $x_{s}^{*}$ is to use the \uured{midpoint}:
+    \[
+    x_s^* = a + \left(s + \tfrac{1}{2}\right)\underbrace{\frac{b-a}{S}}_{\Delta x_{s}}
+    \]
 
   \end{itemize}
 
@@ -237,31 +244,19 @@
 
 \frametitle{Numerical integration}
 
-  \begin{itemize}
-  \item The simplest quadrature integration is grid integration
-    \begin{itemize}
-    \item Evaluate function in a grid and compute\\
-    \hspace{-1cm}\begin{minipage}{4cm}
-    \begin{align*}
-      \E[-\alpha/\beta] \approx \sum_{t=1}^{T} w_{\mathrm{cell}}^{(t)} \frac{\alpha^{(t)}}{\beta^{(t)}},
-    \end{align*}
-  \end{minipage}
-  \begin{minipage}{6cm}
+\begin{itemize}
+  \item Mid-point
+\begin{center}
   \includegraphics[width=6cm]{figs/Integration_rectangle.png}
-\end{minipage}\\
-where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$, and $\alpha^{(t)}$ and $\beta^{(t)}$ are center locations of grid cells
-\end{itemize}
-\item<2-> In 1D further variations with smaller error, e.g. trapezoid
+\end{center}
+\item<2-> A variations with smaller error: trapezoid
   \begin{center}
     \includegraphics[width=6cm]{figs/Integration_trapezoid.png}
   \end{center}
-\item<3-> In 2D and higher
-  \begin{itemize}
-  \item nested quadrature, product rules
-  \item but theres a curse of dimensionality...
-  \end{itemize}
-  \end{itemize}
-
+\item<3-> Exists even better approaches (Simpsons rule)
+\item<4-> But theres a curse of dimensionality... \\
+we need $S^D$ gridpoints in $D$ dimensions
+\end{itemize}
 
 \end{frame}
 

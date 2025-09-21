@@ -263,28 +263,6 @@ we need $S^D$ gridpoints in $D$ dimensions
 \section{Monte Carlo Methods}
 \frame{\sectionpage}
 
-\begin{frame}
-\frametitle{Monte Carlo integration/method}
-
-  \begin{itemize}
-    \item In Gelman et al (2013) notation and for a posteriors $p(\theta|y)$
-    \[
-      E_{p(\theta|y)}(h(\theta)) = \int h(\theta) p(\theta|y) d\theta \approx \sum_s^S h(\theta_s) p(\theta_s|y) \frac{w_s}{S}
-    \]
-    \pause
-    \item If we have samples $\theta_s \sim p(\theta|y)$ we can approximate
-        \[
-      E_{p(\theta|y)}(h(\theta)) = \int h(\theta) p(\theta|y) d\theta \approx \frac{1}{S} \sum_s^S h(\theta_s)
-    \]
-    \pause
-    \begin{align*}
-    E_{p(\theta|y)}\left( \frac{1}{S}\sum_s^S h(\theta_s)\right) & = \frac{1}{S} \sum_s^S E_{p(\theta|y)}  \left( h(\theta_s)\right) \\
-    & = \int h(\theta) p(\theta|y) d\theta
-    \end{align*}
-  \end{itemize}
-
-
-\end{frame}
 
 
 %    A (stochastic) numerical technique to approximate integrals
@@ -329,6 +307,29 @@ we need $S^D$ gridpoints in $D$ dimensions
 
 \end{frame}
 
+
+\begin{frame}
+\frametitle{Monte Carlo integration/method}
+
+  \begin{itemize}
+    \item In Gelman et al (2013) notation and for a posteriors $p(\theta|y)$
+    \[
+      E_{p(\theta|y)}(h(\theta)) = \int h(\theta) p(\theta|y) d\theta \approx \sum_s^S h(\theta_s) p(\theta_s|y) \Delta \theta_{s}
+    \]
+    \pause
+    \item If we have samples $\theta_s \sim p(\theta|y)$ we can approximate
+        \[
+      E_{p(\theta|y)}(h(\theta)) = \int h(\theta) p(\theta|y) d\theta \approx \frac{1}{S} \sum_s^S h(\theta_s)
+    \]
+    \pause
+    \begin{align*}
+    E_{p(\theta|y)}\left( \frac{1}{S}\sum_s^S h(\theta_s)\right) & = \frac{1}{S} \sum_s^S E_{p(\theta|y)}  \left( h(\theta_s)\right) \\
+    & = \int h(\theta) p(\theta|y) d\theta
+    \end{align*}
+  \end{itemize}
+
+
+\end{frame}
 
 \begin{frame}
 

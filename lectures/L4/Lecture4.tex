@@ -200,22 +200,23 @@
 \frame{\subsectionpage}
 
 \begin{frame}
-\frametitle{Numerical integration}
+\frametitle{Riemann recap}
 
 
-  Remember the Riemann sum:
+  Remember the Riemann sum (where $x_{s}^{*}$:
      \begin{align*}
      {\displaystyle I_{a}^{b}=\sum _{s=1}^{S}f(x_{s}^{*})\,\Delta x_{s}\,,}
        \end{align*}
+      where
+      \begin{align*}
+      {\displaystyle \Delta x={\frac {b-a}{S}} \text{ and } {\displaystyle x_{s}^{*}\in [x_{i-s},x_{s}]}}
+      \end{align*}
        \pause
   And the Riemann integral:
         \begin{align*}
          {\displaystyle \int _{a}^{b}f(x)\,dx=\lim _{\|\Delta x\|\rightarrow 0}\sum _{s=1}^{S}f(x_{i}^{*})\,\Delta x_{i},}
     \end{align*}
-    where
-    \begin{align*}
-    {\displaystyle \Delta x={\frac {b-a}{S}}.}
-    \end{align*}
+
 
 \end{frame}
 
@@ -224,27 +225,7 @@
 
 
   \begin{itemize}
-  \item Remember the Riemann sum and the Riemann integral:
-     \begin{align*}
-     {\displaystyle I_{a}^{b}=\sum _{i=1}^{S}f(x_{s}^{*})\,\Delta x_{s}\,,}
-       \end{align*}
-     where
-        \begin{align*}
-         {\displaystyle \int _{a}^{b}f(x)\,dx=\lim _{\|\Delta x\|\rightarrow 0}\sum _{i=1}^{n}f(x_{i}^{*})\,\Delta x_{i}.}
-    \end{align*}
-
-    \item Numerically (deterministic) compute an integral (midpoint) using $S$ sample points
-    \[
-      I^a_b(h) = \int^a_b h(\theta) d\theta \approx \sum_s^S h(\theta_s) \Delta \theta_s
-    \]
-    where
-    \[
-    \Delta \theta_s = \frac{w_s}{S}\, \text{and} \, w_s = b - a
-    \]
-    and
-    \[
-    \theta_s = a - (s + 0.5) w_s / S \, (\text{i.e. the midpoint of interval }s)
-    \]
+    \item Now lets use the Riemann sum to approximate the Riemann integral!
 
 
   \end{itemize}

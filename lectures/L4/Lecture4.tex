@@ -64,19 +64,23 @@
   \begin{itemize}
   \item In this chapter, generic $p(\theta)$ is used instead of
     $p(\theta|y)$
-  \item Unnormalized distribution is denoted by $q(\cdot)$
+    \pause
+  \item \uured{Unnormalized} distribution is denoted by $q(\cdot)$
     \begin{itemize}
     \item $\int q(\theta) d\theta \neq 1$, but finite (i.e. $\int q(\theta) d\theta \le \infty$
     \item $q(\cdot) \propto p(\cdot)$
     \end{itemize}
-  \item Proposal distribution is denoted by $g(\cdot)$
+    \pause
+  \item \uured{Proposal} distribution is denoted by $g(\cdot)$
   \end{itemize}
 
 \end{frame}
 
 \begin{frame}
 
-\frametitle{Numerical accuracy -- floating point}
+\subsection{Computational aspects}
+
+\frametitle{Numerical accuracy}
 
   \begin{itemize}
   \item Floating point presentation of numbers. e.g. with 64bits
@@ -89,11 +93,11 @@
         {\color{uured} prod(dnorm(qr)) $\rightarrow$} {\color{red} 0 (underflow)}
       \item<2-> see log densities in the next slide
       \end{itemize}
-    \item<3-> closest value to 1 is $\approx 1 \pm  2.2\cdot 10^{-16}$
+    \item<3-> the smallest distinguishable difference from 1 is about $\approx 1 \pm  2.2\cdot 10^{-16}$
       \begin{itemize}
-      \item<3-> Laplace and ratio of girl and boy babies
-      \item<3-> {\color{uured}  pbeta(0.5, 241945, 251527) $\rightarrow$} {\color{red}  1 (rounding)}
-      \item<4-> {\color{uured} pbeta(0.5, 241945, 251527, lower.tail=FALSE) $\approx -1.2\cdot 10^{-42}$}\\
+      \item<3-> Ratio of girl and boy babies
+      \item<3-> {\color{uured} pbeta(0.5, 241945, 251527) $\rightarrow$} {\color{red}  1 (rounding)}
+      \item<4-> {\color{uured} pbeta(0.5, 241945, 251527, lower.tail=FALSE) $\approx 1.15\cdot 10^{-42}$}\\
         there is more accuracy near 0
       \end{itemize}
     \end{itemize}
@@ -114,15 +118,16 @@
       \begin{itemize}
       \item {\color{uured} prod(dnorm(qr)) $\rightarrow$} {\color{red} 0 (underflow)}
       \item {\color{uured} sum(dnorm(qr,log=TRUE)) $\rightarrow$} {\color{uured} -847.3}
-      \item<2-> how many observations we can now handle? % $\sim 10^308$
+      \item<2-> How many observations we can now handle? \\
+      $\approx 10^{308}$
     \end{itemize}
-    \item<3-> compute exp as late as possible
+    \item<3-> Compute exp as late as possible
       \begin{itemize}
       \item<4-> e.g. for $a>b$, compute $\log(\exp(a)+\exp(b)) = a + \log(1+\exp(b-a))$\\
         \uncover<5->{
           e.g. {\color{uured} $\log(\exp(800)+\exp(800)) \rightarrow$} {\color{red} Inf}}\\
         \uncover<6->{but {\color{uured} $800 + \log(1 + \exp(800-800)) \approx$} {\color{uured} $800.69$}}
-      \item<7-> e.g. in Metropolis-algorithm (ex5) compute the log of ratio of densities using the identity\\
+      \item<7-> e.g. in Metropolis-algorithm (next week) compute the log of ratio of densities using the identity\\
         $\log(a/b)=\log(a)-\log(b)$
     \end{itemize}
     \end{itemize}
@@ -171,17 +176,23 @@
 \frametitle{It's all about expectations}
 
    \begin{align*}
-   E_{\theta}[f(\theta)] = \int f(\theta) p(\theta|y) d\theta
+   E_{p(\theta|y)}[f(\theta)] = \int f(\theta) p(\theta|y) d\theta
    \end{align*}
 
   \begin{itemize}
+  \item Multiple approaches to compute $E_{p(\theta|y)}[f(\theta)]$
+  \begin{itemize}
   \item Conjugate priors and analytic solutions (Ch 1-5)
-  \item Grid integration and other quadrature rules (Ch 3, 10)
+  \pause
+  \item Numerical (deterministisc) integration (grid and quadrature, Ch 3, 10)
+  \pause
   \item Independent Monte Carlo, rejection and importance sampling (Ch 10)
+  \pause
   \item Markov Chain Monte Carlo (Ch 11-12)
-  \item Distributional approximations (Laplace, VB, EP) (Ch 4, 13)
+  \pause
+  \item (Distributional approximations, Ch 4, 13)
   \end{itemize}
-
+  \end{itemize}
 
  \end{frame}
 

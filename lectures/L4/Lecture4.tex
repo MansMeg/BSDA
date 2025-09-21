@@ -76,9 +76,9 @@
 
 \end{frame}
 
-\begin{frame}
-
 \subsection{Computational aspects}
+
+\begin{frame}
 
 \frametitle{Numerical accuracy}
 
@@ -196,9 +196,42 @@
 
  \end{frame}
 
+\subsection{Numerical integration}
+\frame{\subsectionpage}
+
+\begin{frame}
+\frametitle{Monte Carlo integration/method}
+
+  \begin{itemize}
+    \item Numerically (deterministic) compute an integral (midpoint) using $S$ sample points
+    \[
+      I^a_b(h) = \int^a_b h(\theta) d\theta \approx \sum_s^S h(\theta_s) \Delta \theta_s
+    \]
+    where
+    \[
+    \Delta \theta_s = \frac{w_s}{S}\, \text{and} \, w_s = b - a
+    \]
+    and
+    \[
+    \theta_s = a - (s + 0.5) w_s / S \, (\text{i.e. the midpoint of interval }s)
+    \]
+    \pause
+   \item Remember the definition of the Reimann Sum:
+   \begin{align*}
+   {\displaystyle I_R=\sum _{i=1}^{S}f(x_{s}^{*})\,\Delta x_{s},}
+     \end{align*}
+   where
+      \begin{align*}
+   {\displaystyle I_R \rightarrow \int f(x) dx \, \text{as} \, S \rightarrow \infty}
+  \end{align*}
+
+  \end{itemize}
+
+\end{frame}
+
 \begin{frame}
 
-\frametitle{Quadrature integration}
+\frametitle{Numerical integration}
 
   \begin{itemize}
   \item The simplest quadrature integration is grid integration
@@ -230,36 +263,6 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
 
 \section{Monte Carlo Methods}
 \frame{\sectionpage}
-
-\begin{frame}
-\frametitle{Monte Carlo integration/method}
-
-  \begin{itemize}
-    \item Numerically (deterministic) compute an integral (midpoint) using $S$ sample points
-    \[
-      I^a_b(h) = \int^a_b h(\theta) d\theta \approx \sum_s^S h(\theta_s) \Delta \theta_s
-    \]
-    where
-    \[
-    \Delta \theta_s = \frac{w_s}{S}\, \text{and} \, w_s = b - a
-    \]
-    and
-    \[
-    \theta_s = a - (s + 0.5) w_s / S \, (\text{i.e. the midpoint of interval }s)
-    \]
-    \pause
-   \item Remember the definition of the Reimann Sum:
-   \begin{align*}
-   {\displaystyle I_R=\sum _{i=1}^{S}f(x_{s}^{*})\,\Delta x_{s},}
-     \end{align*}
-   where
-      \begin{align*}
-   {\displaystyle I_R \rightarrow \int f(x) dx \, \text{as} \, S \rightarrow \infty}
-  \end{align*}
-
-  \end{itemize}
-
-\end{frame}
 
 \begin{frame}
 \frametitle{Monte Carlo integration/method}

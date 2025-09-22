@@ -307,29 +307,97 @@ we need $S^D$ gridpoints in $D$ dimensions
 
 \end{frame}
 
-
 \begin{frame}
-\frametitle{Monte Carlo integration/method}
+\frametitle{Monte Carlo integration}
 
   \begin{itemize}
-    \item In Gelman et al (2013) notation and for a posteriors $p(\theta|y)$
-    \[
-      E_{p(\theta|y)}(h(\theta)) = \int h(\theta) p(\theta|y) d\theta \approx \sum_s^S h(\theta_s) p(\theta_s|y) \Delta \theta_{s}
-    \]
-    \pause
-    \item If we have samples $\theta_s \sim p(\theta|y)$ we can approximate
-        \[
-      E_{p(\theta|y)}(h(\theta)) = \int h(\theta) p(\theta|y) d\theta \approx \frac{1}{S} \sum_s^S h(\theta_s)
-    \]
-    \pause
+    \item Basic idea: \uured{approximate the sum using samples}
     \begin{align*}
-    E_{p(\theta|y)}\left( \frac{1}{S}\sum_s^S h(\theta_s)\right) & = \frac{1}{S} \sum_s^S E_{p(\theta|y)}  \left( h(\theta_s)\right) \\
-    & = \int h(\theta) p(\theta|y) d\theta
+         {\displaystyle \int _{a}^{b}f(x)\,dx \approx \sum _{s=1}^{S}f(x_{s}^{*})\,\Delta x_{s},}
     \end{align*}
+    where
+    $x_{s}^{*} \sim U(a,b)$, and $\Delta x={\frac {b-a}{S}}$
+
+    \pause
+  \end{itemize}
+  % TODO: Add for a general p(x)
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Monte Carlo integration}
+
+  \begin{itemize}
+    \item Our target in Bayesian inference:
+    \[
+      E_{p}[h(\theta)] = \int h(\theta) p(\theta|y) d\theta \approx \sum_s^S h(\theta_s) p(\theta_s|y) \Delta \theta_{s}
+    \]
+    \pause
+    \item \uured{Monte Carlo}: If we have $\theta_s \sim p(\theta|y)$ we approximate
+        \[
+      E_{p}[h(\theta)] = \int h(\theta) p(\theta|y) d\theta \approx \frac{1}{S} \sum_s^S h(\theta_s)
+    \]
+
   \end{itemize}
 
 
 \end{frame}
+
+\begin{frame}
+\frametitle{Monte Carlo integration}
+
+\uured{Goal}. Estimate
+\[
+\mu = \mathbb{E}_p[h(\theta)] = \int h(\theta)\,p(\theta|y)\,d\theta
+\]
+using i.i.d.\ draws $\theta_{(1)},\dots,\theta_{(S)} \sim p(\theta|y)$.
+Define the estimator
+\[
+\hat{\mu}_S = \frac{1}{S}\sum_{s=1}^S h(\theta_{(s)}).
+\]
+\pause
+\medskip
+\uured{Unbiasedness.}
+Because the draws are i.i.d.,
+\[
+\mathbb{E}[\hat{\mu}_S]
+= \frac{1}{S}\sum_{s=1}^S \mathbb{E}[h(X^{(s)})]
+= \mathbb{E}[h(X)]
+= \mu.
+\]
+
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Monte Carlo integration}
+
+\emph{Variance (dimension-free rate).}
+If $\operatorname{Var}[h(X)] < \infty$, then
+\[
+\operatorname{Var}(\hat{\mu}_S)
+= \operatorname{Var}\!\left(\frac{1}{S}\sum_{s=1}^S h(X^{(s)})\right)
+= \frac{1}{S^2}\sum_{s=1}^S \operatorname{Var}(h(X^{(s)}))
+= \frac{\operatorname{Var}[h(X)]}{S}.
+\]
+Thus the RMSE satisfies
+\[
+\mathrm{RMSE}(\hat{\mu}_S)
+= \sqrt{\frac{\operatorname{Var}[h(X)]}{S}} \;\propto\; S^{-1/2},
+\]
+independent of the dimension of $X$.
+
+\medskip
+\emph{Consistency.}
+By the strong law of large numbers, if $\mathbb{E}[\,|h(X)|\,] < \infty$,
+\[
+\hat{\mu}_S \;\xrightarrow{\text{a.s.}}\; \mu \qquad \text{as } S \to \infty.
+\]
+
+
+\end{frame}
+
 
 \begin{frame}
 

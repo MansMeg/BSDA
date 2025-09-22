@@ -408,6 +408,7 @@ independent of the dimension of $\theta$.
     \item these draws can be treated as any observations
     \item a collection of draws is a sample of size $S$
     \end{itemize}
+    \pause
   \item Use these draws, for example,
     \begin{itemize}
     \item to compute means, deviations, quantiles
@@ -430,11 +431,11 @@ independent of the dimension of $\theta$.
   \item Trapezoidal rule error is $\propto S^{-2}$
   \item Simpson rule error is $\propto S^{-4}$
   \item Monte Carlo is bad (even worse than midpoint approximation)
-  \only<1>{{\color{uured}Why use Monte Carlo integration?}}
+  \only<1>{\\{\color{uured}Why use Monte Carlo integration?}}
   \pause
   \item Monte Carlo has the same error irrespective of dimension $D$, i.e. $S_D = S$
   \item Numerical methods create a grid with $S_D = S^D$
-  \only<2>{{\color{uured} When is Monte Carlo a better approach than Simpsons?}}
+  \only<2>{\\{\color{uured} When is Monte Carlo a better approach than Simpsons?}}
   \pause
   \[
   (S_D^\frac{1}{D})^{-4} = S_D^{-\frac{1}{2}}\,,

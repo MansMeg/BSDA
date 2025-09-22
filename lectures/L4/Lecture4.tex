@@ -373,27 +373,26 @@ Because the draws are i.i.d.,
 \begin{frame}
 \frametitle{Monte Carlo integration}
 
-\emph{Variance (dimension-free rate).}
-If $\operatorname{Var}[h(X)] < \infty$, then
+\uured{Variance (dimension-free rate).}
+If $\operatorname{Var}[h(\theta)] < \infty$, then
 \[
 \operatorname{Var}(\hat{\mu}_S)
-= \operatorname{Var}\!\left(\frac{1}{S}\sum_{s=1}^S h(X^{(s)})\right)
-= \frac{1}{S^2}\sum_{s=1}^S \operatorname{Var}(h(X^{(s)}))
-= \frac{\operatorname{Var}[h(X)]}{S}.
+= \operatorname{Var}\!\left(\frac{1}{S}\sum_{s=1}^S h(\theta_{(s)})\right)
+= \frac{\operatorname{Var}[h(\theta)]}{S}.
 \]
 Thus the RMSE satisfies
 \[
 \mathrm{RMSE}(\hat{\mu}_S)
-= \sqrt{\frac{\operatorname{Var}[h(X)]}{S}} \;\propto\; S^{-1/2},
+= \sqrt{\frac{\operatorname{Var}[h(\theta)]}{S}} \;\propto\; S^{-1/2},
 \]
-independent of the dimension of $X$.
+independent of the dimension of $\theta$.
 
-\medskip
-\emph{Consistency.}
-By the strong law of large numbers, if $\mathbb{E}[\,|h(X)|\,] < \infty$,
-\[
-\hat{\mu}_S \;\xrightarrow{\text{a.s.}}\; \mu \qquad \text{as } S \to \infty.
-\]
+%\medskip
+%\emph{Consistency.}
+%By the strong law of large numbers, if $\mathbb{E}[\,|h(\theta)|\,] < \infty$,
+%\[
+%\hat{\mu}_S \;\xrightarrow{\text{a.s.}}\; \mu \qquad \text{as } S \to \infty.
+%\]
 
 
 \end{frame}

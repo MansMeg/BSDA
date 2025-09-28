@@ -261,8 +261,6 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
      \end{center}
 \end{frame}
 
-% TODO: Add example of a Gibbs sampling algorithm here (in math). Derive the conditional distributions
-
 \begin{frame}
 
 \frametitle{ Gibbs sampling}
@@ -293,9 +291,6 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
      \end{center}
 \end{frame}
 
-\subsection{Metropolis-Hastings}
-%\frame{\sectionpage}
-
 \begin{frame}
 
 \frametitle{Sampling conditional vs joint}
@@ -310,8 +305,8 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
 
 \end{frame}
 
-
-
+\subsection{Metropolis-Hastings}
+\frame{\subsectionpage}
 
 \begin{frame}
 
@@ -325,9 +320,9 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
         \begin{itemize}
         \item[(a)] pick a proposal $\theta^{*}$ from a {\color{uured} proposal distribution}
           $J_t(\theta^{*}|\theta_{t-1})$. \\
-          Proposal distribution has to be symmetric, i.e.\\
+          (Proposal distribution has to be symmetric, i.e.\\
           $J_t(\theta_a|\theta_b)=J_t(\theta_b|\theta_a)$, for all
-          $\theta_a,\theta_b$
+          $\theta_a,\theta_b$)
         \item<2->[(b)] calculate acceptance ratio
           \begin{equation*}
             r=\frac{p(\theta^{*}|y)}{p(\theta_{t-1}|y)}
@@ -446,10 +441,32 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
 
 \begin{frame}
 
-\frametitle{ Why Metropolis algorithm works}
+\frametitle{Why Metropolis algorithm works}
 
   \begin{itemize}
   \item[2.] Prove that this stationary distribution is the desired target distribution $p(\theta|y)$: see book
+
+  \begin{itemize}
+  \item Show \emph{detailed balance} with respect to
+$p(\theta|y)$:
+\[
+p(\theta|y)\, T(\theta|\theta') = p(\theta'|y)\, T(\theta'|\theta),
+\quad \forall \theta, \theta' .
+\]
+
+Here, $T(\theta'|\theta)$ denotes the one-step transition probability (or density).
+\item Intuition:
+\begin{itemize}
+\item Think of $p(\theta|y)$ as the ``mass'' of probability at state $\theta$.
+\item $p(\theta|y) P(\theta, \theta')$ is the ``flow'' of mass from $\theta$ to $\theta'$.
+\item \uured{Detailed balance}: the flow from $\theta$ to $\theta'$ equals the flow back
+from $\theta'$ to $\theta$ --- nothing accumulates or leaks.
+\end{itemize}
+\end{itemize}
+
+
+
+
 %    \begin{itemize}
 %    \item[-] consider starting algorithm at time $t-1$ with a draw
 %      $\theta_{t-1} \sim p(\theta|y)$

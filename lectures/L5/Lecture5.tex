@@ -95,10 +95,10 @@
   \begin{itemize}
   \item Monte Carlo methods we have discussed so far
     \begin{itemize}
-    \item Inverse CDF works for 1D \pause
-    \item Analytic transformations work for only certain distributions \pause
+    \item Inverse CDF works mainly for 1D \pause
+%    \item Analytic transformations work for only certain distributions \pause
 %    \item Factorization works only for certain joint distributions
-    \item Grid methods works in less than a few dimensions \pause
+    \item Grid methods works in a few dimensions \pause
     \item Rejection sampling works mostly in 1D (truncation is a special case) \pause
     \item Importance sampling is reliable only in special cases
     \end{itemize}
@@ -122,9 +122,8 @@
   \begin{itemize}
   \item<1-> Andrey Markov proved weak law of large numbers and central
     limit theorem for certain dependent-random sequences, which were
-    later named Markov chains
-  \item<2-> The probability of each event depends only on the state
-    attained in the previous event (or finite number of previous events)
+    later named \uured{Markov chains}
+  \item<2-> The probability of each event depends only on the previous event (or finite number of previous events)
     \[
     p(\theta_t|\theta_{t-1}, \theta_{t-2}, ...) = p(\theta_t|\theta_{t-1})
     \]
@@ -132,7 +131,7 @@
 %    Pushkin's novel ``Yevgeniy Onegin''
     \item<3-> $T_t(\theta_{t} \mid \theta_{t-1}) \equiv p(\theta_t|\theta_{t-1})$ is usually refered to as the {\color{uured} transition distribution}
     \item<4-> Under some assumptions $p(\theta_t|\theta_{t-1})$ will converge (in total variation) to \emph{one} {\color{uured} stationary distribution} $p(\theta)$
-    \item<5-> Goal in MCMC: Construct a {\color{uured} transition distribution} with $p(\theta|y)$ as the {\color{uured} stationary distribution}
+    \item<5-> \uured{Goal in MCMC}: Construct a {\color{uured} transition distribution} with $p(\theta|y)$ as the {\color{uured} stationary distribution}
   \end{itemize}
 
 \end{frame}
@@ -161,13 +160,10 @@
     \begin{itemize}
     \item<2->[+] generic
     \item<2->[+] combine sequence of easier Monte Carlo draws to form a Markov chain
-    \item<3->[+] chain goes where most of the posterior mass is
-    \item<3->[+] asymptotically chain spends the $\alpha$\% of time where
-      $\alpha$\% posterior mass is
+    \item<3->[+] converges (in total variation) to $p(\theta|y)$ as $t\rightarrow\infty$
     \item<4->[+] central limit theorem holds for expectations
     \item<5->[-] draws are dependent
-    \item<5->[-] construction of efficient Markov chains is not always
-      easy
+    \item<5->[-] construction of an \uured{efficient} Markov chains is not always easy
     \end{itemize}
 \end{itemize}
 
@@ -175,7 +171,7 @@
 
 \begin{frame}
 
-\frametitle{Markov chain Monte Carlo (MCMC)}
+\frametitle{MCMC summary}
 
   \begin{itemize}
   \item Random variables $\theta_1,\theta_2,\ldots$ where $\theta_t$ depends only on the previous $\theta_{(t-1)}$
@@ -184,8 +180,7 @@
     \end{equation*}
     \pause
   \item Chain has to be initialized with some starting point $\theta_0$ \pause
-  \item Transition distribution $T_t(\theta_t|\theta_{t-1})$ (may
-    depend on $t$) \pause
+  % \item Transition distribution $T_t(\theta_t|\theta_{t-1})$ (may depend on $t$) \pause
   \item Choose a transition distribution so the
     {\color{uured}stationary distribution} of the Markov chain is $p(\theta|y)$
   \end{itemize}
@@ -193,7 +188,7 @@
 \end{frame}
 
 \subsection{Gibbs sampling}
-%\frame{\sectionpage}
+\frame{\subsectionpage}
 
 \begin{frame}
 
@@ -204,17 +199,53 @@
   \item Basic algorithm, for $j \in \{1,...,J\}$ {
       \begin{align*}
          \text{sample $\theta_{j,t}$ from} \quad & p(\theta_j|\theta_{-j,t-1}, y),\\
-      \text{where} \quad 
-          \theta_{-j,t-1} = & (\theta_{1,t},\dots,\theta_{j-1,t}, 
+      \text{where} \quad
+          \theta_{-j,t-1} = & (\theta_{1,t},\dots,\theta_{j-1,t},
           \theta_{j+1,t-1},\dots,\theta_{J,t-1})
       \end{align*}
       }
   \item Will converge (in total variation) to $p(\theta|y)$ as $N\rightarrow\infty$\pause
   \item $j$ can be multiple (blocked) parameters
   \item 1D sampling ($|j|=1$) is generally easy\pause
-  \item Related to the (stochastic) EM algorithm
+  \item Popular for \uured{discrete parameters}
+%  \item Related to the (stochastic) EM algorithm
   \end{itemize}
 \end{frame}
+
+\begin{frame}
+
+\frametitle{Example: Bivariate Normal using Gibbs}
+
+\[
+p(\theta \mid y) \;\sim\; \mathcal{N}\!\left( \bar{y}, \tfrac{1}{n}\Sigma \right).
+\]
+where $\Sigma$ is known and $\theta \in \mathcal{R}^2$
+\vspace{3mm}
+\pause
+
+Using \uured{Gibbs sampling}:\\
+\vspace{3mm}
+Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\):
+
+\[
+\theta_1^{(t)} \;\sim\; \mathcal{N}\!\left(
+\bar{y}_1 + \frac{\rho}{\sigma_{2}}\big(\theta_2^{(t-1)} - \bar{y}_2\big),\;
+\frac{1}{n}\Big(\sigma_{1} - \frac{\rho^2}{\sigma_{2}}\Big)
+\right),
+\]
+
+\[
+\theta_2^{(t)} \;\sim\; \mathcal{N}\!\left(
+\bar{y}_2 + \frac{\rho}{\sigma_{1}}\big(\theta_1^{(t)} - \bar{y}_1\big),\;
+\frac{1}{n}\Big(\sigma_{2} - \frac{\rho^2}{\sigma_{1}}\Big)
+\right).
+\]
+
+\end{frame}
+
+
+
+
 
 \begin{frame}
 

@@ -455,15 +455,18 @@ p(\theta|y)\, T(\theta|\theta') = p(\theta'|y)\, T(\theta'|\theta),
 \]
 
 Here, $T(\theta'|\theta)$ denotes the one-step transition probability (or density).
+\vspace{3mm} \pause
 \item Intuition:
 \begin{itemize}
-\item Think of $p(\theta|y)$ as the ``mass'' of probability at state $\theta$.
-\item $p(\theta|y) P(\theta, \theta')$ is the ``flow'' of mass from $\theta$ to $\theta'$.
+\item Think of $p(\theta|y)$ as the ``mass'' of probability at state $\theta$.\pause
+\item $p(\theta|y) P(\theta, \theta')$ is the ``flow'' of mass from $\theta$ to $\theta'$. \pause
 \item \uured{Detailed balance}: the flow from $\theta$ to $\theta'$ equals the flow back
 from $\theta'$ to $\theta$ --- nothing accumulates or leaks.
 \end{itemize}
 \end{itemize}
-
+\pause
+\vspace{3mm}
+\centering{\uured{More indepth in a proper Markov Theory course!}}
 
 
 
@@ -597,22 +600,6 @@ from $\theta'$ to $\theta$ --- nothing accumulates or leaks.
 
 \section{MCMC Diagnostics}
 \frame{\sectionpage}
-
-\begin{frame}
-
-\frametitle{Gibbs sampling as a special case}
-
-  \begin{itemize}
-  \item Specific case of Metropolis-Hastings algorithm
-    \begin{itemize}
-    \item single updated (or blocked)
-    \item proposal distribution is the conditional distribution\\
-      $\rightarrow$ proposal and target distributions are same\\
-      $\rightarrow$ acceptance probability is $1$
-    \end{itemize}
-  \end{itemize}
-
-\end{frame}
 
 \begin{frame}
 

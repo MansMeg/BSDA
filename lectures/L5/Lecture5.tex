@@ -760,67 +760,67 @@ from $\theta'$ to $\theta$ --- nothing accumulates or leaks.
 \end{frame}
 
 
-\begin{frame}[fragile]
+%\begin{frame}[fragile]
 
-\frametitle{ $\widehat{R}$}
+%\frametitle{ $\widehat{R}$}
 
-  \begin{itemize}
-  \item BDA3: $\widehat{R}$ aka {\em potential scale reduction factor} (PSRF)
-  \item Compare means and variances of the chains\\
-    W = within chain variance estimate\\
-    var\_hat\_plus = total variance estimate\\
-    \vspace{1\baselineskip}
-    \only<1>{\hspace{-0.5cm}\includegraphics[width=8cm]{figs/10chains_rhat1.pdf}}
-    \only<2>{\hspace{-0.5cm}\includegraphics[width=8cm]{figs/10chains_rhat2.pdf}}
-    \only<3>{\hspace{-0.5cm}\includegraphics[width=8cm]{figs/10chains_rhat3.pdf}}
-  \end{itemize}
+%  \begin{itemize}
+%  \item BDA3: $\widehat{R}$ aka {\em potential scale reduction factor} (PSRF)
+%  \item Compare means and variances of the chains\\
+%    W = within chain variance estimate\\
+%    var\_hat\_plus = total variance estimate\\
+%    \vspace{1\baselineskip}
+%    \only<1>{\hspace{-0.5cm}\includegraphics[width=8cm]{figs/10chains_rhat1.pdf}}
+%    \only<2>{\hspace{-0.5cm}\includegraphics[width=8cm]{figs/10chains_rhat2.pdf}}
+%    \only<3>{\hspace{-0.5cm}\includegraphics[width=8cm]{figs/10chains_rhat3.pdf}}
+%  \end{itemize}
 
-\end{frame}
+%\end{frame}
 
-\begin{frame}
+%\begin{frame}
 
-\frametitle{ $\widehat{R}$}
+%\frametitle{ $\widehat{R}$}
 
-  \begin{equation*}
-      \widehat{R}=\sqrt{\frac{\widehat{\var}^{+}}{W}}
-    \end{equation*}
-    \begin{itemize}
-    \item<1-> Estimates how much the scale could reduce if $N\rightarrow\infty$
-    \item<1-> $\widehat{R}\rightarrow 1$, when $N\rightarrow\infty$
-    \item<1-> If $\widehat{R}$ is big (e.g., $R>1.01$), keep sampling
-    \item<2-> If $\widehat{R}$ close to 1, it is still possible that chains have not converged
-      \begin{itemize}
-      \item if starting points were not overdispersed
-      \item distribution far from normal (especially if infinite variance)
-      \item just by chance when $N$ is finite
-      \end{itemize}
-    \end{itemize}
+%  \begin{equation*}
+%      \widehat{R}=\sqrt{\frac{\widehat{\var}^{+}}{W}}
+%    \end{equation*}
+%    \begin{itemize}
+%    \item<1-> Estimates how much the scale could reduce if $N\rightarrow\infty$
+%    \item<1-> $\widehat{R}\rightarrow 1$, when $N\rightarrow\infty$
+%    \item<1-> If $\widehat{R}$ is big (e.g., $R>1.01$), keep sampling
+%    \item<2-> If $\widehat{R}$ close to 1, it is still possible that chains have not converged
+%      \begin{itemize}
+%      \item if starting points were not overdispersed
+%      \item distribution far from normal (especially if infinite variance)
+%      \item just by chance when $N$ is finite
+%      \end{itemize}
+%    \end{itemize}
 
-\end{frame}
+%\end{frame}
 
-\begin{frame}[fragile]
+%\begin{frame}[fragile]
 
-\frametitle{$\widehat{R}$}
+%\frametitle{$\widehat{R}$}
 
-  \begin{itemize}
-  \item Additional $\widehat{R}$ methods to assess convergence
-  \item Split-$\widehat{R}$
-  \begin{itemize}
-    \item Examines {\it mixing} and {\it stationarity} of chains
-    \item To examine stationarity chains are split to two parts: compare means and variances of the split chains
-  \end{itemize}
-  \pause
-  \item Rank normalized $\widehat{R}$
-  \begin{itemize}
-    \item Does not requires that the target distribution has finite mean and variance
-  \end{itemize}
-  \end{itemize}
+%  \begin{itemize}
+%  \item Additional $\widehat{R}$ methods to assess convergence
+%  \item Split-$\widehat{R}$
+%  \begin{itemize}
+%    \item Examines {\it mixing} and {\it stationarity} of chains
+%    \item To examine stationarity chains are split to two parts: compare means and variances of the split chains
+%  \end{itemize}
+%  \pause
+%  \item Rank normalized $\widehat{R}$
+%  \begin{itemize}
+%    \item Does not requires that the target distribution has finite mean and variance
+%  \end{itemize}
+%  \end{itemize}
 
-\end{frame}
+%\end{frame}
 
 
 \subsection{$S_\text{eff}$, MCSE, and autocorrelation}
-%\frame{\sectionpage}
+\frame{\subsectionpage}
 
 
 \begin{frame}
@@ -1085,6 +1085,9 @@ from $\theta'$ to $\theta$ --- nothing accumulates or leaks.
     \begin{itemize}
     \item optimal proposal depends on location
     \end{itemize}
+    \begin{center}
+      \href{https://chi-feng.github.io/mcmc-demo/app.html?algorithm=RandomWalkMH&target=banana}{demo}
+    \end{center}
   \item<2-> Funnels
     \begin{itemize}
     \item optimal proposal depends on location
@@ -1099,7 +1102,14 @@ from $\theta'$ to $\theta$ --- nothing accumulates or leaks.
         \begin{center}
       \href{https://chi-feng.github.io/mcmc-demo/app.html?algorithm=RandomWalkMH&target=multimodal}{demo}
     \end{center}
-  \item<4-> Long-tailed with non-finite variance and mean
+  \item<4-> Non-identifiable models
+    \begin{itemize}
+    \item set of connected points is the mode
+    \end{itemize}
+        \begin{center}
+      \href{https://chi-feng.github.io/mcmc-demo/app.html?algorithm=RandomWalkMH&target=donut}{demo}
+    \end{center}
+  \item<5-> Long-tailed with non-finite variance and mean
     \begin{itemize}
     \item central limit theorem for expectations does not hold
     \end{itemize}

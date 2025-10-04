@@ -250,6 +250,7 @@ r = \min \left( 1, \frac{q(\theta^\star|y)}{q(\theta_{t-1}|y)}\frac{p(\psi^\star
 \pause
 \item[-] Can be difficult to tune (U-turns)
 \item[-] Bounded parameters needs handling
+\item[-] Cannot handle discrete parameters (yet)
 \item[-] Ideally, we should adapt $\epsilon L$
 \item[-] Costly to run each iteration ($L$ log density gradient evaluations)
 \pause
@@ -264,7 +265,7 @@ r = \min \left( 1, \frac{q(\theta^\star|y)}{q(\theta_{t-1}|y)}\frac{p(\psi^\star
 % TODO: Work through a mathematical example
 
 \section{Dynamic HMC and NUTS}
-%\frame{\sectionpage}
+\frame{\sectionpage}
 
 \begin{frame}
 \frametitle{Dynamic HMC}
@@ -275,13 +276,16 @@ r = \min \left( 1, \frac{q(\theta^\star|y)}{q(\theta_{t-1}|y)}\frac{p(\psi^\star
   \item The NUTS/dynamic algorithm:
   \begin{enumerate}
     \item Grow a binary tree of leapfrog steps $L$
-    \item Grow (randomly) in two directions (to keep reversibility of Markov chain)
+    \pause
+    \item Grow (randomly) in two directions \\
+    (to keep reversibility/detailed balance of Markov chain)
+    \pause
     \item Stop to grow tree when encounter a U-turn
     \[
     (\theta_L - \theta_{start}) \cdot \psi_L < 0
     \]
-    % TODO Fix example in univariate normal
-    \item Sample one of the step at the trajectory (higher probability further away)
+    \item Sample one of the accepted steps at the trajectory\\
+    (higher probability further away)\\
   \end{enumerate}
 
   \pause
@@ -308,6 +312,7 @@ r = \min \left( 1, \frac{q(\theta^\star|y)}{q(\theta_{t-1}|y)}\frac{p(\psi^\star
 \item[+] Additional diagnostics
 \pause
 \item[-] Bounded parameters needs handling
+\item[-] Cannot handle discrete parameters (yet)
 \item[-] Costly to run each iteration ($L$ log density gradient evaluations)
 \pause
 \end{itemize}
@@ -336,8 +341,16 @@ r = \min \left( 1, \frac{q(\theta^\star|y)}{q(\theta_{t-1}|y)}\frac{p(\psi^\star
 
   \begin{itemize}
   \item Dynamic HMC specific diagnostic
-  \item Indicates inefficiency in sampling leading to higher
-    autocorrelations and lower ESS ($n_{\rm eff}$)
+  \item The sampler wanted to keep integrating longer, but was forced to stop.
+  \begin{itemize}
+  \item The trajectory wasn’t long enough to fully explore the typical set.
+  \item This often signals:
+  \begin{itemize}
+  \item Very strong correlations or curvature in the posterior (forcing small step size)
+  \item A need for reparameterization.
+  \end{itemize}
+  \end{itemize}
+  \item Leads to higher autocorrelations and lower ESS ($n_{\rm eff}$)
   \item Different parameterizations can help/matter
   \end{itemize}
 \end{frame}
@@ -435,42 +448,58 @@ r = \min \left( 1, \frac{q(\theta^\star|y)}{q(\theta_{t-1}|y)}\frac{p(\psi^\star
 
 
 \begin{frame}
+
 \frametitle{Problematic distributions}
 
   \begin{itemize}
   \item<1-> Nonlinear dependencies
     \begin{itemize}
-    \item simple mass matrix scaling doesn't help
+    \item optimal proposal depends on location
     \end{itemize}
+    \begin{center}
+      \href{https://chi-feng.github.io/mcmc-demo/app.html?algorithm=RandomWalkMH&target=banana}{demo}
+    \end{center}
   \item<2-> Funnels
     \begin{itemize}
-    \item optimal step size depends on location
+    \item optimal proposal depends on location
     \end{itemize}
+    \begin{center}
+      \href{https://chi-feng.github.io/mcmc-demo/app.html?algorithm=RandomWalkMH&target=funnel}{demo}
+    \end{center}
   \item<3-> Multimodal
     \begin{itemize}
     \item difficult to move from one mode to another
     \end{itemize}
-  \item<4-> Long-tailed with non-finite variance and mean
+        \begin{center}
+      \href{https://chi-feng.github.io/mcmc-demo/app.html?algorithm=RandomWalkMH&target=multimodal}{demo}
+    \end{center}
+  \item<4-> Non-identifiable models
     \begin{itemize}
-    \item efficiency of exploration is reduced
-    \item central limit theorem doesn't hold for mean and variance
+    \item set of connected points is the mode
     \end{itemize}
+        \begin{center}
+      \href{https://chi-feng.github.io/mcmc-demo/app.html?algorithm=RandomWalkMH&target=donut}{demo}
+    \end{center}
+  \item<5-> Long-tailed with non-finite variance and mean
+    \begin{itemize}
+    \item central limit theorem for expectations does not hold
+    \end{itemize}
+
   \end{itemize}
 
 \end{frame}
 
 
-\begin{frame}
+%\begin{frame}
 
-\frametitle{Extra (optional) material for HMC}
+%\frametitle{Extra (optional) material for HMC}
 
-  \begin{itemize}
-  \item Michael Betancourt (2018).  A Conceptual Introduction to
-    Hamiltonian Monte Carlo. \url{https://arxiv.org/abs/1701.02434}
-  \item Michael Betancourt (2017).  Diagnosing Biased Inference with Divergences. \url{https://mc-stan.org/users/documentation/case-studies/divergences_and_bias.html}
-  \end{itemize}
-
-\end{frame}
+%  \begin{itemize}
+%  \item Michael Betancourt (2018).  A Conceptual Introduction to
+%    Hamiltonian Monte Carlo. \url{https://arxiv.org/abs/1701.02434}
+%  \item Michael Betancourt (2017).  Diagnosing Biased Inference with Divergences. \url{https://mc-stan.org/users/documentation/case-studies/divergences_and_bias.html}
+%  \end{itemize}
+%\end{frame}
 
 
 \section{Probabilistic Programming}

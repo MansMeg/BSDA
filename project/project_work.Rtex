@@ -151,6 +151,7 @@ For Project Proposal part 2, you need to add the following to your report:
 \begin{enumerate}
   \item Stan code in the appendix for the first proposed model (from part 1)
   \item The first model estimated and added to the Results section of the project proposal.
+  \item Address comments you got on part 1.
 \end{enumerate}
 
 
@@ -182,7 +183,7 @@ The paper should include the following parts/sections:
   \end{itemize}
   \item Models and methods (roughly 0.5 page)
   \begin{itemize}
-    \item Description of the models \emph{Note!} Stan code for all models should be included as an Appendix.
+    \item Description of the models \emph{Note 1!} Only Bayesian Models are allowed, i.e. with proper priors. \emph{Note 2!} Stan code for all models should be included as an Appendix.
     \item Description of how the models were compared (LOO/WAIC)
   \end{itemize}
   \item Results (roughly 1.5-2 pages)
@@ -216,6 +217,7 @@ The paper should include the following parts/sections:
 \item All legends in figures and text in tables should be the same size as the body text in the report.
 \item You should use correct reference systems. A tip is to use \texttt{\\citet}, \texttt{\\citep}, and \texttt{\\bibtex}. This will also simplify your future thesis work.
 \item You should include some (or all) estimated parameters together with their uncertainty and $\hat{R}$ and interpret them in the report. You are free to include them in the appendix.
+\item You should have addressed all comments you got in the project proposal part 1 and 2.
 \end{enumerate}
 
 \paragraph{Additional hints for the report}

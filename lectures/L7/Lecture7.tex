@@ -530,6 +530,33 @@
 
 \begin{frame}
 
+\frametitle{Exchangeability: DeFinettis theorem}
+
+  %\begin{itemize}
+%   \item The simplest form of the exchangeability (but not the only one) for the parameters $\theta$ is \uured{conditional independence}
+%    \begin{equation*}
+%      p(x_1,\ldots,x_J|\theta)=\prod_{j=1}^J p(x_j|\theta)
+%    \end{equation*}
+  %\item<2->
+  Let $(x_n)_{n=1}^{\infty}$ to be an infinite sequence of
+    exchangeable random variables. De Finetti's theorem then says that
+    there is some random variable $\theta$ so that $x_j$ are
+    conditionally independent given $\theta$, and joint density for
+    $x_1,\ldots,x_J$ can be written in the \textit{iid mixture} form
+    \begin{equation*}
+      p(x_1,\ldots,x_J)=\int \left[\prod_{j=1}^J p(x_j|\theta)\right]p(\theta)d\theta
+    \end{equation*}
+%   \end{itemize}
+\begin{itemize}
+\item \uured{Exchangeability}: the data behave as if they were i.i.d., once we account for some unknown parameter $\theta$
+\end{itemize}
+\end{frame}
+
+
+
+
+\begin{frame}
+
 \frametitle{Exchangeability}
 
   \begin{itemize}
@@ -598,30 +625,6 @@
     \item if the observations can be grouped (a priori), then we can use a
       hierarchical model
     \end{itemize}
-\end{itemize}
-\end{frame}
-
-\begin{frame}
-
-\frametitle{Exchangeability: DeFinettis theorem}
-
-  %\begin{itemize}
-%   \item The simplest form of the exchangeability (but not the only one) for the parameters $\theta$ is \uured{conditional independence}
-%    \begin{equation*}
-%      p(x_1,\ldots,x_J|\theta)=\prod_{j=1}^J p(x_j|\theta)
-%    \end{equation*}
-  %\item<2->
-  Let $(x_n)_{n=1}^{\infty}$ to be an infinite sequence of
-    exchangeable random variables. De Finetti's theorem then says that
-    there is some random variable $\theta$ so that $x_j$ are
-    conditionally independent given $\theta$, and joint density for
-    $x_1,\ldots,x_J$ can be written in the \textit{iid mixture} form
-    \begin{equation*}
-      p(x_1,\ldots,x_J)=\int \left[\prod_{j=1}^J p(x_j|\theta)\right]p(\theta)d\theta
-    \end{equation*}
-%   \end{itemize}
-\begin{itemize}
-\item \uured{Exchangeability}: the data behave as if they were i.i.d., once we account for some unknown parameter $\theta$
 \end{itemize}
 \end{frame}
 

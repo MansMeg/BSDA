@@ -495,7 +495,7 @@
     \item a joint prior for a set of parameters
     \end{itemize}
   \item Less strict than independence (IID)
-  \item IID $\rightarrow$ exchangeability
+  \item IID implies exchangeability
   \end{itemize}
 \end{frame}
 
@@ -504,16 +504,21 @@
 \frametitle{Exchangeability}
 
   \begin{itemize}
-  \item \textit{Exchangeability} \\ Parameters
-    $\theta_1,\ldots,\theta_J$ (or observations $y_1,\ldots,y_J$) are
-    exchangeable if the joint distribution $p$ is invariant to the
-    permutation of indices $(1,\ldots,J)$\\
-  e.g.
+  \item \textit{Exchangeability} \\ Random variables
+    $\theta_1,\ldots,\theta_J$ (or $y_1,\ldots,y_J$) are
+    \uured{exchangeable} if the joint distribution $p$ is invariant to the
+    permutation of indices\\
+    i.e
+    \begin{equation*}
+      p(\theta_1,\theta_2,\theta_3) = p(\theta_{\pi(1)},\theta_{\pi(2)},\theta_{\pi(3)})
+    \end{equation*}
+    for any permutation $\pi$ of the indicies. E.g.
     \begin{equation*}
       p(\theta_1,\theta_2,\theta_3) = p(\theta_2,\theta_3,\theta_1)
     \end{equation*}
 \pause
-  \uured{Can we come up with a situation where this doesn't hold?}
+  \uured{Can we come up with a situation where this doesn't hold?} \\ \pause
+  E.g. when we have a trend over indicies (like in time series data)
 \pause
   \item Exchangeability implies symmetry: \\If there is no information
     which can be used \textit{a priori} to separate $\theta_j$ form
@@ -598,15 +603,15 @@
 
 \begin{frame}
 
-\frametitle{Exchangeability}
+\frametitle{Exchangeability: DeFinettis theorem}
 
-  \begin{itemize}
-  \item The simplest form of the exchangeability (but not the only
-    one) for the parameters $\theta$ is \uured{conditional independence}
-    \begin{equation*}
-      p(x_1,\ldots,x_J|\theta)=\prod_{j=1}^J p(x_j|\theta)
-    \end{equation*}
-  \item<2-> Let $(x_n)_{n=1}^{\infty}$ to be an infinite sequence of
+  %\begin{itemize}
+%   \item The simplest form of the exchangeability (but not the only one) for the parameters $\theta$ is \uured{conditional independence}
+%    \begin{equation*}
+%      p(x_1,\ldots,x_J|\theta)=\prod_{j=1}^J p(x_j|\theta)
+%    \end{equation*}
+  %\item<2->
+  Let $(x_n)_{n=1}^{\infty}$ to be an infinite sequence of
     exchangeable random variables. De Finetti's theorem then says that
     there is some random variable $\theta$ so that $x_j$ are
     conditionally independent given $\theta$, and joint density for
@@ -614,7 +619,10 @@
     \begin{equation*}
       p(x_1,\ldots,x_J)=\int \left[\prod_{j=1}^J p(x_j|\theta)\right]p(\theta)d\theta
     \end{equation*}
-   \end{itemize}
+%   \end{itemize}
+\begin{itemize}
+\item \uured{Exchangeability}: the data behave as if they were i.i.d., once we account for some unknown parameter $\theta$
+\end{itemize}
 \end{frame}
 
 %\begin{frame}

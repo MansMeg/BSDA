@@ -63,7 +63,19 @@
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Mini-project comments}
 
+  \begin{itemize}
+  \item Priors are part of model. Describe them only there. \pause
+  \item $\hat{R}$ and computational details - not the main interest. Describe the general results (that you can trust the computations) and refer to the appendix first details \pause
+  \item Legend text same size as body text. \pause
+  \item Remember - look at the instructions. I have failed people with 4.5 pages. Or just 3 pages. \uured{Why do I care about this?} \pause
+  \item For \texttt{posteriordb} students: (1) Please describe the data (or how you similate data) under data.
+Use the exact models that are in the papers. (2) Ignore prior recommendations - see it as replication study
+  \end{itemize}
+
+\end{frame}
 
 \section{Model Checking and Assessment}
 \frame{\sectionpage}
@@ -119,6 +131,7 @@
     \item<3-> draw $\mu^{(s)},\sigma^{(s)}$ from the posterior $p(\mu,\sigma|y)$
     \item<4-> draw $y^{\mathrm{rep}\,(s)}$ from $\N(\mu^{(s)},\sigma^{(s)})$
     \item<5-> repeat $n$ times to get $y^{\mathrm{rep}}$ with $n$ replicates\\~\\
+    \item<6-> example $y^{\mathrm{rep}}$:
     \uncover<6->{\includegraphics[width=7cm]{figs/light_ppc_1hist.pdf}}
       \end{itemize}
     \end{itemize}
@@ -128,7 +141,7 @@
 
 \begin{frame}
 
-\frametitle{Replicates vs. future observation}
+\frametitle{Replicates vs. predictive distributions}
 
   \begin{itemize}
   \item Predictive $\tilde{y}$ is the next not yet observed possible
@@ -210,13 +223,18 @@
     \item e.g. variance (or mean) for normal model with \uured{unknown} $\sigma^2$. If $\sigma^2$ changes so will $T(X)$.
     \end{itemize}
   \item<3-> We want to \uured{identify problems} in data not captured by the \uured{model}
+  \item<4-> Connections:
+  \begin{itemize}
+    \item \uured{Sufficient statistic}: contains all the information about $\theta$
+    \item \uured{Ancillary statistic}: contains no information about $\theta$
+  \end{itemize}
   \end{itemize}
 
 \end{frame}
 
 \begin{frame}[fragile]
 
-\frametitle{Posterior predictive checking -- example}
+\frametitle{Posterior predictive checking -- bad example}
 
   \includegraphics[width=9cm]{figs/light_ppc_var.pdf}
 

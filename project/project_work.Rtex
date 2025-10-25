@@ -133,6 +133,8 @@ Also, two different groups are not allowed to use the same dataset.
 Students need to turn in a one-page project proposal and data description by and get approval for the proposed project. The Project proposal should follow the ICML paper format that can be found \href{https://icml.cc/Conferences/2020/StyleAuthorInstructions}{[here]}.
 The ICML format is also available in overleaf here: \href{https://www.overleaf.com/latex/templates/icml-2019-submission-template/vkqjjvzjvhdc}{[here]}. We recommend using Overleaf for writing the proposal.
 
+\emph{Note!} You should also follow the formating instructions in the ICML template, e.g. regarding Tables, Figures etc.
+
 \emph{The project proposal should include all the group members names!}
 
 In the Project proposal part 1, the following parts should be included. See Project report below on the details on each section.
@@ -160,6 +162,8 @@ For Project Proposal part 2, you need to add the following to your report:
 
 The Project outcome is a report in the ICML paper format that can be found \href{https://icml.cc/Conferences/2020/StyleAuthorInstructions}{[here]}.
 The ICML format is also available in overleaf here: \href{https://www.overleaf.com/latex/templates/icml-2019-submission-template/vkqjjvzjvhdc}{[here]}. We recommend using Overleaf for writing the report.
+
+\emph{Note!} You should also follow the formating instructions in the ICML template, e.g. regarding Tables, Figures etc.
 
 The paper should consist of \emph{between three and a half (3.5) and four (4) pages}, excluding references and eventual appendices. Write the report as you would do in a real situation, i.e. do not refer to the paper as a "mini-project" or similar.
 

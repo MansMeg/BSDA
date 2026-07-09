@@ -17,3 +17,6 @@ lectures/*/*.aux
 */tmp/*
 **/.DS_Store
 .positai
+
+reading_instructions/reading_instructions.tex
+*.toc

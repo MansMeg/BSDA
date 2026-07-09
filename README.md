@@ -34,9 +34,12 @@ You can find the course schedule on TimeEdit [here](https://cloud.timeedit.net/u
 ## Grading
 The course is graded with U (Underkänd/Fail), G (Godkänd/Pass), VG (väl godkänd/Pass with distinction).
 
-To pass, you should pass all assignments and the mini-project *at the set deadline*. 
+To pass, you should pass all assignments, the oral exams connected to the assignments, and the mini-project *at the set deadline*. 
 
-On each assignment, if everything is correct (>90% of points), a VG point will be awarded. Similarly on the mini-project, if it is considered to be very good, 2 VG points can be awarded. A total of 7 or more VG points is needed to get VG on the course. 
+On each assignment, if everything is correct (>90% of points), a VG point will be awarded. To receive the VG point for an assignment, you also need to pass the oral exam for that assignment. Similarly on the mini-project, if it is considered to be very good, 2 VG points can be awarded. A total of 7 or more VG points is needed to get VG on the course. 
+
+### Oral exams
+There will be oral exams connected to the assignments. Each oral exam covers a set of assignments, and for each covered assignment you will answer one randomly drawn oral question. See the [oral exam document](https://github.com/MansMeg/BSDA/blob/main/oral_exam/oral_exam_questions.pdf) for detailed instructions and the question list.
 
 ### Reassessing grades
 Grades are not subject to appeal. However, a grading decision must be reassessed if it is clearly incorrect. Grades can never be lowered. If students want grades to be reassessed, they should contact the course administration who will distribute a form for reassessment the students have to fill out. 
@@ -50,7 +53,7 @@ There are two follow up deadlines (or follow-up corrections) during the course. 
 The project can also be turned in a second time a month after the end of the course. Then the student(s) need to submit both a project report, a PDF with presentation slides and a link to a video presentation of the mini-project.
 *Projects submitted in after the first deadline cannot get VG*.
 
-In the case not anyone can attend the oral presentation known in advance, you can still pass and get a VG if you submit the project report, slides and a recorded video presentation 23.59 before the day of the presentation.
+In the case not anyone can attend the oral presentation known in advance, you can still pass and get a VG if you submit the project report, slides and a recorded video presentation *23.59* before the day of the presentation.
 
 ## Course Literature and Video Material
 Below are the main references for the course.
@@ -161,9 +164,6 @@ Each assignment will be graded and evaluated within 10 working days.
 
 Students are not allowed to show your assignments (text or code) to anyone. Only discuss the assignments with other students. The student that show their assignment to anyone else could also be considered to cheat. Similarly, on zoom labs, only screen share when you are in a separate zoom room with teaching assistants.
 
-### Bayesian Model Averaging
-A guest lecture will be given on by Ph.D. student [Valentin Zulj](https://katalog.uu.se/empinfo/?id=N19-813).
-
 ## Course Mini-Project
 The last two weeks will focus on a course project where 2-3 students choose their data and will conduct a Bayesian data analysis of the given data. 
 
@@ -173,4 +173,3 @@ You can find details and instructions on the project work [here](https://github.
 ## Frequently Asked Questions (FAQ)
 
 Frequently asked questions will be collected [here](https://github.com/MansMeg/BSDA/blob/master/FAQ.md).
-

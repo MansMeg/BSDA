@@ -16,3 +16,4 @@ lectures/*/*.vrb
 lectures/*/*.aux
 */tmp/*
 **/.DS_Store
+.positai

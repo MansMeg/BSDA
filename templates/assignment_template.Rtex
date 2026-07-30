@@ -22,6 +22,8 @@ Here general information is included that is needed for administrative/course pu
 \item[Time used for the assignment] [How long time took the basic assignment (in hours)]
 \item[Good with assignment] [Write one-two sentences of what you liked with the assignment/what should we keep for next year.]
 \item[Things to improve in the assignment] [Write one-two sentences of what you liked with the assignment/what should we keep for next year.]
+\item[Oral exam question contribution] [Write one possible oral exam question for this assignment, together with a short model answer. The question should concern material from this assignment or the associated reading, be suitable for a 2--4 minute oral answer, and test conceptual understanding rather than only calculation or code. The question should not already be included in the oral exam question list and should not be very close to an existing question. You are not allowed to use large language models, such as ChatGPT, to write the question or the answer.]
+\item[Permission for future use] [State clearly whether the course staff may use or adapt your question and answer in a future oral exam: Yes or No.]
 \end{description}
 
 \emph{NOTE!} The assignments will be graded anonymously. \emph{Do not include your name anywhere in the assignment!} If the name is included, the assignment will be failed.

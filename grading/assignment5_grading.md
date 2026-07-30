@@ -23,6 +23,10 @@ Does the report follow the formatting instructions?
 - Mostly
 - Yes
 
+### Q2d - fail/pass
+
+Is an oral exam question contribution included? To pass this requirement, the submission must include one proposed oral exam question connected to this assignment, a short model answer, a brief indication that the question is not already in the oral exam list or very close to it, and a clear Yes/No statement about whether the course staff may use or adapt it in future oral exams. The question and answer must not be written using large language models, such as ChatGPT. If missing or clearly not serious, fail and resubmit.
+
 ## Exercise 1
 
 ### Q3 - 1 point
@@ -137,4 +141,3 @@ Does the report contain a scatter plot of the draws of alpha and beta? Do the re
 - No plot included
 - Plot included, but the results do not look correct (0.5p)
 - Plot included, and the results look roughly correct
-

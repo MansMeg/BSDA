@@ -164,6 +164,10 @@ Each assignment will be graded and evaluated within 10 working days.
 
 Students are not allowed to show your assignments (text or code) to anyone. Only discuss the assignments with other students. The student that show their assignment to anyone else could also be considered to cheat. Similarly, on zoom labs, only screen share when you are in a separate zoom room with teaching assistants.
 
+You may use large language models (LLMs), such as ChatGPT, like you may discuss with fellow students: to learn, ask for explanations, and get feedback. You may not use LLMs to produce the solution you submit. You must be able to explain every part of your submitted work orally. **Note!** When writing an oral exam question and solution, you are not allowed to use an LLM at all.
+
+The assignment PDFs may contain hidden machine-readable integrity text. This is used to detect inappropriate use of LLMs, such as asking an LLM to solve the assignment directly. Do not copy or upload the full assignment text into an LLM.
+
 ## Course Mini-Project
 The last two weeks will focus on a course project where 2-3 students choose their data and will conduct a Bayesian data analysis of the given data. 
 

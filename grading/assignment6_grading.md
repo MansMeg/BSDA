@@ -25,7 +25,7 @@ Does the report follow the formatting instructions?
 
 ### Q2d - fail/pass
 
-Is an oral exam question contribution included? To pass this requirement, the submission must include one proposed oral exam question connected to this assignment, a short model answer, a brief indication that the question is not already in the oral exam list or very close to it, and a clear Yes/No statement about whether the course staff may use or adapt it in future oral exams. The question and answer must not be written using large language models, such as ChatGPT. If missing or clearly not serious, fail and resubmit.
+Is an oral exam question contribution included? To pass this requirement, the submission must include one proposed oral exam question connected to this assignment, a short model answer, a brief indication that the question is not already in the oral exam list or very close to it, and a clear Yes/No statement about whether the course staff may use or adapt it in future oral exams. Students must not use large language models, such as ChatGPT, at all for the oral exam question contribution. If missing or clearly not serious, fail and resubmit.
 
 ## Exercise 1
 

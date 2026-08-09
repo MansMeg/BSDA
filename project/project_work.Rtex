@@ -79,18 +79,18 @@ knitr::opts_chunk$set(size = "small")
 
 \section{Project Instructions}
 
-The last two weeks will focus on a course project where 2-3 students choose data and will do a Bayesian analysis of a  real-world dataset.
+The last two weeks will focus on a course project where 2-3 students either choose data and do a Bayesian analysis of a real-world dataset, or choose the paper replication track described below.
 
 Requirements for the projects are:
 \begin{itemize}
-\item Your project should be a Bayesian Data Analysis using Stan (you can use \texttt{brms} or \texttt{rstanarm} if you like. Although, this is easier and will be considered when grading, i.e. it will be harder to get a VG in the mini-project.
+\item The ordinary project track should be a Bayesian Data Analysis using Stan (you can use \texttt{brms} or \texttt{rstanarm} if you like). Although, this is easier and will be considered when grading, i.e. it will be harder to get a VG in the mini-project.
+\item The paper replication track should reproduce a published statistical analysis by implementing its data and model in Stan and preparing the result for inclusion in \texttt{posteriordb} (inclusion in \texttt{posteriordb} is optional).
 \item Real data should be used (see below for details).
-\item At least two different models should be estimated and compared.
+\item In the ordinary project track, at least two different models should be estimated and compared.
+\item In the paper replication track, one faithful implementation of a sufficiently interesting or complex model is enough (i.e. a model not used in the course). The comparison should instead be between the published results and the Stan implementation.
 \end{itemize}
 
 \emph{Tip!} Write the report so you can add your final report as an example of work you have done to future potential employers.
-
-
 
 \emph{For PhD students}: You can choose to make a small project related to your research interest instead. Although, it should still be a 4 page paper output.
 
@@ -99,6 +99,8 @@ Requirements for the projects are:
 \subsection{Suggested Reading/Video material}
 
 The project will be a small practical exercise in Bayesian data analysis. To get some inspiration, see the Stan YouTube channel \href{https://www.youtube.com/watch?v=k9sH7x8O0Y8}{[here]} or the Stan User Guide \href{https://mc-stan.org/docs/2_29/stan-users-guide/index.html}{[here]}
+
+For the paper replication track, see the \texttt{posteriordb} repository \href{https://github.com/stan-dev/posteriordb}{[here]} and the guide for adding content using R \href{https://stan-dev.r-universe.dev/posteriordb/doc/contributing.html}{[here]}.
 
 \subsection{Project Group and Expected Workload}
 It is possible to have only one student in a group, although this is not recommended. One student group will, in practice, mean additional work due to the requirements of the project.
@@ -128,6 +130,8 @@ The following data sets should not be used in the project:
 
 Also, two different groups are not allowed to use the same dataset.
 
+For the paper replication track, students should instead find a published statistical analysis where the data and the model description are open. The original analysis can be frequentist or Bayesian, but the submitted implementation must be in Stan and must use proper priors. The students should be ok with releasing the stan code openly. Two different groups are not allowed to use the same paper/model/data combination.
+
 
 \subsection{Project Proposal (Part 1 and Part 2)}
 Students need to turn in a one-page project proposal and data description by and get approval for the proposed project. The Project proposal should follow the ICML paper format that can be found \href{https://icml.cc/Conferences/2020/StyleAuthorInstructions}{[here]}.
@@ -137,7 +141,7 @@ The ICML format is also available in overleaf here: \href{https://www.overleaf.c
 
 \emph{The project proposal should include all the group members names!}
 
-In the Project proposal part 1, the following parts should be included. See Project report below on the details on each section.
+In the ordinary Project proposal part 1, the following parts should be included. See Project report below on the details on each section.
 
 \begin{enumerate}
   \item Title
@@ -154,6 +158,31 @@ For Project Proposal part 2, you need to add the following to your report:
   \item Stan code in the appendix for the first proposed model (from part 1)
   \item The first model estimated and added to the Results section of the project proposal.
   \item Address comments you got on part 1.
+\end{enumerate}
+
+\paragraph{Paper replication project proposal}
+For the paper replication track, the Project proposal part 1 should instead include:
+
+\begin{enumerate}
+  \item Title
+  \item Abstract (1 paragraph)
+  \item Introduction to the paper and statistical problem (roughly 0.5 page)
+  \item Paper, data, and model sources, including links and (potential) license information
+  \item A short motivation for why the paper/model is interesting
+  \item Description of the original statistical model
+  \item A statement of whether the original analysis is Bayesian or frequentist. If it is frequentist, explain the Bayesian version to be implemented in Stan, including the choice of proper priors.
+  \item A list of the main results from the paper that will be checked against the Stan implementation
+  \item A short assessment of whether the data and model are suitable for \texttt{posteriordb} (see the \texttt{posteriordb} paper)
+\end{enumerate}
+
+For Project Proposal part 2 in the paper replication track, you need to add:
+
+\begin{enumerate}
+  \item Stan code in the appendix for the proposed model
+  \item A first fit of the Stan model, including basic diagnostics
+  \item A preliminary comparison with at least one result from the original paper
+  \item A short description of the planned \texttt{posteriordb} data, model, and posterior objects
+  \item Address comments you got on part 1
 \end{enumerate}
 
 
@@ -213,11 +242,26 @@ The paper should include the following parts/sections:
   \end{itemize}
 \end{enumerate}
 
+\paragraph{Paper replication project report}
+For the paper replication track, the report should have the same length and format, but the content should be adapted to the reproduction task. It should include:
+
+\begin{enumerate}
+  \item Introduction: describe the original paper, the scientific question, and why the model is interesting.
+  \item Data: describe the original data, preprocessing, and how the data were converted to Stan format.
+  \item Model and methods: describe the original model, the Stan implementation, priors, and any deviations from the paper.
+  \item Computation: report diagnostics such as $\hat{R}$, effective sample sizes, divergences, and relevant computational issues.
+  \item Reproduction results: compare selected results from the paper with the Stan results and discuss agreement or disagreement.
+  \item \texttt{posteriordb} contribution (in appendix): describe the data object, Stan model, posterior object, model info object, and whether a pull request was submitted or the files are ready for submission.
+\end{enumerate}
+
+For this track, model comparison using LOO/WAIC is not required unless it is relevant for reproducing the paper. The central comparison is between the published analysis and the Stan implementation - can you replicate the original results?
+
 \paragraph{Additional requirements for the report}
 \begin{enumerate}
 \item All Figures using color should have a color-blind friendly color palette. See \href{http://www.cookbook-r.com/Graphs/Colors_(ggplot2)/#a-colorblind-friendly-palette}{here} and \href{https://rdrr.io/cran/ggthemes/man/colorblind.html}{here}.
 \item The final report should look like a research paper/article, i.e. try to avoid bullet list and get a good flow in the text. Also do not refer to the report as a mini-project. See it as a real report (or short paper).
 \item All model included in the report should have the Stan code included in the appendix.
+\item For the paper replication track, the appendix should also include enough information to find or recreate the prepared \texttt{posteriordb} files, including data, model, posterior metadata, and any preprocessing code.
 \item All legends in figures and text in tables should be the same size as the body text in the report.
 \item You should use correct reference systems. A tip is to use \texttt{\\citet}, \texttt{\\citep}, and \texttt{\\bibtex}. This will also simplify your future thesis work.
 \item You should include some (or all) estimated parameters together with their uncertainty and $\hat{R}$ and interpret them in the report. You are free to include them in the appendix.
@@ -271,7 +315,8 @@ To pass the report (G), the following criterias should be fulfilled:
 \item The report should follow the additional requirements in Section \ref{project_report}.
 \item show basic knowledge and understanding of the core concepts of the course by using concepts correctly
 \item show an understanding in when certain methods should be used or not, and how
-\item use at least two  (2) \emph{Bayesian} different models and compare them in a correct way (two linear regression models with different covariates is an example of two different models)
+\item for the ordinary project track, use at least two (2) \emph{Bayesian} different models and compare them in a correct way (two linear regression models with different covariates is an example of two different models)
+\item for the paper replication track, implement the selected published model and data in Stan, compare the Stan results with selected results from the original paper, and prepare the data, model, posterior, and metadata in a \texttt{posteriordb}-compatible form
 \item state what has been done in the report with clarity, good english and rigour so it is easy for a reader to understand and follow the paper.
 \item correctly use references in the report following the guideline of the template in Section \ref{project_report}
 \end{enumerate}
@@ -282,9 +327,9 @@ To pass the mini-project with distinction (VG), the following criterias also app
 \item show deep knowledge knowledge and understanding of the core concepts and how to adapt them in a good way to a new situation
 \item connect the analysis in the report with other areas in statistics or previous courses taken in the masters program, i.e. not just repeat what has been done in previous labs.
 \item use models that has not been part of the BSDA course (but for example presented in other courses)
+\item for the paper replication track, choose a substantially interesting or complex model, give a convincing reproduction of the published results, and make a high-quality \texttt{posteriordb} contribution with checks passed locally or a pull request prepared
 \end{enumerate}
 
 
 
 \end{document}
-

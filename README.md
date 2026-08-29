@@ -96,6 +96,12 @@ Below are some suggested complementary reading for the interested student.
 [Part 1](https://www.youtube.com/watch?v=ZRpo41l02KQ)
 [Part 2](https://www.youtube.com/watch?v=6cc4N1vT8pk)
 
+### Stan Playground
+
+[Stan Playground](https://stan-playground.flatironinstitute.org/) is a browser-based environment for writing, compiling and running Stan models without a local Stan installation. It is useful for learning Stan syntax, checking compiler messages, trying small changes to a model, and inspecting posterior draws during the Stan parts of the course.
+
+Stan Playground is especially useful around the lectures and assignments where you first write Stan code yourself. For assignment submissions and the mini-project, you should still include reproducible Stan and R/Python code as described in the assignment instructions.
+
 ### Aki Vehtari lectures
 
 Aki Vehtari at Aalto University has recorded lectures with very similar content as the content presented in the course.
@@ -121,6 +127,7 @@ Aki Vehtari at Aalto University has recorded lectures with very similar content 
 ### Additional video material
 
 - [Stan YouTube channel](https://www.youtube.com/channel/UCwgN5srGpBH4M-Zc2cAluOA) contains good introductions to Stan and some basic suggestions on how to fit models
+- [Matthew Kay, Systematic uncertainty visualization design (StanCon 2026)](https://youtu.be/drngQr8eyXg) is recommended project material after the lectures on Stan, hierarchical models, and model checking. It gives useful guidance for visualizing posterior uncertainty, predictive distributions, and other Bayesian model output.
 
 
 ## Course practicalities

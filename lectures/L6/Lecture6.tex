@@ -746,6 +746,30 @@ model {
 
 \end{frame}
 
+\begin{frame}[fragile]
+
+\frametitle{Binomial model - Stan Playground}
+
+  \begin{itemize}
+  \item We can run the same Stan code directly in the browser:
+    \href{https://stan-playground.flatironinstitute.org/}{stan-playground.flatironinstitute.org}
+  \item Useful for trying Stan syntax, changing priors, checking compiler
+    messages and inspecting draws without installing Stan locally
+  \item For the binomial example above, use this data in \texttt{data.json}:
+  \end{itemize}
+
+  {\small
+  \begin{lstlisting}[basicstyle=\ttfamily]
+{"N": 10, "y": 7}
+\end{lstlisting}}
+
+  \begin{itemize}
+  \item For assignments, still submit reproducible Stan and R/Python code
+    as usual
+  \end{itemize}
+
+\end{frame}
+
 % \begin{frame}[fragile]
 
 % \frametitle{Binomial model - Stan code}

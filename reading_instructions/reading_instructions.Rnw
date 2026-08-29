@@ -153,6 +153,10 @@ knitr::opts_chunk$set(size = "small")
 \item 6.3 Posterior predictive checking ($p$-values (\emph{can be skipped})
 \item 6.4 Graphical posterior predictive checks
 \item 6.5 Model checking for the educational testing example
+\item Complementary video: Matthew Kay's StanCon 2026 lecture
+  \href{https://youtu.be/drngQr8eyXg}{Systematic uncertainty visualization design}
+  is recommended project material on communicating posterior uncertainty and
+  predictive distributions.
 \end{list}
 
 \subsection{Chapter 7}
@@ -231,4 +235,3 @@ Solutions for some of the exercises can be found \href{http://www.stat.columbia.
 
 
 \end{document}
-

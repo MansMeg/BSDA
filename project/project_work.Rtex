@@ -98,7 +98,9 @@ Requirements for the projects are:
 
 \subsection{Suggested Reading/Video material}
 
-The project will be a small practical exercise in Bayesian data analysis. To get some inspiration, see the Stan YouTube channel \href{https://www.youtube.com/watch?v=k9sH7x8O0Y8}{[here]} or the Stan User Guide \href{https://mc-stan.org/docs/2_29/stan-users-guide/index.html}{[here]}
+The project will be a small practical exercise in Bayesian data analysis. To get some inspiration, see the Stan YouTube channel \href{https://www.youtube.com/watch?v=k9sH7x8O0Y8}{[here]} or the Stan User Guide \href{https://mc-stan.org/docs/2_29/stan-users-guide/index.html}{[here]}.
+
+For guidance on communicating posterior uncertainty and predictive distributions in figures, see Matthew Kay's StanCon 2026 lecture \href{https://youtu.be/drngQr8eyXg}{Systematic uncertainty visualization design}.
 
 For the paper replication track, see the \texttt{posteriordb} repository \href{https://github.com/stan-dev/posteriordb}{[here]} and the guide for adding content using R \href{https://stan-dev.r-universe.dev/posteriordb/doc/contributing.html}{[here]}.
 
@@ -259,6 +261,7 @@ For this track, model comparison using LOO/WAIC is not required unless it is rel
 \paragraph{Additional requirements for the report}
 \begin{enumerate}
 \item All Figures using color should have a color-blind friendly color palette. See \href{http://www.cookbook-r.com/Graphs/Colors_(ggplot2)/#a-colorblind-friendly-palette}{here} and \href{https://rdrr.io/cran/ggthemes/man/colorblind.html}{here}.
+\item Figures showing uncertainty should make clear what uncertainty is being shown, e.g. posterior uncertainty in parameters, posterior predictive uncertainty, model comparison uncertainty, or computational uncertainty.
 \item The final report should look like a research paper/article, i.e. try to avoid bullet list and get a good flow in the text. Also do not refer to the report as a mini-project. See it as a real report (or short paper).
 \item All model included in the report should have the Stan code included in the appendix.
 \item For the paper replication track, the appendix should also include enough information to find or recreate the prepared \texttt{posteriordb} files, including data, model, posterior metadata, and any preprocessing code.

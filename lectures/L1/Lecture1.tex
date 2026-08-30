@@ -73,6 +73,20 @@
 \end{frame}
 
 
+\begin{frame}{Quick check: uncertainty in decisions}
+
+  \begin{itemize}
+  \item Think of one decision from your own life, studies, or research where the outcome is uncertain.
+  \pause
+  \item What are the possible outcomes?
+  \item What information would change your uncertainty?
+  \pause
+  \item Pair discussion: what would be the analogue of prior information, data, and a decision?
+  \end{itemize}
+
+\end{frame}
+
+
 \begin{frame}{Bayesian Analysis}
 
   \begin{itemize}
@@ -161,6 +175,24 @@
     \item<3-> two observers may have different epistemic uncertainty
     \end{itemize}
   \end{itemize}
+\end{frame}
+
+
+\begin{frame}{Quick check: aleatoric or epistemic?}
+
+  \begin{itemize}
+  \item Classify each uncertainty, then compare with your neighbour:
+    \begin{enumerate}
+    \item the next roll of a fair die
+    \item the unknown fraction of red chips in a bag
+    \item tomorrow's temperature in Uppsala
+    \end{enumerate}
+  \pause
+  \item Die roll: mainly aleatoric in this model
+  \item Red-chip fraction: epistemic; sampling chips can reduce it
+  \item Temperature: both; data and forecasts reduce epistemic uncertainty, but weather variation remains
+  \end{itemize}
+
 \end{frame}
 
 
@@ -261,6 +293,24 @@ A bookmaker could then take both bets from you and be sure to profit, because yo
 \end{frame}
 
 
+\begin{frame}{Quick check: model or likelihood?}
+
+  \begin{itemize}
+  \item Suppose $Y|\theta \sim \Bin(10,\theta)$, so
+  \[
+  p(y|\theta) = {10 \choose y}\theta^y(1-\theta)^{10-y}.
+  \]
+  \pause
+  \item If $\theta=0.3$ and $Y$ is not observed, what varies?
+  \pause
+  \item If $y=7$ is observed and $\theta$ varies, what is this function called?
+  \pause
+  \item Is $L(\theta|y)$ a probability distribution over $\theta$?
+  \end{itemize}
+
+\end{frame}
+
+
 \begin{frame}{Model and likelihood}
 
   \begin{itemize}
@@ -355,6 +405,25 @@ A bookmaker could then take both bets from you and be sure to profit, because yo
   \item The \emph{posterior predictive distribution}
   \\ 'An average of conditional predictions over the posterior distribution'
   \end{itemize}
+\end{frame}
+
+
+\begin{frame}{Quick check: updating with chips}
+
+  \begin{itemize}
+  \item A bag has an unknown fraction $\theta$ of red chips.
+  \item Before computing anything, predict what happens to $p(\theta|y)$ after:
+    \begin{enumerate}
+    \item one red chip
+    \item red, red, red
+    \item red, yellow, red, yellow
+    \end{enumerate}
+  \pause
+  \item Red observations move the posterior toward larger $\theta$.
+  \item More observations usually make the posterior more concentrated.
+  \item Mixed observations keep the posterior closer to intermediate values.
+  \end{itemize}
+
 \end{frame}
 
 

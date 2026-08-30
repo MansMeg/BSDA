@@ -59,8 +59,17 @@
   \frametitle{Decision making in case of uncertainty}
 
   \begin{center}
-    \includegraphics[width=10.5cm]{figs/irma.png}
+    \includegraphics[width=0.92\linewidth]{figs/irma.png}
   \end{center}
+
+  \vspace{-0.5\baselineskip}
+  \begin{center}
+  \scriptsize
+  Tip! See Matthew Kay's StanCon 2026 keynote:\\
+  \href{https://discourse.mc-stan.org/t/announcing-stancon-2026-last-keynote/40958}{Systematic uncertainty visualization design}
+  \end{center}
+
+
 \end{frame}
 
 
@@ -69,10 +78,10 @@
   \begin{itemize}
   \item Bayesian probability theory
     \begin{itemize}
-    \item uncertainty is represented with probabilities
+    \item uncertainty is represented with probabilities\pause
     \item probabilities are updated based on new information
-    % \item {\it ...common sense reduced to calculation},
-    %   Laplace 1819
+    \item {\it ...common sense reduced to calculation},
+       Laplace 1819
     \end{itemize}
     \pause
     \item Thomas Bayes (170?--1761)
@@ -81,7 +90,7 @@
       mathematician
     % \item Richard Price published Bayes' paper on conditional
     %   probabilities in 1763 after Bayes had died
-    \item considered the problem of {\it inverse probability}
+    \item considered the problem of {\it inverse probability}\pause
       \begin{itemize}
         \item significant part of the Bayesian theory
       \end{itemize}
@@ -120,8 +129,8 @@
       \begin{itemize}
       \item term became quickly popular, because alternative
         descriptions were longer
-    %     \pause
-    % \item after this Bayesians started to use term "frequentist"
+         \pause
+      \item after this Bayesians started to use term "frequentist"
     \end{itemize}
 \end{itemize}
 \end{frame}
@@ -141,16 +150,14 @@
 \begin{frame}{Two types of uncertainty}
 
   \begin{itemize}
-  \item Aleatoric uncertainty due to randomness
+  \item Aleatoric uncertainty \uured{due to randomness}
     \begin{itemize}
-    \item<1-> we are not able to obtain observations which could reduce
-      this uncertainty
+    \item<1-> observations can't reduce this uncertainty
     \end{itemize}
     \vspace{\baselineskip}
-  \item Epistemic uncertainty due to lack of knowledge
+  \item Epistemic uncertainty \uured{due to lack of knowledge}
     \begin{itemize}
-    \item<2-> we are able to obtain observations which can reduce
-      this uncertainty
+    \item<2-> we can reduce this uncertainty with observations
     \item<3-> two observers may have different epistemic uncertainty
     \end{itemize}
   \end{itemize}
@@ -165,12 +172,15 @@
   \begin{itemize}
   \item Uncertainty and knowledge are expressed as probability distributions, why? \pause
     \item Analogy to physical randomness
-    \item Knowledge as coherence of bets (the Dutch book)
-     \\ Example: If you say: P(rain) = 0.7 and P(no rain) = 0.4, those add up to 1.1 (too high).\\
+    \item Knowledge as coherence of bets (the Dutch book): \uured{rationality}
+     \\ \uured{Example}: If you say: P(rain) = 0.7 and P(no rain) = 0.4, those add up to 1.1 (too high).\\
 A bookmaker could then take both bets from you and be sure to profit, because you have made your odds \\ \uured{incoherent}.
+    \item Accuracy arguments: incoherent credences can be systematically worse estimates of truth
+    \item Conditionalization: update by zeroing possibilities ruled out by evidence and rescaling the rest
   \pause
   \item Everyone can have their own 'subjective' uncertainty, e.g.  $P(\text{rain tomorrow})$, $P(\text{Magdalena Andersson will be the next prime minister})$
   \item Frequency arguments can be difficult in some situations: P(other life in the universe)
+  \item {\footnotesize See \href{https://plato.stanford.edu/entries/epistemology-bayesian/}{Stanford Encyclopedia of Philosophy: Bayesian Epistemology}}
   \end{itemize}
 \end{frame}
 
@@ -189,9 +199,15 @@ A bookmaker could then take both bets from you and be sure to profit, because yo
     \item Bayesian epistemology:
     \pause
     \begin{itemize}
-    \item State of knowledge is a probability distribution,
+    \item Studies rational degrees of belief, or credences
+    \item Two core norms:
+      \begin{itemize}
+      \item Probabilism: beliefs at one time should obey the rules of probability
+      \item Conditionalization: beliefs should be updated by conditioning on new evidence
+      \end{itemize}
     \item e.g. unlike Popperian approaches, we can talk about $P(\text{black swan})$
-    \item (New) Research in Philosophy of Science
+    \item Main debates: coherence, priors, idealization, and how evidence should change beliefs
+    \item {\footnotesize Source: \href{https://plato.stanford.edu/entries/epistemology-bayesian/}{Stanford Encyclopedia of Philosophy}}
     \end{itemize}
   \end{itemize}
 \end{frame}
@@ -205,7 +221,7 @@ A bookmaker could then take both bets from you and be sure to profit, because yo
   \item Draw conclusions about {\color{uured} unobserved} quantities, based on {\color{uured} data} \pause
   \item Different types of unobserved quantities
     \begin{itemize}
-    \item {\color{uured} potentially observed}: future observations, treatment effects
+    \item {\color{uured} potentially observed}: future observations, potential outcomes,
     \item {\color{uured} parameters}: data-generating process (e.g. regression coefficients)
     \end{itemize}
   \end{itemize}
@@ -215,11 +231,11 @@ A bookmaker could then take both bets from you and be sure to profit, because yo
 
   \begin{itemize}
     \item $p(\cdot|\cdot)$: conditional pdf/pmf
-    \item $p(\cdot)$: marginal pdf/pmf
+    \item $p(\cdot)$: (marginal) pdf/pmf
     \item $P(\cdot)$ or $\Pr(\cdot)$: probability, e.g. $P(\theta > 0) = \int_0^\infty p(\theta) d\theta$
     \item Random variable: $\theta \sim \N(\mu,\sigma^2)$
     \item pdf/pmf: $p(\theta) = \N(\theta | \mu,\sigma^2)$
-    \item We often suppress known covariates $x$ and assumptions $H$
+    \item We often suppress known covariates/data $x$ and assumptions $h$
   \end{itemize}
 
 \end{frame}
@@ -235,7 +251,7 @@ A bookmaker could then take both bets from you and be sure to profit, because yo
   \item Potentially observed data: $\tilde{y} = (\tilde{y}_1,...,\tilde{y}_m)$
   \item Observed (known) covariates: $x$
   \pause
-  \item I am sloppy: e.g. often implicitly condition on $x$, i.e. $p(\theta|y) = p(\theta|y, x)$
+  \item I can be sloppy: e.g. often implicitly condition on $x$, i.e. $p(\theta|y) = p(\theta|y, x)$
 %  \pause
 %  \item We assume \emph{exchangeability} of the observations (more later):
 %\[
@@ -263,7 +279,7 @@ A bookmaker could then take both bets from you and be sure to profit, because yo
     L(\theta|y) = p(y|\theta)
   \]
   \pause
-  \item The likelihood is generally not normalized over $\theta$
+  \item The likelihood is \uured{generally not normalized} over $\theta$
   \end{itemize}
 \end{frame}
 
@@ -285,11 +301,11 @@ A bookmaker could then take both bets from you and be sure to profit, because yo
   \begin{itemize}
   \item Bayesian conclusions about $\theta$ or $\tilde{y}$ are made using probabilities, {\color{uured} conditional on data} $y$
   \pause
-  \item We state our uncertainty about $\theta$ or $\tilde{y}$ as \uured{distributions}
+  \item We state our uncertainty about $\theta$ or $\tilde{y}$ as \uured{probability distributions}
   \pause
   \begin{itemize}
-    \item potentially observed: $p(\tilde{y}|y)$
     \item parameters: $p(\theta|y)$
+    \item potentially observed: $p(\tilde{y}|y)$
   \end{itemize}
   \end{itemize}
 \end{frame}
@@ -330,14 +346,14 @@ A bookmaker could then take both bets from you and be sure to profit, because yo
 
 \begin{frame}{Predictions}
   \begin{itemize}
-  \item How to do inference on an unknown (potential) observable $\tilde{y}$? E.g. a future observation
+  \item How to do inference on an unknown (potential) observable $\tilde{y}$? E.g. a future observation, potential outcome
   \pause
   \item We use our \emph{data} model and our posterior and \emph{marginalize} over the uncertainty
   \[
   p(\tilde{y}|y) = \int p(\tilde{y}|\theta) p(\theta|y) d\theta
   \]
   \item The \emph{posterior predictive distribution}
-  % \item 'An average of conditional predictions over the posterior distribution'
+  \\ 'An average of conditional predictions over the posterior distribution'
   \end{itemize}
 \end{frame}
 
@@ -384,12 +400,14 @@ A bookmaker could then take both bets from you and be sure to profit, because yo
 
 
 \begin{frame}{Example application: Effects on roaches}
-% https://avehtari.github.io/modelselection/roaches.html
 \begin{itemize}
-\item Question: Effect of treatments on captured roaches
+\item Urban pest-management experiment in apartments
+\item Question: Does treatment reduce the number of captured roaches?
 \pause
 \item Outcome ($y_i$): The number of roaches captured in home $i$
 \item Covariates ($x_i$): Treatment, senior home, pre-treatment number of roaches
+\item Exposure ($u_i$): Different apartments used traps for different numbers of days
+\item Source: Gelman and Hill (2007, Ch. 8.3); \href{https://avehtari.github.io/modelselection/roaches.html}{Vehtari roaches cross-validation demo}
 \item Parameters ($\theta$): Intercept $\alpha$ and coefficients $\beta$
 \pause
 \item Data model:
@@ -400,7 +418,7 @@ p(y_i|\theta,x_i) = \frac{\lambda_i^{y_i}\exp(-\lambda_i)}{y_i!}
 \]
 where
 \[
-\lambda_i = \exp(\alpha + x_i\T\beta)
+\lambda_i = u_i\exp(\alpha + x_i\T\beta)
 \]
 \end{itemize}
 \end{frame}
@@ -418,16 +436,16 @@ p(\beta_k) &= \N(\beta_k|0,\sigma_\beta^2)
 \pause
 \item Posterior:
 \begin{align*}
-p(\alpha, \beta|y,X) \propto
+p(\alpha, \beta|y,X,u) \propto
 p(\alpha)\prod_{k=1}^K p(\beta_k)\\
-\prod_{i=1}^N \Poisson(y_i|\exp(\alpha+x_i\T\beta))
+\prod_{i=1}^N \Poisson(y_i|u_i\exp(\alpha+x_i\T\beta))
 \end{align*}
 \pause
 \item Predictive distribution:
 \begin{align*}
-p(\tilde{y}|\tilde{x},y,X) =
-\int &\Poisson(\tilde{y}|\exp(\alpha+\tilde{x}\T\beta))\\
-&p(\alpha,\beta|y,X)\,d\alpha\,d\beta
+p(\tilde{y}|\tilde{x},\tilde{u},y,X,u) =
+\int &\Poisson(\tilde{y}|\tilde{u}\exp(\alpha+\tilde{x}\T\beta))\\
+&p(\alpha,\beta|y,X,u)\,d\alpha\,d\beta
 \end{align*}
 
 \end{itemize}
@@ -453,7 +471,7 @@ p(\tilde{y}|\tilde{x},y,X) =
     \begin{itemize}
     \item model checking/assessment: is data in conflict with our prior knowledge?
     \item model choice: which model should we use?
-    \item presentation: presenting the model and the results to the application experts
+    \item presentation: presenting and visualising the model and the results to the application experts
     \end{itemize}
   \end{itemize}
 \end{frame}
@@ -527,13 +545,13 @@ p(\tilde{y}|\tilde{x},y,X) =
   \begin{itemize}
   \item Benefits of Bayesian approach
     \begin{itemize}
-    \item uncertainty is the foundation
+    \item uncertainty and probability theory is the foundation
     \item easier interpretation of uncertainty intervals
     \item integrate over uncertainties to focus to interesting parts
     \item straightforward predictive distributions
     \item use relevant prior information
     \item straightforward hierarchical models
-    \item model checking and evaluation
+    \item straightforward model checking and evaluation
     \item easier to build and evaluate very complex models
     \end{itemize}
     \pause
@@ -546,22 +564,22 @@ p(\tilde{y}|\tilde{x},y,X) =
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Example: Swedish vote intention estimation}
-
-  \begin{itemize}
-  \item Estimation of Swedish vote intention\\
-  \url{https://www.bottenada.se/}
-  \begin{itemize}
-  \item approximately 29 000 parameters \\(every party, every week, since the 90ies)
-  \item dynamic house bias
-  \item autoregressive industry bias
-  \item elections are known
-  \item composite data
-  \end{itemize}
-  \pause
-  \item But it takes 12 h to estimate the model
-  \end{itemize}
-\end{frame}
+%\begin{frame}{Example: Swedish vote intention estimation}
+%
+%  \begin{itemize}
+%  \item Estimation of Swedish vote intention\\
+%  \url{https://www.bottenada.se/}
+%  \begin{itemize}
+%  \item approximately 29 000 parameters \\(every party, every week, since the 90ies)
+%  \item dynamic house bias
+%  \item autoregressive industry bias
+%  \item elections are known
+%  \item composite data
+%  \end{itemize}
+%  \pause
+%  \item But it takes 10 h to estimate the model
+%  \end{itemize}
+%\end{frame}
 
 
 \section{Bayesian Computation}
@@ -698,7 +716,7 @@ generated quantities {
 \begin{frame}{Modeling nature}
 
   \begin{itemize}
-  \item Drop a ball from different heights and measure time
+  \item Drop a ball from different heights and measure time (data)
     \pause
     \begin{itemize}
     \item Newton

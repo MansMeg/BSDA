@@ -61,9 +61,12 @@
 \item Research: Machine Learning and Bayesian Statistics
 \begin{enumerate}
 \item Bayesian Statistics and computational statistics
+\pause
 \item Data-centric machine learning
+\pause
 \item Statistical inference from textual data
-\item Applications: Law, sociology, political science, and medicine
+\pause
+\item \uured{Applications}: Law, sociology, political science, history, and medicine/biology
 \end{enumerate}
 \end{enumerate}
 
@@ -76,15 +79,15 @@
 \begin{frame}{Course information}
 The aims of this course are that, after this course you should:\\[3mm]\pause
 \begin{enumerate}
-\item have knowledge in basic concepts, philosophy, and perspectives in Bayesian Statistics,
-\item derive posterior distributions in simple situations,
-\item derive and use predictive distributions,
-\item identify and formulate Bayesian probabilistic models for analysis and predictions,
-\item estimate models using contemporary computer-based methods for posterior approximations,
-\item understand and use basic principles for decisions under uncertainty,
-\item have knowledge about and be able to use Bayesian methods for model comparisons,
-\item be able to critically evaluate Bayesian methods,
-\item report, orally and in writing, a Bayesian statistical analysis
+\item have knowledge in basic concepts, philosophy, and perspectives in Bayesian Statistics,\pause
+\item derive posterior distributions in simple situations,\pause
+\item derive and use predictive distributions,\pause
+\item identify and formulate Bayesian probabilistic models for analysis and predictions,\pause
+\item estimate models using contemporary (state-of-the-art) computer-based methods for posterior approximations, \pause
+\item understand and use basic principles for decisions under uncertainty, \pause
+\item have knowledge about and be able to use Bayesian methods for model comparisons,\pause
+\item be able to critically evaluate Bayesian methods,\pause
+\item report, orally and in writing, a Bayesian statistical analysis\pause
 \end{enumerate}
 
 \end{frame}
@@ -116,7 +119,9 @@ The aims of this course are that, after this course you should:\\[3mm]\pause
 
 \begin{enumerate}
 \item Name
-\item What is your expectation on this course? Why did you choose it?
+\item What is your expectation on this course?
+\item Why did you choose it? (if you chose it)
+\item What do you hope to get out of it?
 \end{enumerate}
 
 \end{frame}
@@ -125,10 +130,10 @@ The aims of this course are that, after this course you should:\\[3mm]\pause
 \begin{frame}{Course Outline}
 Main components:
 \begin{itemize}
-\item Core Content (9 lecture blocks)\pause
+\item Core Content (8-9 lecture blocks)\pause
 \item Assignments (8 individual assignments)\pause
 \item Oral exams connected to the assignments\pause
-\item Mini-project: own Bayesian data analysis or paper replication track (1-3 students)\pause
+\item Mini-project: own Bayesian data analysis or \uured{paper replication track} (1-3 students)\pause
 \end{itemize}
 Exact dates and details; see the course page.
 \end{frame}
@@ -139,14 +144,14 @@ Exact dates and details; see the course page.
 \item Every week: lectures (approx. 2-4h)
 \begin{itemize}
 \item Online video material and reading assignments (approx. 2-4h, 50-90 pages a week)
-\item Lecture(s): present overall theory and content (overview)
+\item Lecture(s): present overall theory and content (overview, focus on learning concepts)
 \item Assignment(s): Computational and theoretical individual work. (approx. 12-16h). \uured{Deadline Sundays 23.59}. \\ \emph{Start monday morning every week!}
 \end{itemize}
 \pause
 \item Recommended workflow for each week
 \begin{itemize}
 \item Do the reading assignments
-\item Watch the videos (although, optional)
+\item Watch the videos (optional)
 \item Do self-study exercises
 \item Start with the assignment
 \item Attend lecture (bring questions!)
@@ -166,14 +171,14 @@ Exact dates and details; see the course page.
 \begin{enumerate}
 \item Core components and concepts and state-of-the-art methods\pause
 \item \emph{Warning!} There might be bugs in the assignments!\pause
-\item All labs can be turned in a three times (See Studium for details), but only first time can give VG:
+\item All labs can be turned in a three times (See Studium for details), but only first time can give VG points:
 \begin{enumerate}
 \item The week of the assignment
 \item The last day of the course
 \item 2-4 weeks after the course
 \end{enumerate}
 \pause
-\item We will mark and return each assignment within \uured{5} working days (max 10 working days).\pause
+\item We will mark and return each assignment hopefully within \uured{5} working days (max 10 working days).\pause
 \item \emph{Important!} Do \uured{\emph{not}} write your name anywhere\pause
 \item \emph{Important!} Do the assignment evaluation!\pause
 \item Three one hour zoom seminars per week with individual help on assignments. \emph{Note!} Don't send us e-mail, instead use the Zoom seminars. \pause
@@ -185,11 +190,12 @@ Exact dates and details; see the course page.
 \begin{frame}{LLM use and assignment integrity}
 
 \begin{itemize}
-\item You may use LLMs like fellow students: to learn, ask for explanations, and get feedback.\pause
+\item \uured{New this year!} You may use LLMs like fellow students: to learn, ask for explanations, and get feedback.\pause
 \item LLMs may not produce submitted solutions.\pause
 \item You must be able to explain every part of your submitted work orally.\pause
-\item LLMs are not allowed at all for the oral exam question contribution.\pause
-\item Assignment PDFs may contain hidden machine-readable integrity text. Do not copy or upload the full assignment text into an LLM.
+\item LLMs are not allowed at all for the oral exam questions.\pause
+\item Assignment PDFs may contain hidden machine-readable integrity text. Do not copy or upload the full assignment text into any LLM.
+\item If we suspect that the assignment has been done using an LLM, it will be failed.
 \end{itemize}
 \end{frame}
 
@@ -248,7 +254,7 @@ Exact dates and details; see the course page.
   \item Stan is a probabilistic programming framework (PPF) and ecosystem
   \item 40+ developers, 100+ contributors, 100K+ users
   \item R, Python, Julia, Scala, Stata, Matlab, command line interfaces
-  \item More than 120 R packages using Stan
+  \item More than 200 R packages using Stan
   \item Many packages to support diagnostics and workflow
   \item Can be used for frequentist inference as well
   \item Alternative PPF exists, Turing (Julia), Pyro (PyTorch), etc.
@@ -277,30 +283,10 @@ Exact dates and details; see the course page.
 \item The project should result in a 4 page report (PDF) using the ICML LaTeX template (see course page).
 \item Project oral presentation (10-15 minutes)\pause
 \item The first author is corresponding author\pause
-\item \emph{This year}:
+\item \emph{New this year}:
 \begin{itemize}
 \item Paper replication track: open paper + Stan implementation + reproduce main result + prepare for \texttt{posteriordb}.
-\item Mini-project discussions: after lectures and at Thursday Zoom sessions (first from next week).
-\end{itemize}
-\end{itemize}
-\end{frame}
-
-
-\begin{frame}{Master theses using Stan}
-
-\begin{itemize}
-\item \uured{New thing this year}: Joint supervision and work with researchers and students (PhD and masters)
-\item For students that want to work closely to research(ers)
-\item Headed by me and Sara Hamis at IT
-\item First step: a joint hackathon in mid november (morning + lunch).
-\pause
-\item Six project (three from stats and three from IT) on Stan and Bayes:
-\pause
-\item At Statistics:
-\begin{itemize}
-\item Modelling of pollen data in Ancient greece (with Anton Bonnier)
-\item Using the Gumbel Softmax to do missing data imputation with discrete parameters (with Jakob Torgander)
-\item Modelling proteins in pharmacometrics
+\item Mini-project discussions: after lectures and during lecture breaks.
 \end{itemize}
 \end{itemize}
 \end{frame}
@@ -329,7 +315,7 @@ Exact dates and details; see the course page.
   \begin{center}
     \includegraphics[width=2.6cm]{figs/BDA3.jpg}
   \end{center}
-  \item Additional articles and blog posts (see reading list per week)
+  \item Additional articles, youtube videos and blog posts (see reading list per week)
 \end{itemize}
 
 \end{frame}
@@ -349,7 +335,7 @@ Exact dates and details; see the course page.
 \item Ph.D. students: I suggest you get VG to pass the course. Make the project a potential paper.
 \item Reassesment of grades (supply form to course admin)
 \item Failing the course: You will need to redo all assignments and mini-project next year.
-\item LLMs may be used for learning, explanations, and feedback, but not to produce submitted solutions.
+\item LLMs may be used for learning, explanations, and feedback, but \uured{not to produce submitted solutions}.
 \end{enumerate}
 
 \end{frame}
@@ -361,8 +347,7 @@ Exact dates and details; see the course page.
 
 
 \begin{itemize}
-  \item Better balance between Assignment 7 and 8.
-  \item Hidden integrity text and Large Language Model use.
+  \item Oral exams
   \item New idea (test) of mini project.
 \end{itemize}
 

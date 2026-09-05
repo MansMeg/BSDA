@@ -298,10 +298,23 @@
       p(\tilde{y}=1|y=0,n,M) &= \frac{1}{n+2} \\
       p(\tilde{y}=1|y=n,n,M) &= \frac{n+1}{n+2}
     \end{align*}
-    \vskip -2mm
+  \end{itemize}
+\end{frame}
 
-  \item<6-> cf. maximum likelihood
+\begin{frame}
+  \frametitle{Posterior mean vs maximum likelihood}
 
+  \begin{itemize}
+  \item Maximum likelihood estimate
+    \[
+      \hat\theta_{\text{MLE}}=\frac{y}{n}
+    \]
+  \item Posterior mean with uniform prior
+    \[
+      \E[\theta|y]=\frac{y+1}{n+2}
+    \]
+  \item \uured{Discussion question}: Why can the posterior mean be a better
+    estimate than the maximum likelihood estimate when $n$ is small?
   \end{itemize}
 \end{frame}
 
@@ -478,6 +491,8 @@
     \begin{itemize}
     \item combination prior and likelihood information
     \item when $n\rightarrow\infty$, $\text{E}[\theta|y]\rightarrow y/n$
+    \item \uured{Discussion question}: Why can the posterior mean be a better
+      estimate than the maximum likelihood estimate $y/n$ when $n$ is small?
     \end{itemize}
     \pause
   \item  Posterior variance
@@ -494,38 +509,47 @@
 \end{frame}
 
 \begin{frame}
-\frametitle{Noninformative prior}
+\frametitle{Weakly informative and ``noninformative'' priors}
 
-% TODO: Add Jeffreys prior here
 \begin{itemize}
-  \item Vague, flat, diffuse, or noninformative
+  \item Goal: use a prior that does not dominate the likelihood
+  \item Common terms: vague, flat, diffuse, weakly informative
+  \pause
+  \item But ``flat'' does not always mean ``noninformative''
   \begin{itemize}
-    \item try to ``to let the data speak for themselves''
-    \item flat is not non-informative
-    \item flat can be stupid
-    \item making prior flat somewhere can make it non-flat somewhere
-      else
+    \item flat in $\theta$ is not flat in $\log(\theta)$
+    \item flat in $\theta$ is not flat in $\mathrm{logit}(\theta)$
   \end{itemize}
+  \pause
+  \item Prior choice should be checked on the scale that matters
+  \item Prefer weakly informative priors when possible:
+    rule out unreasonable values without forcing a narrow answer
 \end{itemize}
 
 \end{frame}
 
 \begin{frame}
-\frametitle{Proper and improper prior}
+\frametitle{Proper and improper priors}
 
 \begin{itemize}
-  \item Proper prior has $\int p(\theta) = 1$
-  \item Improper prior density doesn't have a finite integral
-  \begin{itemize}
-    \item the posterior can still sometimes be proper
-  \end{itemize}
+  \item A proper prior integrates to one:
+  \[
+    \int p(\theta)\,d\theta = 1
+  \]
+  \item An improper prior does not have a finite integral:
+  \[
+    \int p(\theta)\,d\theta = \infty
+  \]
   \pause
-  \item Example: Binomial model
-  \begin{itemize}
-    \item Beta(0,0) prior is improper
-    \item If $y\neq 0$ and $y \neq n$, the posterior is proper
-  \end{itemize}
-  \item \emph{Be careful with improper priors!}
+  \item An improper prior can sometimes still give a proper posterior
+  \item Example: binomial model with
+    $p(\theta)\propto\theta^{-1}(1-\theta)^{-1}$
+  \[
+    \theta|y,n \sim \mathrm{Beta}(y,n-y)
+  \]
+  \item This posterior is proper only if $0<y<n$
+  \pause
+  \item Always check that the posterior is proper
 \end{itemize}
 
 \end{frame}
@@ -565,23 +589,6 @@
     \item Stan team prior choice recommendations \url{https://github.com/stan-dev/stan/wiki/Prior-Choice-Recommendations}
   \end{itemize}
 
-\end{frame}
-
-\begin{frame}
-
-  \frametitle{Example of informative prior}
-
-  \begin{itemize}
-  \item The percentage of girl births is remarkably stable at about
-    48.8\% girls, rarely varying by more than 0.5\% from this rate
-  \only<2-3>{\item There was a study on the percentage of girl births among
-    parents in attractiveness categories 1--5 (assessed by
-    interviewers in a face-to-face survey)}
-  \end{itemize}
-  \begin{center}
-  \only<3>{\includegraphics[width=8cm]{figs/sexratio_bayes_1.pdf}}
-  \only<4>{\includegraphics[width=8cm]{figs/sexratio_bayes_2.pdf}}
-  \end{center}
 \end{frame}
 
 \begin{frame}
@@ -628,23 +635,42 @@
 \end{frame}
 
 \begin{frame}
+
+  \frametitle{Example of informative prior}
+
+  \begin{itemize}
+  \item The percentage of girl births is remarkably stable at about
+    48.8\% girls, rarely varying by more than 0.5\% from this rate
+  \only<2-3>{\item There was a study on the percentage of girl births among
+    parents in attractiveness categories 1--5 (assessed by
+    interviewers in a face-to-face survey)}
+  \end{itemize}
+  \begin{center}
+  \only<3>{\includegraphics[width=8cm]{figs/sexratio_bayes_1.pdf}}
+  \only<4>{\includegraphics[width=8cm]{figs/sexratio_bayes_2.pdf}}
+  \end{center}
+\end{frame}
+
+\begin{frame}
   \frametitle{Sufficient statistics}
 
 \begin{itemize}
   \item The function $t(y)$ of data $y$ is said to be a {\em sufficient statistic} for $\theta$ if the likelihood for $\theta$ depends on the
 data $y$ only through the value of $t(y)$.
   \item Example: Binomial model (with known $n$, and $y_i \in \{0,1\}$)
+  \item<2-> \uured{Discussion question}: What do you think is the sufficient
+    statistic for $\theta$ in this model?
   \begin{align*}
-      p(\theta|y) & \propto p(\theta) \prod^n p(y_i | \theta) \\
-      &\uncover<2->{ \propto \theta^{\alpha-1} (1-\theta)^{\beta-1} \prod^n\theta^y_i (1-\theta)^{1-y_i}} \\
-      &\uncover<3->{ \propto \theta^{\alpha-1} (1-\theta)^{\beta-1} \theta^{\sum y_i} (1-\theta)^{n - \sum y_i}} \\
-      &\uncover<4->{ \propto
+      \uncover<3->{p(\theta|y)} &\uncover<3->{ \propto p(\theta) \prod^n p(y_i | \theta)} \\
+      &\uncover<4->{ \propto \theta^{\alpha-1} (1-\theta)^{\beta-1} \prod^n\theta^y_i (1-\theta)^{1-y_i}} \\
+      &\uncover<5->{ \propto \theta^{\alpha-1} (1-\theta)^{\beta-1} \theta^{\sum y_i} (1-\theta)^{n - \sum y_i}} \\
+      &\uncover<6->{ \propto
         \theta^{\sum y_i+\alpha-1} (1-\theta)^{n-\sum y_i+\beta-1}}\\
-      \uncover<5->{\text{after normalization}} &\\
-      \uncover<5->{p(\theta|y,n,M)}
-      &\uncover<5->{ = \text{Beta}(\theta|\alpha+\sum^n y_i,\beta+n-\sum^n y_i)}
+      \uncover<7->{\text{after normalization}} &\\
+      \uncover<7->{p(\theta|y,n,M)}
+      &\uncover<7->{ = \text{Beta}(\theta|\alpha+\sum^n y_i,\beta+n-\sum^n y_i)}
   \end{align*}
-  \uncover<6->{
+  \uncover<8->{
   Hence, $\sum y_i$ is a sufficient statistic for $\theta$ \color{uured}{in this model}}.
 \end{itemize}
 
@@ -663,23 +689,23 @@ data $y$ only through the value of $t(y)$.
 
 \end{frame}
 
-\begin{frame}
-\frametitle{Algae}
-\framesubtitle{Exercise}
-
-Algae status is monitored in 274 sites at Finnish lakes and rivers.
-The observations for the 2008 algae status at each site are presented
-in file \emph{algae.mat} ('0': no algae, '1': algae present).
-% In year 2008 blue-green algae was observed at 44 sites.
-Let $\pi$ be the probability of a monitoring site having detectable
-blue-green algae levels.
-
-\begin{itemize}
-\item Use a binomial model for observations and a \emph{beta}(2,10) prior.
-\item What can you say about the value of the unknown $\pi$?
-\item Experiment how the result changes if you change the prior.
-\end{itemize}
-\end{frame}
+% \begin{frame}
+% \frametitle{Algae}
+% \framesubtitle{Exercise}
+%
+% Algae status is monitored in 274 sites at Finnish lakes and rivers.
+% The observations for the 2008 algae status at each site are presented
+% in file \emph{algae.mat} ('0': no algae, '1': algae present).
+% % In year 2008 blue-green algae was observed at 44 sites.
+% Let $\pi$ be the probability of a monitoring site having detectable
+% blue-green algae levels.
+%
+% \begin{itemize}
+% \item Use a binomial model for observations and a \emph{beta}(2,10) prior.
+% \item What can you say about the value of the unknown $\pi$?
+% \item Experiment how the result changes if you change the prior.
+% \end{itemize}
+% \end{frame}
 
 \section{The Normal model}
 %\frame{\sectionpage}

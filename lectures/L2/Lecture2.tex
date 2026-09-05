@@ -161,11 +161,9 @@
 
   \begin{align*}
     \uncover<1->{p(\theta|y,n,M)
-      &= \frac{p(y|\theta,n,M)p(\theta|M)}{p(y|n,M)}}\\[-0.5ex]
-    \uncover<2->{&= \frac{\binom{n}{y} \theta^y(1-\theta)^{n-y}
-      \underbrace{1}_{p(\theta|M)}}
-      {\int_0^1 \binom{n}{y} \theta^y(1-\theta)^{n-y}
-      \underbrace{1}_{p(\theta|M)} d\theta}}\\[-0.5ex]
+      &= \frac{p(y|\theta,n,M)p(\theta|M)}{p(y|n,M)}=\frac{p(y|\theta,n,M)}{p(y|n,M)}}\\[-0.5ex]
+    \uncover<2->{&= \frac{\binom{n}{y} \theta^y(1-\theta)^{n-y}}
+      {p(y|n,M)}}\\
     \uncover<3->{&= \frac{\binom{n}{y} \theta^y(1-\theta)^{n-y}}
       {\int_0^1 \binom{n}{y} \theta^y(1-\theta)^{n-y} d\theta}}\\[-0.5ex]
     \uncover<4->{&= \frac{1}{Z}\theta^y(1-\theta)^{n-y}}\\[-0.5ex]
@@ -175,8 +173,8 @@
   \begin{itemize}
   \setlength{\itemsep}{0mm}
   \item<1-> Uniform prior: $p(\theta|M)=1$ on $0\leq\theta\leq 1$
-  \item<2-> The prior appears in the numerator and denominator
-  \item<3-> Since it is $1$, it drops out
+  \item<1-> The prior appears in the numerator and denominator
+  \item<1-> Since it is $1$, it drops out
   \item<4-> $Z$ is constant as a function of $\theta$
   \item<5-> For inference, keep the part that depends on $\theta$
   \end{itemize}
@@ -198,11 +196,13 @@
       = \frac{\Gamma(a)\Gamma(b)}{\Gamma(a+b)}
     \end{equation*}
     \begin{itemize}
-    \item when integrated over $(0,1)$
-      the result can be presented with Gamma functions
-    \item with integers  $\Gamma(n)=(n-1)!$
-    \item for large integers even this is challenging and usually
-      $\log \Gamma(\cdot)$ is computed instead of $\Gamma(\cdot)$
+    \item Where does $B(a,b)=\frac{\Gamma(a)\Gamma(b)}{\Gamma(a+b)}$
+      come from?
+    \item Study recommendation: ask an LLM to step through the standard-integral
+      derivation, or work it through yourself using change of variables
+    \item with integers $\Gamma(n)=(n-1)!$\\
+    (for large integers even this is challenging and usually
+      $\log \Gamma(\cdot)$ is computed instead of $\Gamma(\cdot)$)
     \end{itemize}
   \end{itemize}
 
@@ -249,21 +249,8 @@
     \item prctile {\tt beta.ppf}
     \item random number {\tt beta.rvs}
     \end{itemize}
+  \item CDFs and quantiles are numerically nontrivial, so use library functions
   \end{itemize}
-
-\end{frame}
-
-\begin{frame}
-  \frametitle{Binomial: computation*}
-
-  \begin{itemize}
-  \item Beta CDF not trivial to compute
-  \item For example, {\tt pbeta} in R uses a continued fraction with
-    weighting factors and asymptotic expansion
-  \item Laplace developed normal approximation (Laplace
-    approximation), because he didn't know how to compute Beta CDF
-  \end{itemize}
-  % Lagandre, Gamma function
 
 \end{frame}
 % Beta distribution named by C. Gini 1911
@@ -383,22 +370,39 @@
 
 \begin{frame}
 
-  \frametitle{Conjugate prior}
+  \frametitle{Conjugate priors}
 
   \begin{itemize}
-  \item Prior and posterior have the same form
+  \item A prior is \emph{conjugate} for a likelihood if the posterior
+    is in the same distribution family as the prior
+    \[
+      \text{prior family} + \text{likelihood}
+      \quad \Rightarrow \quad
+      \text{same posterior family}
+    \]
+
+  \pause
+  \item Example:
+    \[
+      \begin{aligned}
+      \theta &\sim \mathrm{Beta}(\alpha,\beta)\\
+      y|\theta &\sim \mathrm{Binomial}(n,\theta)\\
+      \theta|y &\sim \mathrm{Beta}(\alpha+y,\beta+n-y)
+      \end{aligned}
+    \]
+
+  \pause
+  \item Why useful?
     \begin{itemize}
-    \item only for exponential family distributions (plus for
-      some irregular cases)
+    \item gives closed-form posteriors
+    \item helps us understand Bayesian updating
+    \item provides checks for simulation-based methods
+    \item can sometimes allow analytic marginalization
     \end{itemize}
-    \pause
-  \item Used to be important for computational reasons
-  \item Still used for special models to allow partial analytic
-    marginalization (Ch 3)
-  \begin{itemize}
-  \item with dynamic Hamiltonian Monte Carlo used e.g. in Stan no any
-      computational benefit
-  \end{itemize}
+
+  \pause
+  \item But conjugacy is not required: later we use simulation and Stan
+    when closed forms are unavailable
   \end{itemize}
 
 \end{frame}

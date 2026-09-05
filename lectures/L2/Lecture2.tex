@@ -731,11 +731,24 @@ data $y$ only through the value of $t(y)$.
 
 \begin{frame}
 
-  \frametitle{Reasons to use Normal distribution}
+  \frametitle{Why use the Normal distribution?}
 
   \begin{itemize}
-  \item Normal distribution often justified based on central limit theorem
-  \item More often used due to the computational convenience or tradition
+  \item Many measurements are approximately continuous and symmetric
+  \item Sums and averages are often approximately Normal
+  \begin{itemize}
+    \item this is the central limit theorem intuition
+  \end{itemize}
+  \pause
+  \item Normal models are mathematically and computationally convenient
+  \item Convenience is not a model check
+  \pause
+  \item Always ask:
+  \begin{itemize}
+    \item Is the outcome continuous?
+    \item Is the distribution roughly symmetric?
+    \item Are extreme values reasonably described by Normal tails?
+  \end{itemize}
   \end{itemize}
 
 \end{frame}
@@ -744,19 +757,26 @@ data $y$ only through the value of $t(y)$.
 
 \begin{frame}
 
-  \frametitle{Central limit theorem (recap)}
+  \frametitle{Central limit theorem: useful but limited}
 
   \begin{itemize}
-  \item De Moivre, Laplace, Gauss, Chebysev, Liapounov, Markov, et al.
-  \item Given certain conditions, sums (and means) of random variables
-    approach Gaussian distribution as $n \rightarrow \infty$
-  \item Problems
-    \begin{itemize}
-    \item does not hold for all distributions, e.g., Cauchy
-    \item may require large $n$,\\ e.g.
-      Binomial, when $\theta$ close to $0$ or $1$
-    %\item does not hold if one the variables has much larger scale
-    \end{itemize}
+  \item Under certain conditions, sums and averages of many random variables
+    become approximately Normal
+  \[
+    \bar{y} \approx \N\left(\mu,\frac{\sigma^2}{n}\right)
+  \]
+  \pause
+  \item This often justifies Normal approximations for averages and estimates
+  \pause
+  \item The central limit theorem has limits:
+  \begin{itemize}
+    \item it does not apply to all distributions, for example Cauchy
+    \item the approximation may be poor for small $n$
+    \item it may be poor for binomial data when $\theta$ is close to 0 or 1
+  \end{itemize}
+  \pause
+  \item \uured{Discussion question}: Are we modeling the raw data, or an
+    average/estimate?
   \end{itemize}
 
 \end{frame}

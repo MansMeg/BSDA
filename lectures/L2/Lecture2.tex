@@ -57,44 +57,6 @@
 %\frame{\sectionpage}
 
 \begin{frame}
-  \frametitle{Assignment 1}
-
-  \begin{itemize}
-  \item "The formatting was quite time-consuming and could be improved."\pause
-  \item "Maybe the first exercise could be slightly adjusted to be a bit more interesting and fun to work
-with." \pause
-  \item "I would appreciate exploring the concepts of aleatoric and
-epsitemic uncertainity in greater length. Maybe one of the exercises could be about writing about
-these concepts more thoroughly." \pause
-\item "A more detailed, question-specific example for using markmyassignment would be very helpful. "
-  \end{itemize}
-
-\end{frame}
-
-
-\begin{frame}{Master theses using Stan}
-
-\begin{itemize}
-\item Joint supervision and work with researchers and students (PhD and masters)
-\item For students that want to work with research
-\pause
-\item Multiple project (two from stats and three from IT) on Stan and Bayes:
-\pause
-\item Projects
-\begin{itemize}
-\item Modelling of pollen data in Ancient greece (with Anton Bonnier)
-\item Modelling proteins in pharmacometrics
-\end{itemize}
-\pause
-\item Deadline to show interest this \emph{Sunday at 23.59}.
-\end{itemize}
-\end{frame}
-
-
-\section{Posterior distributions}
-%\frame{\sectionpage}
-
-\begin{frame}
   \frametitle{Binomial: known $\theta$}
 
   \begin{itemize}
@@ -186,14 +148,28 @@ these concepts more thoroughly." \pause
     \begin{align*}
       p(\theta|n,M)=p(\theta|M)=1,\, \text{when}\,\, 0\leq\theta\leq 1
     \end{align*}
-  \item<4-> Then
-    \begin{align*}
-      p(\theta|y,n,M)&=\frac{p(y|\theta,n,M)}{p(y|n,M)}
-      =\frac{\binom{n}{y} \theta^y(1-\theta)^{n-y}}{\int_0^1
-        \binom{n}{y} \theta^y(1-\theta)^{n-y} d\theta} \\
-        &=\frac{1}{Z}\theta^y(1-\theta)^{n-y} \\
-        \propto \theta^y(1-\theta)^{n-y}
-    \end{align*}
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Binomial: unknown $\theta$}
+  \framesubtitle{Posterior derivation with a uniform prior}
+
+  \begin{align*}
+    \uncover<1->{p(\theta|y,n,M)
+      &= \frac{p(y|\theta,n,M)}{p(y|n,M)}}\\[1ex]
+    \uncover<2->{&= \frac{\binom{n}{y} \theta^y(1-\theta)^{n-y}}
+      {\int_0^1 \binom{n}{y} \theta^y(1-\theta)^{n-y} d\theta}}\\[1ex]
+    \uncover<3->{&= \frac{1}{Z}\theta^y(1-\theta)^{n-y}}\\[1ex]
+    \uncover<4->{&\propto \theta^y(1-\theta)^{n-y}}
+  \end{align*}
+
+  \begin{itemize}
+  \item<1-> Uniform prior: $p(\theta|M)=1$ on $0\leq\theta\leq 1$
+  \item<2-> The denominator normalizes the posterior
+  \item<3-> $Z$ is constant as a function of $\theta$
+  \item<4-> For inference, keep the part that depends on $\theta$
   \end{itemize}
 
 \end{frame}

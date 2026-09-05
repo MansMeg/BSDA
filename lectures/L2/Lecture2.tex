@@ -867,27 +867,91 @@ data $y$ only through the value of $t(y)$.
 \frametitle{Normal distribution - conjugate prior for $\theta$}
 \framesubtitle{Several observations (iid)}
 
+\begin{itemize}
+  \item Assume
+  \[
+    y_i|\theta \sim \N(\theta,\sigma^2),
+    \qquad
+    \theta \sim \N(\mu_0,\tau_0^2),
+  \]
+  where $\sigma^2$ is known
+  \pause
+  \item The posterior is also Normal:
+  \[
+    \theta|y \sim \N(\mu_n,\tau_n^2)
+  \]
+  \pause
+  \item The posterior mean is a weighted average:
+  \[
+    \mu_n =
+    \frac{
+      \frac{1}{\tau_0^2}\mu_0 + \frac{n}{\sigma^2}\bar{y}
+    }{
+      \frac{1}{\tau_0^2} + \frac{n}{\sigma^2}
+    }
+  \]
+  \pause
+  \item \uured{Prior mean and data mean are weighted by precision}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Normal distribution - posterior uncertainty}
+\framesubtitle{Several observations (iid)}
+
+\begin{itemize}
+  \item The posterior precision is
+  \[
+    \frac{1}{\tau_n^2}
+    =
+    \frac{1}{\tau_0^2}
+    +
+    \frac{n}{\sigma^2}
+  \]
+  \pause
+  \item Information adds:
+  \[
+    \text{posterior precision}
+    =
+    \text{prior precision}
+    +
+    \text{data precision}
+  \]
+  \pause
+  \item Interpretation:
   \begin{itemize}
-  \item Several observations $y=(y_1,\ldots,y_n)$
-    \begin{align*}
-      p(\theta|y) = \N(\theta|\mu_n,\tau_n^2)
-    \end{align*}
-    \vskip -6mm
-    \begin{align*}
-      \text{where} \quad
-      \mu_n=\frac{\frac{1}{\tau_0^2}\mu_0+\frac{n}{\sigma^2}\bar{y}}{\frac{1}{\tau_0^2}+\frac{n}{\sigma^2}} \quad
-      \text{and} \quad \frac{1}{\tau_n^2} = \frac{1}{\tau_0^2}+\frac{n}{\sigma^2}
-    \end{align*}
-  \item If $\tau_0^2=\sigma^2$, prior corresponds to one virtual observation with value $\mu_0$
-    \pause
-    \item If $\tau_0\rightarrow\infty$ when $n$ fixed\\
-      or if $n\rightarrow\infty$ when $\tau_0$ fixed
-      \begin{equation*}
-        p(\theta|y) \rightarrow^d \N(\theta|\bar{y},\sigma^2/n)
-      \end{equation*}
-      \pause
-      \item Find the {\color{uured}sufficient statistic} for $\theta$!
+    \item smaller $\tau_0^2$ means a stronger prior
+    \item smaller $\sigma^2$ means more informative observations
+    \item larger $n$ means more information from data
   \end{itemize}
+  \pause
+  \item \uured{Discussion question}: What is the sufficient statistic for
+    $\theta$ here?
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Normal distribution - limiting cases}
+\framesubtitle{Several observations (iid)}
+
+\begin{itemize}
+  \item If $\tau_0^2=\sigma^2$, the prior has the same weight as one observation:
+  \[
+    \mu_n = \frac{\mu_0+n\bar{y}}{1+n}
+  \]
+  \pause
+  \item If $\tau_0^2\rightarrow\infty$, the prior becomes very weak:
+  \[
+    \theta|y \approx \N\left(\bar{y},\frac{\sigma^2}{n}\right)
+  \]
+  \pause
+  \item If $n\rightarrow\infty$, the data dominate the prior:
+  \[
+    \theta|y \approx \N\left(\bar{y},\frac{\sigma^2}{n}\right)
+  \]
+\end{itemize}
 
 \end{frame}
 

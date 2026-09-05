@@ -148,6 +148,8 @@
     \begin{align*}
       p(\theta|n,M)=p(\theta|M)=1,\, \text{when}\,\, 0\leq\theta\leq 1
     \end{align*}
+  \item<4-> \uured{Discussion question}: Which quantities are functions of $\theta$,
+    and which are constants once the data are observed?
   \end{itemize}
 
 \end{frame}
@@ -275,8 +277,12 @@
 
 \begin{frame}
   \frametitle{Predictive distribution -- Effect of integration}
+  \small
 
   \begin{itemize}
+  \setlength{\itemsep}{0mm}
+  \item \uured{Discussion}: Why integrate over $\theta$ instead of plug in one estimate?
+    \pause
   \item Predictive distribution for new $\tilde{y}$ (discrete)
     \begin{align*}
       \uncover<2->{p(\tilde{y}=1|y,n,M)} & \uncover<2->{= \int_0^1} p(\tilde{y}=1|\theta,y,n,M) \uncover<2->{p(\theta|y,n,M)d\theta}\\
@@ -407,8 +413,12 @@
       &\uncover<3->{ = \text{Beta}(\theta|\alpha+y,\beta+n-y)}
     \end{align*}
     \vskip -2mm
-  \item<4-> $\alpha$ and $\beta$ can considered to be number of prior observations
-  \item<4-> Uniform prior when $\alpha=1$ and $\beta=1$
+	  \item<4-> $\alpha$ and $\beta$ can be considered to be number of prior observations
+    \begin{itemize}
+    \item<5-> \uured{Discussion question}: What do $\alpha$ and $\beta$ behave like
+      in terms of prior successes/failures?
+    \end{itemize}
+	  \item<4-> Uniform prior when $\alpha=1$ and $\beta=1$
   \end{itemize}
 \end{frame}
 
@@ -842,7 +852,8 @@ blue-green algae levels.
     \item posterior variance $\tau_1^2$
   \end{enumerate}
   \pause
-  \item {\color{uured}Aleatoric} and {\color{uured}epistemic} uncertainty?
+  \item \uured{Discussion question}: Where do aleatoric and epistemic uncertainty
+    appear in $\sigma^2+\tau_1^2$?
   \end{itemize}
 \end{frame}
 
@@ -856,10 +867,61 @@ blue-green algae levels.
   \[
   E(X) = V(X) = \lambda
   \]
+  \item<3-> \uured{Discussion}: What would make this assumption questionable
+    for observed count data?
   \pause
-  \item The gamma distribution is a conjugate prior - what is the posterior?
+  \item The gamma distribution is a conjugate prior
   \pause
   \item Today: Mostly the negative binomial is used for count data
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Poisson-Gamma model}
+
+  \begin{itemize}
+  \item Observations $y=(y_1,\ldots,y_n)$
+    \begin{align*}
+      y_i|\lambda &\sim \Poisson(\lambda),\\
+      \lambda &\sim \text{Gamma}(\alpha,\beta)
+    \end{align*}
+    where $\beta$ is the rate parameter
+  \pause
+  \item Posterior
+    \begin{align*}
+      p(\lambda|y) &\propto
+      \lambda^{\sum_i y_i}\exp(-n\lambda)
+      \lambda^{\alpha-1}\exp(-\beta\lambda)\\
+      &\propto \lambda^{\alpha+\sum_i y_i-1}
+      \exp[-(\beta+n)\lambda]
+    \end{align*}
+  \item<3-> Thus
+    \[
+      \lambda|y \sim \text{Gamma}\left(\alpha+\sum_i y_i,\beta+n\right)
+    \]
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Poisson-Gamma posterior predictive}
+
+  \begin{itemize}
+  \item Integrate over uncertainty in $\lambda$
+    \[
+      p(\tilde{y}|y)=\int p(\tilde{y}|\lambda)p(\lambda|y)d\lambda
+    \]
+  \pause
+  \item If $\lambda|y\sim\text{Gamma}(\alpha_n,\beta_n)$, then
+    \[
+      \tilde{y}|y\sim\text{NegBinomial}
+      \left(\text{size}=\alpha_n,\text{prob}=\frac{\beta_n}{\beta_n+1}\right)
+    \]
+  \pause
+  \item Here
+    \[
+      \alpha_n=\alpha+\sum_i y_i,\qquad \beta_n=\beta+n
+    \]
+  \item This is the count-data analogue of posterior predictive averaging
   \end{itemize}
 \end{frame}
 

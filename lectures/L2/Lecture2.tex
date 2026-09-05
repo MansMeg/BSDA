@@ -157,21 +157,28 @@
 \begin{frame}
   \frametitle{Binomial: unknown $\theta$}
   \framesubtitle{Posterior derivation with a uniform prior}
+  \small
 
   \begin{align*}
     \uncover<1->{p(\theta|y,n,M)
-      &= \frac{p(y|\theta,n,M)}{p(y|n,M)}}\\[1ex]
-    \uncover<2->{&= \frac{\binom{n}{y} \theta^y(1-\theta)^{n-y}}
-      {\int_0^1 \binom{n}{y} \theta^y(1-\theta)^{n-y} d\theta}}\\[1ex]
-    \uncover<3->{&= \frac{1}{Z}\theta^y(1-\theta)^{n-y}}\\[1ex]
-    \uncover<4->{&\propto \theta^y(1-\theta)^{n-y}}
+      &= \frac{p(y|\theta,n,M)p(\theta|M)}{p(y|n,M)}}\\[-0.5ex]
+    \uncover<2->{&= \frac{\binom{n}{y} \theta^y(1-\theta)^{n-y}
+      \underbrace{1}_{p(\theta|M)}}
+      {\int_0^1 \binom{n}{y} \theta^y(1-\theta)^{n-y}
+      \underbrace{1}_{p(\theta|M)} d\theta}}\\[-0.5ex]
+    \uncover<3->{&= \frac{\binom{n}{y} \theta^y(1-\theta)^{n-y}}
+      {\int_0^1 \binom{n}{y} \theta^y(1-\theta)^{n-y} d\theta}}\\[-0.5ex]
+    \uncover<4->{&= \frac{1}{Z}\theta^y(1-\theta)^{n-y}}\\[-0.5ex]
+    \uncover<5->{&\propto \theta^y(1-\theta)^{n-y}}
   \end{align*}
 
   \begin{itemize}
+  \setlength{\itemsep}{0mm}
   \item<1-> Uniform prior: $p(\theta|M)=1$ on $0\leq\theta\leq 1$
-  \item<2-> The denominator normalizes the posterior
-  \item<3-> $Z$ is constant as a function of $\theta$
-  \item<4-> For inference, keep the part that depends on $\theta$
+  \item<2-> The prior appears in the numerator and denominator
+  \item<3-> Since it is $1$, it drops out
+  \item<4-> $Z$ is constant as a function of $\theta$
+  \item<5-> For inference, keep the part that depends on $\theta$
   \end{itemize}
 
 \end{frame}
@@ -182,12 +189,17 @@
   \begin{itemize}
   \item Normalization term $Z$ (constant given $y$)
     \begin{equation*}
-      Z= \int_0^1 \theta^y(1-\theta)^{n-y} d\theta = \frac{\Gamma(y+1)\Gamma(n-y+1)}{\Gamma(n+2)}
+      Z= \int_0^1 \theta^y(1-\theta)^{n-y} d\theta
+      = B(y+1,n-y+1)
     \end{equation*}
   \item Normalisation term has \emph{Beta} function form
+    \begin{equation*}
+      B(a,b)=\int_0^1 t^{a-1}(1-t)^{b-1}dt
+      = \frac{\Gamma(a)\Gamma(b)}{\Gamma(a+b)}
+    \end{equation*}
     \begin{itemize}
     \item when integrated over $(0,1)$
-      the result can presented with Gamma functions
+      the result can be presented with Gamma functions
     \item with integers  $\Gamma(n)=(n-1)!$
     \item for large integers even this is challenging and usually
       $\log \Gamma(\cdot)$ is computed instead of $\Gamma(\cdot)$

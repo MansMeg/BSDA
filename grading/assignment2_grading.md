@@ -32,16 +32,49 @@ Are the evaluation questions answered and are the total number of hours put writ
 Is an oral exam question contribution included? To pass this requirement, the submission must include one proposed oral exam question connected to this assignment, a short model answer, a brief indication that the question is not already in the oral exam list or very close to it, and a clear Yes/No statement about whether the course staff may use or adapt it in future oral exams. Students must not use large language models, such as ChatGPT, at all for the oral exam question contribution. If missing or clearly not serious, fail and resubmit.
 
 
-## Exercise 1
+## Exercise 2
 
 ### Q3 - 1 point
+
+Is the posterior derived correctly?
+
+- No
+- Yes
+
+
+### Q4 - 1 point
+
+In a), is the probability P(theta>0.5|y,n) correct?
+
+- No
+- Yes
+
+
+### Q5 - 1 point
+
+In b), are the results of the calculations correct?
+
+- No
+- Yes
+
+
+### Q6 - 1 point
+
+In c), does the interpretation make sense?
+
+- No
+- Yes
+
+## Exercise 3
+
+### Q7 - 1 point
 
 Is the source code included?
 
 - No
 - Yes
 
-### Q4 - 1 point
+### Q8 - 1 point
 
 Are the prior, likelihood and posterior forms in a) reported? Derivation of posterior is not necessary.
 
@@ -49,7 +82,7 @@ Are the prior, likelihood and posterior forms in a) reported? Derivation of post
 - Some missing (0.5p)
 - Yes
 
-### Q5 - 1 point
+### Q9 - 1 point
 
 In a), is the reported resulting posterior correct ...?
 
@@ -57,28 +90,28 @@ In a), is the reported resulting posterior correct ...?
 - It is reported, that the posterior distribution is ..., but the numerical values for the parameters are incorrect. (0.5p)
 - It is reported, that the posterior distribution is ..., and the numerical values for the parameters are correct.
 
-### Q6 - 1 point
+### Q10 - 1 point
 
 In part b), is there at least one point estimate reported. Sample based estimates are also ok. Points should be given if the method is right, even if the result is wrong due to a wrong posterior distribution being used. With the right posterior, mean, median, and mode are all approximately ....
 
 - No
 - Yes
 
-### Q7 - 1 point
+### Q11 - 1 point
 
 In part b), is the 90% posterior interval estimate reported? Sample based estimate is ok.
 
 - No
 - Yes
 
-### Q8 - 1 point
+### Q12 - 1 point
 
 In part c), is the posterior probability Pr(π<0.2|y) reported? Points should be given if the method is right, even if the result is wrong because the posterior used was wrong. If the posterior was right, the result should be approximately ....
 
 - No
 - Yes
 
-### Q9 - 1 point
+### Q13 - 1 point
 
 For the d) part, does the report discuss ...?
 
@@ -87,7 +120,7 @@ For the d) part, does the report discuss ...?
 - Yes, but not quite right or some missing
 - Yes
 
-### Q10 - 1 point
+### Q14 - 1 point
 
 For the e) part, is there some comparison and discussion of results obtained with alternative prior parameters?
 
@@ -95,16 +128,16 @@ For the e) part, is there some comparison and discussion of results obtained wit
 - Yes, but the results and conclusions are clearly wrong
 - Yes
 
-## Exercise 2
+## Exercise 4
 
-### Q11 - 1 point
+### Q15 - 1 point
 
 For the a) part, is the analytical posterior correctly derived?
 
 - No
 - Yes
 
-### Q12 - 1 point
+### Q16 - 1 point
 
 For the b) part, are the posterior alpha and beta correct?
 
@@ -112,7 +145,7 @@ For the b) part, are the posterior alpha and beta correct?
 - No, only one 
 - Yes, both
 
-### Q13 - 1 point
+### Q17 - 1 point
 
 For the c) part, are the posterior 95% credible interval correct (up to the second decimal)?
 
@@ -120,14 +153,14 @@ For the c) part, are the posterior 95% credible interval correct (up to the seco
 - No, only one part
 - Yes, both
 
-### Q14 - 1 point
+### Q18 - 1 point
 
 For the d) part, is the right distribution identified?
 
 - No
 - Yes, both
 
-### Q15 - 1 point
+### Q19 - 1 point
 
 For the d) part, is the prob and size parameters correct?
 
@@ -136,7 +169,7 @@ For the d) part, is the prob and size parameters correct?
 - Yes, both
 
 
-### Q16 - 1 point
+### Q20 - 1 point
 
 For the e) part, is the analysis correct?
 

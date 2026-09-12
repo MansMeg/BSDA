@@ -662,7 +662,7 @@
   \only<6>{\includegraphics[width=8cm]{figs/bioassay_fitbinom.pdf}\\}
   \only<5->{Binomial model
     \begin{align*}
-    y_i \mid {\only<6>{\color{blue}} \theta}_i & \sim \Bin({\only<6>{\color{blue}} \theta}_i,n_i) \uncover<6>{, \quad \logit({\only<6>{\color{blue}}\theta}_i)= \log\left(\frac{{\only<6>{\color{blue}}\theta}_i}{1-{\only<6>{\color{blue}}\theta}_i}\right) = \alpha+\beta x_i}
+    y_i \mid {\only<6>{\color{blue}} \theta}_i & \sim \Bin(n_i,{\only<6>{\color{blue}} \theta}_i) \uncover<6>{, \quad \logit({\only<6>{\color{blue}}\theta}_i)= \log\left(\frac{{\only<6>{\color{blue}}\theta}_i}{1-{\only<6>{\color{blue}}\theta}_i}\right) = \alpha+\beta x_i}
     \end{align*}
   }
 
@@ -673,7 +673,7 @@
 
     \begin{minipage}[b][5cm][t]{4cm}
     \begin{align*}
-      y_i \mid \color{blue} \theta_i & \sim \Bin({\color{blue} \theta}_i, n_i)\\
+      y_i \mid \color{blue} \theta_i & \sim \Bin(n_i, {\color{blue} \theta}_i)\\
       \logit({\color{blue} \theta}_i) & = \log\left(\frac{{\color{blue} \theta}_i}{1-{\color{blue} \theta}_i}\right)\\
                                      & = {\color{uured} \alpha+\beta x_i} \\
       \uncover<2->{\\ {\color{blue} \theta_i} & = \frac{1}{1+\exp(-({\color{uured}\alpha+\beta x_i}))}}
@@ -706,7 +706,7 @@
   \vspace{-1.5\baselineskip}
     \begin{align*}
       \intertext{Binomial model}
-      y_i \mid \theta_i & \sim \Bin(\theta_i,n_i)\\
+      y_i \mid \theta_i & \sim \Bin(n_i,\theta_i)\\
       \intertext{Link function}
       \logit(\theta_i) & = \alpha+\beta x_i
       \uncover<2->{

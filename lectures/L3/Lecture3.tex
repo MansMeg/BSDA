@@ -129,7 +129,7 @@
 \end{frame}
 
 \section{Multiple parameter models}
-%\frame{\sectionpage}
+\frame{\sectionpage}
 \subsection{Marginalization}
 
 \begin{frame}
@@ -183,7 +183,7 @@
 
 \end{frame}
 
-\subsection{Gaussian}
+\section{Gaussian Model}
 
 \begin{frame}
 \frametitle{Gaussian with unknown $\mu$ and $\sigma^2$}
@@ -556,7 +556,7 @@
 
 \end{frame}
 
-\subsection{Gaussian - conjugate prior}
+\subsection{Conjugate prior}
 
 \begin{frame}{Gaussian - conjugate prior}
 
@@ -624,82 +624,6 @@
 
 \end{frame}
 
-
-\subsection{Multinomial model}
-
-\begin{frame}{Multinomial model for categorical data}
-
-  \begin{itemize}
-  \item[-] Extension of binomial to $K$ categories
-  \item[-] Observation model: {\color{uured}Multinomial model}
-  \[
-  \mathbf{y} \mid \boldsymbol{\theta}, m \sim \mathrm{Multinomial}(m,\boldsymbol{\theta})
-  \]
-  \pause
-    \begin{align*}
-      p(\mathbf{y} \mid \boldsymbol{\theta}, m) \propto \prod_{k=1}^K \theta_k^{y_k},
-    \end{align*}
-    \begin{align*}
-      \text{where } \sum_{k=1}^K \theta_k = 1\,, \text{ and } \theta_k > 0
-    \end{align*}
-  \pause
-  \item[-] Example: $\mathbf{y} = (0,1,0,6,30)$ - {\color{uured} what is $K$ here?}
-  \pause
-  \item[-] Categorical distribution: $\mathrm{Multinomial}(1,\boldsymbol{\theta})$
-  \end{itemize}
-\end{frame}
-
-
-\begin{frame}{Prior for the multinomial model}
-
-  \begin{itemize}
-  \item[-] {\color{uured} What is important when choosing the prior for $\theta$?}
-  \pause
-  \item[-] Conjugate prior: The Dirichlet distribution
-  \begin{align*}
-    p(\boldsymbol{\theta}) \propto \prod_{k=1}^K \theta_k^{\alpha_k-1},
-  \end{align*}
-  \begin{align*}
-      \text{where } \alpha_k > 0, \sum_{k=1}^K \theta_k = 1\,, \text{ and } \theta_k > 0
-  \end{align*}
-  \pause
-  \item[-] {\color{uured} What is the connection to the Beta distribution?}
-  \end{itemize}
-
-\end{frame}
-
-\begin{frame}{Posterior for the multinomial model}
-
-  {\small Let $y_k=\sum_{i=1}^n y_{k,i}$ be the observed count in category $k$.}
-
-    \begin{align*}
-      p(\boldsymbol{\theta} \mid \mathbf{y}) & \propto p(\mathbf{y} \mid \boldsymbol{\theta}) p(\boldsymbol{\theta})\\
-       \uncover<2->{& \propto \prod_{k=1}^K \theta_k^{\alpha_k-1} \prod_{i=1}^n \prod_{k=1}^K \theta_k^{y_{k,i}}}\\
-       \uncover<3->{& = \prod_{k=1}^K \theta_k^{\alpha_k-1} \prod_{k=1}^K \theta_k^{\sum_{i=1}^n y_{k,i}}}\\
-       \uncover<4->{& = \prod_{k=1}^K \theta_k^{\alpha_k - 1 + \sum_{i=1}^n y_{k,i}}}\\
-       \uncover<5->{& = \mathrm{Dirichlet}(\alpha_1+y_1,\ldots,\alpha_K+y_K)}
-    \end{align*}
-
-\end{frame}
-
-\subsection{Multivariate Gaussian}
-
-\begin{frame}{Multivariate Gaussian}
-
-  \begin{itemize}
-  \item[-] Observation model
-    \begin{align*}
-      p(y \mid \mu,\Sigma)\propto  \mid \Sigma \mid ^{-1/2}
-      \exp\left( -\frac{1}{2} (y-\mu)^T \Sigma^{-1} (y-\mu)\right),
-    \end{align*}
-    \begin{align*}
-      \text{where } y \in \mathcal{R}^D\,
-    \end{align*}
-  \item[-] See BDA3 p. 72--
-  \item[-] New recommended LKJ-prior mentioned in Appendix A, see more
-    in Stan manual
-  \end{itemize}
-\end{frame}
 
 \section{Bioassay example}
 
@@ -912,6 +836,82 @@
 
 \end{frame}
 
+\section{Additional examples}
+\subsection{Multinomial model}
+
+\begin{frame}{Multinomial model for categorical data}
+
+  \begin{itemize}
+  \item[-] Extension of binomial to $K$ categories
+  \item[-] Observation model: {\color{uured}Multinomial model}
+  \[
+  \mathbf{y} \mid \boldsymbol{\theta}, m \sim \mathrm{Multinomial}(m,\boldsymbol{\theta})
+  \]
+  \pause
+    \begin{align*}
+      p(\mathbf{y} \mid \boldsymbol{\theta}, m) \propto \prod_{k=1}^K \theta_k^{y_k},
+    \end{align*}
+    \begin{align*}
+      \text{where } \sum_{k=1}^K \theta_k = 1\,, \text{ and } \theta_k > 0
+    \end{align*}
+  \pause
+  \item[-] Example: $\mathbf{y} = (0,1,0,6,30)$ - {\color{uured} what is $K$ here?}
+  \pause
+  \item[-] Categorical distribution: $\mathrm{Multinomial}(1,\boldsymbol{\theta})$
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}{Prior for the multinomial model}
+
+  \begin{itemize}
+  \item[-] {\color{uured} What is important when choosing the prior for $\theta$?}
+  \pause
+  \item[-] Conjugate prior: The Dirichlet distribution
+  \begin{align*}
+    p(\boldsymbol{\theta}) \propto \prod_{k=1}^K \theta_k^{\alpha_k-1},
+  \end{align*}
+  \begin{align*}
+      \text{where } \alpha_k > 0, \sum_{k=1}^K \theta_k = 1\,, \text{ and } \theta_k > 0
+  \end{align*}
+  \pause
+  \item[-] {\color{uured} What is the connection to the Beta distribution?}
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Posterior for the multinomial model}
+
+  {\small Let $y_k=\sum_{i=1}^n y_{k,i}$ be the observed count in category $k$.}
+
+    \begin{align*}
+      p(\boldsymbol{\theta} \mid \mathbf{y}) & \propto p(\mathbf{y} \mid \boldsymbol{\theta}) p(\boldsymbol{\theta})\\
+       \uncover<2->{& \propto \prod_{k=1}^K \theta_k^{\alpha_k-1} \prod_{i=1}^n \prod_{k=1}^K \theta_k^{y_{k,i}}}\\
+       \uncover<3->{& = \prod_{k=1}^K \theta_k^{\alpha_k-1} \prod_{k=1}^K \theta_k^{\sum_{i=1}^n y_{k,i}}}\\
+       \uncover<4->{& = \prod_{k=1}^K \theta_k^{\alpha_k - 1 + \sum_{i=1}^n y_{k,i}}}\\
+       \uncover<5->{& = \mathrm{Dirichlet}(\alpha_1+y_1,\ldots,\alpha_K+y_K)}
+    \end{align*}
+
+\end{frame}
+
+\subsection{Multivariate Gaussian}
+
+\begin{frame}{Multivariate Gaussian}
+
+  \begin{itemize}
+  \item[-] Observation model
+    \begin{align*}
+      p(y \mid \mu,\Sigma)\propto  \mid \Sigma \mid ^{-1/2}
+      \exp\left( -\frac{1}{2} (y-\mu)^T \Sigma^{-1} (y-\mu)\right),
+    \end{align*}
+    \begin{align*}
+      \text{where } y \in \mathcal{R}^D\,
+    \end{align*}
+  \item[-] See BDA3 p. 72--
+  \item[-] New recommended LKJ-prior mentioned in Appendix A, see more
+    in Stan manual
+  \end{itemize}
+\end{frame}
 
 
 \end{document}

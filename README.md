@@ -141,6 +141,15 @@ Aki Vehtari at Aalto University has recorded lectures with very similar content 
 - [Stan YouTube channel](https://www.youtube.com/channel/UCwgN5srGpBH4M-Zc2cAluOA) contains good introductions to Stan and some basic suggestions on how to fit models
 - [Matthew Kay, Systematic uncertainty visualization design (StanCon 2026)](https://youtu.be/drngQr8eyXg) is recommended project material after the lectures on Stan, hierarchical models, and model checking. It gives useful guidance for visualizing posterior uncertainty, predictive distributions, and other Bayesian model output.
 
+#### Research front: Bayesian computation
+
+The following talks are optional advanced material after the HMC/Stan lecture. You are not expected to understand every technical detail; use them to see examples of current research on making Bayesian computation more adaptive and efficient.
+
+- [Bob Carpenter, Within-orbit adaptive leapfrog sampler (WALNUTS) with continuous Nutpie adaptation](https://www.youtube.com/watch?v=Usjt1cK5fQc)
+- [Adrian Seyboldt, From Mass Matrix Adaptation to Normalizing Flows (StanCon 2026)](https://www.youtube.com/watch?v=wIR1YXFrNaE)
+
+While watching, focus on three questions: What limitation of current HMC/NUTS is being discussed? What new idea is proposed? Why might this matter for difficult Bayesian models?
+
 
 ## Course practicalities
 

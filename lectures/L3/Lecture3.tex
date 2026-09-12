@@ -554,19 +554,19 @@
   \item[-] Extension of binomial to $K$ categories
   \item[-] Observation model: {\color{uured}Multinomial model}
   \[
-  \mathbf{y} \sim \text{MN}(\mathbf{y}|\theta,m)
+  \mathbf{y} \mid \boldsymbol{\theta}, m \sim \mathrm{Multinomial}(m,\boldsymbol{\theta})
   \]
   \pause
     \begin{align*}
-      p(\mathbf{y}  \mid  \theta, m) \propto \prod_{k=1}^K \theta_j^{y_j},
+      p(\mathbf{y} \mid \boldsymbol{\theta}, m) \propto \prod_{k=1}^K \theta_k^{y_k},
     \end{align*}
     \begin{align*}
-      \text{where } \sum_k^K \theta_k = 1\,, \text{ and } \forall \theta_k > 0
+      \text{where } \sum_{k=1}^K \theta_k = 1\,, \text{ and } \theta_k > 0
     \end{align*}
   \pause
-  \item[-] Example: $\mathbf{y}_i = (0,1,0,6,30)$ - {\color{uured} what is $K$ here?}
+  \item[-] Example: $\mathbf{y} = (0,1,0,6,30)$ - {\color{uured} what is $K$ here?}
   \pause
-  \item[-] Categorical distribution: $\text{MN}(\mathbf{y}|\mathbf{p},m = 1)$
+  \item[-] Categorical distribution: $\mathrm{Multinomial}(1,\boldsymbol{\theta})$
   \end{itemize}
 \end{frame}
 
@@ -578,10 +578,10 @@
   \pause
   \item[-] Conjugate prior: The Dirichlet distribution
   \begin{align*}
-    p(\theta) \propto \prod_{k=1}^K \theta_k^{\alpha_k-1},
+    p(\boldsymbol{\theta}) \propto \prod_{k=1}^K \theta_k^{\alpha_k-1},
   \end{align*}
   \begin{align*}
-      \text{where} \forall \alpha_k > 0, \sum_k^K \theta_k = 1\,, \text{ and } \forall \theta_k > 0
+      \text{where } \alpha_k > 0, \sum_{k=1}^K \theta_k = 1\,, \text{ and } \theta_k > 0
   \end{align*}
   \pause
   \item[-] {\color{uured} What is the connection to the Beta distribution?}
@@ -591,12 +591,14 @@
 
 \begin{frame}{Posterior for the multinomial model}
 
+  {\small Let $y_k=\sum_{i=1}^n y_{k,i}$ be the observed count in category $k$.}
+
     \begin{align*}
-      p(\theta \mid y) & \propto p(y \mid \theta) p(\theta)\\
-       \uncover<2->{& \propto \prod_{k=1}^K \theta_k^{\alpha_k-1} \prod^n_i \prod_{k=1}^K \theta_k^{y_{k,i}}}\\
-       \uncover<3->{& = \prod_{k=1}^K \theta_k^{\alpha_k-1} \prod_{k=1}^K \theta_k^{\sum^n_i y_{k,i}}}\\
-       \uncover<4->{& = \prod_{k=1}^K \theta_k^{\alpha_k - 1 + \sum^n_i y_{k,i}}}\\
-       \uncover<5->{& = \text{Dir}(...,\alpha_k + \sum^n_i y_{k,i},...)}
+      p(\boldsymbol{\theta} \mid \mathbf{y}) & \propto p(\mathbf{y} \mid \boldsymbol{\theta}) p(\boldsymbol{\theta})\\
+       \uncover<2->{& \propto \prod_{k=1}^K \theta_k^{\alpha_k-1} \prod_{i=1}^n \prod_{k=1}^K \theta_k^{y_{k,i}}}\\
+       \uncover<3->{& = \prod_{k=1}^K \theta_k^{\alpha_k-1} \prod_{k=1}^K \theta_k^{\sum_{i=1}^n y_{k,i}}}\\
+       \uncover<4->{& = \prod_{k=1}^K \theta_k^{\alpha_k - 1 + \sum_{i=1}^n y_{k,i}}}\\
+       \uncover<5->{& = \mathrm{Dirichlet}(\alpha_1+y_1,\ldots,\alpha_K+y_K)}
     \end{align*}
 
 \end{frame}

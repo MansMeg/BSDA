@@ -58,8 +58,8 @@
   \frametitle{Assignment 2}
 
   \begin{itemize}
-  \item "Task 2b and 2d was  unclear" (on our list now)\pause
-  \item "Simulate from the predictive distribution in two steps?"\pause
+  \item ``Tasks 2b and 2d were unclear'' (on our list now)\pause
+  \item ``Simulate from the predictive distribution in two steps?''\pause
   \end{itemize}
 
 \end{frame}
@@ -76,7 +76,7 @@
   \pause
   \item Next week (Wednesday): Deadline mini-project proposal
   \pause
-  \item Submit to the correct assignment - its anonymous
+  \item Submit to the correct assignment - the submission is anonymous
   \end{itemize}
 \end{frame}
 
@@ -450,7 +450,7 @@
     { \small Predictive distribution for new $\tilde{y}$}
     %\vspace{-2.75\baselineskip}
     \begin{align*}
-      \only<6> {\color{orange}} \scriptstyle p(\tilde{y} \mid y) & \scriptstyle = \int p(\tilde{y} \mid \mu,\sigma)p(\mu,\sigma \mid y)d\mu\sigma\\
+      \only<6> {\color{orange}} \scriptstyle p(\tilde{y} \mid y) & \scriptstyle = \int p(\tilde{y} \mid \mu,\sigma)p(\mu,\sigma \mid y)\,d\mu\,d\sigma\\
       \uncover<2->{{\color{red} \scriptstyle \mu^{(s)}, \sigma^{(s)}} & \scriptstyle \sim p(\mu, \sigma  \mid  y)}\\
       \uncover<3->{{\color{red} \scriptstyle \tilde{y}^{(s)}} & \scriptstyle \sim \color{blue} p(\tilde{y} \mid \mu^{(s)},\sigma^{(s)})}
      \end{align*}
@@ -468,7 +468,7 @@
 
 \begin{frame}{Gaussian - posterior predictive distribution}
 
-   Posterior predictive distribution given known variance
+   First condition on $\sigma^2$, then integrate it out
     \begin{align*}
       p(\tilde{y} \mid \sigma^2,y) & = \int p(\tilde{y} \mid \mu,\sigma^2)p(\mu \mid \sigma^2,y)d\mu\\
        \uncover<2->{& = \int \N(\tilde{y} \mid \mu,\sigma^2)\N(\mu \mid \bar{y},\sigma^2/n)d\mu\\ }
@@ -762,11 +762,11 @@
 \begin{frame}{Grid evaluation}
 
 \begin{enumerate}
-   \item Setup an area (can be hard) for $\alpha$ and $\beta$ that capture most mass (here $\alpha = [-1,5]$ and $\beta = [0,30]$)
+   \item Set up an area (can be hard) for $\alpha$ and $\beta$ that captures most mass (here $\alpha \in [-1,5]$ and $\beta \in [0,30]$)
    \pause
    \item Compute unnormalized $p(\alpha^{(g)},\beta^{(g)} \mid y,n,x)$, here $\tilde{p}$, at the grid points $g$
    \pause
-   \item Sum up $\tilde{p}$ over the whole grid (for all $g \in \{1,...,G\}$)
+   \item Sum up $\tilde{p}$ over the whole grid (for all $g \in \{1,\ldots,G\}$)
    \pause
    \item Compute (normalize) the pmf approximation of the posterior $\hat{p}$
 \end{enumerate}
@@ -775,12 +775,12 @@
 \begin{tabular}{c c c c}
        $g$ & ($\alpha$, $\beta$) & $\tilde{p}$ & $\hat{p}$ \\
       \hline
-      1 & (0, -1) & 0.02 & 0.0002 \\
-      2 & (0, -0.8) & 0.03 & 0.0003 \\
+      1 & (-1, 0) & 0.02 & 0.0002 \\
+      2 & (-0.8, 0.2) & 0.03 & 0.0003 \\
       ... & ... & ... & ... \\
-      G & (30, 5) & 0.001 & 0.00001 \\
+      G & (5, 30) & 0.001 & 0.00001 \\
       \hline
-       $\sum_g^G$ & - & 100 & 1
+       $\sum_{g=1}^G$ & - & 100 & 1
 \end{tabular}
 
 \end{frame}
@@ -929,24 +929,17 @@
   \begin{itemize}
   \item[-] Observation model
     \begin{align*}
-      p(y \mid \mu,\Sigma)\propto  \mid \Sigma \mid ^{-1/2}
-      \exp\left( -\frac{1}{2} (y-\mu)^T \Sigma^{-1} (y-\mu)\right),
+      p(\mathbf{y} \mid \boldsymbol{\mu},\Sigma)\propto |\Sigma|^{-1/2}
+      \exp\left( -\frac{1}{2} (\mathbf{y}-\boldsymbol{\mu})^T \Sigma^{-1} (\mathbf{y}-\boldsymbol{\mu})\right),
     \end{align*}
     \begin{align*}
-      \text{where } y \in \mathcal{R}^D\,
+      \text{where } \mathbf{y} \in \R^D\,
     \end{align*}
-  \item[-] See BDA3 p. 72--
+  \item[-] See BDA3 p. 72.
   \item[-] New recommended LKJ-prior mentioned in Appendix A, see more
     in Stan manual
   \end{itemize}
 \end{frame}
-
-
-\end{document}
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 \end{document}

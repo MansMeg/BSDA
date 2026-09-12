@@ -96,6 +96,18 @@ Below are some suggested complementary reading for the interested student.
 [Part 1](https://www.youtube.com/watch?v=ZRpo41l02KQ)
 [Part 2](https://www.youtube.com/watch?v=6cc4N1vT8pk)
 
+### Short Stan tutorials
+
+The [Stan Tutorials playlist](https://www.youtube.com/playlist?list=PLCrWEzJgSUqwL85xIj1wubGdY15C5Gf7H) has shorter practical videos that are useful when you start writing Stan code.
+
+Recommended course clips:
+
+- [Getting started with Stan in R](https://www.youtube.com/watch?v=4t6niM6sksI) before the first Stan assignment.
+- [Have I converged? Convergence checks in Stan.](https://www.youtube.com/watch?v=0FdMZwIbJ_4) before reporting Stan diagnostics.
+- [Hierarchical Modelling in Stan: Predicting the Premier League](https://www.youtube.com/watch?v=dNZQrcAjgXQ) before the hierarchical models assignment.
+
+Python users may also find [Getting started with Stan in Python](https://www.youtube.com/watch?v=YtR18hdAWmU) useful.
+
 ### Stan Playground
 
 [Stan Playground](https://stan-playground.flatironinstitute.org/) is a browser-based environment for writing, compiling and running Stan models without a local Stan installation. It is useful for learning Stan syntax, checking compiler messages, trying small changes to a model, and inspecting posterior draws during the Stan parts of the course.

@@ -416,7 +416,7 @@
     \uncover<1->{p(\mu|y) &\propto {\only<1>{\color{blue}}[(n-1)s^2+n(\mu-\bar{y})^2]^{-n/2}}\\}
     \uncover<2->{&\propto \left[1+\frac{n(\mu-\bar{y})^2}{(n-1)s^2}\right]^{-n/2}\\}
     \uncover<3->{\color{gray} p(x|\mu_\star,\sigma_\star,\nu_\star) & \color{gray} = {\displaystyle {\frac {\Gamma {\left({\frac {\nu_\star +1}{2}}\right)}}{{\sqrt {\pi \nu_\star \sigma_\star^2}}\,\Gamma {\left({\frac {\nu_\star }{2}}\right)}}}\left(1+{\frac {1}{\nu_\star }\frac {(x - \mu_\star)^2}{\sigma_\star^2}}\right)^{-{\frac {\nu_\star +1}{2}}}}\\}
-    \uncover<4->{p(\mu \mid y) & = \underbrace{t(\mu \mid \mu_\star=\bar{y},\sigma_\star=s^2/n,\nu_\star=n-1)}_{\text{Student's $t$}}}
+    \uncover<4->{p(\mu \mid y) & = \underbrace{t_{n-1}(\mu \mid \bar{y},s^2/n)}_{\text{Student's $t$}}}
     \end{align*}
 
 \end{frame}
@@ -476,6 +476,63 @@
     \uncover<4->{\intertext{\, \, \, this is up to scaling factor same as $p(\mu \mid \sigma^2,y)$}}
       \uncover<5->{p(\tilde{y} \mid y) & = t_{n-1}(\tilde{y} \mid \bar{y},(1+{\textstyle \frac{1}{n}})s^2)}
     \end{align*}
+
+\end{frame}
+
+\begin{frame}{Gaussian unknown variance: summary}
+
+  With $p(\mu,\sigma^2)\propto \sigma^{-2}$ and
+  $s^2=\frac{1}{n-1}\sum_{i=1}^n(y_i-\bar{y})^2$:
+
+  \begin{align*}
+    \sigma^2 \mid y &\sim \Invchi2(n-1,s^2)\\
+    \mu \mid y &\sim t_{n-1}(\cdot \mid \bar{y},s^2/n)\\
+    \tilde{y} \mid y &\sim t_{n-1}(\cdot \mid \bar{y},(1+{\textstyle \frac{1}{n}})s^2)
+  \end{align*}
+
+  \begin{itemize}
+  \item Posterior uncertainty for $\mu$ is smaller than predictive
+    uncertainty for a new $\tilde{y}$.
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Student's $t$: scale convention}
+
+  \begin{itemize}
+  \item In these slides, $t_\nu(\cdot \mid m,v)$ uses $v$ as scale squared.
+  \item If software expects a scale parameter, use $\sqrt{v}$.
+  \item Examples:
+    \begin{align*}
+      \mu \mid y &\sim t_{n-1}(\cdot \mid \bar{y},s^2/n)\\
+      \tilde{y} \mid y &\sim t_{n-1}(\cdot \mid \bar{y},(1+{\textstyle \frac{1}{n}})s^2)
+    \end{align*}
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Posterior draws for derived quantities}
+
+  \begin{itemize}
+  \item Often the quantity of interest is $q=g(\theta)$.
+  \item If $\theta^{(s)} \sim p(\theta \mid y)$, then compute
+    \[
+      q^{(s)}=g(\theta^{(s)}).
+    \]
+  \item The draws $q^{(s)}$ summarize $p(q \mid y)$.
+  \item Examples: $\theta_1-\theta_2$, $\mu_1-\mu_2$,
+    $x_{\mathrm{LD50}}=-\alpha/\beta$.
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Pair discussion: continuous posteriors}
+
+  \begin{itemize}
+  \item Suppose $\mu_d=\mu_1-\mu_2$ has a continuous posterior.
+  \item What is $\Pr(\mu_d=0 \mid y)$?
+  \item What would be a more useful posterior summary?
+  \end{itemize}
 
 \end{frame}
 
@@ -707,6 +764,18 @@
     {\includegraphics[width=4.5cm]{figs/bioassay_fitbinom.pdf}}
     {\includegraphics[width=4.5cm]{figs/bioassay_fitlogitspace.pdf}}
   \end{minipage}
+\end{frame}
+
+\begin{frame}{Pair discussion: bioassay assumptions}
+
+  \begin{itemize}
+  \item What assumptions are needed for
+    $y_i \mid \theta_i \sim \Bin(n_i,\theta_i)$?
+  \item Are animals within a dose group exchangeable and independent?
+  \item Name one practical reason why the binomial model could fail.
+  \item Why use a logit model instead of $\theta_i=\alpha+\beta x_i$?
+  \end{itemize}
+
 \end{frame}
 
 \begin{frame}{Bioassay: Lethal Dose 50\%}

@@ -98,7 +98,7 @@ Requirements for the projects are:
 
 \subsection{Suggested Reading/Video material}
 
-The project will be a small practical exercise in Bayesian data analysis. To get some inspiration, see the Stan YouTube channel \href{https://www.youtube.com/watch?v=k9sH7x8O0Y8}{[here]} or the Stan User Guide \href{https://mc-stan.org/docs/2_29/stan-users-guide/index.html}{[here]}.
+The project will be a small practical exercise in Bayesian data analysis. To get some inspiration, see the Stan YouTube channel \href{https://www.youtube.com/watch?v=k9sH7x8O0Y8}{[here]}, the short Stan Tutorials playlist \href{https://www.youtube.com/playlist?list=PLCrWEzJgSUqwL85xIj1wubGdY15C5Gf7H}{[here]}, or the Stan User Guide \href{https://mc-stan.org/docs/2_29/stan-users-guide/index.html}{[here]}.
 
 For guidance on communicating posterior uncertainty and predictive distributions in figures, see Matthew Kay's StanCon 2026 lecture \href{https://youtu.be/drngQr8eyXg}{Systematic uncertainty visualization design}.
 

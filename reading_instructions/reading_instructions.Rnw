@@ -143,6 +143,8 @@ knitr::opts_chunk$set(size = "small")
 \item 5.5 Example: parallel experiments in eight schools (uses hierarchical normal model, details of computation can be skipped)
 \item 5.6 Meta-analysis (\emph{can be skipped})
 \item 5.7 Weakly informative priors for hierarchical variance parameters
+\item Video assignment before the hierarchical models assignment:
+  \href{https://www.youtube.com/watch?v=dNZQrcAjgXQ}{Hierarchical Modelling in Stan: Predicting the Premier League}
 \end{list}
 
 \subsection{Chapter 6}
@@ -204,6 +206,8 @@ knitr::opts_chunk$set(size = "small")
 \item 11.4 Inference and assessing convergence (\emph{very important})
 \item 11.5 Effective number of simulation draws (\emph{very important})
 \item 11.6 Example: hierarchical normal model (\emph{can be skipped})
+\item Video assignment before reporting Stan diagnostics:
+  \href{https://www.youtube.com/watch?v=0FdMZwIbJ_4}{Have I converged? Convergence checks in Stan.}
 \end{list}
 
 \subsection{Chapter 12}
@@ -215,6 +219,10 @@ knitr::opts_chunk$set(size = "small")
 \item 12.4 Hamiltonian Monte Carlo (used in Stan)
 \item 12.5 Hamiltonian dynamics for a simple hierarchical model (read through)
 \item 12.6 Stan: developing a computing environment (read through)
+\item Video assignment before the first Stan assignment:
+  \href{https://www.youtube.com/watch?v=4t6niM6sksI}{Getting started with Stan in R}
+  (Python users may also watch
+  \href{https://www.youtube.com/watch?v=YtR18hdAWmU}{Getting started with Stan in Python})
 \end{list}
 
 \section{The Bayesian Data Analysis book: Self-study Exercises}

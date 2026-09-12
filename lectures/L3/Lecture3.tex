@@ -303,6 +303,16 @@
   \item Why integrate it out instead of plug in one estimate?
   \end{itemize}
 
+  \uncover<2->{
+  \vspace{0.5\baselineskip}
+  {\small
+  {\color{uured}After discussion:}
+  \begin{itemize}
+  \item $\sigma$ (or $\sigma^2$) is nuisance if the target is $\mu$.
+  \item Marginalization keeps uncertainty about $\sigma$ in $p(\mu \mid y)$.
+  \item Plug-in conditions on one value and usually understates uncertainty.
+  \end{itemize}}}
+
 \end{frame}
 
 \begin{frame}{Marginal $p(\mu|y)$ and $p(\sigma^2|y)$}
@@ -429,8 +439,18 @@
   \item uncertainty about $\mu$?
   \item noise in a new observation?
   \item both?
-  \item what are the two types of uncertainties called?
+  \item What are the two types of uncertainties called?
   \end{itemize}
+
+  \uncover<2->{
+  \vspace{0.5\baselineskip}
+  {\small
+  {\color{uured}After discussion:}
+  \begin{itemize}
+  \item Parameter uncertainty is epistemic uncertainty.
+  \item New observation noise is aleatoric uncertainty.
+  \item The posterior predictive distribution includes both.
+  \end{itemize}}}
 
 \end{frame}
 
@@ -526,6 +546,55 @@
 
 \end{frame}
 
+\begin{frame}{Two independent proportions: odds ratio}
+
+  \begin{itemize}
+  \item For groups $j=0,1$:
+    \begin{align*}
+      y_j \mid p_j &\sim \Bin(n_j,p_j), &
+      p_j &\sim \Beta(a_j,b_j)
+    \end{align*}
+  \item Conjugacy gives
+    \begin{align*}
+      p_j \mid y_j \sim \Beta(a_j+y_j,b_j+n_j-y_j)
+    \end{align*}
+  \item Draw $p_0^{(s)}$ and $p_1^{(s)}$ independently, then compute
+    \begin{align*}
+      \mathrm{OR}^{(s)}
+      =
+      \frac{p_1^{(s)}/(1-p_1^{(s)})}
+           {p_0^{(s)}/(1-p_0^{(s)})}.
+    \end{align*}
+  \item Summarize the draws with a point estimate, posterior interval,
+    histogram, and a prior sensitivity check.
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Two independent normal means}
+
+  \begin{itemize}
+  \item For groups $j=1,2$:
+    \begin{align*}
+      y_{ij} \mid \mu_j,\sigma_j^2 &\sim \N(\mu_j,\sigma_j^2), &
+      p(\mu_j,\sigma_j^2) &\propto \sigma_j^{-2}
+    \end{align*}
+  \item From the one-sample result:
+    \begin{align*}
+      \mu_j \mid y_j \sim
+      t_{n_j-1}(\cdot \mid \bar{y}_j,s_j^2/n_j)
+    \end{align*}
+  \item Draw $\mu_1^{(s)}$ and $\mu_2^{(s)}$ independently, then compute
+    \begin{align*}
+      \mu_d^{(s)} = \mu_1^{(s)}-\mu_2^{(s)}.
+    \end{align*}
+  \item Summarize $p(\mu_d \mid y)$ with a point estimate, posterior
+    interval, histogram, and probabilities of scientifically meaningful
+    differences.
+  \end{itemize}
+
+\end{frame}
+
 \begin{frame}{Pair discussion: continuous posteriors}
 
   \begin{itemize}
@@ -533,6 +602,15 @@
   \item What is $\Pr(\mu_d=0 \mid y)$?
   \item What would be a more useful posterior summary?
   \end{itemize}
+
+  \uncover<2->{
+  \vspace{0.5\baselineskip}
+  {\small
+  {\color{uured}After discussion:}
+  \begin{itemize}
+  \item $\Pr(\mu_d=0 \mid y)=0$ for a continuous posterior.
+  \item More useful: $\Pr(\mu_d>0 \mid y)$ and a credible interval.
+  \end{itemize}}}
 
 \end{frame}
 
@@ -558,6 +636,17 @@
     \only<3>{\includegraphics[width=5.2cm]{figs/newcomb_posterior2.pdf}}
     \only<4>{\includegraphics[width=5.2cm]{figs/newcomb_posterior3.pdf}}
   \end{center}
+
+\end{frame}
+
+\begin{frame}{Newcomb: model checking}
+
+  \begin{itemize}
+  \item The Gaussian model is useful as a first analysis.
+  \item The negative coded values hint at outliers or model misfit.
+  \item Later: check whether the model can generate data that look like what we
+    observed.
+  \end{itemize}
 
 \end{frame}
 
@@ -764,6 +853,23 @@
 
 \end{frame}
 
+\begin{frame}{Grid evaluation on the log scale}
+
+  For grid point $g$ with parameters $(\alpha_g,\beta_g)$:
+  \begin{align*}
+    \log \tilde{p}_g
+    &= \log p(\alpha_g,\beta_g)
+       + \sum_{i=1}^k \log p(y_i \mid \alpha_g,\beta_g,n_i,x_i)\\
+    \uncover<2->{\hat{p}_g
+    &= \frac{\exp(\log \tilde{p}_g)}
+            {\sum_{h=1}^G \exp(\log \tilde{p}_h)}}
+  \end{align*}
+
+  \uncover<3->{Computing on the log scale avoids numerical underflow and
+  matches the log weights we use later.}
+
+\end{frame}
+
 \begin{frame}{Grid evaluation}
 
 \begin{enumerate}
@@ -791,7 +897,7 @@
 \end{frame}
 
 
-\begin{frame}{Bioassay (with uniform prior on $\alpha,\beta$)}
+\begin{frame}{Bioassay: uniform prior on constrained grid}
 
   \only<1>{\includegraphics[width=8cm]{figs/bioassay_grid1.pdf}}
   \only<2>{\includegraphics[width=8cm]{figs/bioassay_grid2.pdf}\\
@@ -863,8 +969,9 @@
   \item Predictive distributions include parameter uncertainty and new
     observation noise.
   \item Posterior draws make derived quantities easy to summarize.
-  \item Bioassay: a nonconjugate logistic-binomial model, where grid
-    evaluation works because the parameter dimension is small.
+  \item Bioassay: grid evaluation works here because the parameter dimension is
+    small.
+  \item This motivates more scalable computation for larger Bayesian models.
   \end{itemize}
 
 \end{frame}

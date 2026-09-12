@@ -702,6 +702,20 @@
 
 \end{frame}
 
+\begin{frame}{Bioassay: monotone toxicity}
+
+  \begin{itemize}
+  \item In this lecture, we constrain toxicity to be monotone.
+  \item The grid is restricted to $\beta \geq 0$; increasing dose cannot
+    decrease the probability of death.
+  \item Conceptually, the LD50 summary is interpreted under the
+    positive-dose-effect assumption $\beta > 0$.
+  \item If $\beta \leq 0$ were allowed, we would also report
+    $\Pr(\beta > 0 \mid y)$ and LD50 conditional on $\beta > 0$.
+  \end{itemize}
+
+\end{frame}
+
 \begin{frame}{Bioassay: Lethal Dose 50\%}
 
   \only<1>{\includegraphics[width=8cm]{figs/bioassay_fitbinom.pdf}}
@@ -832,6 +846,20 @@
     where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$, and $\alpha^{(t)}$ and $\beta^{(t)}$ are center locations of grid cells
   \item<3-> Grid sampling gets computationally too expensive in high
     dimensions
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Recap}
+
+  \begin{itemize}
+  \item Multiparameter posteriors are joint distributions.
+  \item Marginalization removes nuisance parameters.
+  \item Predictive distributions include parameter uncertainty and new
+    observation noise.
+  \item Posterior draws make derived quantities easy to summarize.
+  \item Bioassay: a nonconjugate logistic-binomial model, where grid
+    evaluation works because the parameter dimension is small.
   \end{itemize}
 
 \end{frame}

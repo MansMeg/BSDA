@@ -639,27 +639,28 @@
 
 \subsection{Example}
 
-\begin{frame}{Simon Newcomb's speed of light experiment in 1882}
+\begin{frame}{Newcomb's speed of light experiment}
 
-  {\small
-  Newcomb measured ($n=66$) the time required for light to travel from
-  his laboratory on the Potomac River to a mirror at the base of the
-  Washington Monument and back, a total distance of 7442 meters.}
-  \pause
-  {\small
-  Here $y_i$ is one coded round-trip time: measured time minus 24,800
-  nanoseconds. The $y>0$ curve is a sensitivity check that removes the two
-  negative coded values (not negative travel times).}
   \begin{center}
     \vspace{-0.5\baselineskip}
-    {\includegraphics[width=5.2cm]{figs/newcomb_data.pdf}}\\
+    {\includegraphics[width=5cm]{figs/newcomb_data.pdf}}\\
     \vspace{-1\baselineskip}
-    \only<1>{\phantom{\includegraphics[width=5.2cm]{figs/newcomb_posterior1.pdf}}}
-    \only<2>{\includegraphics[width=5.2cm]{figs/newcomb_posterior1.pdf}}
-    \only<3>{\includegraphics[width=5.2cm]{figs/newcomb_posterior2.pdf}}
-    \only<4>{\includegraphics[width=5.2cm]{figs/newcomb_posterior3.pdf}}
+    \only<1>{\phantom{\includegraphics[width=5cm]{figs/newcomb_posterior1.pdf}}}
+    \only<2>{\includegraphics[width=5cm]{figs/newcomb_posterior1.pdf}}
+    \only<3>{\includegraphics[width=5cm]{figs/newcomb_posterior2.pdf}}
+    \only<4>{\includegraphics[width=5cm]{figs/newcomb_posterior3.pdf}}
   \end{center}
 
+
+  {\small
+  Newcomb measured in 1882 ($n=66$) the time required for light to travel from
+  his laboratory on the Potomac River to a mirror at the base of the
+  Washington Monument and back, a total distance of 7442 meters. Here $y_i$ is one coded round-trip time: measured time minus 24,800
+  nanoseconds. }
+
+  {\small
+  \only<3->{ The $y>0$ curve is a sensitivity check that removes the two
+  negative coded values (not negative travel times).}}
 \end{frame}
 
 \begin{frame}{Newcomb: model checking}
@@ -691,7 +692,7 @@
       p(\mu,\sigma^2)=\NInvchi2(\mu_0,\sigma_0^2/\kappa_0;\nu_0,\sigma_0^2)
     \end{align*}
     \pause
-  \item[-] $\mu$ and $\sigma^2$ are a priori dependent
+  \item[-] $\mu$ and $\sigma^2$ are \uured{a priori dependent}
     \begin{itemize}
       \item[-] if $\sigma^2$ is large, then $\mu$ has wide prior
     \end{itemize}
@@ -987,13 +988,13 @@
 \begin{frame}{Recap}
 
   \begin{itemize}
-  \item Multiparameter posteriors are joint distributions.
-  \item Marginalization removes nuisance parameters.
+  \item Multiparameter posteriors are joint distributions.\pause
+  \item Marginalization removes nuisance parameters.\pause
   \item Predictive distributions include parameter uncertainty and new
-    observation noise.
-  \item Posterior draws make derived quantities easy to summarize.
+    observation noise.\pause
+  \item Posterior draws make derived quantities easy to summarize.\pause
   \item Bioassay: grid evaluation works here because the parameter dimension is
-    small.
+    small (only 2 parameters).\pause
   \item This motivates more scalable computation for larger Bayesian models.
   \end{itemize}
 

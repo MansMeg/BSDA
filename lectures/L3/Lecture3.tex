@@ -62,6 +62,7 @@
   \item Next week (Monday): Oral exam assignment 1-2
   \pause
   \item Next week (Wednesday): Deadline mini-project proposal
+  \end{itemize}
 \end{frame}
 
 
@@ -92,23 +93,54 @@
   \only<6>{\includegraphics[width=8cm]{figs/fakel_postdrawspred2.pdf}}
 
 \end{frame}
-\begin{frame}
-
-\frametitle{Monte Carlo and Posterior Draws}
+\begin{frame}{Monte Carlo and posterior integrals}
 
   \begin{itemize}
-  \item Assume we can get draws from $p(\theta \mid y)$
+  \item Assume we can get posterior draws
+    \[
+      \theta^{(1)},\ldots,\theta^{(S)}
+      \stackrel{\mathrm{iid}}{\sim} p(\theta \mid y).
+    \]
   \pause
-  \item $\theta^{(s)}$ draws from $p(\theta \mid y)$ can be used
-    \begin{itemize}
-    \item<1-> for visualization
-    \item<2-> to approximate expectations (integrals)
-      \begin{align*}
-        E_{p(\theta \mid y)}[\theta] = \int \theta p(\theta \mid y) \approx \frac{1}{S}\sum_{s=1}^{S} \theta^{(s)}
-      \end{align*}
-    \end{itemize}
-    \item<3-> to approximate uncertainty intervals for $\theta$
+  \item Many posterior summaries are integrals:
+    \[
+      I_h = \E[h(\theta) \mid y]
+          = \int h(\theta)p(\theta \mid y)\,d\theta.
+    \]
+  \pause
+  \item Monte Carlo approximation:
+    \[
+      I_h \approx \hat{I}_S
+      = \frac{1}{S}\sum_{s=1}^{S} h(\theta^{(s)}).
+    \]
   \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Monte Carlo approximation}
+
+  Short (simplified) proof: \\(given $\E[Z_s \mid y] <\infty$ and  $\Var[Z_s \mid y]<\infty$):
+  \begin{enumerate}
+  \item Let $Z_s=h(\theta^{(s)})$. Then
+    $\E[Z_s \mid y]=I_h$.\pause
+  \item The average $\hat{I}_S=S^{-1}\sum_{s=1}^{S}Z_s$ has
+    $\E[\hat{I}_S \mid y]=\frac{S}{S} I_h = I_h$.\pause
+  \item Let $\Var[Z_s \mid y]=\sigma_h^2$, then
+    $\Var[\hat{I}_S \mid y]=\sigma_h^2/S$.\pause
+  \item By the law of large numbers, $\hat{I}_S \to^P I_h$ as $S$ grows.
+  \end{enumerate}
+\pause
+  Examples of $h(\theta)$:
+  \begin{align*}
+    h(\theta)&=\theta
+      && \text{posterior mean}\\
+    h(\theta)&=\mathbf{1}\{\theta>0\}
+      && \text{posterior probability}\\
+    h(\theta)&=g(\theta)
+      && \text{derived quantity}
+  \end{align*}
+
+
 
 \end{frame}
 
@@ -409,8 +441,9 @@
     \begin{align*}
     \uncover<1->{p(\mu|y) &\propto {\only<1>{\color{blue}}[(n-1)s^2+n(\mu-\bar{y})^2]^{-n/2}}\\}
     \uncover<2->{&\propto \left[1+\frac{n(\mu-\bar{y})^2}{(n-1)s^2}\right]^{-n/2}\\}
-    \uncover<3->{\color{gray} p(x|\mu_\star,\sigma_\star,\nu_\star) & \color{gray} = {\displaystyle {\frac {\Gamma {\left({\frac {\nu_\star +1}{2}}\right)}}{{\sqrt {\pi \nu_\star \sigma_\star^2}}\,\Gamma {\left({\frac {\nu_\star }{2}}\right)}}}\left(1+{\frac {1}{\nu_\star }\frac {(x - \mu_\star)^2}{\sigma_\star^2}}\right)^{-{\frac {\nu_\star +1}{2}}}}\\}
-    \uncover<4->{p(\mu \mid y) & = \underbrace{t_{n-1}(\mu \mid \bar{y},s^2/n)}_{\text{Student's $t$}}}
+    \uncover<3->{&= \left[1+\frac{1}{n-1}\frac{(\mu-\bar{y})^2}{s^2/n}\right]^{-(n-1+1)/2}\\}
+    \uncover<4->{\color{gray} p(x|\mu_\star,\sigma_\star,\nu_\star) & \color{gray} = {\displaystyle {\frac {\Gamma {\left({\frac {\nu_\star +1}{2}}\right)}}{{\sqrt {\pi \nu_\star \sigma_\star^2}}\,\Gamma {\left({\frac {\nu_\star }{2}}\right)}}}\left(1+{\frac {1}{\nu_\star }\frac {(x - \mu_\star)^2}{\sigma_\star^2}}\right)^{-{\frac {\nu_\star +1}{2}}}}\\}
+    \uncover<5->{p(\mu \mid y) & = \underbrace{t_{n-1}(\mu \mid \bar{y},s^2/n)}_{\text{Student's $t$}}}
     \end{align*}
 
 \end{frame}
@@ -538,10 +571,12 @@
       y_j \mid p_j &\sim \Bin(n_j,p_j), &
       p_j &\sim \Beta(a_j,b_j)
     \end{align*}
+    \pause
   \item Conjugacy gives
     \begin{align*}
       p_j \mid y_j \sim \Beta(a_j+y_j,b_j+n_j-y_j)
     \end{align*}
+    \pause
   \item Draw $p_0^{(s)}$ and $p_1^{(s)}$ independently, then compute
     \begin{align*}
       \mathrm{OR}^{(s)}
@@ -549,6 +584,7 @@
       \frac{p_1^{(s)}/(1-p_1^{(s)})}
            {p_0^{(s)}/(1-p_0^{(s)})}.
     \end{align*}
+    \pause
   \item Summarize the draws with a point estimate, posterior interval,
     histogram, and a prior sensitivity check.
   \end{itemize}
@@ -563,15 +599,18 @@
       y_{ij} \mid \mu_j,\sigma_j^2 &\sim \N(\mu_j,\sigma_j^2), &
       p(\mu_j,\sigma_j^2) &\propto \sigma_j^{-2}
     \end{align*}
+    \pause
   \item From the one-sample result:
     \begin{align*}
       \mu_j \mid y_j \sim
       t_{n_j-1}(\cdot \mid \bar{y}_j,s_j^2/n_j)
     \end{align*}
+    \pause
   \item Draw $\mu_1^{(s)}$ and $\mu_2^{(s)}$ independently, then compute
     \begin{align*}
       \mu_d^{(s)} = \mu_1^{(s)}-\mu_2^{(s)}.
     \end{align*}
+    \pause
   \item Summarize $p(\mu_d \mid y)$ with a point estimate, posterior
     interval, histogram, and probabilities of scientifically meaningful
     differences.

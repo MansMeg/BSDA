@@ -218,10 +218,7 @@
 
  \end{frame}
 
-\subsection{Numerical integration}
-\frame{\subsectionpage}
-
-\begin{frame}
+\begin{frame}<0>[label=backup_riemann]
 \frametitle{Riemann recap}
 
   Partition $[a,b]$ as
@@ -245,7 +242,7 @@
 
 \end{frame}
 
-\begin{frame}
+\begin{frame}<0>[label=backup_midpoint]
 \frametitle{Numerical integration}
 
 
@@ -268,7 +265,7 @@
 
 \end{frame}
 
-\begin{frame}
+\begin{frame}<0>[label=backup_quadrature_rules]
 
 \frametitle{Numerical integration}
 
@@ -302,7 +299,7 @@ dimension require $S^D$ grid points in $D$ dimensions
 %    \]
 %    \item
 
-\begin{frame}
+\begin{frame}<0>[label=backup_history]
 \frametitle{Monte Carlo: history}
 
   \begin{itemize}
@@ -424,7 +421,7 @@ dimension require $S^D$ grid points in $D$ dimensions
 \end{frame}
 
 
-\begin{frame}
+\begin{frame}<0>[label=backup_monte_carlo_uses]
 
 \frametitle{Monte Carlo}
 
@@ -572,7 +569,7 @@ dimension require $S^D$ grid points in $D$ dimensions
 
 \end{frame}
 
-\begin{frame}
+\begin{frame}<0>[label=backup_kilpis_data]
 
 \frametitle{Example: Kilpisjärvi summer temperature}
 
@@ -726,7 +723,7 @@ dimension require $S^D$ grid points in $D$ dimensions
 \end{frame}
 
 
-\begin{frame}
+\begin{frame}<0>[label=backup_variance_reduction]
 
 \frametitle{How many simulation draws are needed?}
 
@@ -741,7 +738,7 @@ dimension require $S^D$ grid points in $D$ dimensions
 
 \end{frame}
 
-\begin{frame}
+\begin{frame}<0>[label=backup_high_dimension]
 
 \frametitle{How many simulation draws are needed?}
 
@@ -755,9 +752,7 @@ dimension require $S^D$ grid points in $D$ dimensions
 
 \end{frame}
 
-
 \section{Direct sampling}
-\frame{\sectionpage}
 
 \begin{frame}
 \frametitle{Direct sampling}
@@ -777,7 +772,7 @@ dimension require $S^D$ grid points in $D$ dimensions
 
 \end{frame}
 
-\begin{frame}
+\begin{frame}<0>[label=backup_rng]
 
 \frametitle{Random number generators}
 
@@ -795,7 +790,7 @@ dimension require $S^D$ grid points in $D$ dimensions
 
 \end{frame}
 
-\begin{frame}
+\begin{frame}<0>[label=backup_box_muller]
 
 
 \frametitle{Direct simulation: example}
@@ -866,7 +861,6 @@ dimension require $S^D$ grid points in $D$ dimensions
 \end{frame}
 
 \subsection{Rejection sampling}
-\frame{\subsectionpage}
 
 \begin{frame}
 
@@ -919,7 +913,7 @@ dimension require $S^D$ grid points in $D$ dimensions
 
 \end{frame}
 
-\begin{frame}{Pair discussion: rejection proposal}
+\begin{frame}<0>[label=backup_rejection_discussion]{Pair discussion: rejection proposal}
 
   \begin{itemize}
   \item What happens if $Mg$ fails to cover the target everywhere?
@@ -940,7 +934,6 @@ dimension require $S^D$ grid points in $D$ dimensions
 \end{frame}
 
 \subsection{Importance sampling}
-\frame{\subsectionpage}
 
 \begin{frame}
 \frametitle{Importance sampling identity}
@@ -1119,7 +1112,7 @@ dimension require $S^D$ grid points in $D$ dimensions
 
 \end{frame}
 
-\begin{frame}
+\begin{frame}<0>[label=backup_bioassay_compare]
 
 \frametitle{Bioassay: grid and resampled draws}
 
@@ -1143,7 +1136,7 @@ dimension require $S^D$ grid points in $D$ dimensions
 \end{frame}
 
 
-\begin{frame}
+\begin{frame}<0>[label=backup_bioassay_resampled]
 
 \frametitle{Bioassay: importance-resampled draws}
 
@@ -1210,7 +1203,6 @@ dimension require $S^D$ grid points in $D$ dimensions
 
 
 \subsection{Pareto-smoothed importance sampling}
-\frame{\subsectionpage}
 
 \begin{frame}
 
@@ -1255,7 +1247,7 @@ dimension require $S^D$ grid points in $D$ dimensions
 
 \end{frame}
 
-\begin{frame}
+\begin{frame}<0>[label=backup_loo]
 
 \frametitle{Importance-sampling leave-one-out cross-validation}
 
@@ -1333,6 +1325,24 @@ MCMC & Transition rule & Dependent target draws & Requires convergence diagnosti
 
 \end{frame}
 
+
+\section{Additional material}
+\frame{\sectionpage}
+
+\againframe<1->{backup_riemann}
+\againframe<1->{backup_midpoint}
+\againframe<1->{backup_quadrature_rules}
+\againframe<1->{backup_history}
+\againframe<1->{backup_monte_carlo_uses}
+\againframe<1->{backup_kilpis_data}
+\againframe<1->{backup_variance_reduction}
+\againframe<1->{backup_high_dimension}
+\againframe<1->{backup_rng}
+\againframe<1->{backup_box_muller}
+\againframe<1->{backup_rejection_discussion}
+\againframe<1->{backup_bioassay_compare}
+\againframe<1->{backup_bioassay_resampled}
+\againframe<1->{backup_loo}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

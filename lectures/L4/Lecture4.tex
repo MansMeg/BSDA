@@ -62,7 +62,7 @@
 \frametitle{Notation}
 
   \begin{itemize}
-  \item In this chapter, generic $p(\theta)$ is used instead of
+  \item In this lecture, generic $p(\theta)$ is used instead of
     $p(\theta|y)$
     \pause
   \item An \uured{unnormalized density} is denoted by $q(\cdot)$
@@ -93,16 +93,16 @@
         {\color{uured} qr=rnorm(600)}
       \item Calculate the joint density:\\
         {\color{uured} prod(dnorm(qr)) $\rightarrow$} {\color{red} 0 (underflow)}
-      \item<2-> See log densities in the next slide
+      \item<2-> See log densities on the next slide
     \end{itemize}
     \item<3-> Probabilities extremely close to 1 may be rounded to 1
       \begin{itemize}
       \item<3-> Ratio of girl and boy babies
       \item<3-> {\color{uured} pbeta(0.5, 241945, 251527) $\rightarrow$} {\color{red}  1 (rounding)}
       \item<4-> {\color{uured} pbeta(0.5, 241945, 251527, lower.tail=FALSE) $\approx 1.15\cdot 10^{-42}$}\\
-        there is more accuracy near 0
+        computing the upper tail directly preserves precision
       \end{itemize}
-    \item<5->DEMO in R!
+    \item<5-> R demonstration
   \end{itemize}
 
 \end{frame}
@@ -122,17 +122,38 @@
       \item<2-> the log density is a sum and remains representable long
         after the product has underflowed
     \end{itemize}
-    \item<3-> Compute exp as late as possible
+    \item<3-> Exponentiate as late as possible
       \begin{itemize}
-      \item<4-> e.g. for $a>b$, compute $\log(\exp(a)+\exp(b)) = a + \log(1+\exp(b-a))$\\
+      \item<4-> For $a>b$, compute $\log(\exp(a)+\exp(b)) = a + \log(1+\exp(b-a))$\\
         \uncover<5->{
-          e.g. {\color{uured} $\log(\exp(800)+\exp(800)) \rightarrow$} {\color{red} Inf}}\\
+          {\color{uured} $\log(\exp(800)+\exp(800)) \rightarrow$} {\color{red} Inf}}\\
         \uncover<6->{but {\color{uured} $800 + \log(1 + \exp(800-800)) \approx$} {\color{uured} $800.69$}}
-      \item<7-> e.g. in Metropolis-algorithm (next week) compute the log of ratio of densities using the identity\\
+      \item<7-> In the Metropolis algorithm (next week), compute the log
+        density ratio using the identity\\
         $\log(a/b)=\log(a)-\log(b)$
     \end{itemize}
     \end{itemize}
   \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Pair discussion: log weights}
+
+  \begin{itemize}
+  \item Suppose the log weights are $-1000$, $-1001$, and $-1002$.
+  \item Direct exponentiation may underflow. How can we obtain normalized
+    weights without changing their relative sizes?
+  \end{itemize}
+
+  \uncover<2->{
+  \vspace{0.5\baselineskip}
+  {\small
+  {\color{uured}After discussion:}
+  \begin{itemize}
+  \item Subtract the largest log weight from every log weight.
+  \item Exponentiate the shifted values and divide by their sum.
+  \item The common shift cancels when the weights are normalized.
+  \end{itemize}}}
 
 \end{frame}
 
@@ -160,7 +181,7 @@
         E_{\color{blue} p(\theta|y)}[f(\theta)] \approx
         \frac{\sum_{s=1}^S \left[f(\theta^{(s)}){\color{uured}q(\theta^{(s)}|y)}\right]}{\sum_{s=1}^S{\color{uured}q(\theta^{(s)}|y)}}
       \end{align*}
-    \item<5-> Monte Carlo methods which can sample from
+    \item<5-> Monte Carlo methods that can sample from
       ${\color{blue}p(\theta^{(s)}|y)}$ using only
       ${\color{uured}q(\theta^{(s)}|y)}$
          \vspace{-0.5\baselineskip}
@@ -185,11 +206,11 @@
   \begin{itemize}
   \item Conjugate priors and analytic solutions (Ch 1-5)
   \pause
-  \item Numerical (deterministisc) integration (grid and quadrature, Ch 3, 10)
+  \item Numerical (deterministic) integration (grid and quadrature, Ch 3, 10)
   \pause
   \item Independent Monte Carlo, rejection and importance sampling (Ch 10)
   \pause
-  \item Markov Chain Monte Carlo (Ch 11-12)
+  \item Markov chain Monte Carlo (Ch 11-12)
   \pause
   \item (Distributional approximations, Ch 4, 13)
   \end{itemize}
@@ -247,28 +268,27 @@
 
 \end{frame}
 
-
 \begin{frame}
 
 \frametitle{Numerical integration}
 
 \begin{itemize}
-  \item Mid-point
+  \item Midpoint rule
 \begin{center}
   \includegraphics[width=6cm]{figs/Integration_rectangle.png}
 \end{center}
-\item<2-> A variations with smaller error: trapezoid
+\item<2-> Another rule with smaller error: trapezoidal rule
   \begin{center}
     \includegraphics[width=6cm]{figs/Integration_trapezoid.png}
   \end{center}
-\item<3-> Exists even better approaches (Simpsons rule)
-\item<4-> But theres a curse of dimensionality... \\
-we need $S^D$ gridpoints in $D$ dimensions
+\item<3-> Higher-order approaches also exist, such as Simpson's rule
+\item<4-> But there is a curse of dimensionality: $S$ points per
+dimension require $S^D$ grid points in $D$ dimensions
 \end{itemize}
 
 \end{frame}
 
-\section{Monte Carlo Methods}
+\section{Monte Carlo methods}
 \frame{\sectionpage}
 
 
@@ -283,7 +303,7 @@ we need $S^D$ gridpoints in $D$ dimensions
 %    \item
 
 \begin{frame}
-\frametitle{Monte Carlo - history}
+\frametitle{Monte Carlo: history}
 
   \begin{itemize}
   \item Used already before computers
@@ -294,14 +314,15 @@ we need $S^D$ gridpoints in $D$ dimensions
       \item Gosset (Student, 1908; hat)
     \end{itemize}
     \pause
-  \item "Monte Carlo method" term was proposed by Metropolis, von Neumann
-    or Ulam in the end of 1940s
+  \item The term ``Monte Carlo method'' emerged from work by Metropolis,
+    von Neumann, and Ulam in the late 1940s
      \begin{itemize}
-     \item they worked together in atomic bomb project
+     \item they worked together on the Manhattan Project
      \item Metropolis and Ulam, "The Monte Carlo Method", 1949
      \end{itemize}
     \pause
-   \item Bayesians started to have enough cheap computation time in 1990s
+   \item Monte Carlo methods became widely practical for Bayesian inference
+     as computing became cheaper in the 1990s
      \begin{itemize}
      \item BUGS project started 1989 (last OpenBUGS release 2014)
      \item Gelfand \& Smith, 1990
@@ -382,6 +403,26 @@ we need $S^D$ gridpoints in $D$ dimensions
 
 \end{frame}
 
+\begin{frame}{Pair discussion: Monte Carlo precision}
+
+  \begin{itemize}
+  \item You have $S=1000$ independent draws.
+  \item How many draws are needed to halve the MCSE of a posterior mean?
+  \item Does this reduce posterior uncertainty as well?
+  \end{itemize}
+
+  \uncover<2->{
+  \vspace{0.5\baselineskip}
+  {\small
+  {\color{uured}After discussion:}
+  \begin{itemize}
+  \item MCSE decreases as $S^{-1/2}$, so four times as many draws are needed.
+  \item We need $S=4000$ draws.
+  \item More draws reduce numerical error, not posterior uncertainty.
+  \end{itemize}}}
+
+\end{frame}
+
 
 \begin{frame}
 
@@ -390,16 +431,16 @@ we need $S^D$ gridpoints in $D$ dimensions
   \begin{itemize}
   \item Simulate draws from the target distribution $p(\theta|y)$
     \begin{itemize}
-    \item these draws can be treated as any observations
-    \item a collection of draws is a sample of size $S$
+    \item these draws can be analyzed like a random sample
+    \item a collection of draws has sample size $S$
     \end{itemize}
     \pause
   \item Use these draws, for example,
     \begin{itemize}
-    \item to compute means, deviations, quantiles
+    \item to compute means, standard deviations, and quantiles
     \item to draw histograms
     \item to marginalize
-    \item etc.
+    \item to estimate probabilities and derived quantities
     \end{itemize}
   \end{itemize}
 
@@ -434,19 +475,39 @@ we need $S^D$ gridpoints in $D$ dimensions
 
 \end{frame}
 
+\begin{frame}{Pair discussion: which integration method?}
+
+  \begin{itemize}
+  \item When would you prefer deterministic quadrature?
+  \item When would you prefer Monte Carlo integration?
+  \end{itemize}
+
+  \uncover<2->{
+  \vspace{0.5\baselineskip}
+  {\small
+  {\color{uured}After discussion:}
+  \begin{itemize}
+  \item Quadrature is attractive for smooth, low-dimensional integrals.
+  \item Monte Carlo is attractive in higher dimensions and when posterior
+    draws are already available.
+  \item The best choice depends on both dimension and the available structure.
+  \end{itemize}}}
+
+\end{frame}
+
 \begin{frame}
 \frametitle{Grid sampling and curse of dimensionality}
 
   \begin{itemize}
       \item 10 parameters
-      \item if we don't know beforehand where the posterior mass is
+      \item if we do not know beforehand where the posterior mass is
         \begin{itemize}
           \item need to choose wide box for the grid
           \item need to have enough grid points to get some of them
-            where essential mass is
+            in regions containing substantial posterior mass
         \end{itemize}
       \only<1>{{\color{uured} Can we do this?}}
-      \item e.g. 50 or 1000 grid points per dimension
+      \item for example, 50 or 1000 grid points per dimension
         \begin{itemize}
         \item[$\rightarrow$] $50^{10} \approx 10^{17}$ grid points
         \item[$\rightarrow$] $1000^{10} = 10^{30}$ grid points
@@ -469,10 +530,10 @@ we need $S^D$ gridpoints in $D$ dimensions
 
   \begin{itemize}
   \item How many draws or how big sample size $S$?
-  \item If draws are independent
+  \item For independent draws
     \begin{itemize}
-    \item usual methods to estimate the uncertainty due to a finite
-      number of observations (finite sample size)
+    \item standard sampling formulas quantify uncertainty caused by using
+      a finite number of draws
     \end{itemize}
   \item Markov chain Monte Carlo produces dependent draws (next week)
     \begin{itemize}
@@ -619,13 +680,13 @@ we need $S^D$ gridpoints in $D$ dimensions
   \begin{itemize}
   \item Too many digits make reading of the results slower and give
     false impression of the accuracy
-  \item<2-> Don't show digits which are just random noise
+  \item<2-> Do not show digits that are just random noise
     \begin{itemize}
     \item check what is the Monte Carlo standard error
     \end{itemize}
   \item<3-> Show meaningful digits given the posterior uncertainty
-  \item<4-> Example: The mean and 90\% central posterior interval for temperature
-     increase C$^\circ$/century based on posterior draws
+  \item<4-> Example: The mean and 90\% central posterior interval for the
+     temperature increase in C$^\circ$/century, based on posterior draws
      \begin{itemize}
      \item<5-> {\color{red} 2.050774 and $[$0.7472868 3.3017524$]$} (NO!)
      \item<6-> {\color{uured} 2.1 and $[$0.7 3.3$]$}
@@ -643,8 +704,7 @@ we need $S^D$ gridpoints in $D$ dimensions
 
   \begin{itemize}
 
-   \item Example: The probability that temp increase is
-     positive
+   \item Example: The probability that the temperature increase is positive
      \pause
      \begin{itemize}
      \item {\color{red} 0.9960000} (NO!)
@@ -652,14 +712,15 @@ we need $S^D$ gridpoints in $D$ dimensions
      \item {\color{uured} 1.00} (depends on the context)
      \pause
      \item With 4000 draws MCSE $\approx$ 0.002. We could report
-       that probability is {\color{uured} very likely larger than 0.99}, or sample
+       that the probability is {\color{uured} very likely larger than 0.99}, or sample
        more to justify reporting three digits
        \pause
-     \item For probabilities close to 0 or 1, consider also when
-       the model assumption justify certain accuracy
+     \item For probabilities close to 0 or 1, also consider whether the
+       model assumptions justify such precision
      \end{itemize}
      \pause
-   \item \uured{For your project}: Think for each reported value how many digits is sensible.
+   \item \uured{For your project}: For each reported value, choose a
+     sensible number of digits.
   \end{itemize}
 
 \end{frame}
@@ -670,11 +731,11 @@ we need $S^D$ gridpoints in $D$ dimensions
 \frametitle{How many simulation draws are needed?}
 
   \begin{itemize}
-  \item Less draws needed with
+  \item Fewer draws may be needed with
     \begin{itemize}
     \item deterministic methods
     \item Rao-Blackwellization (marginalisation)
-    \item variance reduction methods, e.g. control variates
+    \item variance-reduction methods, such as control variates
     \end{itemize}
   \end{itemize}
 
@@ -685,9 +746,10 @@ we need $S^D$ gridpoints in $D$ dimensions
 \frametitle{How many simulation draws are needed?}
 
   \begin{itemize}
-  \item Number of independent draws needed doesn't depend on the number of dimensions...
+  \item The $S^{-1/2}$ Monte Carlo rate does not explicitly depend on dimension
 \pause
-    \item ...but it may be difficult to obtain independent draws in high dimensional case
+    \item However, obtaining useful independent draws can be difficult in
+      high-dimensional problems
 
   \end{itemize}
 
@@ -701,15 +763,16 @@ we need $S^D$ gridpoints in $D$ dimensions
 \frametitle{Direct sampling}
 
   \begin{itemize}
-  \item Direct simulation from known pdf/pmf, e.g. $p(\theta|y)$ in conjugate case
+  \item Direct simulation from a known density or mass function, such as
+    $p(\theta\mid y)$ in a conjugate model
   \item Produces independent draws
     \begin{itemize}
-    \item Using analytic transformations of uniform random numbers
-      (e.g. appendix A)
+    \item analytic transformations of uniform random numbers
+      (e.g. Appendix A)
     \item factorization
-    \item numerical inverse-CDF
+    \item numerical inversion of the CDF
     \end{itemize}
-  \item {\color{uured} Problem}: restricted to limited set of models
+  \item {\color{uured}Limitation}: available only for a limited set of models
   \end{itemize}
 
 \end{frame}
@@ -719,15 +782,14 @@ we need $S^D$ gridpoints in $D$ dimensions
 \frametitle{Random number generators}
 
   \begin{itemize}
-  \item {\color{uured}How to sample from a pdf?}
+  \item {\color{uured}How do we sample from a probability distribution?}
   \pause
-  \item Good {\color{uured} psuedo} random number generators are sufficient for Bayesian inference
+  \item Good {\color{uured}pseudorandom} number generators are sufficient
+    for Bayesian inference
   \begin{itemize}
-    \item pseudo random generator uses deterministic algorithm to
-      produce a sequence which is difficult to make difference from
-      truly random sequence
-    \item modern software used for statistical analysis have good
-      pseudo RNGs
+    \item a pseudorandom generator uses a deterministic algorithm to
+      produce a sequence that behaves like a random sequence
+    \item modern statistical software uses high-quality generators
     \end{itemize}
   \end{itemize}
 
@@ -736,11 +798,11 @@ we need $S^D$ gridpoints in $D$ dimensions
 \begin{frame}
 
 
-\frametitle{Direct simulation: Example}
+\frametitle{Direct simulation: example}
 
   \begin{itemize}
-  \item Box-Muller -method:\\ If $U_1$ and $U_2$ are independent
-    draws from distribution $\U(0,1)$, and
+  \item Box--Muller method:\\ If $U_1$ and $U_2$ are independent
+    draws from $\U(0,1)$, and
     \begin{align*}
       X_1 & = \sqrt{-2\log(U_1)}\cos(2\pi U_2) \\
       X_2 & = \sqrt{-2\log(U_1)}\sin(2\pi U_2)
@@ -749,9 +811,9 @@ we need $S^D$ gridpoints in $D$ dimensions
     $\N(0,1)$
     \pause
     \begin{itemize}
-      \item not the fastest method due to trigonometric computations
-      \item for normal distribution more than ten different methods
-      \item e.g. R uses inverse-CDF
+      \item it is not the fastest method because it requires trigonometric functions
+      \item many alternative methods exist for the normal distribution
+      \item R uses numerical inversion by default
     \end{itemize}
   \end{itemize}
 
@@ -857,6 +919,26 @@ we need $S^D$ gridpoints in $D$ dimensions
 
 \end{frame}
 
+\begin{frame}{Pair discussion: rejection proposal}
+
+  \begin{itemize}
+  \item What happens if $Mg$ fails to cover the target everywhere?
+  \item What happens if the envelope is valid but much wider than the target?
+  \end{itemize}
+
+  \uncover<2->{
+  \vspace{0.5\baselineskip}
+  {\small
+  {\color{uured}After discussion:}
+  \begin{itemize}
+  \item Without full coverage, the algorithm is invalid and misses part of
+    the target.
+  \item An overly wide envelope is valid but gives a low acceptance rate.
+  \item A good envelope covers the target as tightly as possible.
+  \end{itemize}}}
+
+\end{frame}
+
 \subsection{Importance sampling}
 \frame{\subsectionpage}
 
@@ -912,6 +994,26 @@ we need $S^D$ gridpoints in $D$ dimensions
 
    \only<3>{The estimator is generally biased for finite $S$, but
      consistent as $S\to\infty$.}
+
+\end{frame}
+
+\begin{frame}{Pair discussion: proposal tails}
+
+  \begin{itemize}
+  \item The target has heavier tails than the proposal.
+  \item What happens to the importance weights in the tails?
+  \item Would a slightly wider proposal be safer or less safe?
+  \end{itemize}
+
+  \uncover<2->{
+  \vspace{0.5\baselineskip}
+  {\small
+  {\color{uured}After discussion:}
+  \begin{itemize}
+  \item Rare tail draws receive extremely large weights.
+  \item A few draws may dominate, producing low ESS and unstable estimates.
+  \item A proposal with sufficiently heavy tails is usually safer.
+  \end{itemize}}}
 
 \end{frame}
 
@@ -1004,13 +1106,13 @@ we need $S^D$ gridpoints in $D$ dimensions
       \includegraphics[width=2.5cm]{figs/bioassayis2s.pdf}
       \includegraphics[width=2.5cm]{figs/bioassayis2h.pdf}\\}
     \only<2-3>{Normal approximation is discussed more in BDA3 Ch 4\\}
-    \only<3>{But the normal approximation is not that good here:\\ Grid sd(LD50) $\approx$ 0.1, Normal sd(LD50) $\approx$ .75!}
+    \only<3>{But the normal approximation is not accurate here:\\ Grid SD(LD50) $\approx$ 0.1, normal SD(LD50) $\approx$ 0.75}
       \only<4->{
         \makebox[0cm][t]{\hspace{-0.5cm}\rotatebox{90}{\hspace{1cm}IR}}
       \includegraphics[width=2.5cm]{figs/bioassayis3d.pdf}
       \includegraphics[width=2.5cm]{figs/bioassayis3s.pdf}
       \includegraphics[width=2.5cm]{figs/bioassayis3h.pdf}\\}
-    \only<5->{Grid sd(LD50) $\approx$ 0.1, IR sd(LD50) $\approx$ 0.1}
+    \only<5->{Grid SD(LD50) $\approx$ 0.1, IR SD(LD50) $\approx$ 0.1}
     \end{center}
      \end{minipage}
    }
@@ -1064,6 +1166,27 @@ we need $S^D$ gridpoints in $D$ dimensions
 
 \end{frame}
 
+\begin{frame}{Pair discussion: can we trust the weights?}
+
+  \begin{itemize}
+  \item Most normalized weights are near zero, while a few are much larger.
+  \item What does this imply about the estimate?
+  \item What should we inspect before trusting it?
+  \end{itemize}
+
+  \uncover<2->{
+  \vspace{0.5\baselineskip}
+  {\small
+  {\color{uured}After discussion:}
+  \begin{itemize}
+  \item Only a small number of draws contribute substantial information.
+  \item The estimate may be sensitive to a few draws.
+  \item Inspect ESS and the Pareto $\widehat{k}$ diagnostic; improve the
+    proposal if necessary.
+  \end{itemize}}}
+
+\end{frame}
+
 \begin{frame}
 
 \frametitle{Bioassay: effective sample size}
@@ -1086,7 +1209,7 @@ we need $S^D$ gridpoints in $D$ dimensions
 
 
 
-\subsection{Pareto-Smoothed Importance Sampling}
+\subsection{Pareto-smoothed importance sampling}
 \frame{\subsectionpage}
 
 \begin{frame}
@@ -1134,13 +1257,13 @@ we need $S^D$ gridpoints in $D$ dimensions
 
 \begin{frame}
 
-\frametitle{Importance sampling leave-one-out cross-validation}
+\frametitle{Importance-sampling leave-one-out cross-validation}
 
   \begin{itemize}
-  \item Later in the course you will learn how $p(\theta|y)$ can be
-    used as a proposal distribution for $p(\theta|y_{-i})$
+  \item Later in the course, we use $p(\theta\mid y)$ as a proposal
+    distribution for $p(\theta\mid y_{-i})$
     \begin{itemize}
-    \item which allows fast computation of leave-one-out cross-validation
+    \item this allows fast approximation of leave-one-out cross-validation
       \begin{align*}
         p(y_i|y_{-i})=\int p(y_i|\theta) p(\theta|y_{-i}) d\theta
       \end{align*}
@@ -1160,6 +1283,30 @@ we need $S^D$ gridpoints in $D$ dimensions
 %  \end{itemize}
 %
 %\end{frame}
+
+\begin{frame}
+\frametitle{Recap: simulation methods}
+
+{\small
+\begin{tabular}{@{}p{1.7cm}p{1.8cm}p{2.2cm}p{2.7cm}@{}}
+\textbf{Method} & \textbf{Draw from} & \textbf{Output} & \textbf{Main limitation} \\
+\hline
+Direct & Target $p$ & Independent, equal-weight draws & Available for few models \\[1mm]
+Rejection & Proposal $g$ & Accepted independent target draws & Acceptance can be very low \\[1mm]
+Importance & Proposal $g$ & Weighted proposal draws & A few weights may dominate \\[1mm]
+MCMC & Transition rule & Dependent target draws & Requires convergence diagnostics
+\end{tabular}
+}
+
+\pause
+\vspace{0.8\baselineskip}
+\begin{itemize}
+  \item There is no universally best method: efficiency depends on the
+    target, dimension, proposal, and quantity being estimated.
+  \item Always assess Monte Carlo accuracy with appropriate diagnostics.
+\end{itemize}
+
+\end{frame}
 
 \begin{frame}
 \frametitle{Next week: Markov chain Monte Carlo (MCMC)}

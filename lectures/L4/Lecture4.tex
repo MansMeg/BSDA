@@ -65,10 +65,12 @@
   \item In this chapter, generic $p(\theta)$ is used instead of
     $p(\theta|y)$
     \pause
-  \item \uured{Unnormalized} distribution is denoted by $q(\cdot)$
+  \item An \uured{unnormalized density} is denoted by $q(\cdot)$
     \begin{itemize}
-    \item $\int q(\theta) d\theta \neq 1$, but finite (i.e. $\int q(\theta) d\theta \le \infty$
-    \item $q(\cdot) \propto p(\cdot)$
+    \item Its normalizing constant must satisfy
+      $Z=\int q(\theta)\,d\theta$, with $0<Z<\infty$
+    \item The normalized density is
+      $p(\theta)=q(\theta)/Z$, equivalently $q(\theta)\propto p(\theta)$
     \end{itemize}
     \pause
   \item \uured{Proposal} distribution is denoted by $g(\cdot)$
@@ -202,20 +204,23 @@
 \begin{frame}
 \frametitle{Riemann recap}
 
-
-  Remember the Riemann sum (where $x_{s}^{*}$:
-     \begin{align*}
-     {\displaystyle I_{a}^{b}=\sum _{s=1}^{S}f(x_{s}^{*})\,\Delta x_{s}\,,}
-       \end{align*}
-      where
-      \begin{align*}
-      {\displaystyle \Delta x={\frac {b-a}{S}} \text{ and } {\displaystyle x_{s}^{*}\in [x_{i-s},x_{s}]}}
-      \end{align*}
-       \pause
-  And the Riemann integral:
-        \begin{align*}
-         {\displaystyle \int _{a}^{b}f(x)\,dx=\lim _{\|\Delta x\|\rightarrow 0}\sum _{s=1}^{S}f(x_{i}^{*})\,\Delta x_{i},}
-    \end{align*}
+  Partition $[a,b]$ as
+  \[
+    a=x_0<x_1<\cdots<x_S=b,
+    \qquad \Delta x_s=x_s-x_{s-1},
+  \]
+  and choose one point $x_s^*\in[x_{s-1},x_s]$ in each subinterval.
+  The corresponding \uured{Riemann sum} is
+  \[
+    R_S=\sum_{s=1}^{S} f(x_s^*)\,\Delta x_s.
+  \]
+  \pause
+  The \uured{Riemann integral} is the limit
+  \[
+    \int_a^b f(x)\,dx
+    =\lim_{\max_s \Delta x_s\to 0}
+      \sum_{s=1}^{S} f(x_s^*)\,\Delta x_s.
+  \]
 
 
 \end{frame}
@@ -225,14 +230,18 @@
 
 
   \begin{itemize}
-    \item Now lets use the Riemann sum to approximate the Riemann integral!
+    \item Use a finite Riemann sum to approximate the integral:
     \pause
     \begin{align*}
          {\displaystyle \int _{a}^{b}f(x)\,dx \approx \sum _{s=1}^{S}f(x_{s}^{*})\,\Delta x_{s},}
     \end{align*}
-    \item A simple $x_{s}^{*}$ is to use the \uured{midpoint}:
+    \item For $S$ equal-width subintervals,
+      $\Delta x=(b-a)/S$.
+    \item A common choice is the \uured{midpoint}:
     \[
-    x_s^* = a + \left(s + \tfrac{1}{2}\right)\underbrace{\frac{b-a}{S}}_{\Delta x_{s}}
+      x_s^* = \frac{x_{s-1}+x_s}{2}
+      = a + \left(s-\tfrac{1}{2}\right)\Delta x,
+      \qquad s=1,\ldots,S.
     \]
 
   \end{itemize}

@@ -789,14 +789,16 @@ we need $S^D$ gridpoints in $D$ dimensions
 
 \begin{frame}
 
-\frametitle{Effective sampling size}
+\frametitle{Effective sample size}
 
   \begin{itemize}
-    \item Efficient sampling size $S_\text{eff}$ the number of samples using direct methods
-    \item Common with {\color{uured} weighted} or {\color{uured} correlated} samples
+    \item The effective sample size $S_\text{eff}$ compares Monte Carlo
+      precision with that of independent, equally weighted draws
+    \item For $S$ independent draws, $S_\text{eff}=S$
     \pause
-    \item Indirect methods usually have an $S_\text{eff} < S$
-    \item Informally an indication of performance of method
+    \item Weighted or correlated draws usually have $S_\text{eff}<S$
+    \item A larger $S_\text{eff}$ means more precise estimates for the
+      same number of stored draws
   \end{itemize}
 
 \end{frame}
@@ -810,16 +812,24 @@ we need $S^D$ gridpoints in $D$ dimensions
 
     \vspace{-.3\baselineskip}
   \begin{itemize}
-  \item[-] Proposal ($g(\theta)$) forms envelope over the target distribution ${q(\theta|y)}/{M g(\theta)} \leq 1$
-  \item[-] Draw from the proposal and accept with probability ${q(\theta|y)}/{M g(\theta)}$
-  \item<3>[-] Common for truncated distributions
+  \item[-] Let $p(\theta)=q(\theta)/Z$ be the target density
+  \item[-] Choose a proposal $g$ and a finite $M$ such that
+    \[
+      q(\theta)\leq M g(\theta) \quad \text{for all }\theta
+    \]
+  \item[-] Intuitively, scale $g$ vertically by $M$ until $Mg$ covers
+    $q$ everywhere. Then $q(\theta)/(Mg(\theta))$ is always between 0 and 1.
+  \item<2->[-] Draw $\theta^*\sim g$ and $u\sim\U(0,1)$; accept if
+    \[
+      u\leq\frac{q(\theta^*)}{M g(\theta^*)}
+    \]
   \end{itemize}
 
   \begin{center}
     \vspace{-1.6\baselineskip}
-    \only<1>{\includegraphics[width=8cm]{figs/rejection1.pdf}}
-    \only<2>{\includegraphics[width=8cm]{figs/rejection2.pdf}}
-    \only<3>{\includegraphics[width=8cm]{figs/rejection3.pdf}}
+    \only<1>{\includegraphics[width=6cm]{figs/rejection1.pdf}}
+    \only<2>{\includegraphics[width=6cm]{figs/rejection2.pdf}}
+    \only<3->{\includegraphics[width=6cm]{figs/rejection3.pdf}}
   \end{center}
 
 \end{frame}

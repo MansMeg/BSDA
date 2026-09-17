@@ -835,19 +835,23 @@ we need $S^D$ gridpoints in $D$ dimensions
 \end{frame}
 
 \begin{frame}
-\frametitle{Rejection sampling}
+\frametitle{Why rejection sampling works}
 
 \begin{itemize}
-  \item The number of accepted draws is the effective sample size $S_\text{eff}$
-
-  \only<1>{{\color{uured} When will this be work/not work (i.e. give high/low $S_\text{eff}$)?}}
+  \item The density of an accepted proposal is proportional to
+    \[
+      \underbrace{g(\theta)}_{\text{proposal density}}
+      \underbrace{\frac{q(\theta)}{M g(\theta)}}_{\text{acceptance probability}}
+      =\frac{q(\theta)}{M}\propto p(\theta).
+    \]
+  \item<2-> Thus the accepted values are independent draws from the target
+  \item<3-> If $A$ of $T$ proposals are accepted, their effective sample
+    size is $A$, while $A/T$ estimates the acceptance rate $Z/M$
+  \only<3>{\\{\color{uured} When will the acceptance rate be high or low?}}
   \pause
     \begin{itemize}
-    \item with bad proposal distribution may require a lot of trials
-    \item selection of good proposal gets very difficult when
-      the number of dimensions increase
-%      \pause
-%    \item reliable diagnostics and thus can be a useful part
+    \item<4-> A tight envelope gives a high acceptance rate
+    \item<4-> Finding a good envelope becomes difficult as dimension increases
     \end{itemize}
   \end{itemize}
 
@@ -857,12 +861,39 @@ we need $S^D$ gridpoints in $D$ dimensions
 \frame{\subsectionpage}
 
 \begin{frame}
+\frametitle{Importance sampling identity}
 
-\frametitle{Importance sampling}
+  If we can evaluate the normalized target $p$, then
+  \begin{align*}
+    w(\theta)&=\frac{p(\theta)}{g(\theta)},\\
+    \E_p[f(\theta)]
+    &=\int f(\theta)w(\theta)g(\theta)\,d\theta
+      =\E_g[w(\theta)f(\theta)].
+  \end{align*}
+  \pause
+  Thus, for $\theta^{(s)}\sim g$,
+  \[
+    \widehat I_S=\frac{1}{S}\sum_{s=1}^S
+      w(\theta^{(s)})f(\theta^{(s)})
+  \]
+  is an unbiased estimator of $\E_p[f(\theta)]$.
+  \pause
+  If only $q(\theta)=Zp(\theta)$ is known, the unknown $Z$ cancels:
+  \[
+    \E_p[f(\theta)]
+    =\frac{\E_g[(q/g)f]}{\E_g[q/g]}.
+  \]
+
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Self-normalized importance sampling}
 
   \begin{itemize}
      \vspace{-.5\baselineskip}
-   \item[-] Proposal does not need to have a higher value everywhere
+   \item[-] Draw from $g$ and compute
+     $w_s=q(\theta^{(s)})/g(\theta^{(s)})$
    \end{itemize}
    \begin{center}
      \vspace{-1\baselineskip}
@@ -871,12 +902,16 @@ we need $S^D$ gridpoints in $D$ dimensions
      \vspace{-1\baselineskip}
      \only<2->{
    \begin{eqnarray*}
-      \E[f(\theta)] \approx \frac{\sum_s w_s f(\theta^{(s)})}{\sum_s
-      w_s}, \qquad \text{where} \quad
-      w_s =  \frac{q(\theta^{(s)})}{g(\theta^{(s)})} \qquad
+      \widehat{\E_p[f(\theta)]}
+      = \sum_{s=1}^S \widetilde w_s f(\theta^{(s)}),
+      \qquad
+      \widetilde w_s=\frac{w_s}{\sum_{r=1}^S w_r}
    \end{eqnarray*}
    }
    \end{center}
+
+   \only<3>{The estimator is generally biased for finite $S$, but
+     consistent as $S\to\infty$.}
 
 \end{frame}
 

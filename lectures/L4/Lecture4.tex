@@ -408,24 +408,28 @@ we need $S^D$ gridpoints in $D$ dimensions
 \begin{frame}
 
 
-\frametitle{Monte Carlo vs. Deterministic Methods}
+\frametitle{Monte Carlo vs. deterministic integration}
 
   \begin{itemize}
-  \item Monte Carlo (approximation) error is $\propto S^{-1/2}$
-  \item Midpoint rule error is $\propto S^{-2}$
-  \item Trapezoidal rule error is $\propto S^{-2}$
-  \item Simpson rule error is $\propto S^{-4}$
-  \item Monte Carlo is bad (even worse than midpoint approximation)
-  \only<1>{\\{\color{uured}Why use Monte Carlo integration?}}
+  \item In one dimension, for a sufficiently smooth function, typical
+    error rates with $N$ evaluations are
+    \[
+      \begin{array}{c|c}
+        \text{Method} & \text{Error rate} \\
+        \hline
+        \text{Midpoint or trapezoidal rule} & N^{-2} \\
+        \text{Simpson's rule} & N^{-4} \\
+        \text{Monte Carlo} & N^{-1/2}
+      \end{array}
+    \]
+  \item Deterministic integration is therefore usually preferable for
+    a smooth, low-dimensional problem.
+  \only<1>{\\{\color{uured}Why do we still need Monte Carlo?}}
   \pause
-  \item Monte Carlo has the same error irrespective of dimension $D$, i.e. $S_D = S$
-  \item Numerical methods create a grid with $S_D = S^D$
-  \only<2>{\\{\color{uured} When is Monte Carlo a better approach than Simpsons?}}
-  \pause
-  \[
-  (S_D^\frac{1}{D})^{-4} = S_D^{-\frac{1}{2}}\,,
-  \]
-  i.e. for $d > 8$ Monte Carlo is better.
+  \item A grid with $m$ points in each of $D$ dimensions requires
+    $N=m^D$ evaluations: its cost grows exponentially with $D$.
+  \item<3-> The Monte Carlo rate $N^{-1/2}$ does not explicitly depend on
+    $D$, which makes Monte Carlo attractive in higher dimensions.
   \end{itemize}
 
 \end{frame}
@@ -444,17 +448,15 @@ we need $S^D$ gridpoints in $D$ dimensions
       \only<1>{{\color{uured} Can we do this?}}
       \item e.g. 50 or 1000 grid points per dimension
         \begin{itemize}
-        \item[$\rightarrow$] 50$^{10} \approx$ 1e17 grid points
-        \item[$\rightarrow$] 1000$^{10} \approx$ 1e30 grid points
+        \item[$\rightarrow$] $50^{10} \approx 10^{17}$ grid points
+        \item[$\rightarrow$] $1000^{10} = 10^{30}$ grid points
         \end{itemize}
       \pause
-      \item R and my current laptop can compute density of normal
-        distribution about 20 million times per second
+      \item Even at 20 million density evaluations per second:
         \begin{itemize}
-        \item[$\rightarrow$] evaluation in 1e17 grid points would take
-           150 years %triljoona vuotta
-        \item[$\rightarrow$] evaluation in 1e30 grid points would take
-           1 500 billion years %triljoona vuotta
+        \item[$\rightarrow$] $10^{17}$ evaluations would take about 150 years
+        \item[$\rightarrow$] $10^{30}$ evaluations would take about
+          $1.5\cdot 10^{15}$ years
         \end{itemize}
  \end{itemize}
 

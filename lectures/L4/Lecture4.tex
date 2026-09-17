@@ -917,45 +917,77 @@ we need $S^D$ gridpoints in $D$ dimensions
 
 \begin{frame}
 
-\frametitle{Importance sampling}
+\frametitle{Choosing a proposal}
 
   \begin{itemize}
-  \item Resampling using normalized importance weights can be used to
-    pick a smaller number of draws with uniform weights
+  \item The proposal must satisfy
+    \[
+      g(\theta)>0 \quad \text{wherever } p(\theta)>0
+    \]
+    Otherwise, important parts of the target can never be sampled.
     \pause
-  \item Selection of good proposal gets more difficult when the
-      number of dimensions increase
-      \pause
-    \item Often used to correct distributional approximations and leave-one-out cross-validation
+  \item A good proposal covers the target and gives similar weights
+    \begin{itemize}
+      \item tails that are too light can produce rare, extremely large weights
+      \item large weight variation gives unstable estimates and low effective
+        sample size
+    \end{itemize}
+    \pause
+  \item Finding a good proposal becomes harder as dimension increases
   \end{itemize}
 
 \end{frame}
 
 \begin{frame}
 
-\frametitle{Importance sampling}
+\frametitle{Weight variability}
 
   \begin{itemize}
-  \item Variation of the weights affect the {\color{uured} effective sample size}
+  \item Variation in the weights affects the {\color{uured} effective sample size}
     \begin{itemize}
-    \item if single weight dominates, we have effectively one sample
+    \item if one weight dominates, we have effectively one draw
     \item if all weights are equal, we have effectively $S$ draws
     \end{itemize}
-    \only<1>{{\color{uured}What does this mean? What is a good proposal $g(\theta)$?}}
+    \only<1>{{\color{uured}Which weight pattern would you trust more?}}
     \pause
-  \item Central limit theorem holds only if variance of the weight
-    distribution is finite
-%  \item See Vehtari, Simpson, Gelman, Yuling and Gabry (2019). Pareto
-%    smoothed importance sampling. arXiv preprint arXiv:1507.02646,
-%    \url{https://arxiv.org/abs/1507.02646} for improved diagnostics
-%    and stability.
+  \item For the usual central limit theorem, the weighted quantity must
+    have finite variance; for self-normalized importance sampling this
+    requires
+    \[
+      \E_g\!\left[w(\theta)^2
+      \bigl(f(\theta)-\E_p[f(\theta)]\bigr)^2\right]<\infty.
+    \]
+  \item<3-> Heavy-tailed weights can violate this condition even when
+    $f(\theta)$ itself has finite variance under the target.
   \end{itemize}
 
 \end{frame}
 
 \begin{frame}
+\frametitle{Bioassay importance-sampling workflow}
 
-\frametitle{Example: Importance sampling in Bioassay}
+  \begin{enumerate}
+    \item Draw $(\alpha^{(s)},\beta^{(s)})$ from the bivariate normal
+      proposal $g$
+    \item Compute log weights
+      $\log w_s=\log q(\alpha^{(s)},\beta^{(s)})-
+      \log g(\alpha^{(s)},\beta^{(s)})$
+    \item Stabilize and normalize the weights so that
+      $\sum_s\widetilde w_s=1$
+    \item Compute weighted posterior summaries and inspect the weights
+      and $S_{\rm eff}$
+    \item Optionally resample draws with probabilities $\widetilde w_s$
+  \end{enumerate}
+
+  \pause
+  \uured{IR} in the following figures means \uured{importance resampling}:
+  resampling the proposal draws using the normalized weights.
+
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Bioassay: proposal and resampled draws}
 
    \vspace{-.5\baselineskip}
    \makebox[9cm][t]{
@@ -987,7 +1019,7 @@ we need $S^D$ gridpoints in $D$ dimensions
 
 \begin{frame}
 
-\frametitle{Example: Importance sampling in Bioassay}
+\frametitle{Bioassay: grid and resampled draws}
 
 
    \makebox[8cm][t]{
@@ -1000,7 +1032,7 @@ we need $S^D$ gridpoints in $D$ dimensions
      \end{minipage}
      \begin{minipage}[t][4cm][t]{4cm}
        \begin{center}
-       IR\\
+       IR (resampled)\\
        \includegraphics[width=4cm]{figs/bioassayis3s.pdf}
   \end{center}
   \end{minipage}
@@ -1011,10 +1043,10 @@ we need $S^D$ gridpoints in $D$ dimensions
 
 \begin{frame}
 
-\frametitle{Example: Importance sampling in Bioassay}
+\frametitle{Bioassay: importance-resampled draws}
 
        \begin{center}
-       IR\\
+       IR (resampled)\\
        \includegraphics[width=8cm]{figs/bioassayis3s.pdf}
   \end{center}
 
@@ -1022,7 +1054,7 @@ we need $S^D$ gridpoints in $D$ dimensions
 
 \begin{frame}
 
-\frametitle{Example: Importance sampling in Bioassay}
+\frametitle{Bioassay: importance weights}
 
        \begin{center}
        \only<1>{\includegraphics[width=8cm]{figs/bioassayisw1.pdf}}
@@ -1034,7 +1066,7 @@ we need $S^D$ gridpoints in $D$ dimensions
 
 \begin{frame}
 
-\frametitle{Example: Importance sampling in Bioassay}
+\frametitle{Bioassay: effective sample size}
        \begin{center}
          \vspace{-\baselineskip}
        \includegraphics[width=8cm]{figs/bioassayisw2.pdf}\\
@@ -1057,21 +1089,48 @@ we need $S^D$ gridpoints in $D$ dimensions
 \subsection{Pareto-Smoothed Importance Sampling}
 \frame{\subsectionpage}
 
-% TODO: Add more math here
+\begin{frame}
+
+\frametitle{Pareto-smoothed importance sampling}
+
+  \begin{itemize}
+  \item Raw importance sampling can be dominated by a few very large weights
+  \pause
+  \item PSIS fits a generalized Pareto distribution to the upper tail
+    of the importance ratios
+  \item It replaces the largest ratios with smoothed values from the fitted tail
+  \pause
+  \item This usually reduces variability, at the cost of a small amount of bias
+  \item PSIS also provides improved estimates of effective sample size and MCSE
+  \end{itemize}
+
+  \vfill
+  {\tiny Vehtari, Simpson, Gelman, Yao, and Gabry (2024)}
+\end{frame}
 
 \begin{frame}
 
-\frametitle{Pareto smoothed importance sampling}
+\frametitle{The Pareto $\widehat{k}$ diagnostic}
 
   \begin{itemize}
-  \item Pareto-Smoothed Importance sampling smooth the weights according to a Generalized Pareto($k$) distribution
-  \item Pareto-$k$ diagnostic estimate the number of existing moments ($\lfloor 1/k \rfloor$)
-  \item<2-> Finite variance and central limit theorem for $k<1/2$
-  \item<3-> Finite mean and generalized central limit theorem for $k<1$,
-    but pre-asymptotic constant grows impractically large for $k>0.7$
+  \item $\widehat{k}$ describes the heaviness of the upper tail of the
+    importance ratios
+    \begin{itemize}
+      \item smaller $\widehat{k}$ means more stable importance sampling
+      \item larger $\widehat{k}$ means that a few ratios dominate
+    \end{itemize}
+  \pause
+  \item Current guidance treats estimates as reliable when
+    \[
+      \widehat{k}<\min\!\left(1-\frac{1}{\log_{10}S},\,0.7\right)
+    \]
+  \item<3-> Above this threshold, the estimate and its MCSE may be unreliable;
+    investigate the proposal or use a more robust computation
+  \item<4-> For intuition: a generalized Pareto tail has finite variance
+    when $k<1/2$; when $k\geq1$, even its mean does not exist
   \end{itemize}
+
 \end{frame}
-% \\ \uncover<2->{&\text{Pareto-$k$ diagnostic preferably $<$ 0.7: }}\uncover<3->{ \hat{k} \approx 0.57}
 
 \begin{frame}
 

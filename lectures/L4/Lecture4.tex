@@ -93,16 +93,16 @@
         {\color{uured} qr=rnorm(600)}
       \item Calculate the joint density:\\
         {\color{uured} prod(dnorm(qr)) $\rightarrow$} {\color{red} 0 (underflow)}
-      \item<2-> See log densities on the next slide
+      \\ (See log densities on the next slide)
     \end{itemize}
-    \item<3-> Probabilities extremely close to 1 may be rounded to 1
+    \item<2-> Probabilities extremely close to 1 may be rounded to 1
       \begin{itemize}
-      \item<3-> Ratio of girl and boy babies
-      \item<3-> {\color{uured} pbeta(0.5, 241945, 251527) $\rightarrow$} {\color{red}  1 (rounding)}
-      \item<4-> {\color{uured} pbeta(0.5, 241945, 251527, lower.tail=FALSE) $\approx 1.15\cdot 10^{-42}$}\\
+      \item<2-> Ratio of girl and boy babies
+      \item<2-> {\color{uured} pbeta(0.5, 241945, 251527) $\rightarrow$} {\color{red}  1 (rounding)}
+      \item<3-> {\color{uured} pbeta(0.5, 241945, 251527, lower.tail=FALSE) $\approx 1.15\cdot 10^{-42}$}\\
         computing the upper tail directly preserves precision
       \end{itemize}
-    \item<5-> R demonstration
+    % \item<5-> R demonstration
   \end{itemize}
 
 \end{frame}
@@ -140,7 +140,7 @@
 \begin{frame}{Pair discussion: log weights}
 
   \begin{itemize}
-  \item Suppose the log weights are $-1000$, $-1001$, and $-1002$.
+  \item Suppose the log weights are $\log(w) = (-1000, -1001, -1002)$.
   \item Direct exponentiation may underflow. How can we obtain normalized
     weights without changing their relative sizes?
   \end{itemize}
@@ -154,6 +154,17 @@
   \item Exponentiate the shifted values and divide by their sum.
   \item The common shift cancels when the weights are normalized.
   \end{itemize}}}
+
+  \uncover<3->{
+  \vspace{0.25\baselineskip}
+  {\small
+  {\color{uured}Numerical calculation:}
+  \begin{align*}
+    (-1000,-1001,-1002)-(-1000)&=(0,-1,-2),\\
+    \exp(0,-1,-2)&\approx(1,0.368,0.135),\\
+    \widetilde{w}&\approx(0.665,0.245,0.090).
+  \end{align*}
+  The normalized weights are unchanged by the common shift.}}
 
 \end{frame}
 
@@ -395,7 +406,7 @@ dimension require $S^D$ grid points in $D$ dimensions
       \xrightarrow{d}\N(0,\sigma_h^2).
     \]
   \item<4-> Thus the typical Monte Carlo error decreases at rate
-    $S^{-1/2}$: halving MCSE requires four times as many draws.
+    $S^{-1/2}$.
 \end{itemize}
 
 \end{frame}
@@ -503,7 +514,7 @@ dimension require $S^D$ grid points in $D$ dimensions
           \item need to have enough grid points to get some of them
             in regions containing substantial posterior mass
         \end{itemize}
-      \only<1>{{\color{uured} Can we do this?}}
+      \only<1>{{\color{uured} Can we do this with a laptop (20m evals per second)?}}
       \item for example, 50 or 1000 grid points per dimension
         \begin{itemize}
         \item[$\rightarrow$] $50^{10} \approx 10^{17}$ grid points
@@ -645,13 +656,35 @@ dimension require $S^D$ grid points in $D$ dimensions
     \pause
   \item If $S=100$ and $p_A\approx0.5$, MCSE is $0.05$, or about
     5 percentage points. An MCSE of $0.01$ requires about 2500 draws.
-    \pause
-  \item Small probabilities require many draws
-    \begin{itemize}
-    \item the expected number of draws in $A$ is $S p_A$, so we need
-      $S$ much larger than $1/p_A$ for a stable estimate
-    \end{itemize}
 \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Small probabilities require many draws}
+
+  Let $N_A$ be the number of posterior draws that fall in $A$. Then
+  \[
+    N_A\sim\operatorname{Binomial}(S,p_A),
+    \qquad \E(N_A)=S p_A.
+  \]
+  \pause
+  \begin{itemize}
+  \item If $S=1/p_A$, we expect only one draw in $A$. The observed count
+    can easily be 0, 1, or 2, so the estimate is unstable.
+  \pause
+  \item For small $p_A$, the relative Monte Carlo error is approximately
+    \[
+      \frac{\operatorname{MCSE}(\widehat p_A)}{p_A}
+      \approx \frac{1}{\sqrt{S p_A}}.
+    \]
+    Thus, we need $S$ much larger than $1/p_A$, or equivalently
+    $S p_A$ much larger than 1.
+  \pause
+  \item Example: if $p_A=0.001$, then $S=1000$ gives only one expected
+    draw in $A$, while $S=100\,000$ gives 100 expected draws.
+  \end{itemize}
 
 \end{frame}
 
@@ -897,10 +930,18 @@ dimension require $S^D$ grid points in $D$ dimensions
   \item The density of an accepted proposal is proportional to
     \[
       \underbrace{g(\theta)}_{\text{proposal density}}
+      \cdot
       \underbrace{\frac{q(\theta)}{M g(\theta)}}_{\text{acceptance probability}}
       =\frac{q(\theta)}{M}\propto p(\theta).
     \]
-  \item<2-> Thus the accepted values are independent draws from the target
+  \item<2-> More formally, for any region $B$,
+    \[
+      P(\theta\in B\mid\text{accepted})
+      =\frac{\int_B q(\theta)/M\,d\theta}
+             {\int q(\theta)/M\,d\theta}
+      =\int_B p(\theta)\,d\theta.
+    \]
+    Thus, accepted values are independent draws from the target.
   \item<3-> If $A$ of $T$ proposals are accepted, their effective sample
     size is $A$, while $A/T$ estimates the acceptance rate $Z/M$
   \only<3>{\\{\color{uured} When will the acceptance rate be high or low?}}
@@ -936,9 +977,9 @@ dimension require $S^D$ grid points in $D$ dimensions
 \subsection{Importance sampling}
 
 \begin{frame}
-\frametitle{Importance sampling identity}
+\frametitle{Importance sampling}
 
-  If we can evaluate the normalized target $p$, then
+  If we can evaluate the normalized target $p$ and have aproposal $g$, then we can use \uured{importance sampling}
   \begin{align*}
     w(\theta)&=\frac{p(\theta)}{g(\theta)},\\
     \E_p[f(\theta)]
@@ -1164,7 +1205,6 @@ dimension require $S^D$ grid points in $D$ dimensions
   \begin{itemize}
   \item Most normalized weights are near zero, while a few are much larger.
   \item What does this imply about the estimate?
-  \item What should we inspect before trusting it?
   \end{itemize}
 
   \uncover<2->{
@@ -1174,8 +1214,6 @@ dimension require $S^D$ grid points in $D$ dimensions
   \begin{itemize}
   \item Only a small number of draws contribute substantial information.
   \item The estimate may be sensitive to a few draws.
-  \item Inspect ESS and the Pareto $\widehat{k}$ diagnostic; improve the
-    proposal if necessary.
   \end{itemize}}}
 
 \end{frame}
@@ -1237,9 +1275,9 @@ dimension require $S^D$ grid points in $D$ dimensions
   \pause
   \item Current guidance treats estimates as reliable when
     \[
-      \widehat{k}<\min\!\left(1-\frac{1}{\log_{10}S},\,0.7\right)
+      \widehat{k}<0.7
     \]
-  \item<3-> Above this threshold, the estimate and its MCSE may be unreliable;
+  \item<3-> Above this threshold, the estimate may be unreliable;
     investigate the proposal or use a more robust computation
   \item<4-> For intuition: a generalized Pareto tail has finite variance
     when $k<1/2$; when $k\geq1$, even its mean does not exist
@@ -1247,7 +1285,7 @@ dimension require $S^D$ grid points in $D$ dimensions
 
 \end{frame}
 
-\begin{frame}<0>[label=backup_loo]
+\begin{frame}
 
 \frametitle{Importance-sampling leave-one-out cross-validation}
 
@@ -1300,7 +1338,7 @@ MCMC & Transition rule & Dependent target draws & Requires convergence diagnosti
 
 \end{frame}
 
-\begin{frame}
+\begin{frame}<0>[label=backup_mcmc_preview]
 \frametitle{Next week: Markov chain Monte Carlo (MCMC)}
 
   \begin{itemize}
@@ -1342,7 +1380,7 @@ MCMC & Transition rule & Dependent target draws & Requires convergence diagnosti
 \againframe<1->{backup_rejection_discussion}
 \againframe<1->{backup_bioassay_compare}
 \againframe<1->{backup_bioassay_resampled}
-\againframe<1->{backup_loo}
+\againframe<1->{backup_mcmc_preview}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

@@ -224,19 +224,24 @@
 
   \begin{itemize}
   \item Alternate sampling from conditional distributions
-  \item Basic algorithm, for $j \in \{1,...,J\}$ {
-      \begin{align*}
-         \text{sample $\theta_{j,t}$ from} \quad & p(\theta_j|\theta_{-j,t-1}, y),\\
-      \text{where} \quad
-          \theta_{-j,t-1} = & (\theta_{1,t},\dots,\theta_{j-1,t},
-          \theta_{j+1,t-1},\dots,\theta_{J,t-1})
-      \end{align*}
-      }
-  \item Under standard conditions, the distribution of $\theta_t$ converges
-    to $p(\theta\mid y)$ as $t\rightarrow\infty$\pause
-  \item $j$ can be multiple (blocked) parameters
-  \item 1D sampling ($|j|=1$) is generally easy\pause
-  \item Popular for \uured{discrete parameters}
+  \item For two parameters, one complete sweep is
+    \begin{align*}
+      \theta_1^{(t)}&\sim
+        p(\theta_1\mid\theta_2^{(t-1)},y),\\
+      \theta_2^{(t)}&\sim
+        p(\theta_2\mid\theta_1^{(t)},y).
+    \end{align*}
+  \pause
+  \item More generally, update $j=1,\ldots,J$ in order using
+    \[
+      \theta_j^{(t)}\sim p\!\left(\theta_j\mid
+      \theta_1^{(t)},\ldots,\theta_{j-1}^{(t)},
+      \theta_{j+1}^{(t-1)},\ldots,\theta_J^{(t-1)},y\right).
+    \]
+  \pause
+  \item Under standard conditions, the distribution of $\theta^{(t)}$
+    converges to $p(\theta\mid y)$ as $t\rightarrow\infty$
+  \item Several parameters can be updated together in a block
 %  \item Related to the (stochastic) EM algorithm
   \end{itemize}
 \end{frame}
@@ -453,25 +458,21 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
 \frametitle{Why Metropolis algorithm works}
 
   \begin{itemize}
-  \item[1.] Prove that simulated series is a Markov chain
-    which has unique stationary distribution
+  \item Detailed balance will show that $p(\theta\mid y)$ is a
+    stationary distribution of the Metropolis chain
+  \pause
+  \item Convergence to that stationary distribution also requires a
+    well-behaved chain
     \begin{itemize}
-    \item[a)] irreducible
-      \begin{itemize}
-      \item<2->[=] positive probability of eventually reaching any
-        state from any other state
-      \end{itemize}
-    \item[b)] aperiodic
-      \begin{itemize}
-      \item<3->[=] aperiodic (return times are not periodic)
-      \item<3->[-] holds for a random walk on any proper distribution (except for trivial exceptions)
-      \end{itemize}
-    \item[c)] recurrent / not transient
-      \begin{itemize}
-      \item<4->[=] probability to return to a state $i$ is 1 as $T\rightarrow \infty$
-      \item<4->[-] holds for a random walk on any proper distribution (except for trivial exceptions)
-      \end{itemize}
+    \item the proposal must allow the chain to reach all relevant regions
+      of the target distribution
+    \item the chain must not be trapped in a deterministic cycle
     \end{itemize}
+  \pause
+  \item These ideas are formalized by \uured{irreducibility} and
+    \uured{aperiodicity}
+  \item<4-> They depend on both the target and the proposal; they do not
+    follow merely because the target is a proper distribution
   \end{itemize}
 
 \end{frame}
@@ -482,29 +483,29 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
 \frametitle{Why Metropolis algorithm works}
 
   \begin{itemize}
-  \item[2.] Prove that this stationary distribution is the desired target distribution $p(\theta|y)$: see book
-
-  \begin{itemize}
-  \item Show \emph{detailed balance} with respect to
-$p(\theta|y)$:
-\[
-p(\theta|y)\, T(\theta|\theta') = p(\theta'|y)\, T(\theta'|\theta),
-\quad \forall \theta, \theta' .
-\]
-
-Here, $T(\theta'|\theta)$ denotes the one-step transition probability (or density).
-\vspace{3mm} \pause
-\item Intuition:
-\begin{itemize}
-\item Think of $p(\theta|y)$ as the ``mass'' of probability at state $\theta$.\pause
-\item $p(\theta|y) P(\theta, \theta')$ is the ``flow'' of mass from $\theta$ to $\theta'$. \pause
-\item \uured{Detailed balance}: the flow from $\theta$ to $\theta'$ equals the flow back
-from $\theta'$ to $\theta$ --- nothing accumulates or leaks.
-\end{itemize}
-\end{itemize}
-\pause
-\vspace{3mm}
-\centering{\uured{More indepth in a proper Markov Theory course!}}
+  \item For a symmetric proposal $J(\theta'\mid\theta)$, the Metropolis
+    acceptance probability is
+    \[
+      \alpha(\theta,\theta')=
+      \min\!\left(1,\frac{p(\theta'\mid y)}{p(\theta\mid y)}\right).
+    \]
+  \pause
+  \item The probability flow from $\theta$ to $\theta'$ is
+    \begin{align*}
+      &p(\theta\mid y)J(\theta'\mid\theta)\alpha(\theta,\theta')\\
+      &\qquad=J(\theta'\mid\theta)
+        \min\!\left(p(\theta\mid y),p(\theta'\mid y)\right).
+    \end{align*}
+  \pause
+  \item Symmetry of $J$ makes this expression unchanged when
+    $\theta$ and $\theta'$ are exchanged. Hence
+    \[
+      p(\theta\mid y)T(\theta'\mid\theta)
+      =p(\theta'\mid y)T(\theta\mid\theta').
+    \]
+  \item<4-> This is \uured{detailed balance}; it implies that
+    $p(\theta\mid y)$ is stationary for the Metropolis transition $T$
+  \end{itemize}
 
 
 
@@ -536,7 +537,6 @@ from $\theta'$ to $\theta$ --- nothing accumulates or leaks.
 %      $\theta_{t-1}$ have the same marginal distributions, and so
 %      $p(\theta|y)$ is the stationary distribution of the Markov chain of $\theta$
 %    \end{itemize}
-  \end{itemize}
 
 \end{frame}
 

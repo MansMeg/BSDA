@@ -398,6 +398,33 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
 
 \begin{frame}
 
+\frametitle{Rejection sampling vs. Metropolis rejection}
+
+  \begin{itemize}
+  \item In rejection sampling, a rejected proposal is discarded
+    \begin{itemize}
+    \item only accepted proposals are included in the output
+    \item the next proposal is drawn independently from $g$
+    \end{itemize}
+  \pause
+  \item In the Metropolis algorithm, a rejected proposal is discarded,
+    but the current state is repeated
+    \[
+      \theta_t=\theta_{t-1}.
+    \]
+    \begin{itemize}
+    \item the repeated state is a valid draw from the Markov chain
+    \item it must be retained when computing posterior summaries
+    \end{itemize}
+  \pause
+  \item Keeping only accepted Metropolis proposals changes the distribution
+    and generally gives incorrect estimates
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+
 \frametitle{ Metropolis algorithm}
 
   \begin{itemize}
@@ -577,29 +604,24 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
 \frametitle{ Metropolis-Hastings algorithm}
 
   \begin{itemize}
-  \item Ideal proposal distribution is the distribution itself
+  \item The ideal proposal is the target distribution itself
     \begin{itemize}
-    \item $J(\theta^{*}|\theta)\equiv p(\theta^{*}|y)$ for all
-      $\theta$
-    \item acceptance probability is $1$
-    \item independent draws
-    \item not usually feasible
+    \item $J(\theta^{*}|\theta)\equiv p(\theta^{*}|y)$ gives independent
+      draws with acceptance probability 1, but is not usually feasible
     \end{itemize}
-  \item<2-> Good proposal distribution resembles the target distribution
+  \item<2-> A good proposal resembles the target distribution
+  \item<3-> Proposal scale controls movement through the target
     \begin{itemize}
-    \item if the shape of the target distribution is unknown, usually
-      normal or $t$ distribution is used
+    \item small scale: many accepted steps, but each step moves little
+    \item large scale: longer proposed steps, but many are rejected
     \end{itemize}
-  \item<3-> After the proposal distribution shape has been selected, it is important to select the scale
+  \item<4-> There is no universal optimal acceptance rate
     \begin{itemize}
-    \item small scale \\$\rightarrow$ many steps accepted, but the chain moves slowly due to small steps
-    \item big scale \\$\rightarrow$ long steps proposed, but many of
-      those rejected and again chain moves slowly
+    \item it depends on the target, dimension, proposal, and quantity
+      of interest
+    \item compare proposals using ESS per computation time or MCSE
     \end{itemize}
-    \begin{center}
-  \href{https://chi-feng.github.io/mcmc-demo/app.html?algorithm=RandomWalkMH&target=standard}{demo}
-  \end{center}
-  \item<4-> Generic rule for rejection rate is 60-90\% %(but depends on dimensionality and a specific algorithm variation)
+  \item<5-> \href{https://chi-feng.github.io/mcmc-demo/app.html?algorithm=RandomWalkMH&target=standard}{Interactive demonstration}
 \end{itemize}
 
 \end{frame}
@@ -954,19 +976,22 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
 \frametitle{Autocorrelation}
 
   \begin{itemize}
-  \item Estimation of the autocorrelation using several chains
+  \item For lag $t$, estimate the expected squared change within chains
     \begin{equation*}
-      \hat{\rho}_n=1-\frac{W - \frac{1}{M}\sum_{m=1}^M \hat{\rho}_{n,m}}{2\widehat{\var}^{+}}
+      \widehat V_t=\frac{1}{M(N-t)}
+      \sum_{m=1}^M\sum_{n=1}^{N-t}
+      \left(\theta_{n+t,m}-\theta_{n,m}\right)^2.
     \end{equation*}
-    where $\hat{\rho}_{n,m}$ is autocorrelation at lag $n$ for chain $m$
-%  \item<2-> This combines $\widehat{R}$ and autocorrelation estimates
-%    \begin{itemize}
-%    \item takes into account if the chains are not mixing (the chains have not converged)
-%    \end{itemize}
-  \item<2-> BDA3 has slightly different and less accurate equation. The
-    above equation is used in Stan 2.18+
-  \item<3-> Compared to a method which computes the autocorrelation
-    from a single chain, the multi-chain estimate has smaller variance
+  \pause
+  \item Estimate the lag-$t$ autocorrelation by
+    \begin{equation*}
+      \widehat\rho_t
+      =1-\frac{\widehat V_t}{2\widehat{\operatorname{var}}^{+}}.
+    \end{equation*}
+  \item<3-> Small squared changes imply high autocorrelation; large changes
+    imply lower autocorrelation
+  \item<4-> Using $\widehat{\operatorname{var}}^{+}$ incorporates information
+    from all chains and penalizes chains that have not mixed well
  \end{itemize}
 \end{frame}
 

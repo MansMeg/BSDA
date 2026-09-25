@@ -244,9 +244,16 @@
 \frametitle{Example: Bivariate Normal using Gibbs}
 
 \[
-p(\theta \mid y) \;\sim\; \mathcal{N}\!\left( \bar{y}, \tfrac{1}{n}\Sigma \right).
+p(\theta \mid y) \;\sim\; \mathcal{N}\!\left( \bar{y}, \tfrac{1}{n}\Sigma \right),
+\qquad
+\Sigma=
+\begin{pmatrix}
+  \sigma_1^2 & \rho\sigma_1\sigma_2\\
+  \rho\sigma_1\sigma_2 & \sigma_2^2
+\end{pmatrix}.
 \]
-where $\Sigma$ is known and $\theta \in \mathcal{R}^2$
+Here $\sigma_1$ and $\sigma_2$ are marginal standard deviations,
+$\rho$ is the correlation, and $\Sigma$ is known.
 \vspace{3mm}
 \pause
 
@@ -256,15 +263,17 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
 
 \[
 \theta_1^{(t)} \;\sim\; \mathcal{N}\!\left(
-\bar{y}_1 + \frac{\rho}{\sigma_{2}}\big(\theta_2^{(t-1)} - \bar{y}_2\big),\;
-\frac{1}{n}\Big(\sigma_{1} - \frac{\rho^2}{\sigma_{2}}\Big)
+\bar{y}_1 + \rho\frac{\sigma_1}{\sigma_2}
+  \big(\theta_2^{(t-1)} - \bar{y}_2\big),\;
+\frac{\sigma_1^2}{n}(1-\rho^2)
 \right),
 \]
 
 \[
 \theta_2^{(t)} \;\sim\; \mathcal{N}\!\left(
-\bar{y}_2 + \frac{\rho}{\sigma_{1}}\big(\theta_1^{(t)} - \bar{y}_1\big),\;
-\frac{1}{n}\Big(\sigma_{2} - \frac{\rho^2}{\sigma_{1}}\Big)
+\bar{y}_2 + \rho\frac{\sigma_2}{\sigma_1}
+  \big(\theta_1^{(t)} - \bar{y}_1\big),\;
+\frac{\sigma_2^2}{n}(1-\rho^2)
 \right).
 \]
 

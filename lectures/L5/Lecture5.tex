@@ -67,7 +67,7 @@
 
 \begin{frame}
 
-\frametitle{ It's all about expectations}
+\frametitle{It's all about expectations}
 
   \vspace{-1.5\baselineskip}
    \begin{align*}
@@ -100,7 +100,7 @@
 
 \begin{frame}
 
-\frametitle{ Monte Carlo}
+\frametitle{Monte Carlo}
 
   \begin{itemize}
   \item Monte Carlo methods we have discussed so far
@@ -133,13 +133,13 @@
   \item<1-> A Markov chain is a sequence in which the next state depends
     on the current state, but not on earlier states
     \[
-    p(\theta_t\mid\theta_{t-1},\ldots,\theta_0)
-    =p(\theta_t\mid\theta_{t-1}).
+    p(\theta^{(t)}\mid\theta^{(t-1)},\ldots,\theta^{(0)})
+    =p(\theta^{(t)}\mid\theta^{(t-1)}).
     \]
-  \item<2-> $T(\theta_t\mid\theta_{t-1})$ is the
+  \item<2-> $T(\theta^{(t)}\mid\theta^{(t-1)})$ is the
     {\color{uured}transition distribution}
   \item<3-> For a well-behaved chain, the distribution $P_t$ of
-    $\theta_t$ approaches a stationary distribution $\pi$
+    $\theta^{(t)}$ approaches a stationary distribution $\pi$
   \item<4-> Total variation distance is
     \[
       d_{\mathrm{TV}}(P_t,\pi)
@@ -207,7 +207,7 @@
 \frametitle{Markov chain Monte Carlo (MCMC)}
 
   \begin{itemize}
-  \item Produce draws $\theta_{(t)}$ given $\theta_{(t-1)}$ from a
+  \item Produce draws $\theta^{(t)}$ given $\theta^{(t-1)}$ from a
     Markov chain, with {\color{uured}stationary distribution} $p(\theta|y)$
     \begin{itemize}
     \item<2->[+] generic
@@ -216,7 +216,7 @@
     \item<4->[+] for well-behaved chains, a central limit theorem holds
       for Monte Carlo averages
     \item<5->[-] draws are dependent
-    \item<5->[-] construction of an \uured{efficient} Markov chains is not always easy
+    \item<5->[-] constructing an \uured{efficient} Markov chain is not always easy
     \end{itemize}
 \end{itemize}
 
@@ -227,9 +227,11 @@
 \frametitle{MCMC summary}
 
   \begin{itemize}
-  \item Random variables $\theta_1,\theta_2,\ldots$ where $\theta_t$ depends only on the previous $\theta_{(t-1)}$
+  \item Random variables $\theta^{(1)},\theta^{(2)},\ldots$ where
+    $\theta^{(t)}$ depends only on the previous state $\theta^{(t-1)}$
     \begin{equation*}
-      p(\theta_t|\theta_1,\ldots,\theta_{(t-1)})=p(\theta_t|\theta_{(t-1)})
+      p(\theta^{(t)}|\theta^{(1)},\ldots,\theta^{(t-1)})
+      =p(\theta^{(t)}|\theta^{(t-1)})
     \end{equation*}
     \pause
   \item Chain has to be initialized with some starting point $\theta_0$ \pause
@@ -331,17 +333,30 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
 
 \begin{frame}
 
-\frametitle{ Gibbs sampling}
+\frametitle{Gibbs sampling}
 
   \vspace{-0.5\baselineskip}
   \begin{itemize}
   \item With \uured{conditionally conjugate} priors, the sampling from
     the conditional distributions is easy for wide range of models
-  \item<2-> BUGS / WinBUGS / OpenBUGS / JAGS
-  \item<3-> No algorithm parameters to tune
-  \item<4-> For not so easy conditionals, use  e.g. inverse-CDF
-  \item<5-> Several parameters can be updated in blocks ({\em blocking})
-  \item<6-> Slow if parameters are highly dependent in the posterior...
+  \item<2-> No algorithm parameters to tune
+  \item<3-> For not so easy conditionals, use e.g. inverse-CDF
+  \item<4-> Several parameters can be updated in blocks ({\em blocking})
+  \item<5-> Slow if parameters are highly dependent in the posterior...
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}<0>[label=backup_gibbs_software]
+
+\frametitle{Gibbs software: BUGS and JAGS}
+
+  \begin{itemize}
+  \item BUGS popularized automatic Gibbs sampling for Bayesian models
+  \item WinBUGS and OpenBUGS provided widely used BUGS implementations
+  \item JAGS follows a similar model-description and sampling approach
+  \item These systems work especially naturally for models with
+    conditionally conjugate components
   \end{itemize}
 
 \end{frame}
@@ -408,35 +423,35 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
       \item[2.] $t=1,2,\ldots$
         \begin{itemize}
         \item[(a)] pick a proposal $\theta^{*}$ from a {\color{uured} proposal distribution}
-          $J_t(\theta^{*}|\theta_{t-1})$. \\
+          $J_t(\theta^{*}|\theta^{(t-1)})$. \\
           (Proposal distribution has to be symmetric, i.e.\\
           $J_t(\theta_a|\theta_b)=J_t(\theta_b|\theta_a)$, for all
           $\theta_a,\theta_b$)
         \item<2->[(b)] calculate acceptance ratio
           \begin{equation*}
-            r=\frac{p(\theta^{*}|y)}{p(\theta_{t-1}|y)}
+            r=\frac{p(\theta^{*}|y)}{p(\theta^{(t-1)}|y)}
           \end{equation*}
           \vspace{-6mm}
         \item<3->[(c)] set
           \begin{equation*}
-            \theta_t=
+            \theta^{(t)}=
             \begin{cases}
               \theta^{*} & \text{with probability $\min(r,1)$}\\
-              \theta_{t-1} & \text{otherwise}
+              \theta^{(t-1)} & \text{otherwise}
             \end{cases}
           \end{equation*}
           \uncover<4>{
-          ie, if $p(\theta^{*}|y)>p(\theta_{t-1}|y)$ accept the proposal always \\
+          i.e., if $p(\theta^{*}|y)>p(\theta^{(t-1)}|y)$, always accept the proposal \\
           \hspace{0.4cm}and otherwise accept the proposal with probability $r$}
       \end{itemize}
       \vspace{-1.5\baselineskip}
     \item<5-> rejection of a proposal increments the time $t$ also by one\\
-      ie, the new state is the same as previous
+      i.e., the new state is the same as the previous state
       \item<6-> step c is executed by generating a random number from
         $\U(0,1)$
-      \item<7-> $p(\theta^*|y)$ and $p(\theta_{t-1}|y)$ have the same
-        normalization terms, and thus instead of $p(\cdot|y)$,
-        unnormalized $q(\cdot|y)$ can be used, { \color{uured} as the normalization terms cancel out}!
+      \item<7-> $p(\theta^*|y)$ and $p(\theta^{(t-1)}|y)$ have the same
+        normalizing constant, so the unnormalized density $q(\cdot|y)$
+        can be used: {\color{uured}the constant cancels}
     \end{itemize}
   \end{itemize}
 
@@ -456,7 +471,7 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
   \item In the Metropolis algorithm, a rejected proposal is discarded,
     but the current state is repeated
     \[
-      \theta_t=\theta_{t-1}.
+      \theta^{(t)}=\theta^{(t-1)}.
     \]
     \begin{itemize}
     \item the repeated state is a valid draw from the Markov chain
@@ -473,7 +488,7 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
 
   Consider a random-walk Metropolis proposal
   \[
-    \theta^*\sim\mathcal{N}(\theta_{t-1},\sigma_p^2 I).
+    \theta^*\sim\mathcal{N}(\theta^{(t-1)},\sigma_p^2 I).
   \]
 
   \begin{itemize}
@@ -492,7 +507,7 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
 
 \begin{frame}
 
-\frametitle{ Metropolis algorithm}
+\frametitle{Metropolis algorithm}
 
   \begin{itemize}
   \item Example: one bivariate observation $(y_1,y_2)$
@@ -518,7 +533,8 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
        \right)
        \end{equation*}
      \item proposal distribution
-       $J_t(\theta^{*}|\theta_{t-1})=\N(\theta^{*}|\theta_{t-1},\sigma_p^2)$
+       $J_t(\theta^{*}|\theta^{(t-1)})
+       =\N(\theta^{*}|\theta^{(t-1)},\sigma_p^2)$
      \end{itemize}
    \end{itemize}
 
@@ -529,29 +545,16 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
 
  \begin{frame}
 
-\frametitle{Why Metropolis algorithm works}
+\frametitle{Why the Metropolis algorithm works}
 
+  \small
   \begin{itemize}
-  \item Intuitively more draws from the higher density areas as
-    jumps to higher density are always accepted and only some of the
-    jumps to the lower density are accepted
-    \vspace{5mm}
-    \pause
-  \item Theoretically
+  \item Intuitively, the chain spends more time in high-density regions
     \begin{itemize}
-    \item[1.] Prove that simulated series is a Markov chain
-      which has unique stationary distribution
-    \item[2.] Prove that this stationary distribution is the desired target distribution $p(\theta|y)$
+    \item proposals to higher density are always accepted
+    \item proposals to lower density are accepted only sometimes
     \end{itemize}
-\end{itemize}
-
-\end{frame}
-
-\begin{frame}
-
-\frametitle{Why Metropolis algorithm works}
-
-  \begin{itemize}
+  \pause
   \item Detailed balance will show that $p(\theta\mid y)$ is a
     stationary distribution of the Metropolis chain
   \pause
@@ -563,9 +566,9 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
     \item the chain must not be trapped in a deterministic cycle
     \end{itemize}
   \pause
-  \item These ideas are formalized by \uured{irreducibility} and
+  \item<4-> These ideas are formalized by \uured{irreducibility} and
     \uured{aperiodicity}
-  \item<4-> They depend on both the target and the proposal; they do not
+  \item<5-> They depend on both the target and the proposal; they do not
     follow merely because the target is a proper distribution
   \end{itemize}
 
@@ -574,7 +577,7 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
 
 \begin{frame}
 
-\frametitle{Why Metropolis algorithm works}
+\frametitle{Detailed balance for the Metropolis algorithm}
 
   \begin{itemize}
   \item For a symmetric proposal $J(\theta'\mid\theta)$, the Metropolis
@@ -644,8 +647,10 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
     \item acceptance ratio includes ratio of proposal distributions
       \begin{equation*}
         r =
-        \frac{p(\theta^{*}|y)/J_t(\theta^{*}|\theta_{t-1})}{p(\theta_{t-1}|y)/J_t(\theta_{t-1}|\theta^{*})} \pause =
-        \frac{p(\theta^{*}|y)J_t(\theta_{t-1}|\theta^{*})}{p(\theta_{t-1}|y)J_t(\theta^{*}|\theta_{t-1})}
+        \frac{p(\theta^{*}|y)/J_t(\theta^{*}|\theta^{(t-1)})}
+        {p(\theta^{(t-1)}|y)/J_t(\theta^{(t-1)}|\theta^{*})} \pause =
+        \frac{p(\theta^{*}|y)J_t(\theta^{(t-1)}|\theta^{*})}
+        {p(\theta^{(t-1)}|y)J_t(\theta^{*}|\theta^{(t-1)})}
       \end{equation*}
     \end{itemize}
   \end{itemize}
@@ -668,7 +673,7 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
 
 \begin{frame}
 
-\frametitle{ Metropolis-Hastings algorithm}
+\frametitle{Metropolis-Hastings algorithm}
 
   \begin{itemize}
   \item The ideal proposal is the target distribution itself
@@ -711,12 +716,12 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
 
 \begin{frame}
 
-\frametitle{ Metropolis}
+\frametitle{Metropolis}
 
   \begin{itemize}
-  \item Usually doesn't scale well to high dimensions
+  \item Usually does not scale well to high dimensions
     \begin{itemize}
-    \item if the shape doesn't match the whole distribution, the efficiency drops
+    \item if the shape does not match the whole distribution, efficiency drops
 %    \item demo11\_2\\
       \vspace{1\baselineskip}
       \hspace{-1cm}\includegraphics[width=4cm]{figs/Metrop2.pdf}\includegraphics[width=4cm]{figs/Metrop3.pdf}
@@ -733,9 +738,9 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
 \frametitle{What we want to know}
 
   \begin{enumerate}
-  \item Has the chains \uured{converged} to the posterior distribution?
+  \item Do the chains show evidence of poor \uured{convergence} or mixing?
   \pause
-  \item How many \uured{efficient} samples do I have?
+  \item How many \uured{effective} samples do I have?
   \end{enumerate}
 
 \end{frame}
@@ -777,13 +782,13 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
 
 \begin{frame}
 
-\frametitle{Assesing convergence}
+\frametitle{Assessing convergence}
 
   \vspace{-0.5\baselineskip}
   \begin{itemize}
   \item Several Markov chains make convergence diagnostics easier
   \pause
-    \item Start chains from different starting points -- preferably overdispersed
+    \item Start chains from different, preferably overdispersed, starting points
       \begin{center}
   \vspace{-0.5\baselineskip}
       \includegraphics[width=6cm]{figs/10chains1.pdf}
@@ -828,6 +833,28 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
 
 \begin{frame}
 
+\frametitle{Classical $\widehat R$: interpretation}
+
+  \begin{itemize}
+  \item The classical diagnostic compares a total variance estimate
+    $\widehat{\operatorname{var}}^{+}$ with the within-chain variance $W$
+    \[
+      \widehat R=\sqrt{\frac{\widehat{\operatorname{var}}^{+}}{W}}.
+    \]
+  \pause
+  \item $\widehat R$ close to 1 means the between-chain and within-chain
+    variation are similar
+  \item $\widehat R>1$ indicates that the chains disagree more than expected
+    from their within-chain variation
+  \pause
+  \item A value close to 1 is necessary but not sufficient: also inspect
+    trace plots, ESS, and MCSE
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}<0>[label=backup_rhat_wb]
+
 \frametitle{ $\widehat{R}$}
 
   \begin{itemize}
@@ -859,7 +886,7 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
 \end{frame}
 
 
-\begin{frame}
+\begin{frame}<0>[label=backup_rhat_vplus]
 
 \frametitle{ $\widehat{R}$}
 
@@ -959,6 +986,8 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
 \frametitle{MCMC draws are dependent}
 
   \begin{itemize}
+    \item Notation: $M$ chains, $N$ retained draws per chain, and
+      $S=MN$ retained draws in total
     \item For well-behaved chains, Monte Carlo averages converge to
       posterior expectations
       \begin{align*}
@@ -974,13 +1003,15 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
 
 \begin{frame}
 
-\frametitle{MCMC Autocorrelation}
+\frametitle{Autocorrelation in MCMC}
 
   \begin{itemize}
-  \item Auto correlation function
+  \item The autocorrelation function measures dependence between draws
+    separated by a given lag
     \begin{itemize}
-    \item describes the correlation given a certain lag
-    \item can be used to compare efficiency of MCMC methods
+    \item high autocorrelation means that successive draws contain less
+      new information
+    \item it helps compare the efficiency of MCMC methods
     \end{itemize}
   \end{itemize}
 %\vspace{.5cm}
@@ -991,7 +1022,7 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
 
 \begin{frame}
 
-\frametitle{Autocorrelation}
+\frametitle{Autocorrelation: one worked example}
 
   \vspace{-0.5\baselineskip}
   \includegraphics[width=4cm]{figs/Metrop1.pdf}
@@ -1000,9 +1031,9 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
 
 \end{frame}
 
-\begin{frame}
+\begin{frame}<0>[label=backup_autocorrelation_example_2]
 
-\frametitle{Autocorrelation}
+\frametitle{Autocorrelation: comparison example 1}
 
   \vspace{-0.5\baselineskip}
   \includegraphics[width=4cm]{figs/Metrop2.pdf}
@@ -1011,9 +1042,9 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
 
 \end{frame}
 
-\begin{frame}
+\begin{frame}<0>[label=backup_autocorrelation_example_3]
 
-\frametitle{Autocorrelation}
+\frametitle{Autocorrelation: comparison example 2}
 
   \vspace{-0.5\baselineskip}
   \includegraphics[width=4cm]{figs/Metrop3.pdf}
@@ -1053,17 +1084,17 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
 \frametitle{Autocorrelation}
 
   \begin{itemize}
-  \item For lag $t$, estimate the expected squared change within chains
+  \item For lag $k$, estimate the expected squared change within chains
     \begin{equation*}
-      \widehat V_t=\frac{1}{M(N-t)}
-      \sum_{m=1}^M\sum_{n=1}^{N-t}
-      \left(\theta_{n+t,m}-\theta_{n,m}\right)^2.
+      \widehat V_k=\frac{1}{M(N-k)}
+      \sum_{m=1}^M\sum_{n=1}^{N-k}
+      \left(\theta_{n+k,m}-\theta_{n,m}\right)^2.
     \end{equation*}
   \pause
-  \item Estimate the lag-$t$ autocorrelation by
+  \item Estimate the lag-$k$ autocorrelation by
     \begin{equation*}
-      \widehat\rho_t
-      =1-\frac{\widehat V_t}{2\widehat{\operatorname{var}}^{+}}.
+      \widehat\rho_k
+      =1-\frac{\widehat V_k}{2\widehat{\operatorname{var}}^{+}}.
     \end{equation*}
   \item<3-> Small squared changes imply high autocorrelation; large changes
     imply lower autocorrelation
@@ -1079,10 +1110,10 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
 \frametitle{Integrated autocorrelation time}
 
   \begin{itemize}
-  \item Let $\rho_t$ be the autocorrelation at lag $t$. The integrated
+  \item Let $\rho_k$ be the autocorrelation at lag $k$. The integrated
     autocorrelation time is
     \begin{align*}
-      \tau = 1 + 2 \sum_{t=1}^\infty \rho_t,
+      \tau = 1 + 2 \sum_{k=1}^\infty \rho_k,
       \qquad S_\text{eff}=\frac{S}{\tau}.
     \end{align*}
   \pause
@@ -1091,11 +1122,11 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
   \pause
   \item Estimated autocorrelations become noisy at long lags
     \begin{itemize}
-    \item practical estimators truncate the sum at a finite lag $T$
+    \item practical estimators truncate the sum at a finite lag $K$
     \begin{align*}
-      \hat{\tau} = 1 + 2 \sum_{t=1}^T \hat{\rho}_t
+      \hat{\tau} = 1 + 2 \sum_{k=1}^K \hat{\rho}_k
     \end{align*}
-    \item statistical software chooses $T$ adaptively
+    \item statistical software chooses the maximum lag $K$ adaptively
     \end{itemize}
     \end{itemize}
 \end{frame}
@@ -1105,17 +1136,17 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
 \frametitle{Geyer's adaptive window estimator of $\tau$}
 
   \begin{itemize}
-  \item Truncation $T$ can be decided adaptively
+  \item The maximum lag $K$ can be chosen adaptively
     \begin{itemize}
-    \item for stationary, irreducible, recurrent Markov chain
-    \item let $\Gamma_m=\rho_{2m}+\rho_{2m+1}$, which is sum of two
-      consequent autocorrelations
-    \item $\Gamma_m$ is positive, decreasing and convex function of $m$
+    \item for a stationary, irreducible, recurrent Markov chain
+    \item let $\Gamma_m=\rho_{2m}+\rho_{2m+1}$, the sum of two
+      consecutive autocorrelations
+    \item $\Gamma_m$ is a positive, decreasing, and convex function of $m$
     \end{itemize}
     \vspace{0.5\baselineskip}
   \item<2-> Initial positive sequence estimator (Geyer's IPSE)
       \begin{itemize}
-        \item Choose the largest $m$ so, that all values of the sequence
+        \item Choose the largest $m$ such that all values of the sequence
         $\hat{\Gamma}_1, \ldots, \hat{\Gamma}_m$ are positive
       \end{itemize}
   \vspace{0.5\baselineskip}
@@ -1158,7 +1189,7 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
 
 \end{frame}
 
-\begin{frame}
+\begin{frame}<0>[label=backup_ess_example_2]
 
  \frametitle{Effective sample size, $S_\text{eff}$}
 
@@ -1186,7 +1217,7 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
 \end{frame}
 
 
-\begin{frame}
+\begin{frame}<0>[label=backup_ess_example_3]
 
 \frametitle{Effective sample size, $S_\text{eff}$}
 
@@ -1306,7 +1337,14 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
 \section{Additional material}
 \frame{\sectionpage}
 
+\againframe<1->{backup_gibbs_software}
+\againframe<1->{backup_rhat_wb}
+\againframe<1->{backup_rhat_vplus}
 \againframe<1->{backup_geyer}
+\againframe<1->{backup_autocorrelation_example_2}
+\againframe<1->{backup_autocorrelation_example_3}
+\againframe<1->{backup_ess_example_2}
+\againframe<1->{backup_ess_example_3}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

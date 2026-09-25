@@ -51,36 +51,19 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-\begin{frame}
-  \frametitle{Seminar today at 13.15}
-
-  \begin{itemize}
-  \item \uured{Topic}: posteriordb: Testing, Benchmarking and Developing Bayesian Inference Algorithms
-  \item \uured{Where}: H317 Ekonomikum
-  \item \uured{Speaker} Jakob Torgander, Department of Statistics, Uppsala University
-  \item \uured{Opponent} David Broman, EECS, KTH Royal Institute of Technology
-  \end{itemize}
-
-\end{frame}
 
 \begin{frame}
-  \frametitle{Assignment 4}
+  \frametitle{Oral exam + mini projects}
 
   \begin{itemize}
-  \item "More explicit examples of proper weight normalization would help prevent implementation errors in importance sampling."\pause
-  \item "$\hat{R}$ diagnostics is mentioned in the information on the assignment" \pause
-  \item "It was hard to find information on how to solve the exercises from the book and lectures." \pause
-  \item "..., maybe add a testable MCSE function so that we can know we have done it correct." \pause
-  \item "it might help if the workload were reduced or if there were more time between assignments" \pause
-  \item Minor suggestions and improvements
+  \item Oral exam evaluation (good and bad)?
+  \item Mini project proposals
   \end{itemize}
 
 \end{frame}
 
 \section{Monte Carlo recap}
 %\frame{\sectionpage}
-
-
 
 \begin{frame}
 
@@ -147,18 +130,60 @@
 \frametitle{Markov chains}
 
   \begin{itemize}
-  \item<1-> Andrey Markov proved weak law of large numbers and central
-    limit theorem for certain dependent-random sequences, which were
-    later named \uured{Markov chains}
-  \item<2-> The probability of each event depends only on the previous event (or finite number of previous events)
+  \item<1-> A Markov chain is a sequence in which the next state depends
+    on the current state, but not on earlier states
     \[
-    p(\theta_t|\theta_{t-1}, \theta_{t-2}, ...) = p(\theta_t|\theta_{t-1})
+    p(\theta_t\mid\theta_{t-1},\ldots,\theta_0)
+    =p(\theta_t\mid\theta_{t-1}).
     \]
-%  \item<3-> Markov's one example was the sequence of letters in
-%    Pushkin's novel ``Yevgeniy Onegin''
-    \item<3-> $T_t(\theta_{t} \mid \theta_{t-1}) \equiv p(\theta_t|\theta_{t-1})$ is usually refered to as the {\color{uured} transition distribution}
-    \item<4-> Under some assumptions $p(\theta_t|\theta_{t-1})$ will converge (in total variation) to \emph{one} {\color{uured} stationary distribution} $p(\theta)$
-    \item<5-> \uured{Goal in MCMC}: Construct a {\color{uured} transition distribution} with $p(\theta|y)$ as the {\color{uured} stationary distribution}
+  \item<2-> $T(\theta_t\mid\theta_{t-1})$ is the
+    {\color{uured}transition distribution}
+  \item<3-> For a well-behaved chain, the distribution $P_t$ of
+    $\theta_t$ approaches a stationary distribution $\pi$
+  \item<4-> Total variation distance is
+    \[
+      d_{\mathrm{TV}}(P_t,\pi)
+      =\sup_A\left|P_t(A)-\pi(A)\right|.
+    \]
+    It is the largest difference between the probabilities that $P_t$
+    and $\pi$ assign to the same event $A$
+  \item<5-> Convergence in total variation means
+    $d_{\mathrm{TV}}(P_t,\pi)\rightarrow0$
+  \item<6-> \uured{Goal in MCMC}: construct $T$ with
+    $\pi(\theta)=p(\theta\mid y)$
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+
+\frametitle{A stationary distribution: two-state example}
+
+  Consider a chain with states 1 and 2 and transition matrix
+  \[
+    T=
+    \begin{pmatrix}
+      0.8 & 0.2\\
+      0.4 & 0.6
+    \end{pmatrix}.
+  \]
+  Each row gives the probabilities of the next state.
+  \pause
+  \begin{itemize}
+  \item The distribution $\pi=(2/3,1/3)$ is stationary because
+    \[
+      \pi T=(2/3,1/3)=\pi.
+    \]
+  \pause
+  \item Starting from state 1 gives
+    \[
+      P_0=(1,0),\qquad P_1=(0.8,0.2),\qquad
+      P_2=(0.72,0.28),\quad\ldots
+    \]
+    and $P_t$ approaches $\pi$
+  \item<4-> Stationary means that applying the transition leaves the
+    distribution unchanged; convergence means approaching it from another
+    starting distribution
   \end{itemize}
 
 \end{frame}
@@ -334,6 +359,27 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
      \end{center}
 \end{frame}
 
+\begin{frame}{Pair discussion: correlated Gibbs sampling}
+
+  \begin{itemize}
+  \item Both Gibbs samplers accept every update. Why does the sampler for
+    the correlated target nevertheless produce fewer effective draws?
+  \item What would you expect its trace plot and autocorrelation function
+    to look like?
+  \end{itemize}
+
+  \uncover<2->{
+  \vspace{0.5\baselineskip}
+  {\color{uured}After discussion:}
+  \begin{itemize}
+  \item Each coordinate update moves only horizontally or vertically, while
+    the posterior mass lies along a narrow diagonal region.
+  \item The chain therefore moves slowly along that region, producing high
+    autocorrelation and a small effective sample size.
+  \end{itemize}}
+
+\end{frame}
+
 \begin{frame}
 
 \frametitle{Sampling conditional vs joint}
@@ -420,6 +466,27 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
   \item Keeping only accepted Metropolis proposals changes the distribution
     and generally gives incorrect estimates
   \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Proposal scale: discussion}
+
+  Consider a random-walk Metropolis proposal
+  \[
+    \theta^*\sim\mathcal{N}(\theta_{t-1},\sigma_p^2 I).
+  \]
+
+  \begin{itemize}
+  \item Predict what happens when $\sigma_p$ is much too small.
+  \item Predict what happens when $\sigma_p$ is much too large.
+  \item For each case, what do you expect for the acceptance rate, trace
+    plot, and autocorrelation?
+  \end{itemize}
+
+  \uncover<2->{
+  {\color{uured}After discussion:} Small proposals are often accepted but
+  move slowly. Large proposals move farther when accepted, but are often
+  rejected. Both choices can give high autocorrelation and low ESS.}
 
 \end{frame}
 
@@ -681,22 +748,26 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
 \frametitle{Warm-up}
 
   \begin{itemize}
-  \item Asymptotically chain spends the $\alpha$\% of time where
-    $\alpha$\% posterior mass is
+  \item Early draws can be strongly influenced by the starting value
     \uncover<2->{
       \begin{itemize}
-      \item but in finite time the initial part of the Markov chain may be
-        non-representative \\
-        \hspace{2cm}\includegraphics[width=4cm]{figs/Metrop1.pdf}
+      \item the chain may not yet have reached the typical posterior region
+        \\
+        \hspace{2cm}\includegraphics[width=3.2cm]{figs/Metrop1.pdf}
       \end{itemize}
       }
       \vspace{-.5\baselineskip}
-    \item<3-> Warm-up period = (non-representative) draws from the beginning of the Markov chain
+    \item<3-> Warm-up, also called {\color{uured} burn-in}, is the initial
+      phase before retained sampling
     \begin{itemize}
-      \item remove warm-up before using samples for inference
-      \item warm-up may include phase for adapting algorithm parameters
+      \item do not use warm-up draws in posterior summaries
+      \item algorithms may adapt proposal or tuning parameters during warm-up
       \end{itemize}
-    \item<4-> Also called {\color{uured} burn-in}
+    \item<4-> Discarding warm-up does not guarantee good sampling
+      \begin{itemize}
+      \item the retained chains can still mix slowly or miss posterior regions
+      \item convergence and efficiency diagnostics are still required
+      \end{itemize}
   \end{itemize}
 
 \end{frame}
@@ -953,21 +1024,27 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
 
 \begin{frame}
 
-\frametitle{Autocorrelation}
+\frametitle{Effective sample size and MCSE}
 
   \begin{itemize}
-  \item The autocorrleation can be used to estimate Monte Carlo error in case of MCMC
-  \item For expectation $\bar{\theta}$
-    \begin{equation*}
-      \Var[\bar{\theta}] = \frac{\sigma^2_\theta}{S_\text{eff}}
-    \end{equation*}
-    where $S_\text{eff}=S/\tau$, and $\tau$ is sum of autocorrelations
-    \begin{itemize}
-      \item<2-> $\tau$ describes how many dependent draws correspond to one independent draw
-      \item<3-> Here $S=NM$ (in BDA3 $N=nm$ and $n_\text{eff}=N/\tau$)
-      \item<4-> BDA3 focuses on $S_\text{eff}$ and not the Monte Carlo error directly
-%        new R-hat paper discusses more about MCSEs for different quantities
-    \end{itemize}
+  \item Suppose we estimate $\mu_f=\E[f(\theta)\mid y]$ using
+    \[
+      \widehat\mu_f=\frac{1}{S}\sum_{s=1}^S f(\theta^{(s)}).
+    \]
+  \pause
+  \item If the autocorrelation time for $f(\theta)$ is $\tau_f$, define
+    \[
+      S_{\mathrm{eff},f}=\frac{S}{\tau_f}.
+    \]
+  \pause
+  \item The Monte Carlo standard error is approximately
+    \[
+      \operatorname{MCSE}(\widehat\mu_f)
+      \approx \frac{\operatorname{sd}(f(\theta))}
+      {\sqrt{S_{\mathrm{eff},f}}}.
+    \]
+  \item<4-> Larger effective sample size means a more precise Monte Carlo
+    estimate; doubling ESS reduces MCSE by a factor of $\sqrt{2}$
   \end{itemize}
 \end{frame}
 
@@ -999,33 +1076,31 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
 
 \begin{frame}
 
-\frametitle{Estimating $\tau$}
+\frametitle{Integrated autocorrelation time}
 
   \begin{itemize}
-  \item Estimation of $\tau$
+  \item Let $\rho_t$ be the autocorrelation at lag $t$. The integrated
+    autocorrelation time is
     \begin{align*}
-      \tau = 1 + 2 \sum_{t=1}^\infty \hat{\rho}_t
+      \tau = 1 + 2 \sum_{t=1}^\infty \rho_t,
+      \qquad S_\text{eff}=\frac{S}{\tau}.
     \end{align*}
-    where $\hat{\rho}_t$ is empirical autocorrelation
+  \pause
+  \item $\tau$ measures how many correlated draws provide roughly the
+    same information as one independent draw
+  \pause
+  \item Estimated autocorrelations become noisy at long lags
     \begin{itemize}
-    \item<2-> empirical autocorrelation function is noisy %and thus
-%      estimate of $\tau$ is noisy
-    \item<2-> noise is larger for longer lags (less observations)
-    \item<3-> less noisy estimate is obtained by truncating
+    \item practical estimators truncate the sum at a finite lag $T$
     \begin{align*}
       \hat{\tau} = 1 + 2 \sum_{t=1}^T \hat{\rho}_t
     \end{align*}
+    \item statistical software chooses $T$ adaptively
     \end{itemize}
-%    \item<4-> As $\tau$ is estimated from a finite number of draws,
-%      it's expectation is overoptimistic
-%      \begin{itemize}
-%      \item if $\hat{\tau}>MN/20$ then the estimate is unreliable
-%
-%      \end{itemize}
     \end{itemize}
 \end{frame}
 
-\begin{frame}
+\begin{frame}<0>[label=backup_geyer]
 
 \frametitle{Geyer's adaptive window estimator of $\tau$}
 
@@ -1143,45 +1218,95 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
 
 \begin{frame}
 
-\frametitle{Problematic distributions}
+\frametitle{Difficult geometry: changing scale and direction}
 
   \begin{itemize}
-  \item<1-> Nonlinear dependencies
+  \item \uured{Nonlinear dependence}: posterior mass follows a curved,
+    narrow region
     \begin{itemize}
-    \item optimal proposal depends on location
+    \item a fixed random-walk direction repeatedly proposes points outside
+      the high-density region
+    \item symptoms: slow movement, high autocorrelation, and low ESS
     \end{itemize}
-    \begin{center}
-      \href{https://chi-feng.github.io/mcmc-demo/app.html?algorithm=RandomWalkMH&target=banana}{demo}
-    \end{center}
-  \item<2-> Funnels
+  \pause
+  \item \uured{Funnel geometry}: the appropriate step size changes across
+    the posterior
     \begin{itemize}
-    \item optimal proposal depends on location
+    \item a step size suitable for the wide part is too large for the neck
+    \item a step size suitable for the neck moves very slowly in the wide part
+    \item symptoms: chains explore different scales or rarely enter the neck
     \end{itemize}
-    \begin{center}
-      \href{https://chi-feng.github.io/mcmc-demo/app.html?algorithm=RandomWalkMH&target=funnel}{demo}
-    \end{center}
-  \item<3-> Multimodal
-    \begin{itemize}
-    \item difficult to move from one mode to another
-    \end{itemize}
-        \begin{center}
-      \href{https://chi-feng.github.io/mcmc-demo/app.html?algorithm=RandomWalkMH&target=multimodal}{demo}
-    \end{center}
-  \item<4-> Non-identifiable models
-    \begin{itemize}
-    \item set of connected points is the mode
-    \end{itemize}
-        \begin{center}
-      \href{https://chi-feng.github.io/mcmc-demo/app.html?algorithm=RandomWalkMH&target=donut}{demo}
-    \end{center}
-  \item<5-> Long-tailed with non-finite variance and mean
-    \begin{itemize}
-    \item central limit theorem for expectations does not hold
-    \end{itemize}
-
   \end{itemize}
 
+  \vfill
+  \centering
+  \href{https://chi-feng.github.io/mcmc-demo/app.html?algorithm=RandomWalkMH&target=banana}{Banana demo}
+  \qquad
+  \href{https://chi-feng.github.io/mcmc-demo/app.html?algorithm=RandomWalkMH&target=funnel}{Funnel demo}
+
 \end{frame}
+
+\begin{frame}
+
+\frametitle{Difficult geometry: hidden regions}
+
+  \begin{itemize}
+  \item \uured{Multimodality}: chains can remain in different modes
+    \begin{itemize}
+    \item chain means disagree and $\widehat R$ can remain above 1
+    \item if every chain starts in the same mode, diagnostics may fail to
+      reveal the missing mode
+    \end{itemize}
+  \pause
+  \item \uured{Non-identifiability}: many parameter combinations fit the
+    data almost equally well
+    \begin{itemize}
+    \item the posterior contains a ridge rather than one compact region
+    \item symptoms: drifting traces, strong dependence, and low ESS
+    \end{itemize}
+  \pause
+  \item \uured{Heavy tails}: occasional extreme draws dominate summaries
+    \begin{itemize}
+    \item means or variances may not exist, so the usual CLT and MCSE may
+      not apply
+    \end{itemize}
+  \end{itemize}
+
+  \vfill
+  \centering
+  \href{https://chi-feng.github.io/mcmc-demo/app.html?algorithm=RandomWalkMH&target=multimodal}{Multimodal demo}
+  \qquad
+  \href{https://chi-feng.github.io/mcmc-demo/app.html?algorithm=RandomWalkMH&target=donut}{Ridge demo}
+
+\end{frame}
+
+\begin{frame}
+
+\frametitle{MCMC diagnostic workflow}
+
+  \begin{enumerate}
+  \item Run several chains from different, reasonably dispersed starting
+    values
+  \item Remove warm-up draws before computing posterior summaries
+  \item Inspect trace plots: chains should explore the same regions without
+    persistent trends
+  \item Check that $\widehat R$ is close to 1 for all reported quantities
+  \item Check ESS and MCSE for the posterior summaries that matter
+  \item If diagnostics are poor, investigate the proposal, parameterization,
+    model, and posterior geometry
+  \end{enumerate}
+
+  \pause
+  \vspace{0.5\baselineskip}
+  {\color{uured}Running longer helps only if the chain is exploring the
+  relevant posterior regions.}
+
+\end{frame}
+
+\section{Additional material}
+\frame{\sectionpage}
+
+\againframe<1->{backup_geyer}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

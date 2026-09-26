@@ -35,6 +35,14 @@
 % Input new commands
 \input{../common/commands.tex}
 
+% Replace a code-style annotation embedded in the original R-hat figures.
+\newcommand{\rhatplot}[2]{%
+  \includegraphics[width=8cm]{#1}%
+  \begin{picture}(0,0)
+    \put(-132,21){\colorbox{white}{\scriptsize\color{red}$\widehat{\operatorname{var}}^{+}=#2$}}
+  \end{picture}%
+}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \setlength{\parskip}{3mm}
@@ -52,16 +60,6 @@
 
 
 
-\begin{frame}
-  \frametitle{Oral exam + mini projects}
-
-  \begin{itemize}
-  \item Oral exam evaluation (good and bad)?
-  \item Mini project proposals
-  \end{itemize}
-
-\end{frame}
-
 \section{Monte Carlo recap}
 %\frame{\sectionpage}
 
@@ -77,8 +75,9 @@
    \end{align*}
      \uncover<2->{We can easily evaluate ${\color{uured} p(y|\theta)p(\theta)}$ for any $\theta$, but the integral ${\color{red} \int p(y|\theta)p(\theta) d\theta}$ is usually difficult.}
 
-   \uncover<3->{We can use the unnormalized posterior ${\color{uured} q(\theta|y)
-     = p(y|\theta)p(\theta)}$, for example, in}
+   \uncover<3->{Define the unnormalized posterior
+     ${\color{uured}q(\theta)=p(y|\theta)p(\theta)}$, so that
+     ${\color{blue}p(\theta|y)\propto q(\theta)}$. We can use $q$, for example, in}
  \begin{itemize}
    \vspace{-0.5\baselineskip}
 %    \item<4-> Grid (equal spacing) evaluation with self-normalization
@@ -88,7 +87,7 @@
 %      \end{align*}
     \item<4-> Monte Carlo methods which can sample from
       ${\color{blue}p(\theta^{(s)}|y)}$ using only
-      ${\color{uured}q(\theta^{(s)}|y)}$
+      ${\color{uured}q(\theta^{(s)})}$
          \vspace{-0.5\baselineskip}
       \begin{align*}
         E_{\color{blue} p(\theta|y)}[f(\theta)] \approx \frac{1}{S} \sum_{s=1}^S f(\theta^{(s)})
@@ -213,7 +212,8 @@
     \begin{itemize}
     \item<2->[+] generic
     \item<2->[+] combine sequence of easier Monte Carlo draws to form a Markov chain
-    \item<3->[+] converges (in total variation) to $p(\theta|y)$ as $t\rightarrow\infty$
+    \item<3->[+] under suitable irreducibility and aperiodicity conditions,
+      converges in total variation to $p(\theta|y)$ as $t\rightarrow\infty$
     \item<4->[+] for well-behaved chains, a central limit theorem holds
       for Monte Carlo averages
     \item<5->[-] draws are dependent
@@ -410,7 +410,12 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
     \begin{itemize}
     \item e.g. it is easy to sample from multivariate normal
     \end{itemize}
-    \item<2-> Can we use that to form a Markov chain?
+  \item<2-> If direct joint sampling is available, use it
+    \begin{itemize}
+    \item the draws are independent, so a Markov chain is unnecessary
+    \end{itemize}
+  \item<3-> MCMC is useful when direct joint sampling is unavailable but
+    full conditionals or local proposals are manageable
   \end{itemize}
 
 \end{frame}
@@ -456,7 +461,7 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
       \item<6-> step c is executed by generating a random number from
         $\U(0,1)$
       \item<7-> $p(\theta^*|y)$ and $p(\theta^{(t-1)}|y)$ have the same
-        normalizing constant, so the unnormalized density $q(\cdot|y)$
+        normalizing constant, so the unnormalized density $q(\cdot)$
         can be used: {\color{uured}the constant cancels}
     \end{itemize}
   \end{itemize}
@@ -735,7 +740,7 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
 \frametitle{Metropolis}
 
   \begin{itemize}
-  \item Usually does not scale well to high dimensions
+  \item Random-walk Metropolis usually does not scale well to high dimensions
     \begin{itemize}
     \item if the shape does not match the whole distribution, efficiency drops
 %    \item demo11\_2\\
@@ -778,11 +783,10 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
       \end{itemize}
       }
       \vspace{-.5\baselineskip}
-    \item<3-> Warm-up, also called {\color{uured} burn-in}, is the initial
-      phase before retained sampling
+    \item<3-> Warm-up is the initial phase before retained sampling
     \begin{itemize}
-      \item do not use warm-up draws in posterior summaries
       \item algorithms may adapt proposal or tuning parameters during warm-up
+      \item the discarded initial draws are often called {\color{uured} burn-in}
       \end{itemize}
     \item<4-> Discarding warm-up does not guarantee good sampling
       \begin{itemize}
@@ -840,9 +844,9 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
     $\widehat{\operatorname{var}}^{+}$ = total variance estimate\\}
     \vspace{1\baselineskip}
     \only<1>{\hspace{-0.5cm}\phantom{\includegraphics[width=8cm]{figs/10chains_rhat1.pdf}}}
-    \only<2>{\hspace{-0.5cm}\includegraphics[width=8cm]{figs/10chains_rhat1.pdf}}
-    \only<3>{\hspace{-0.5cm}\includegraphics[width=8cm]{figs/10chains_rhat2.pdf}}
-    \only<4>{\hspace{-0.5cm}\includegraphics[width=8cm]{figs/10chains_rhat3.pdf}}
+    \only<2>{\hspace{-0.5cm}\rhatplot{figs/10chains_rhat1.pdf}{1.42}}
+    \only<3>{\hspace{-0.5cm}\rhatplot{figs/10chains_rhat2.pdf}{1.06}}
+    \only<4>{\hspace{-0.5cm}\rhatplot{figs/10chains_rhat3.pdf}{0.96}}
   \end{itemize}
 
 \end{frame}
@@ -1040,6 +1044,7 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
 
 \frametitle{Autocorrelation: one worked example}
 
+  \uured{Well-scaled proposal: regular movement through the target}
   \vspace{-0.5\baselineskip}
   \includegraphics[width=4cm]{figs/Metrop1.pdf}
   \uncover<2->{\includegraphics[width=5cm]{figs/Metrop1trace.pdf}\\}
@@ -1051,10 +1056,11 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
 
 \frametitle{Autocorrelation: comparison example 1}
 
+  \uured{Proposal too small: short accepted moves}
   \vspace{-0.5\baselineskip}
-  \includegraphics[width=4cm]{figs/Metrop2.pdf}
-  {\includegraphics[width=5cm]{figs/Metrop2trace.pdf}\\}
-  {\includegraphics[width=5cm]{figs/Metrop2acf.pdf}}
+  \includegraphics[width=3.7cm]{figs/Metrop2.pdf}
+  {\includegraphics[width=4.7cm]{figs/Metrop2trace.pdf}\\}
+  {\includegraphics[width=4.7cm]{figs/Metrop2acf.pdf}}
 
 \end{frame}
 
@@ -1062,6 +1068,7 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
 
 \frametitle{Autocorrelation: comparison example 2}
 
+  \uured{Proposal too large: many rejections and repeated states}
   \vspace{-0.5\baselineskip}
   \includegraphics[width=4cm]{figs/Metrop3.pdf}
   {\includegraphics[width=5cm]{figs/Metrop3trace.pdf}\\}
@@ -1092,6 +1099,8 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
     \]
   \item<4-> Larger effective sample size means a more precise Monte Carlo
     estimate; doubling ESS reduces MCSE by a factor of $\sqrt{2}$
+  \item<5-> In practice, MCSE should be small relative to the posterior
+    uncertainty and the precision needed for reporting
   \end{itemize}
 \end{frame}
 
@@ -1178,17 +1187,26 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
 
 \begin{frame}
 
- \frametitle{Effective sample size, $S_\text{eff}$}
+ \frametitle{Fast ACF decay and larger ESS}
 
-   \uured{Fastest ACF decay:} $\widehat\tau\approx24$ and
-   $\widehat S_\text{eff}\approx188$ from $S=4500$ retained draws\\
+   \only<1>{
+   \begin{itemize}
+   \item All examples use $S=4500$ retained draws after warm-up
+   \item Pair discussion: rank the three chains by expected ESS using their
+     ACF plots
+   \item Which chain should give the smallest MCSE if their posterior
+     standard deviations are similar?
+   \end{itemize}}
+   \only<2->{\uured{Fastest decay:}
+   $\widehat\tau\approx24 \Rightarrow \widehat S_\text{eff}\approx188$
+   for $S=4500$ retained draws\\}
    \uncover<2->{
   \makebox[10cm][t]{
 %    \hspace{-.7cm}
      \begin{minipage}{10cm}
-     \includegraphics[width=4.5cm]{figs/Metrop1trace.pdf}
-     \includegraphics[width=4.5cm]{figs/Metrop1acf.pdf}\\
-     \includegraphics[width=4.5cm]{figs/Metrop1mcerr.pdf}
+     \includegraphics[width=4.2cm]{figs/Metrop1trace.pdf}
+     \includegraphics[width=4.2cm]{figs/Metrop1acf.pdf}\\
+     \includegraphics[width=4.2cm]{figs/Metrop1mcerr.pdf}
      \hspace{0cm}
      \begin{minipage}[t][4cm][t]{4.5cm}
        \vspace{-2.5cm}
@@ -1208,16 +1226,16 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
 
 \begin{frame}
 
- \frametitle{Effective sample size, $S_\text{eff}$}
+ \frametitle{Slow ACF decay and smaller ESS}
 
    \uured{Slowest ACF decay:} $\widehat\tau\approx104$ and
    $\widehat S_\text{eff}\approx43$ from $S=4500$ retained draws\\
   \makebox[10cm][t]{
 %    \hspace{-.7cm}
      \begin{minipage}{10cm}
-     \includegraphics[width=4.5cm]{figs/Metrop2trace.pdf}
-     \includegraphics[width=4.5cm]{figs/Metrop2acf.pdf}\\
-     \includegraphics[width=4.5cm]{figs/Metrop2mcerr.pdf}
+     \includegraphics[width=4.2cm]{figs/Metrop2trace.pdf}
+     \includegraphics[width=4.2cm]{figs/Metrop2acf.pdf}\\
+     \includegraphics[width=4.2cm]{figs/Metrop2mcerr.pdf}
      \hspace{0cm}
      \begin{minipage}[t][4cm][t]{4cm}
        \vspace{-2.5cm}
@@ -1237,7 +1255,7 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
 
 \begin{frame}
 
-\frametitle{Effective sample size, $S_\text{eff}$}
+\frametitle{Comparing autocorrelation and ESS}
 
    \uured{Across all three examples: slower ACF decay
    $\Rightarrow$ larger $\widehat\tau$
@@ -1245,9 +1263,9 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
   \makebox[10cm][t]{
 %    \hspace{-.7cm}
      \begin{minipage}{10cm}
-     \includegraphics[width=4.5cm]{figs/Metrop3trace.pdf}
-     \includegraphics[width=4.5cm]{figs/Metrop3acf.pdf}\\
-     \includegraphics[width=4.5cm]{figs/Metrop3mcerr.pdf}
+     \includegraphics[width=4.2cm]{figs/Metrop3trace.pdf}
+     \includegraphics[width=4.2cm]{figs/Metrop3acf.pdf}\\
+     \includegraphics[width=4.2cm]{figs/Metrop3mcerr.pdf}
      \hspace{0cm}
      \begin{minipage}[t][4cm][t]{4cm}
        \vspace{-2.5cm}

@@ -39,7 +39,9 @@
 \newcommand{\rhatplot}[2]{%
   \includegraphics[width=8cm]{#1}%
   \begin{picture}(0,0)
-    \put(-132,21){\colorbox{white}{\scriptsize\color{red}$\widehat{\operatorname{var}}^{+}=#2$}}
+    \put(-132,18){\begingroup\setlength{\fboxsep}{0.5pt}%
+      \colorbox{white}{\makebox[42pt]{\scriptsize\color{red}$\widehat{\operatorname{var}}^{+}=#2$}}%
+      \endgroup}
   \end{picture}%
 }
 
@@ -55,6 +57,8 @@
 \frame{\titlepage
 % \thispagestyle{empty}
 }
+
+\input{Lecture5_announcements}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -278,6 +282,8 @@
 
 \frametitle{Example: Bivariate Normal using Gibbs}
 
+For $n$ independent observations $y_i\sim\mathcal{N}(\theta,\Sigma)$
+and a flat prior, let $\bar y$ be the sample mean. Then
 \[
 \theta \mid y \;\sim\; \mathcal{N}\!\left( \bar{y}, \tfrac{1}{n}\Sigma \right),
 \qquad
@@ -287,14 +293,12 @@
   \rho\sigma_1\sigma_2 & \sigma_2^2
 \end{pmatrix}.
 \]
-Here $\sigma_1$ and $\sigma_2$ are marginal standard deviations,
-$\rho$ is the correlation, and $\Sigma$ is known.
-\vspace{3mm}
+The known $\Sigma$ has observation standard deviations $\sigma_1,\sigma_2$
+and correlation $\rho$. The posterior standard deviations are
+$\sigma_j/\sqrt n$.
 \pause
 
-Using \uured{Gibbs sampling}:\\
-\vspace{3mm}
-Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\):
+One \uured{Gibbs sweep}, given $(\theta_1^{(t-1)},\theta_2^{(t-1)})$:
 
 \[
 \theta_1^{(t)} \;\sim\; \mathcal{N}\!\left(
@@ -458,12 +462,37 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
       \vspace{-1.5\baselineskip}
     \item<5-> rejection of a proposal increments the time $t$ also by one\\
       i.e., the new state is the same as the previous state
-      \item<6-> step c is executed by generating a random number from
-        $\U(0,1)$
+      \item<6-> draw $U\sim\U(0,1)$ and accept if $U<\min(1,r)$
       \item<7-> $p(\theta^*|y)$ and $p(\theta^{(t-1)}|y)$ have the same
         normalizing constant, so the unnormalized density $q(\cdot)$
         can be used: {\color{uured}the constant cancels}
     \end{itemize}
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Metropolis on the log scale}
+
+  \begin{itemize}
+  \item For a symmetric proposal, use the unnormalized log posterior
+    \[
+      \ell(\theta)=\log q(\theta)
+      =\log p(y\mid\theta)+\log p(\theta).
+    \]
+  \pause
+  \item Compute the log density ratio
+    \[
+      \Delta=\ell(\theta^*)-\ell(\theta^{(t-1)}).
+    \]
+  \pause
+  \item Draw $U\sim\U(0,1)$ and accept the proposal if
+    \[
+      \log U<\min(0,\Delta).
+    \]
+    Otherwise repeat the current state: $\theta^{(t)}=\theta^{(t-1)}$
+  \pause
+  \item This avoids evaluating tiny densities or exponentiating large
+    log density ratios
   \end{itemize}
 
 \end{frame}
@@ -779,14 +808,16 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
       \begin{itemize}
       \item the chain may not yet have reached the typical posterior region
         \\
-        \hspace{2cm}\includegraphics[width=3.2cm]{figs/Metrop1.pdf}
+        \hspace{2cm}\includegraphics[width=2.8cm]{figs/Metrop1.pdf}
       \end{itemize}
       }
       \vspace{-.5\baselineskip}
     \item<3-> Warm-up is the initial phase before retained sampling
     \begin{itemize}
-      \item algorithms may adapt proposal or tuning parameters during warm-up
-      \item the discarded initial draws are often called {\color{uured} burn-in}
+      \item tune the proposal during warm-up if needed
+      \item for our Metropolis samplers, keep the proposal fixed during
+        retained sampling
+      \item discard warm-up ({\color{uured} burn-in}) draws
       \end{itemize}
     \item<4-> Discarding warm-up does not guarantee good sampling
       \begin{itemize}
@@ -866,6 +897,8 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
     variation are similar
   \item $\widehat R>1$ indicates that the chains disagree more than expected
     from their within-chain variation
+  \item Course rule of thumb: aim for $\widehat R<1.01$, with values closer
+    to 1 preferred
   \pause
   \item A value close to 1 is necessary but not sufficient: also inspect
     trace plots, ESS, and MCSE
@@ -1044,7 +1077,7 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
 
 \frametitle{Autocorrelation: one worked example}
 
-  \uured{Well-scaled proposal: regular movement through the target}
+  \uured{Less correlated target: faster exploration}
   \vspace{-0.5\baselineskip}
   \includegraphics[width=4cm]{figs/Metrop1.pdf}
   \uncover<2->{\includegraphics[width=5cm]{figs/Metrop1trace.pdf}\\}
@@ -1056,7 +1089,7 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
 
 \frametitle{Autocorrelation: comparison example 1}
 
-  \uured{Proposal too small: short accepted moves}
+  \uured{Stronger target correlation, same proposal scale}
   \vspace{-0.5\baselineskip}
   \includegraphics[width=3.7cm]{figs/Metrop2.pdf}
   {\includegraphics[width=4.7cm]{figs/Metrop2trace.pdf}\\}
@@ -1068,11 +1101,40 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
 
 \frametitle{Autocorrelation: comparison example 2}
 
-  \uured{Proposal too large: many rejections and repeated states}
+  \uured{Same strongly correlated target, larger proposals}
   \vspace{-0.5\baselineskip}
   \includegraphics[width=4cm]{figs/Metrop3.pdf}
   {\includegraphics[width=5cm]{figs/Metrop3trace.pdf}\\}
   {\includegraphics[width=5cm]{figs/Metrop3acf.pdf}}
+
+\end{frame}
+
+\begin{frame}{From autocorrelation to Monte Carlo error}
+
+  Consider one stationary chain with $X_s=f(\theta^{(s)})$ and
+  $\sigma_f^2=\operatorname{Var}(X_s)<\infty$. Write
+  $\bar X=S^{-1}\sum_{s=1}^S X_s$ and
+  $\rho_{f,k}=\operatorname{Corr}(X_s,X_{s+k})$.
+
+  \pause
+  \begin{align*}
+    \operatorname{Var}(\bar X)
+    &=\frac{1}{S^2}\sum_{s=1}^S\sum_{t=1}^S
+      \operatorname{Cov}(X_s,X_t)\\
+    &=\frac{\sigma_f^2}{S}
+      \left[1+2\sum_{k=1}^{S-1}
+        \left(1-\frac{k}{S}\right)\rho_{f,k}\right].
+  \end{align*}
+  Each pair contributes twice, and there are $S-k$ pairs at lag $k$.
+
+  \pause
+  For a long run with absolutely summable autocorrelations,
+  \[
+    \operatorname{Var}(\bar X)\approx\frac{\sigma_f^2\tau_f}{S},
+    \qquad \tau_f=1+2\sum_{k=1}^{\infty}\rho_{f,k}.
+  \]
+  \uncover<4->{\uured{Positive autocorrelations add uncertainty to the
+  average, increasing its Monte Carlo standard error.}}
 
 \end{frame}
 
@@ -1164,18 +1226,21 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
   \item The maximum lag $K$ can be chosen adaptively
     \begin{itemize}
     \item for a stationary, reversible Markov chain
-    \item let $\Gamma_m=\rho_{2m}+\rho_{2m+1}$, the sum of two
-      consecutive autocorrelations
+    \item let $\Gamma_m=\rho_{2m}+\rho_{2m+1}$ for $m=0,1,\ldots$
+      and $\rho_0=1$
     \item $\Gamma_m$ is a positive, decreasing, and convex function of $m$
     \end{itemize}
-    \vspace{0.5\baselineskip}
   \item<2-> Initial positive sequence estimator (Geyer's IPSE)
       \begin{itemize}
-        \item Choose the largest $m$ such that all values of the sequence
-        $\hat{\Gamma}_1, \ldots, \hat{\Gamma}_m$ are positive
+        \item Starting at $m=0$, retain consecutive positive estimated
+          pairs and stop before the first nonpositive pair
+        \item If $L$ is the last retained pair, the maximum lag is $K=2L+1$
       \end{itemize}
-  \vspace{0.5\baselineskip}
-      \includegraphics[width=6cm]{figs/Metrop1acf.pdf}
+    \uncover<2->{\[
+      \widehat\tau=-1+2\sum_{m=0}^L\widehat\Gamma_m
+      =1+2\sum_{k=1}^K\widehat\rho_k.
+    \]}
+      \includegraphics[width=4.8cm]{figs/Metrop1acf.pdf}
   \end{itemize}
 \end{frame}
 
@@ -1210,6 +1275,7 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
      \hspace{0cm}
      \begin{minipage}[t][4cm][t]{4.5cm}
        \vspace{-2.5cm}
+       {\small ESS for one scalar parameter:\par}
        \begin{align*}
          \widehat{\tau} & = 1 + 2 \sum_{k=1}^K \widehat{\rho}_k\\
                  & \approx 24
@@ -1239,6 +1305,7 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
      \hspace{0cm}
      \begin{minipage}[t][4cm][t]{4cm}
        \vspace{-2.5cm}
+       {\small ESS for one scalar parameter:\par}
        \begin{align*}
          \widehat{\tau} & = 1 + 2 \sum_{k=1}^K \widehat{\rho}_k\\
                  & \approx 104
@@ -1269,6 +1336,7 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
      \hspace{0cm}
      \begin{minipage}[t][4cm][t]{4cm}
        \vspace{-2.5cm}
+       {\small ESS for one scalar parameter:\par}
        \begin{align*}
          \widehat{\tau} & = 1 + 2 \sum_{k=1}^K \widehat{\rho}_k\\
                  & \approx 63
@@ -1293,8 +1361,8 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
   \item \uured{Nonlinear dependence}: posterior mass follows a curved,
     narrow region
     \begin{itemize}
-    \item a fixed random-walk direction repeatedly proposes points outside
-      the high-density region
+    \item a fixed proposal shape and scale cannot follow the curve, so
+      many proposals fall outside the high-density region
     \item symptoms: slow movement, high autocorrelation, and low ESS
     \end{itemize}
   \pause
@@ -1330,7 +1398,7 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
   \item \uured{Non-identifiability}: many parameter combinations fit the
     data almost equally well
     \begin{itemize}
-    \item the posterior contains a ridge rather than one compact region
+    \item with weak prior information, the posterior can contain a long ridge
     \item symptoms: drifting traces, strong dependence, and low ESS
     \end{itemize}
   \pause
@@ -1359,7 +1427,7 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
   \item Remove warm-up draws before computing posterior summaries
   \item Inspect trace plots: chains should explore the same regions without
     persistent trends
-  \item Check that $\widehat R$ is close to 1 for all reported quantities
+  \item Check that $\widehat R<1.01$ for all reported quantities
   \item Check ESS and MCSE for the posterior summaries that matter
   \item If diagnostics are poor, investigate the proposal, parameterization,
     model, and posterior geometry

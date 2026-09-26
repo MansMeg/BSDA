@@ -108,8 +108,9 @@
     \item Inverse CDF works mainly for 1D \pause
 %    \item Analytic transformations work for only certain distributions \pause
 %    \item Factorization works only for certain joint distributions
-    \item Grid methods works in a few dimensions \pause
-    \item Rejection sampling works mostly in 1D (truncation is a special case) \pause
+    \item Grid methods work in a few dimensions \pause
+    \item Rejection sampling typically becomes inefficient as dimension
+      increases (truncation is a special case) \pause
     \item Importance sampling is reliable only in special cases
     \end{itemize}
     \pause
@@ -234,7 +235,7 @@
       =p(\theta^{(t)}|\theta^{(t-1)})
     \end{equation*}
     \pause
-  \item Chain has to be initialized with some starting point $\theta_0$ \pause
+  \item Chain has to be initialized with some starting point $\theta^{(0)}$ \pause
   % \item Transition distribution $T_t(\theta_t|\theta_{t-1})$ (may depend on $t$) \pause
   \item Choose a transition distribution so the
     {\color{uured}stationary distribution} of the Markov chain is $p(\theta|y)$
@@ -278,7 +279,7 @@
 \frametitle{Example: Bivariate Normal using Gibbs}
 
 \[
-p(\theta \mid y) \;\sim\; \mathcal{N}\!\left( \bar{y}, \tfrac{1}{n}\Sigma \right),
+\theta \mid y \;\sim\; \mathcal{N}\!\left( \bar{y}, \tfrac{1}{n}\Sigma \right),
 \qquad
 \Sigma=
 \begin{pmatrix}
@@ -337,10 +338,15 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
 
   \vspace{-0.5\baselineskip}
   \begin{itemize}
-  \item With \uured{conditionally conjugate} priors, the sampling from
-    the conditional distributions is easy for wide range of models
-  \item<2-> No algorithm parameters to tune
-  \item<3-> For not so easy conditionals, use e.g. inverse-CDF
+  \item When the full conditional distributions have standard forms,
+    exact Gibbs updates are easy to draw
+  \item<2-> Exact Gibbs updates have no proposal scale or rejection step
+    \begin{itemize}
+    \item blocking, parameterization, and update order can still strongly
+      affect efficiency
+    \end{itemize}
+  \item<3-> For a nonstandard full conditional, use a Metropolis--Hastings
+    update within the Gibbs sweep
   \item<4-> Several parameters can be updated in blocks ({\em blocking})
   \item<5-> Slow if parameters are highly dependent in the posterior...
   \end{itemize}
@@ -419,13 +425,13 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
   \begin{itemize}
   \item Algorithm
     \begin{itemize}
-      \item[1.] starting point $\theta^0$
+      \item[1.] starting point $\theta^{(0)}$
       \item[2.] $t=1,2,\ldots$
         \begin{itemize}
         \item[(a)] pick a proposal $\theta^{*}$ from a {\color{uured} proposal distribution}
-          $J_t(\theta^{*}|\theta^{(t-1)})$. \\
+          $J(\theta^{*}|\theta^{(t-1)})$. \\
           (Proposal distribution has to be symmetric, i.e.\\
-          $J_t(\theta_a|\theta_b)=J_t(\theta_b|\theta_a)$, for all
+          $J(\theta_a|\theta_b)=J(\theta_b|\theta_a)$, for all
           $\theta_a,\theta_b$)
         \item<2->[(b)] calculate acceptance ratio
           \begin{equation*}
@@ -510,10 +516,10 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
 \frametitle{Metropolis algorithm}
 
   \begin{itemize}
-  \item Example: one bivariate observation $(y_1,y_2)$
+  \item Example: one bivariate observation $y=(y_1,y_2)$
     \begin{itemize}
-    \item bivariate normal distribution with unknown mean and known
-      covariance
+    \item $y\mid\theta\sim\N(\theta,\Sigma)$, with known covariance
+      $\Sigma$ and a flat prior $p(\theta)\propto1$
        \begin{equation*}
          \left.
          \begin{pmatrix}
@@ -533,8 +539,8 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
        \right)
        \end{equation*}
      \item proposal distribution
-       $J_t(\theta^{*}|\theta^{(t-1)})
-       =\N(\theta^{*}|\theta^{(t-1)},\sigma_p^2)$
+       $J(\theta^{*}|\theta^{(t-1)})
+       =\N(\theta^{*}|\theta^{(t-1)},\sigma_p^2 I)$
      \end{itemize}
    \end{itemize}
 
@@ -587,7 +593,8 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
       \min\!\left(1,\frac{p(\theta'\mid y)}{p(\theta\mid y)}\right).
     \]
   \pause
-  \item The probability flow from $\theta$ to $\theta'$ is
+  \item For $\theta'\neq\theta$, the probability flow from $\theta$ to
+    $\theta'$ is
     \begin{align*}
       &p(\theta\mid y)J(\theta'\mid\theta)\alpha(\theta,\theta')\\
       &\qquad=J(\theta'\mid\theta)
@@ -600,8 +607,9 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
       p(\theta\mid y)T(\theta'\mid\theta)
       =p(\theta'\mid y)T(\theta\mid\theta').
     \]
-  \item<4-> This is \uured{detailed balance}; it implies that
-    $p(\theta\mid y)$ is stationary for the Metropolis transition $T$
+  \item<4-> The self-transition caused by rejection balances trivially.
+    Thus detailed balance holds for the full transition kernel $T$, and
+    $p(\theta\mid y)$ is stationary
   \end{itemize}
 
 
@@ -647,10 +655,8 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
     \item acceptance ratio includes ratio of proposal distributions
       \begin{equation*}
         r =
-        \frac{p(\theta^{*}|y)/J_t(\theta^{*}|\theta^{(t-1)})}
-        {p(\theta^{(t-1)}|y)/J_t(\theta^{(t-1)}|\theta^{*})} \pause =
-        \frac{p(\theta^{*}|y)J_t(\theta^{(t-1)}|\theta^{*})}
-        {p(\theta^{(t-1)}|y)J_t(\theta^{*}|\theta^{(t-1)})}
+        \frac{p(\theta^{*}|y)J(\theta^{(t-1)}|\theta^{*})}
+        {p(\theta^{(t-1)}|y)J(\theta^{*}|\theta^{(t-1)})}
       \end{equation*}
     \end{itemize}
   \end{itemize}
@@ -703,13 +709,23 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
 \frametitle{Gibbs sampling as a special case}
 
   \begin{itemize}
-  \item Specific case of Metropolis-Hastings algorithm
-    \begin{itemize}
-    \item single updated (or blocked)
-    \item proposal distribution is the conditional distribution\\
-      $\rightarrow$ proposal and target distributions are same\\
-      $\rightarrow$ acceptance probability is $1$
-    \end{itemize}
+  \item Update one component while holding $\theta_{-j}$ fixed, proposing
+    \[
+      \theta_j^*\sim p(\theta_j\mid\theta_{-j},y).
+    \]
+  \pause
+  \item The Metropolis--Hastings acceptance ratio is
+    \begin{align*}
+      r
+      &=\frac{p(\theta_j^*,\theta_{-j}\mid y)\,
+        p(\theta_j\mid\theta_{-j},y)}
+        {p(\theta_j,\theta_{-j}\mid y)\,
+        p(\theta_j^*\mid\theta_{-j},y)}\\
+      &=1,
+    \end{align*}
+    because each joint posterior factors into the same marginal for
+    $\theta_{-j}$ times its full conditional
+  \item<3-> Therefore every exact Gibbs proposal is accepted
   \end{itemize}
 
 \end{frame}
@@ -820,8 +836,8 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
   \begin{itemize}
   \item $\widehat{R}$ or {\color{uured} potential scale reduction factor} (PSRF)
   \item Compare means and variances of the chains\\
-    \uncover<2->{W = within chain variance estimate\\
-    var\_hat\_plus = total variance estimate\\}
+    \uncover<2->{$W$ = within-chain variance estimate\\
+    $\widehat{\operatorname{var}}^{+}$ = total variance estimate\\}
     \vspace{1\baselineskip}
     \only<1>{\hspace{-0.5cm}\phantom{\includegraphics[width=8cm]{figs/10chains_rhat1.pdf}}}
     \only<2>{\hspace{-0.5cm}\includegraphics[width=8cm]{figs/10chains_rhat1.pdf}}
@@ -898,18 +914,18 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
     \end{equation*}
     \vspace{-0.5\baselineskip}
     \begin{itemize}
-    \item this \emph{overestimates} marginal posterior variance if the
-      starting points are overdispersed
+    \item with overdispersed starting points and incomplete mixing, this
+      typically \emph{overestimates} the marginal posterior variance
     \end{itemize}
     \vspace{0.5\baselineskip}
-  \item<2-> Given finite $N$, $W$ \emph{underestimates} marginal posterior variance
+  \item<2-> Before chains have fully explored the posterior, $W$ typically
+    \emph{underestimates} the marginal posterior variance
     \begin{itemize}
     \item single chains have not yet visited all points in the distribution
     \item when $N\rightarrow\infty, \quad \E(W)\rightarrow \var(\theta|y)$
     \end{itemize}
     \vspace{0.5\baselineskip}
-  \item<3-> As $\widehat{\var}^{+}(\theta|y)$ overestimates and $W$ underestimates,
-    compute
+  \item<3-> Comparing these two estimates motivates
     \begin{equation*}
       \widehat{R}=\sqrt{\frac{\widehat{\var}^{+}}{W}}
     \end{equation*}
@@ -1138,7 +1154,7 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
   \begin{itemize}
   \item The maximum lag $K$ can be chosen adaptively
     \begin{itemize}
-    \item for a stationary, irreducible, recurrent Markov chain
+    \item for a stationary, reversible Markov chain
     \item let $\Gamma_m=\rho_{2m}+\rho_{2m+1}$, the sum of two
       consecutive autocorrelations
     \item $\Gamma_m$ is a positive, decreasing, and convex function of $m$
@@ -1164,7 +1180,8 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
 
  \frametitle{Effective sample size, $S_\text{eff}$}
 
-   Effective sample size $\ESS = S_\text{eff} \approx S/\hat{\tau}$\\
+   \uured{Fastest ACF decay:} $\widehat\tau\approx24$ and
+   $\widehat S_\text{eff}\approx188$ from $S=4500$ retained draws\\
    \uncover<2->{
   \makebox[10cm][t]{
 %    \hspace{-.7cm}
@@ -1176,11 +1193,11 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
      \begin{minipage}[t][4cm][t]{4.5cm}
        \vspace{-2.5cm}
        \begin{align*}
-         \hat{\tau} & = 1 + 2 \sum_{t=1}^T \hat{\rho}_t\\
+         \widehat{\tau} & = 1 + 2 \sum_{k=1}^K \widehat{\rho}_k\\
                  & \approx 24
        \end{align*}
                \begin{align*}
-         \hat{S}_\text{eff} & = \frac{4500}{24} \approx  188
+         \widehat{S}_\text{eff} & = \frac{4500}{24} \approx 188
        \end{align*}
      \end{minipage}
    \end{minipage}
@@ -1193,7 +1210,8 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
 
  \frametitle{Effective sample size, $S_\text{eff}$}
 
-   Effective sample size $\ESS = S_\text{eff} \approx S/\hat{\tau}$\\
+   \uured{Slowest ACF decay:} $\widehat\tau\approx104$ and
+   $\widehat S_\text{eff}\approx43$ from $S=4500$ retained draws\\
   \makebox[10cm][t]{
 %    \hspace{-.7cm}
      \begin{minipage}{10cm}
@@ -1204,11 +1222,11 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
      \begin{minipage}[t][4cm][t]{4cm}
        \vspace{-2.5cm}
        \begin{align*}
-         \hat{\tau} & = 1 + 2 \sum_{t=1}^T \hat{\rho}_t\\
+         \widehat{\tau} & = 1 + 2 \sum_{k=1}^K \widehat{\rho}_k\\
                  & \approx 104
        \end{align*}
                \begin{align*}
-         \hat{S}_\text{eff} & = \frac{4500}{104} \approx  43
+         \widehat{S}_\text{eff} & = \frac{4500}{104} \approx 43
        \end{align*}
      \end{minipage}
    \end{minipage}
@@ -1221,7 +1239,9 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
 
 \frametitle{Effective sample size, $S_\text{eff}$}
 
-   Effective sample size $\ESS = S_\text{eff} \approx S/\hat{\tau}$\\
+   \uured{Across all three examples: slower ACF decay
+   $\Rightarrow$ larger $\widehat\tau$
+   $\Rightarrow$ smaller $\widehat S_\text{eff}$.}\\
   \makebox[10cm][t]{
 %    \hspace{-.7cm}
      \begin{minipage}{10cm}
@@ -1232,11 +1252,11 @@ Given starting values \((\theta_1^{(0)}, \theta_2^{(0)})\), for \(t = 1,2,\dots\
      \begin{minipage}[t][4cm][t]{4cm}
        \vspace{-2.5cm}
        \begin{align*}
-         \hat{\tau} & = 1 + 2 \sum_{t=1}^T \hat{\rho}_t\\
+         \widehat{\tau} & = 1 + 2 \sum_{k=1}^K \widehat{\rho}_k\\
                  & \approx 63
        \end{align*}
         \begin{align*}
-         \hat{S}_\text{eff} & = \frac{4500}{63} \approx  71
+         \widehat{S}_\text{eff} & = \frac{4500}{63} \approx 71
        \end{align*}
      \end{minipage}
    \end{minipage}

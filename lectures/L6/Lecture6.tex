@@ -146,7 +146,7 @@ where $K(\psi)$ is the \uured{kinetic} energy and $V(\theta)$ is the \uured{pote
 \item Hamiltonian Dynamics (\uured{preserve energy})
 \begin{align}
 \frac{d\theta}{dt} &=  \frac{\partial H}{\partial \psi} = \frac{\partial K}{\partial \psi}\\
-\frac{d\psi}{dt} &=  - \frac{\partial H}{\partial \theta} = \frac{\partial V}{\partial \theta}
+\frac{d\psi}{dt} &=  - \frac{\partial H}{\partial \theta} = - \frac{\partial V}{\partial \theta}
 \end{align}
 \item Let $V(\theta) = - \log(q(\theta|y))= - \log p(\theta) - \log p(y | \theta)$
 \item Let $\psi \sim N(0, M)$ where $M$ is the \uured{mass matrix}
@@ -364,11 +364,11 @@ r = \min \left( 1, \frac{q(\theta^\star|y)}{q(\theta_{t-1}|y)}\frac{p(\psi^\star
   \pause
   \item The Hamiltonian $H(\theta, \psi) $ should remain roughly constant throughout the trajectory:
   \[
-  H(\theta_{start}, \psi_{start}) \approx H(\theta_{end}, \psi_{end})
+  H(\theta, \psi) \approx H(\theta_{start}, \psi_{start})
   \]
-  \item A large difference between the initial and final Hamiltonian indicates a divergent transition:
+  \item Stan flags an excessively large positive increase at any point along the trajectory:
   \[
-  H(\theta_{start}, \psi_{start}) - H(\theta_{end}, \psi_{end}) >> 0
+  \Delta H = H(\theta, \psi) - H(\theta_{start}, \psi_{start}) \gg 0
   \]
   \item indicates that Hamiltonian dynamic simulation has problems with unexpected fast changes in log-density
   \item possibility of biased estimates
@@ -1123,7 +1123,7 @@ parameters {
 }
 transformed parameters {
     vector[N] mu;
-    mu <- alpha + beta*x;
+    mu = alpha + beta*x;
 }
 model {
     y ~ normal(mu, sigma);
@@ -1146,7 +1146,7 @@ data {
   }
 
   \begin{itemize}
-  \item difference between {\tt vector[N] x}\, and\, {\tt real x[N]}
+  \item difference between {\tt vector[N] x}\, and\, {\tt array[N] real x}
   \end{itemize}
 \end{frame}
 
@@ -1162,7 +1162,7 @@ parameters {
 }
 transformed parameters {
     vector[N] mu;
-    mu <- alpha + beta*x;
+    mu = alpha + beta*x;
 }
 \end{lstlisting}
   }
@@ -1188,7 +1188,7 @@ data {
 ...
 transformed parameters {
     vector[N] mu;
-    mu <- alpha + beta*x;
+    mu = alpha + beta*x;
 }
 model {
     alpha ~ normal(pmualpha,psalpha);
@@ -1213,7 +1213,7 @@ parameters {
 }
 transformed parameters {
   vector[N] mu;
-  mu <- alpha + beta*x;
+  mu = alpha + beta*x;
 }
 model {
   nu ~ gamma(2,0.1);
@@ -1391,8 +1391,10 @@ fit_bin2 <- stan_glm(y/N ~ grp2, family = binomial(), data = d_bin2,
 
   {\scriptsize
 \begin{lstlisting}[language=R]
-fit_bin2 <- brm(y/N ~ grp2, family = binomial(), data = d_bin2,
-                    weights = N)
+fit_bin2 <- brm(
+  y | trials(N) ~ grp2,
+  family = binomial(), data = d_bin2
+)
 
 
 fit_lin_t <- brm(temp ~ year, data = d_lin, family = student())
@@ -1424,7 +1426,7 @@ data {
 }
 transformed data {
   real ymax;
-  ymax <- max(y);
+  ymax = max(y);
 }
 parameters {
   real<lower=0> sigma;
@@ -1435,7 +1437,7 @@ model {
 }
 generated quantities {
   vector[Nt] predccdf;
-  predccdf<-gpareto_ccdf(yt,k,sigma);
+  predccdf = gpareto_ccdf(yt,k,sigma);
 }
   \end{lstlisting}
 }
@@ -1452,9 +1454,9 @@ functions {
     // should check and give error if k<0
     // and max(y)/sigma > -1/k
     int N;
-    N <- dims(y)[1];
-    if (fabs(k) > 1e-15)
-      return -(1+1/k)*sum(log1pv(y*k/sigma)) -N*log(sigma);
+    N = dims(y)[1];
+    if (abs(k) > 1e-15)
+      return -(1+1/k)*sum(log1p(y*k/sigma)) -N*log(sigma);
     else
       return -sum(y/sigma) -N*log(sigma); // limit k->0
   }
@@ -1462,8 +1464,8 @@ functions {
     // generalised Pareto log ccdf with mu=0
     // should check and give error if k<0
     // and max(y)/sigma < -1/k
-    if (fabs(k) > 1e-15)
-      return exp((-1/k)*log1pv(y/sigma*k));
+    if (abs(k) > 1e-15)
+      return exp((-1/k)*log1p(y/sigma*k));
     else
       return exp(-y/sigma); // limit k->0
   }

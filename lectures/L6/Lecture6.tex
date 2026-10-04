@@ -52,6 +52,17 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\begin{frame}
+
+\frametitle{Oral Exam 2}
+
+ \begin{itemize}
+    \item Next Monday
+    \item Block 3-5
+    \item New room and longer (but still expect 20s+ depending on nervousness level)
+  \end{itemize}
+
+\end{frame}
 
 \section{MCMC recap}
 %\frame{\sectionpage}
@@ -69,8 +80,10 @@
   from its starting point.
 \item[+] A general approach when direct posterior sampling is difficult.
 \pause
-\item[-] Draws are dependent: precision depends on $S_\text{eff}$.
-\item[-] We still need to assess convergence and Monte Carlo error.
+\item[-] Draws are dependent: precision depends on the
+  effective sample size (ESS), $S_{\mathrm{eff}}$.
+\item[-] Assess convergence and the Monte Carlo standard error (MCSE)
+  of each estimated summary.
 \end{itemize}
 
 \end{frame}
@@ -113,12 +126,12 @@
 \frametitle{Why Hamiltonian Monte Carlo?}
 
 \begin{itemize}
-\item Want to build an \uured{efficient} Markov Chain
+\item Want to build an \uured{efficient} Markov chain
 \begin{itemize}
-\item We want to sample jointly all $\theta$
+\item We want to sample all components of $\theta$ jointly.
 \item We know the \uured{unnormalized} posterior
   $q(\theta|y)=Z \cdot p(\theta|y)$, where $Z$ does not depend on $\theta$.
-\item Standard HMC needs continuous unknowns and a sufficiently smooth
+\item Standard Hamiltonian Monte Carlo (HMC) needs continuous unknowns and a sufficiently smooth
   log density.
 \item Can the \uured{gradient} of $\log q(\theta|y)$ guide efficient proposals?
 \pause
@@ -135,11 +148,11 @@
 \begin{itemize}
 \item Add momentum variables to our posterior (\uured{canonical} distribution)
 \[
- p(\psi,\theta | y) = p(\psi | \theta , y) \cdot p(\theta | y)\,,
+ p(\theta,\psi | y) = p(\theta | y) \cdot p(\psi | \theta , y)\,,
 \]
 in practice we let $p(\psi | \theta , y) = p(\psi)$
 \pause
-\item Idea from Physics (Mechanics):
+\item Idea from physics (mechanics):
 \begin{itemize}
 \item $\theta$: position
 \item $\psi$: momentum
@@ -181,7 +194,7 @@ where $K(\psi)$ is the \uured{kinetic} energy and $V(\theta)$ is the \uured{pote
 \frametitle{What is Hamiltonian Monte Carlo?}
 
 \begin{itemize}
-\item Hamiltonian Dynamics (\uured{preserve energy})
+\item Hamiltonian dynamics (\uured{preserve energy})
 \begin{align}
 \frac{d\theta}{dt} &=  \frac{\partial H}{\partial \psi} = \frac{\partial K}{\partial \psi}\\
 \frac{d\psi}{dt} &=  - \frac{\partial H}{\partial \theta} = - \frac{\partial V}{\partial \theta}
@@ -357,7 +370,7 @@ The momentum half-step, position full-step, and momentum half-step give
 \begin{itemize}
 \item Reverse momentum: $\psi^\star=-\widetilde\psi=0.25$.
   The joint proposal is $(\theta^\star,\psi^\star)=(1.5,0.25)$.
-\item These choices keep the arithmetic simple, rather than tune efficiency.
+\item Here $\epsilon$ and $L$ are chosen for simple arithmetic.
 \end{itemize}
 \end{frame}
 
@@ -385,6 +398,31 @@ r=\min(1,e^{-0.15625})\approx0.8553.
 \item If instead $U=0.90$, \uured{reject} and retain $\theta_t=1$.
   In either case, refresh momentum at the next iteration.
 \end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Pair discussion: step size and exploration}
+
+Discuss in pairs (1--2 minutes).
+\begin{itemize}
+\item Consider HMC with $\epsilon=0.1$ and $L=20$.
+  We halve $\epsilon$ but keep $L$ fixed.
+\item What happens to numerical accuracy and integration time?
+  Does this automatically improve posterior exploration?
+\item How could we preserve the original integration time?
+\end{itemize}
+
+\uncover<2->{
+\vspace{0.5\baselineskip}
+\uured{After discussion:}
+\begin{itemize}
+\item Smaller steps generally improve numerical accuracy,
+  but $L\epsilon$ falls from $2$ to $1$.
+\item A shorter trajectory may limit movement, so better accuracy
+  does not guarantee better exploration.
+\item Double $L$ to $40$ to keep $L\epsilon=2$, at the cost of
+  more gradient evaluations per proposal.
+\end{itemize}}
 \end{frame}
 
 \begin{frame}
@@ -439,7 +477,7 @@ r=\min(1,e^{-0.15625})\approx0.8553.
 
 
 \begin{frame}
-\frametitle{Hamiltonian Monte Carlo Summary}
+\frametitle{Hamiltonian Monte Carlo summary}
 
 \begin{itemize}
 \item Parameters:
@@ -448,7 +486,7 @@ r=\min(1,e^{-0.15625})\approx0.8553.
 \item[$L$] leapfrog steps\pause
 \item[$M$] mass matrix\pause
 \end{itemize}
-\item[+] Can be very efficient ($S_\text{eff}$)
+\item[+] Can be very efficient ($S_{\mathrm{eff}}$)
 \item[+] Additional diagnostics
 \pause
 \item[-] Integration time $L\epsilon$ needs tuning: too short mixes slowly;
@@ -477,8 +515,8 @@ r=\min(1,e^{-0.15625})\approx0.8553.
   \item \uured{Goal:} Simplify/adapt the tuning of HMC
   \item \uured{Dynamic}: choose the number of leapfrog steps $L$
     within each iteration.
-  \item NUTS grows a trajectory in randomly chosen forward or backward
-    directions, doubling its length in stages.
+  \item The \uured{No-U-Turn Sampler (NUTS)} grows a trajectory in randomly
+    chosen forward or backward directions, doubling its length in stages.
   \pause
   \item \uured{U-turn intuition}, with $M=I$ and one moving endpoint:
   \[
@@ -497,7 +535,7 @@ r=\min(1,e^{-0.15625})\approx0.8553.
 \end{frame}
 
 \begin{frame}
-\frametitle{Dynamic Hamiltonian Monte Carlo Summary}
+\frametitle{Dynamic Hamiltonian Monte Carlo summary}
 
 \begin{itemize}
 \item Parameters:
@@ -505,7 +543,7 @@ r=\min(1,e^{-0.15625})\approx0.8553.
 \item[$\epsilon$] step size \pause
 \item[$M$] mass matrix\pause
 \end{itemize}
-\item[+] Can be very efficient ($S_\text{eff}$)
+\item[+] Can be very efficient ($S_{\mathrm{eff}}$)
 \item[+] Additional diagnostics
 \pause
 \item $L$ is chosen anew at each iteration, including after warmup.
@@ -536,7 +574,7 @@ r=\min(1,e^{-0.15625})\approx0.8553.
 
 \begin{frame}
 
-\frametitle{Max tree depth}
+\frametitle{Maximum tree depth}
 
   \begin{itemize}
   \item NUTS reached its computational limit before its usual stopping rule.
@@ -557,15 +595,15 @@ r=\min(1,e^{-0.15625})\approx0.8553.
 
 % What
 \begin{itemize}
-  \item HMC specific diagnostic
+  \item HMC-specific diagnostic
   \pause
   \item The Hamiltonian $H(\theta, \psi) $ should remain roughly constant throughout the trajectory:
   \[
-  H(\theta, \psi) \approx H(\theta_{start}, \psi_{start})
+  H(\theta, \psi) \approx H(\theta_{\mathrm{start}}, \psi_{\mathrm{start}})
   \]
   \item Stan flags an excessively large positive increase at any point along the trajectory:
   \[
-  \Delta H = H(\theta, \psi) - H(\theta_{start}, \psi_{start}) \gg 0
+  \Delta H = H(\theta, \psi) - H(\theta_{\mathrm{start}}, \psi_{\mathrm{start}}) \gg 0
   \]
   \item The numerical trajectory is unreliable, often because the
     posterior curvature changes rapidly.
@@ -685,8 +723,9 @@ r=\min(1,e^{-0.15625})\approx0.8553.
     \begin{itemize}
     \item If its posterior mean does not exist, there is no finite
       expectation to estimate.
-    \item Infinite variance rules out the usual finite-variance CLT/MCSE
-      argument. Other summaries may still be well behaved.
+    \item Infinite variance rules out the usual finite-variance central
+      limit theorem (CLT) and its MCSE formula.
+      Other summaries may still be well behaved.
     \end{itemize}
   \end{itemize}
 
@@ -715,6 +754,30 @@ r=\min(1,e^{-0.15625})\approx0.8553.
 \item Good $\widehat R$ and ESS do not cancel a divergence warning.
   No diagnostic proves that all important regions were explored.
 \end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Pair discussion: conflicting diagnostics}
+
+Discuss in pairs (1--2 minutes).
+\begin{itemize}
+\item Four chains give $\widehat R=1.00$ and ESS $=2000$ for a
+  parameter of interest, but report 12 post-warmup divergences.
+\item Can we trust its posterior summaries?
+\item Would simply running the chains longer solve the problem?
+\end{itemize}
+
+\uncover<2->{
+\vspace{0.5\baselineskip}
+\uured{After discussion:}
+\begin{itemize}
+\item Good $\widehat R$ and ESS do not rule out biased estimates
+  when divergences remain.
+\item Longer chains do not repair inaccurate numerical integration
+  or the underlying difficult geometry.
+\item Check the model, scales and priors. Consider reparameterization
+  or smaller steps, then refit and check again.
+\end{itemize}}
 \end{frame}
 
 
@@ -748,9 +811,8 @@ r=\min(1,e^{-0.15625})\approx0.8553.
 \frametitle{Probabilistic programming languages}
 
   \begin{itemize}
-  \item Wikipedia ``A probabilistic programming language (PPL) is a
-    programming language designed to describe probabilistic models
-    and then perform inference in those models''
+  \item A \uured{probabilistic programming language (PPL)} lets us specify
+    a probability model in code and use inference algorithms to fit it.
     \pause
   \item To make probabilistic programming useful
     \begin{itemize}
@@ -772,14 +834,39 @@ r=\min(1,e^{-0.15625})\approx0.8553.
     \item automated inference
     \item diagnostics
     \end{itemize}
-  \item Many frameworks
-    Stan, PyMC3, Pyro (Uber), Edward (Google), Birch (Uppsala), ...
+  \item Examples of frameworks:
+    \href{https://mc-stan.org/}{Stan},
+    \href{https://www.pymc.io/}{PyMC},
+    \href{https://pyro.ai/}{Pyro}, and
+    \href{https://num.pyro.ai/}{NumPyro}.
   \end{itemize}
 
 \end{frame}
 
-\section{Stan}
+\begin{frame}
+\frametitle{From model to checked predictions}
+
+\begin{enumerate}
+\item \uured{Specify}: observation model, parameter constraints and
+  scientifically meaningful priors.
+\item \uured{Fit}: run several chains with warmup; use a known-answer
+  test when one is available.
+\item \uured{Check computation}: traces, $\widehat R$, ESS, MCSE,
+  divergences and tree depth. Resolve problems before interpreting results.
+\item \uured{Interpret and predict}: summarize parameters and generated
+  quantities in meaningful units; distinguish the mean from a future outcome.
+\item \uured{Check the model}: compare predictive implications with
+  observed data. Accurate computation does not guarantee a good model.
+\end{enumerate}
+
+\vfill
+\uured{Assignment 6}: apply this workflow to the bioassay model and
+the Gaussian trend/prediction exercise.
+\end{frame}
+
+\section{Additional material}
 \frame{\sectionpage}
+\subsection{Stan}
 
 \begin{frame}
 
@@ -802,25 +889,22 @@ r=\min(1,e^{-0.15625})\approx0.8553.
 
 \begin{frame}
 
-  \frametitle{Stan - probabilistic programming framework}
+  \frametitle{Stan: probabilistic programming framework}
 
    \begin{itemize}
-   \item Language, inference engine, user interfaces, documentation,
-     case studies, diagnostics, packages, ...
-     \begin{itemize}
-     \item autodiff to compute gradients of the log density
-     \end{itemize}
-   \item<2-> More than ten thousand users in social, biological, and
-     physical sciences, medicine, engineering, and business
-
-   \item<3-> Several full time developers, 40+ developers, more than 100 contributors
-   \item<4-> R, Python, Julia, Scala, Stata, Matlab, command line interfaces
-    \item<4-> More than 100 R packages using Stan
+   \item A modeling language with inference algorithms, diagnostics,
+     documentation and worked examples.
+   \item<2-> \uured{Automatic differentiation} computes gradients of
+     the log density for HMC.
+   \item<3-> Interfaces include RStan and CmdStanR for R,
+     PyStan and CmdStanPy for Python, and the CmdStan command line.
+   \item<4-> Packages such as \texttt{rstanarm} and \texttt{brms}
+     provide formula-based model specification using Stan.
    \end{itemize}
   \vfill
   \begin{center}
     \includegraphics[width=1.5cm]{figs/stan_logo_wide.png}\\
-    \url{mc-stan.org}
+    \href{https://mc-stan.org/}{mc-stan.org}
   \end{center}
 \end{frame}
 
@@ -908,7 +992,7 @@ data {
 
   \begin{itemize}
   \item Data type and size are declared
-  \item Stan checks that given data matches type and constraints
+  \item Stan checks that supplied data match the declared types and constraints.
     \begin{itemize}
     \item<2-> If you are not used to strong typing, this may
       feel annoying, but it will reduce the probability of coding
@@ -1062,14 +1146,14 @@ model {
 
 \begin{frame}
 
-\frametitle{Stan}
+\frametitle{Compiling a Stan model}
 
   \begin{itemize}
-  \item Stan compiles (transplies) the model written in Stan language to C++
+  \item Stan translates the model to C++, which is then compiled for inference.
     \begin{itemize}
-    \item this makes the sampling for complex models and bigger data faster
-    \item also makes Stan models easily portable, you can use your own
-      favorite interface
+    \item Compiled code evaluates the log density and its gradients.
+    \item The same Stan model can be used through different interfaces,
+      including R and Python.
     \end{itemize}
   \end{itemize}
 
@@ -1163,7 +1247,7 @@ fit = posterior.sample(
   \theta\mid y&\sim\operatorname{Beta}(8,4).
   \end{align*}
 \pause
-\item Thus we know, without simulation,
+\item We know the posterior mean and standard deviation (SD) exactly:
   \[
   E(\theta\mid y)=\frac{8}{12}=\frac23,
   \quad
@@ -1407,7 +1491,7 @@ bayesplot::mcmc_hist(draws, pars = 'oddsratio') +
 
 \begin{frame}[fragile]
 
-\frametitle{HMC specific diagnostics}
+\frametitle{HMC-specific diagnostics}
 
   {\small
 \begin{lstlisting}[language=R]
@@ -1432,7 +1516,7 @@ n_leapfrog <-
 
 \begin{frame}[fragile]
 
-\frametitle{Shinystan}
+\frametitle{ShinyStan}
 
   \begin{itemize}
   \item Graphical user interface for analysing MCMC results
@@ -1811,18 +1895,17 @@ generated quantities {
 
 \begin{frame}[fragile]
 
-\frametitle{RStanARM}
+\frametitle{rstanarm}
 
   \begin{itemize}
-  \item RStanARM provides simplified model description with
-    pre-compiled models
+  \item \texttt{rstanarm} uses R formulas and precompiled Stan models.
     \begin{itemize}
-    \item no need to wait for compilation
-    \item a restricted set of models
+    \item No separate model compilation for each fit.
+    \item Supports a defined collection of regression models.
     \end{itemize}
   \end{itemize}
 
-Two group Binomial model:
+Two-group binomial model:
   {\scriptsize
 \begin{lstlisting}
 d_bin2 <- data.frame(
@@ -1848,18 +1931,17 @@ fit_bin2 <- stan_glm(
 
 \begin{frame}[fragile]
 
-\frametitle{RStanARM}
+\frametitle{rstanarm}
 
   \begin{itemize}
-  \item RStanARM provides simplified model description with
-    pre-compiled models
+  \item \texttt{rstanarm} uses R formulas and precompiled Stan models.
     \begin{itemize}
-    \item no need to wait for compilation
-    \item a restricted set of models
+    \item No separate model compilation for each fit.
+    \item Supports a defined collection of regression models.
     \end{itemize}
   \end{itemize}
 
-Two group Binomial model:
+Two-group binomial model:
   {\scriptsize
 \begin{lstlisting}
 d_bin2 <- data.frame(
@@ -1892,13 +1974,13 @@ fit_bin2 <- stan_glm(
 
 \begin{frame}[fragile]
 
-\frametitle{BRMS}
+\frametitle{brms}
 
   \begin{itemize}
-  \item BRMS provides simplified model description
+  \item \texttt{brms} uses R formulas to generate Stan code.
     \begin{itemize}
-    \item a larger set of models than RStanARM, but still restricted
-    \item need to wait for the compilation
+    \item Supports many regression families and multilevel models.
+    \item Generated models need compilation before fitting.
     \end{itemize}
   \end{itemize}
 
@@ -2045,27 +2127,19 @@ vector gpareto_ccdf(vector y,
 
 \begin{frame}[fragile]
 
-\frametitle{Different interfaces}
+\frametitle{Stan interfaces}
 
   \begin{itemize}
-  \item RStan / PyStan
-    \begin{itemize}
-    \item C++ functions of Stan are called directly from R / Python
-    \item Higher integration between R/Python and Stan, but maybe more
-      difficult to install due to more requirements of compatible C++
-      compilers and libraries
-    \end{itemize}
-  \item CmdStanR / CmdStanPy
-    \begin{itemize}
-    \item Lightweight interface on top of commandline program CmdStan
-    \item Lacks some features that are not needed in this course, but
-      is usually easier to install
-    \end{itemize}
-  \item More recent useful R packages
-    \begin{itemize}
-    \item posterior: for handling posterior draws, convergence diagnostics, and summaries
-    \item tidybayes + ggdist: pretty plots
-    \end{itemize}
+  \item \href{https://mc-stan.org/rstan/}{RStan} and
+    \href{https://pystan.readthedocs.io/}{PyStan} provide Stan interfaces
+    for R and Python, respectively.
+  \item \href{https://mc-stan.org/cmdstanr/}{CmdStanR} and
+    \href{https://mc-stan.org/cmdstanpy/}{CmdStanPy} run compiled models
+    through CmdStan, Stan's command-line interface.
+  \item The model is written in the same Stan language. Installation
+    requirements and the commands for fitting and extracting draws differ.
+  \item Related R packages: \texttt{posterior} for draws and diagnostics,
+    and \texttt{tidybayes} and \texttt{ggdist} for summaries and visualization.
   \end{itemize}
 
 \end{frame}
@@ -2099,59 +2173,29 @@ vector gpareto_ccdf(vector y,
 
 \begin{frame}
 
-\frametitle{Extra material for Stan}
+\frametitle{Stan references and tutorials}
 
   \begin{itemize}
-  \item Andrew Gelman, Daniel Lee, and Jiqiang Guo (2015) Stan: A
-    probabilistic programming language for Bayesian inference and
-    optimization. \url{http://www.stat.columbia.edu/~gelman/research/published/stan_jebs_2.pdf}
-  \item Carpenter et al (2017). Stan: A probabilistic programming
-    language. Journal of Statistical Software
-    76(1). \url{https://dox.doi.org/10.18637/jss.v076.i01}
-  \item Stan User's Guide, Language Reference Manual, and Language
-    Function Reference (in html and pdf)
-    \url{https://mc-stan.org/users/documentation/}
-    \begin{itemize}
-    \item[-] easiest to start from Example Models in User's guide
-    \end{itemize}
-  \item Basics of Bayesian inference and Stan, part 1 Jonah Gabry \&
-    Lauren Kennedy (StanCon 2019 Helsinki tutorial)
-    \begin{itemize}
-    \item[-]
-      \url{https://www.youtube.com/watch?v=ZRpo41l02KQ&index=6&list=PLuwyh42iHquU4hUBQs20hkBsKSMrp6H0J}
-    \item[-] \url{https://www.youtube.com/watch?v=6cc4N1vT8pk&index=7&list=PLuwyh42iHquU4hUBQs20hkBsKSMrp6H0J}
-  \end{itemize}
-  \item Short practical Stan tutorials
-    \begin{itemize}
-    \item[-] \url{https://www.youtube.com/playlist?list=PLCrWEzJgSUqwL85xIj1wubGdY15C5Gf7H}
-    \end{itemize}
+  \item Gelman, Lee and Guo (2015).
+    \href{https://doi.org/10.3102/1076998615606113}{Stan: A probabilistic programming language for Bayesian inference and optimization.}
+    \emph{Journal of Educational and Behavioral Statistics}, 40(5).
+    \href{https://sites.stat.columbia.edu/gelman/research/published/stan_jebs_2.pdf}{Author PDF}.
+  \item Carpenter et al. (2017).
+    \href{https://doi.org/10.18637/jss.v076.i01}{Stan: A probabilistic programming language.}
+    \emph{Journal of Statistical Software}, 76(1).
+  \item Official documentation:
+    \href{https://mc-stan.org/docs/stan-users-guide/}{Stan User's Guide}
+    (example models),
+    \href{https://mc-stan.org/docs/reference-manual/}{Stan Reference Manual}, and
+    \href{https://mc-stan.org/docs/functions-reference/}{Stan Functions Reference}.
+  \item Gabry and Kennedy, StanCon 2019 Helsinki:
+    Basics of Bayesian inference and Stan
+    (\href{https://www.youtube.com/watch?v=ZRpo41l02KQ}{part 1},
+    \href{https://www.youtube.com/watch?v=6cc4N1vT8pk}{part 2}).
+  \item \href{https://www.youtube.com/playlist?list=PLCrWEzJgSUqwL85xIj1wubGdY15C5Gf7H}{Short practical Stan tutorials} (playlist).
   \end{itemize}
 \end{frame}
 
 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-\begin{frame}
-\frametitle{From model to checked predictions}
-
-\begin{enumerate}
-\item \uured{Specify}: observation model, parameter constraints and
-  scientifically meaningful priors.
-\item \uured{Fit}: run several chains with warmup; use a known-answer
-  test when one is available.
-\item \uured{Check computation}: traces, $\widehat R$, ESS, MCSE,
-  divergences and tree depth. Resolve problems before interpreting results.
-\item \uured{Interpret and predict}: summarize parameters and generated
-  quantities in meaningful units; distinguish the mean from a future outcome.
-\item \uured{Check the model}: compare predictive implications with
-  observed data. Accurate computation does not guarantee a good model.
-\end{enumerate}
-
-\vfill
-\uured{Assignment 6}: apply this workflow to the bioassay model and
-the Gaussian trend/prediction exercise.
-\end{frame}
 
 \end{document}

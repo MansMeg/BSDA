@@ -560,6 +560,33 @@ Discuss in pairs (1--2 minutes).
 \end{frame}
 
 \begin{frame}
+\frametitle{Adaptive dynamic HMC in Stan}
+
+  \begin{itemize}
+  \item \uured{During warmup}, Stan adapts the mass matrix and step size.
+    \begin{itemize}
+    \item The mass matrix accounts for parameter scales and, if dense,
+      linear correlations.
+    \item \texttt{adapt\_delta} is the target average acceptance statistic
+      used to tune the step size.
+    \item A higher target usually gives smaller steps and more computation.
+    \end{itemize}
+  \pause
+  \item \texttt{adapt\_delta} is \uured{not a guarantee} that this fraction
+    of final NUTS draws will be accepted.
+  \pause
+  \item \uured{After warmup}, the adapted mass matrix and step size
+    stop adapting.
+    \begin{itemize}
+    \item NUTS still chooses a trajectory length $L$ at \uured{each iteration}.
+    \item \texttt{max\_treedepth} limits the work per iteration.
+    \end{itemize}
+  \item Use the post-warmup draws for inference.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
 
 \frametitle{HMC / NUTS}
 
@@ -922,33 +949,6 @@ the Gaussian trend/prediction exercise.
 
 \end{frame}
 
-
-\begin{frame}
-\frametitle{Adaptive dynamic HMC in Stan}
-
-  \begin{itemize}
-  \item \uured{During warmup}, Stan adapts the mass matrix and step size.
-    \begin{itemize}
-    \item The mass matrix accounts for parameter scales and, if dense,
-      linear correlations.
-    \item \texttt{adapt\_delta} is the target average acceptance statistic
-      used to tune the step size.
-    \item A higher target usually gives smaller steps and more computation.
-    \end{itemize}
-  \pause
-  \item \texttt{adapt\_delta} is \uured{not a guarantee} that this fraction
-    of final NUTS draws will be accepted.
-  \pause
-  \item \uured{After warmup}, the adapted mass matrix and step size
-    stop adapting.
-    \begin{itemize}
-    \item NUTS still chooses a trajectory length $L$ at \uured{each iteration}.
-    \item \texttt{max\_treedepth} limits the work per iteration.
-    \end{itemize}
-  \item Use the post-warmup draws for inference.
-\end{itemize}
-
-\end{frame}
 
 \begin{frame}[fragile]
 

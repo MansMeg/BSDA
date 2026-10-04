@@ -147,10 +147,33 @@ in practice we let $p(\psi | \theta , y) = p(\psi)$
 \pause
 \item Define the Hamiltonian as
 \begin{align}
-H(\psi, \theta)  & = - \log(p(\psi)) - \log(p(\theta | y))\\
+H(\theta, \psi)  & = - \log(p(\psi)) - \log(p(\theta | y))\\
  & = K(\psi) + V(\theta)\,,
 \end{align}
 where $K(\psi)$ is the \uured{kinetic} energy and $V(\theta)$ is the \uured{potential} energy
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Why can we add momentum?}
+
+\begin{itemize}
+\item Choose any proper momentum density $p(\psi)$, independent of $\theta$,
+  and define the joint target
+  \[
+  p(\theta,\psi\mid y)=p(\theta\mid y)p(\psi).
+  \]
+\pause
+\item Its marginal distribution for $\theta$ is unchanged:
+  \begin{align*}
+  \int p(\theta,\psi\mid y)\,d\psi
+    &=p(\theta\mid y)\int p(\psi)\,d\psi\\
+    &=p(\theta\mid y).
+  \end{align*}
+\item Hence we can sample the joint target and \uured{keep only $\theta$}.
+\pause
+\item Refreshing $\psi\sim p(\psi)$ is a draw from its full conditional.
+  It changes the trajectory without changing the target posterior.
 \end{itemize}
 \end{frame}
 
@@ -174,6 +197,32 @@ K(\psi)=-\log p(\psi)=\tfrac12\psi^\top M^{-1}\psi+C,
 \]
 where $C$ does not depend on $\psi$.
 \end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Normal example: constant energy}
+
+For $\theta\sim N(0,1)$ and $\psi\sim N(0,1)$ independently,
+\[
+H(\theta,\psi)=\frac{\theta^2+\psi^2}{2}
+\quad\text{(ignoring an additive constant).}
+\]
+\begin{columns}[c,onlytextwidth]
+\begin{column}{0.48\textwidth}
+\includegraphics[width=\linewidth]{figs/hmc_normal_energy.pdf}
+\end{column}
+\begin{column}{0.49\textwidth}
+\[
+\frac{d\theta}{dt}=\psi,\qquad
+\frac{d\psi}{dt}=-\theta.
+\]
+\begin{itemize}
+\item Exact dynamics follow a circle, clockwise: energy is constant.
+\item The red arrow refreshes momentum at fixed $\theta$.
+\item The next trajectory can follow a different energy circle.
+\end{itemize}
+\end{column}
+\end{columns}
 \end{frame}
 
 \begin{frame}
@@ -232,21 +281,130 @@ M^{-1}\approx\Sigma.
 
 \begin{frame}
 
-\frametitle{Hamiltonian Monte Carlo Algorithm}
+\frametitle{HMC: construct a proposal}
 
+At iteration $t$, start at $\theta_{t-1}$ with positive target density.
 \begin{enumerate}
-\item Sample momentum
+\item Refresh momentum:
 \[
-\psi_0 \sim N(0,M)
+\psi_0 \sim N(0,M).
 \]
 \pause
-\item Simulate values $(\theta^\star,\psi^\star)$ using the leapfrog integrator $L$ steps with stepsize $\epsilon$, starting from $(\theta_{t-1},\psi_0)$
+\item Starting at $(\theta_{t-1},\psi_0)$, take $L$ leapfrog steps
+  of size $\epsilon$ to get $(\theta^\star,\widetilde\psi)$.
 \pause
-\item Accept the proposed values $(\theta^\star,\psi^\star)$ with probability
-\[
-r = \min \left( 1, \frac{q(\theta^\star|y)}{q(\theta_{t-1}|y)}\frac{p(\psi^\star)}{p(\psi_0)} \right)
-\]
+\item Reverse the final momentum: $\psi^\star=-\widetilde\psi$.
+  This makes the proposal reversible.
 \end{enumerate}
+\begin{itemize}
+\item For Gaussian momentum, $K(-\psi)=K(\psi)$, so the reversal
+  does not change the energy or acceptance probability.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{HMC: accept or retain the old state}
+
+\begin{itemize}
+\item Calculate the energy change:
+\[
+\Delta H=H(\theta^\star,\psi^\star)
+         -H(\theta_{t-1},\psi_0).
+\]
+\item The Metropolis acceptance probability is
+\[
+r=\min\!\left(1,
+\frac{q(\theta^\star\mid y)p(\psi^\star)}
+     {q(\theta_{t-1}\mid y)p(\psi_0)}\right)
+ =\min(1,e^{-\Delta H}).
+\]
+\pause
+\item Draw $U\sim\operatorname{Uniform}(0,1)$ and compare on the log scale:
+\[
+\theta_t=\begin{cases}
+\theta^\star, & \log U<\min(0,-\Delta H),\\
+\theta_{t-1}, & \text{otherwise}.
+\end{cases}
+\]
+\item As in L4, the log comparison avoids exponentiating extreme values.
+  Discard the momentum; refresh it next iteration.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Numerical HMC: one leapfrog step}
+
+\begin{itemize}
+\item Target $\theta\sim N(0,1)$ and mass $M=1$, so
+  $\nabla_\theta\log q(\theta)=-\theta$.
+\item Suppose $\theta_{t-1}=1$ and refreshed momentum $\psi_0=1$.
+  Take one leapfrog step: $\epsilon=1$, $L=1$.
+\end{itemize}
+\pause
+The momentum half-step, position full-step, and momentum half-step give
+\begin{align*}
+\psi_{1/2}
+  &=\psi_0-\frac{\epsilon}{2}\theta_{t-1}
+    =1-\frac12\cdot1=0.5,\\[0.5em]
+\theta^\star
+  &=\theta_{t-1}+\epsilon\psi_{1/2}
+    =1+1\cdot0.5=1.5,\\[0.5em]
+\widetilde\psi
+  &=\psi_{1/2}-\frac{\epsilon}{2}\theta^\star
+    =0.5-\frac12\cdot1.5=-0.25.
+\end{align*}
+\pause
+\begin{itemize}
+\item Reverse momentum: $\psi^\star=-\widetilde\psi=0.25$.
+  The joint proposal is $(\theta^\star,\psi^\star)=(1.5,0.25)$.
+\item These choices keep the arithmetic simple, rather than tune efficiency.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Numerical HMC: accept or reject}
+
+Ignoring an additive constant, $H(\theta,\psi)=(\theta^2+\psi^2)/2$.
+\begin{align*}
+H(\theta_{t-1},\psi_0)&=\frac{1^2+1^2}{2}=1,\\
+H(\theta^\star,\psi^\star)&=\frac{1.5^2+0.25^2}{2}=1.15625.
+\end{align*}
+\pause
+\begin{itemize}
+\item Leapfrog has increased the energy slightly:
+\[
+\Delta H=1.15625-1=0.15625.
+\]
+\item The acceptance probability is
+\[
+r=\min(1,e^{-0.15625})\approx0.8553.
+\]
+\pause
+\item Draw $U\sim\operatorname{Uniform}(0,1)$. If $U=0.80$,
+  then $U<r$: \uured{accept} and set $\theta_t=1.5$.
+\item If instead $U=0.90$, \uured{reject} and retain $\theta_t=1$.
+  In either case, refresh momentum at the next iteration.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Why does the HMC update work?}
+
+\begin{itemize}
+\item \uured{Reversibility}: leapfrog followed by a momentum reversal can
+  be undone by applying the same proposal again.
+\pause
+\item \uured{Volume preservation}: leapfrog does not expand or compress
+  volumes in $(\theta,\psi)$ space. No proposal Jacobian is needed.
+\pause
+\item \uured{Metropolis correction}: the acceptance step corrects the
+  numerical energy error, preserving the joint target
+  \[
+  p(\theta,\psi\mid y)\propto e^{-H(\theta,\psi)}.
+  \]
+\item Marginalizing momentum then gives $p(\theta\mid y)$.
+  Energy conservation alone is not the full justification.
+\end{itemize}
 \end{frame}
 
 
@@ -308,8 +466,6 @@ r = \min \left( 1, \frac{q(\theta^\star|y)}{q(\theta_{t-1}|y)}\frac{p(\psi^\star
 
 \end{frame}
 
-
-% TODO: Work through a mathematical example
 
 \section{Dynamic HMC and NUTS}
 \frame{\sectionpage}
@@ -536,6 +692,29 @@ r = \min \left( 1, \frac{q(\theta^\star|y)}{q(\theta_{t-1}|y)}\frac{p(\psi^\star
 
   \vfill
   \href{https://chi-feng.github.io/mcmc-demo/app.html?algorithm=RandomWalkMH&target=donut}{Ridge demo: random-walk Metropolis, as in L5}
+\end{frame}
+
+\begin{frame}
+\frametitle{Diagnostic recap: can we trust the draws?}
+
+\begin{itemize}
+\item Run multiple chains, preferably at least four, with dispersed
+  initial values. Discard warmup.
+\item Inspect trace plots and require $\widehat R<1.01$ for the
+  parameters and derived quantities of interest.
+\pause
+\item Check ESS and MCSE \uured{for each reported summary}.
+  Using the classical ESS from L5, when the usual CLT applies,
+  \[
+  \operatorname{MCSE}(\widehat\mu_f)
+  \approx \frac{\operatorname{SD}(f(\theta)\mid y)}{\sqrt{S_{\mathrm{eff},f}}}.
+  \]
+\item Investigate post-warmup divergences before trusting estimates.
+  Tree-depth warnings primarily concern efficiency.
+\pause
+\item Good $\widehat R$ and ESS do not cancel a divergence warning.
+  No diagnostic proves that all important regions were explored.
+\end{itemize}
 \end{frame}
 
 
@@ -972,6 +1151,61 @@ fit = posterior.sample(
 
 \end{frame}
 
+\begin{frame}
+\frametitle{Binomial example: an exact benchmark}
+
+\begin{itemize}
+\item In our example, $N=10$, $y=7$, and $\theta\sim\operatorname{Beta}(1,1)$.
+\item Bayes' rule gives
+  \begin{align*}
+  p(\theta\mid y)&\propto
+    \theta^7(1-\theta)^3\cdot\theta^0(1-\theta)^0,\\
+  \theta\mid y&\sim\operatorname{Beta}(8,4).
+  \end{align*}
+\pause
+\item Thus we know, without simulation,
+  \[
+  E(\theta\mid y)=\frac{8}{12}=\frac23,
+  \quad
+  \operatorname{SD}(\theta\mid y)
+    =\sqrt{\frac{8\cdot4}{12^2\cdot13}}\approx0.1307.
+  \]
+\item Stan's estimates should agree \uured{within Monte Carlo error},
+  not match every digit.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Does Stan reproduce the known answer?}
+
+{\small
+\begin{lstlisting}[language=R]
+s_bin <- summary(fit_bin, pars = "theta",
+  probs = c(0.05, 0.95))$summary
+qbeta(c(0.05, 0.95), 8, 4)
+\end{lstlisting}
+}
+
+% RStan 2.32.7, seed 123, four chains, iter=2000, warmup=1000.
+\begin{center}
+\begin{tabular}{lrr}
+ & Exact & Stan \\
+\hline
+Posterior mean & 0.6667 & 0.6648 \\
+Posterior SD & 0.1307 & 0.1338 \\
+5\% quantile & 0.4356 & 0.4271 \\
+95\% quantile & 0.8649 & 0.8634
+\end{tabular}
+\end{center}
+
+\begin{itemize}
+\item RStan run above: 4000 post-warmup draws in total.
+\item MCSE of the mean is $0.0033$; the mean differs by only $0.0019$.
+\item $\widehat R=1.0009$; no divergences or maximum-tree-depth hits.
+  Checking a known case helps validate code before harder models.
+\end{itemize}
+\end{frame}
+
 \begin{frame}[fragile]
 
 \frametitle{Difference between proportions}
@@ -1222,6 +1456,33 @@ n_leapfrog <-
 
 \begin{frame}[fragile]
 
+\frametitle{Gaussian regression: the observation model}
+
+\begin{itemize}
+\item At known predictor values $x_i$, assume conditional independence:
+\[
+y_i\mid\alpha,\beta,\sigma,x_i
+  \sim N(\alpha+\beta x_i,\sigma^2),\qquad i=1,\ldots,N.
+\]
+\item $\alpha$ is the intercept, $\beta$ the slope, and $\sigma$ the
+  residual \uured{standard deviation}.
+\pause
+\item Set $\mu_i=\alpha+\beta x_i$. Stan's vectorized statement
+\end{itemize}
+{\small
+\begin{lstlisting}[language=Stan]
+y ~ normal(mu, sigma);
+\end{lstlisting}
+}
+adds the sum of the individual log densities:
+\[
+\log p(y\mid\alpha,\beta,\sigma,x)
+  =\sum_{i=1}^N\log N(y_i\mid\mu_i,\sigma^2).
+\]
+Stan takes $\sigma$, not $\sigma^2$, as the second argument.
+\end{frame}
+
+\begin{frame}[fragile]
 \frametitle{Gaussian linear model}
   {\footnotesize
   \begin{lstlisting}[language=Stan]
@@ -1314,6 +1575,54 @@ model {
 \item Supply prior means and strictly positive scales in the units of the parameters.
 \item With \texttt{sigma > 0}, its normal prior is a half-normal. The constraint alone does not specify this prior.
 \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Gaussian regression: posterior prediction}
+
+Add \texttt{real xpred;} to the data block, then append:
+{\small
+\begin{lstlisting}[language=Stan]
+generated quantities {
+  real mu_pred = alpha + beta*xpred;
+  real y_pred = normal_rng(mu_pred, sigma);
+}
+\end{lstlisting}
+}
+\begin{itemize}
+\item At each posterior draw, \texttt{mu\_pred} is the regression mean
+  at the fixed prediction location.
+\item \texttt{y\_pred} adds a new residual to simulate a
+  \uured{future observation} at that location.
+\item Keep both: they answer different questions.
+  These lines use the Gaussian observation model.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Mean uncertainty versus predictive uncertainty}
+
+At fixed $x_{\mathrm{pred}}$, write
+$\mu_{\mathrm{pred}}=\alpha+\beta x_{\mathrm{pred}}$.
+\begin{itemize}
+\item The posterior of $\mu_{\mathrm{pred}}$ describes uncertainty
+  about the \uured{regression mean}.
+\item A new observation also varies around that mean:
+\[
+y_{\mathrm{pred}}\mid\alpha,\beta,\sigma
+  \sim N(\mu_{\mathrm{pred}},\sigma^2).
+\]
+\pause
+\item By the law of total variance, when these moments are finite,
+\[
+\underbrace{\operatorname{Var}(y_{\mathrm{pred}}\mid y)}_{\text{predictive uncertainty}}
+=\underbrace{\operatorname{Var}(\mu_{\mathrm{pred}}\mid y)}_{\text{mean uncertainty}}
+ +\underbrace{E(\sigma^2\mid y)}_{\text{residual variation}}.
+\]
+\item A predictive interval for a new observation accounts for both
+  sources, not just uncertainty in the fitted line.
+\end{itemize}
+Predictor values are held fixed throughout.
 \end{frame}
 
 \begin{frame}[fragile]
@@ -1415,29 +1724,90 @@ model {
 
 \begin{frame}[fragile]
 
-\frametitle{Linear regression model in Stan}
+\frametitle{Standardized regression: data}
 
-  {\scriptsize
+  {\footnotesize
 \begin{lstlisting}[language=Stan]
 data {
-  int<lower=0> N; // number of data points
-  vector[N] x; //
-  vector[N] y; //
-  real xpred; // input location for prediction
+  int<lower=2> N;
+  vector[N] x;
+  vector[N] y;
+  real xpred;
 }
 transformed data {
+  real mx = mean(x);
+  real my = mean(y);
+  real sx = sd(x);
+  real sy = sd(y);
   vector[N] x_std;
   vector[N] y_std;
-  real xpred_std;
-  x_std = (x - mean(x)) / sd(x);
-  y_std = (y - mean(y)) / sd(y);
-  xpred_std = (xpred - mean(x)) / sd(x);
+  if (sx <= 0 || sy <= 0)
+    reject("x and y must have positive SD");
+  x_std = (x - mx) / sx;
+  y_std = (y - my) / sy;
 }
 \end{lstlisting}
   }
+\begin{itemize}
+\item Center and scale once, using the training data.
+  Model and prediction blocks follow on the next two slides.
+\end{itemize}
 \end{frame}
 
-%XXXX add better posterior draws
+\begin{frame}[fragile]
+\frametitle{Standardized regression: model}
+
+{\small
+\begin{lstlisting}[language=Stan]
+parameters {
+  real alpha_std;
+  real beta_std;
+  real<lower=0> sigma_std;
+}
+model {
+  alpha_std ~ normal(0, 1);
+  beta_std ~ normal(0, 1);
+  sigma_std ~ normal(0, 1);
+  y_std ~ normal(alpha_std + beta_std*x_std,
+                 sigma_std);
+}
+\end{lstlisting}
+}
+\begin{itemize}
+\item $\beta_{\mathrm{std}}$ measures change in mean response SDs
+  per predictor SD. $\sigma_{\mathrm{std}}$ is residual SD in response SDs.
+\item These are illustrative priors on the standardized scale.
+  They need not match the earlier original-scale priors.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Standardized regression: original units}
+
+Expanding $y=m_y+s_y\{\alpha_{\mathrm{std}}
++\beta_{\mathrm{std}}(x-m_x)/s_x+\text{error}\}$ gives
+\[
+\beta=\frac{s_y}{s_x}\beta_{\mathrm{std}},\qquad
+\alpha=m_y+s_y\alpha_{\mathrm{std}}-\beta m_x,\qquad
+\sigma=s_y\sigma_{\mathrm{std}}.
+\]
+{\small
+\begin{lstlisting}[language=Stan]
+generated quantities {
+  real beta = beta_std * sy / sx;
+  real alpha = my + sy*alpha_std - beta*mx;
+  real sigma = sy*sigma_std;
+  real mu_pred = alpha + beta*xpred;
+  real y_pred = normal_rng(mu_pred, sigma);
+}
+\end{lstlisting}
+}
+\begin{itemize}
+\item Transform \uured{every posterior draw}, including the residual SD.
+\item \texttt{xpred}, \texttt{mu\_pred} and \texttt{y\_pred} are now
+  in original units. Do not standardize the prediction point again.
+\end{itemize}
+\end{frame}
 
 \begin{frame}[fragile]
 
@@ -1762,5 +2132,26 @@ vector gpareto_ccdf(vector y,
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+
+\begin{frame}
+\frametitle{From model to checked predictions}
+
+\begin{enumerate}
+\item \uured{Specify}: observation model, parameter constraints and
+  scientifically meaningful priors.
+\item \uured{Fit}: run several chains with warmup; use a known-answer
+  test when one is available.
+\item \uured{Check computation}: traces, $\widehat R$, ESS, MCSE,
+  divergences and tree depth. Resolve problems before interpreting results.
+\item \uured{Interpret and predict}: summarize parameters and generated
+  quantities in meaningful units; distinguish the mean from a future outcome.
+\item \uured{Check the model}: compare predictive implications with
+  observed data. Accurate computation does not guarantee a good model.
+\end{enumerate}
+
+\vfill
+\uured{Assignment 6}: apply this workflow to the bioassay model and
+the Gaussian trend/prediction exercise.
+\end{frame}
 
 \end{document}

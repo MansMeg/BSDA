@@ -6,6 +6,7 @@
 \usepackage{hyperref}
 \usepackage{listings}
 \input{../common/lststan} % Stan listing
+\lstset{breaklines=true,breakatwhitespace=true}
 
 
 \hypersetup{
@@ -56,36 +57,47 @@
 %\frame{\sectionpage}
 
 \begin{frame}
-\frametitle{Recap: MCMC, Gibbs and Metropolis}
+\frametitle{Recap: Markov chain Monte Carlo}
 
 \begin{itemize}
-\item Markov Chain Monte Carlo
-\begin{itemize}
-\item A \uured{transition distribution} $T(\theta_0 \rightarrow \theta_1)$ with a unique \uured{stationary distribution}
-\item Target: setup $T$ so that $p(\theta|y)$ is the stationary distribution\pause
-\item [+] generic \pause
-\item [-] generates dependent draws (inefficiencies/low $S_\text{eff}$)
-\item [-] need to assess convergence to $p(\theta|y)$
-\end{itemize}
+\item The \uured{transition distribution} $T$ describes the next state
+  given the current state.
+\item Construct $T$ so that $p(\theta\mid y)$ is its
+  \uured{stationary distribution}.
 \pause
+\item Under suitable conditions, the chain approaches this distribution
+  from its starting point.
+\item[+] A general approach when direct posterior sampling is difficult.
+\pause
+\item[-] Draws are dependent: precision depends on $S_\text{eff}$.
+\item[-] We still need to assess convergence and Monte Carlo error.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Recap: Gibbs and Metropolis}
+
+\begin{itemize}
 \item Gibbs sampling
 \begin{itemize}
-\item Conditional (or block) sampling of $\theta$
+\item Update one parameter (or a block) from its full conditional:
 \[
 \theta_j \sim p(\theta_j|\theta_{-j}, y)
 \]
-\pause
-\item[+] Often easy to construct \pause
-\item[-] Inefficient if posterior has correlated parameters
+\item[+] Often easy to construct when conditionals are available.
+\item[-] Single-parameter updates can mix slowly under strong correlation.
 \end{itemize}
 \pause
 \item Metropolis(-Hastings) sampling
 \begin{itemize}
-\item Joint (or block) sampling of $\theta$
-\item Proposal distribution $J$ (i.e. $T$)\pause
-\item[+] better for correlated posteriors\pause
-\item[-] scale need to be tuned for efficient sampling
-\item[-] hard to propose in high dimensions (many small steps or many rejections)
+\item Propose a joint (or block) move from $J$.
+\item The proposal \uured{plus acceptance or rejection} defines $T$;
+  on rejection, the next state equals the current state.
+\pause
+\item[+] A well-chosen joint proposal can handle correlation efficiently.
+\item[-] Efficiency depends on proposal shape and scale, especially in
+  high dimensions.
 \end{itemize}
 \end{itemize}
 
@@ -104,8 +116,11 @@
 \item Want to build an \uured{efficient} Markov Chain
 \begin{itemize}
 \item We want to sample jointly all $\theta$
-\item We know the \uured{unnormalized} posterior $q(\theta|y)=Z \cdot p(\theta|y)$, were $Z$ is the normalization constant.
-\item Can we use this to create a good \uured{proposal} distribution $J$?
+\item We know the \uured{unnormalized} posterior
+  $q(\theta|y)=Z \cdot p(\theta|y)$, where $Z$ does not depend on $\theta$.
+\item Standard HMC needs continuous unknowns and a sufficiently smooth
+  log density.
+\item Can the \uured{gradient} of $\log q(\theta|y)$ guide efficient proposals?
 \pause
 \item \uured{Hamiltonian Monte Carlo}!
 \end{itemize}
@@ -148,16 +163,40 @@ where $K(\psi)$ is the \uured{kinetic} energy and $V(\theta)$ is the \uured{pote
 \frac{d\theta}{dt} &=  \frac{\partial H}{\partial \psi} = \frac{\partial K}{\partial \psi}\\
 \frac{d\psi}{dt} &=  - \frac{\partial H}{\partial \theta} = - \frac{\partial V}{\partial \theta}
 \end{align}
-\item Let $V(\theta) = - \log(q(\theta|y))= - \log p(\theta) - \log p(y | \theta)$
-\item Let $\psi \sim N(0, M)$ where $M$ is the \uured{mass matrix}
-\item Hence, $K(\psi) = - \log p(\psi) \propto 0.5 \psi^T M^{-1} \psi + C$
+\item For computing the dynamics, additive constants do not matter:
+\[
+V(\theta) = -\log q(\theta\mid y)
+          = -\log p(\theta)-\log p(y\mid\theta).
+\]
+\item Let $\psi\sim N(0,M)$, with positive-definite \uured{mass matrix} $M$.
+\[
+K(\psi)=-\log p(\psi)=\tfrac12\psi^\top M^{-1}\psi+C,
+\]
+where $C$ does not depend on $\psi$.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Choosing the mass matrix}
+
+\begin{itemize}
+\item The mass matrix controls how momentum moves the parameters:
+\[
+\frac{d\theta}{dt}=M^{-1}\psi.
+\]
+\item Write $\Sigma=\operatorname{Cov}(\theta\mid y)$.
+  For a roughly Gaussian posterior, a useful choice is
+\[
+M^{-1}\approx\Sigma.
+\]
 \pause
-\item We need to choose $M$ in a smart way.
-\begin{enumerate}
-\item Ideally, $M^{-1}=Cov(\theta|y)$
-\item In practice, $M^{-1}=V(\theta|y)$
-\end{enumerate}
-% TODO: readup on the mass matrix and why inverse mass matrix is Cov
+\item During warmup, Stan estimates a regularized approximation:
+\begin{itemize}
+\item diagonal: accounts for different parameter scales;
+\item dense: also accounts for linear correlations.
+\end{itemize}
+\item In Stan these calculations use \uured{unconstrained coordinates}.
+  One fixed matrix cannot remove all nonlinear geometry.
 \end{itemize}
 \end{frame}
 
@@ -167,21 +206,27 @@ where $K(\psi)$ is the \uured{kinetic} energy and $V(\theta)$ is the \uured{pote
 \frametitle{The leapfrog integrator}
 
 \begin{itemize}
-\item We want to simulate Hamiltonian dynamics
-\begin{align}
-\frac{d\theta}{dt} &=  M^{-1} \psi\\
-\frac{d\psi}{dt} &=  \frac{\partial \log q(\theta|y)}{\partial \theta}
-\end{align}
-\item A \uured{discrete} approximation: \uured{the leapfrog integrator}
+\item A \uured{discrete} approximation to Hamiltonian dynamics:
+\[
+\frac{d\theta}{dt}=M^{-1}\psi,
+\qquad
+\frac{d\psi}{dt}=\nabla_\theta\log q(\theta\mid y).
+\]
 \pause
-\item We take $L$ leapfrog steps with step size $\epsilon$ as
-\begin{align}
-\psi \leftarrow &\psi + \frac{1}{2}\epsilon \frac{d\log q(\theta|y)}{d\theta}\\
-\theta \leftarrow& \theta + \epsilon M^{-1}\psi\\
-\psi \leftarrow &\psi + \frac{1}{2}\epsilon \frac{d\log q(\theta|y)}{d\theta}
-\end{align}
+\item For $\ell=0,\ldots,L-1$, repeat \uured{all three updates}:
+\begin{align*}
+\psi_{\ell+1/2} &= \psi_\ell
+  +\frac{\epsilon}{2}\nabla_\theta\log q(\theta_\ell\mid y),\\
+\theta_{\ell+1} &= \theta_\ell+\epsilon M^{-1}\psi_{\ell+1/2},\\
+\psi_{\ell+1} &= \psi_{\ell+1/2}
+  +\frac{\epsilon}{2}\nabla_\theta\log q(\theta_{\ell+1}\mid y).
+\end{align*}
+\item The final gradient uses the \uured{updated position} $\theta_{\ell+1}$.
 \pause
-\item Discretization introduce a error depending on $\epsilon$ (not $L \epsilon$)
+\item Step size $\epsilon$ controls numerical accuracy;
+  $L\epsilon$ is the total integration time.
+\item Longer trajectories are not automatically harmless: errors can
+  grow, especially when the step size is too large.
 \end{itemize}
 \end{frame}
 
@@ -248,11 +293,13 @@ r = \min \left( 1, \frac{q(\theta^\star|y)}{q(\theta_{t-1}|y)}\frac{p(\psi^\star
 \item[+] Can be very efficient ($S_\text{eff}$)
 \item[+] Additional diagnostics
 \pause
-\item[-] Can be difficult to tune (U-turns)
-\item[-] Bounded parameters needs handling
-\item[-] Cannot handle discrete parameters (yet)
-\item[-] Ideally, we should adapt $\epsilon L$
-\item[-] Costly to run each iteration ($L$ log density gradient evaluations)
+\item[-] Integration time $L\epsilon$ needs tuning: too short mixes slowly;
+  too long can retrace the trajectory.
+\item Requires continuous unknowns and a smooth log density.
+\item Stan transforms declared bounds to unconstrained coordinates.
+\item Discrete \uured{observations} are fine; discrete \uured{latent parameters}
+  need another strategy, such as marginalization.
+\item[-] Each iteration requires many gradient evaluations.
 \pause
 \end{itemize}
 
@@ -272,29 +319,23 @@ r = \min \left( 1, \frac{q(\theta^\star|y)}{q(\theta_{t-1}|y)}\frac{p(\psi^\star
 
   \begin{itemize}
   \item \uured{Goal:} Simplify/adapt the tuning of HMC
-  \item \uured{Dynamic} HMC refers to \uured{dynamic} trajectory length of the leapfrog integrator (i.e. $L$ is chosen on the fly) \pause
-  \item The NUTS/dynamic algorithm:
-  \begin{enumerate}
-    \item Grow a binary tree of leapfrog steps $L$
-    \pause
-    \item Grow (randomly) in two directions \\
-    (to keep reversibility/detailed balance of Markov chain)
-    \pause
-    \item Stop to grow tree when encounter a U-turn
-    \[
-    (\theta_L - \theta_{start}) \cdot \psi_L < 0
-    \]
-    \item Sample one of the accepted steps at the trajectory\\
-    (higher probability further away)\\
-  \end{enumerate}
-
+  \item \uured{Dynamic}: choose the number of leapfrog steps $L$
+    within each iteration.
+  \item NUTS grows a trajectory in randomly chosen forward or backward
+    directions, doubling its length in stages.
   \pause
-  \item Dynamic simulation is discretized
-  \begin{itemize}
-    \item small $\epsilon$ gives accurate simulation, but requires more log density evaluations
-    \item large $\epsilon$ reduces computation, but increases
-      simulation error
-    \end{itemize}
+  \item \uured{U-turn intuition}, with $M=I$ and one moving endpoint:
+  \[
+  (\theta_L-\theta_{\mathrm{start}})^\top\psi_L<0.
+  \]
+  The motion now points back towards the starting position.
+  \item This is an illustration, \uured{not the full stopping rule}:
+    NUTS checks both ends and parts of the growing trajectory.
+  \pause
+  \item Select the next state from eligible trajectory states using a
+    rule designed to preserve the target distribution.
+    These are not separately accepted MCMC draws.
+  \item Step size still controls integration accuracy and computational cost.
 \end{itemize}
 
 \end{frame}
@@ -311,9 +352,11 @@ r = \min \left( 1, \frac{q(\theta^\star|y)}{q(\theta_{t-1}|y)}\frac{p(\psi^\star
 \item[+] Can be very efficient ($S_\text{eff}$)
 \item[+] Additional diagnostics
 \pause
-\item[-] Bounded parameters needs handling
-\item[-] Cannot handle discrete parameters (yet)
-\item[-] Costly to run each iteration ($L$ log density gradient evaluations)
+\item $L$ is chosen anew at each iteration, including after warmup.
+\item Stan transforms bounded parameters to unconstrained coordinates.
+\item Still requires continuous unknowns and a smooth log density.
+  Discrete data are fine; discrete latent parameters need another strategy.
+\item[-] Each iteration still requires many gradient evaluations.
 \pause
 \end{itemize}
 
@@ -340,18 +383,16 @@ r = \min \left( 1, \frac{q(\theta^\star|y)}{q(\theta_{t-1}|y)}\frac{p(\psi^\star
 \frametitle{Max tree depth}
 
   \begin{itemize}
-  \item Dynamic HMC specific diagnostic
-  \item The sampler wanted to keep integrating longer, but was forced to stop.
-  \begin{itemize}
-  \item The trajectory wasn’t long enough to fully explore the typical set.
-  \item This often signals:
-  \begin{itemize}
-  \item Very strong correlations or curvature in the posterior (forcing small step size)
-  \item A need for reparameterization.
-  \end{itemize}
-  \end{itemize}
-  \item Leads to higher autocorrelations and lower ESS ($n_{\rm eff}$)
-  \item Different parameterizations can help/matter
+  \item NUTS reached its computational limit before its usual stopping rule.
+  \item Primarily an \uured{efficiency warning}: repeated truncation can
+    increase autocorrelation and reduce ESS.
+  \item This alone does not demonstrate biased sampling or failure to
+    explore the posterior.
+  \pause
+  \item Check model specification, scaling and parameterization;
+    examine the other diagnostics too.
+  \item Increasing \texttt{max\_treedepth} permits more computation,
+    but does not repair poor posterior geometry.
   \end{itemize}
 \end{frame}
 
@@ -370,8 +411,10 @@ r = \min \left( 1, \frac{q(\theta^\star|y)}{q(\theta_{t-1}|y)}\frac{p(\psi^\star
   \[
   \Delta H = H(\theta, \psi) - H(\theta_{start}, \psi_{start}) \gg 0
   \]
-  \item indicates that Hamiltonian dynamic simulation has problems with unexpected fast changes in log-density
-  \item possibility of biased estimates
+  \item The numerical trajectory is unreliable, often because the
+    posterior curvature changes rapidly.
+  \item Divergences after warmup warn of possible biased estimates:
+    some regions may be poorly explored.
 \end{itemize}
 %\end{frame}
 
@@ -385,26 +428,19 @@ r = \min \left( 1, \frac{q(\theta^\star|y)}{q(\theta_{t-1}|y)}\frac{p(\psi^\star
 
 % Why
 \begin{itemize}
-  \item Why do we get divergent transitions?
-  \begin{enumerate}
-    \item Step size too large
-    \begin{itemize}
-      \item Do not approximate the trajectory
-    \end{itemize}
-    \pause
-    \item Highly curved posterior geometry
-    \begin{itemize}
-      \item Small changes in position can result in very large changes in the gradient (momentum)
-      \item Unstable trajectory
-      \item Common in hiearhical models
-    \end{itemize}
-    \pause
-    \item Tight correlations between parameters
-    \begin{itemize}
-      \item Small changes in position can result in very large changes in the gradient (momentum)
-      \item small movements in one parameter may cause disproportionately large movements in another
-    \end{itemize}
-    \end{enumerate}
+  \item A step size that works in one region may be too large in another.
+  \item In a highly curved region, small changes in position can produce
+    large changes in the \uured{gradient}.
+  \pause
+  \item The gradient determines the \uured{change in momentum};
+    it is not the momentum itself:
+    \[
+    \frac{d\psi}{dt}=\nabla_\theta\log q(\theta\mid y).
+    \]
+  \item Narrow regions and changing scales, such as funnels in
+    hierarchical models, can make leapfrog unstable.
+  \item Strong linear correlation can often be handled by the mass
+    matrix; changing local curvature is harder.
 \end{itemize}
 
 \end{frame}
@@ -414,19 +450,21 @@ r = \min \left( 1, \frac{q(\theta^\star|y)}{q(\theta_{t-1}|y)}\frac{p(\psi^\star
 
 % Solutions
 \begin{itemize}
-  \item Solutions:
+  \item When divergences remain after warmup:
   \begin{enumerate}
-    \item Decrease step size/Increase number of leapfrog steps
+    \item Check the model and code, parameter scales, and whether the
+      priors provide sensible regularization.
     \pause
-    \item Reparameterization
-    \begin{itemize}
-      \item Reparameterizing the model to reduce correlations between parameters or to make the posterior geometry more regular can help, e.g. in hiearhical models
-    \end{itemize}
+    \item Reparameterize to make the geometry easier to traverse,
+      for example with a non-centered hierarchical model.
     \pause
-    \item Use a better Metric (Mass Matrix)
-    \pause
-    \item Use other samplers that uses the Hessian, e.g. Riemannian Manifold HMC (but it has its own drawbacks)
+    \item Consider a smaller step size. In Stan, a higher
+      \texttt{adapt\_delta} usually leads to smaller steps during warmup.
+    \item Refit and check whether divergences disappear without making
+      sampling impractically slow.
     \end{enumerate}
+  \item More leapfrog steps \uured{at the same step size} do not fix
+    inaccurate integration. Longer chains do not remove this bias.
 \end{itemize}
 
 \end{frame}
@@ -449,44 +487,55 @@ r = \min \left( 1, \frac{q(\theta^\star|y)}{q(\theta_{t-1}|y)}\frac{p(\psi^\star
 
 \begin{frame}
 
-\frametitle{Problematic distributions}
+\frametitle{Difficult posterior geometry}
 
   \begin{itemize}
-  \item<1-> Nonlinear dependencies
-    \begin{itemize}
-    \item optimal proposal depends on location
-    \end{itemize}
-    \begin{center}
-      \href{https://chi-feng.github.io/mcmc-demo/app.html?algorithm=RandomWalkMH&target=banana}{demo}
-    \end{center}
-  \item<2-> Funnels
-    \begin{itemize}
-    \item optimal proposal depends on location
-    \end{itemize}
-    \begin{center}
-      \href{https://chi-feng.github.io/mcmc-demo/app.html?algorithm=RandomWalkMH&target=funnel}{demo}
-    \end{center}
-  \item<3-> Multimodal
-    \begin{itemize}
-    \item difficult to move from one mode to another
-    \end{itemize}
-        \begin{center}
-      \href{https://chi-feng.github.io/mcmc-demo/app.html?algorithm=RandomWalkMH&target=multimodal}{demo}
-    \end{center}
-  \item<4-> Non-identifiable models
-    \begin{itemize}
-    \item set of connected points is the mode
-    \end{itemize}
-        \begin{center}
-      \href{https://chi-feng.github.io/mcmc-demo/app.html?algorithm=RandomWalkMH&target=donut}{demo}
-    \end{center}
-  \item<5-> Long-tailed with non-finite variance and mean
-    \begin{itemize}
-    \item central limit theorem for expectations does not hold
-    \end{itemize}
-
+  \item \uured{Nonlinear dependence}: the direction of the narrow
+    posterior region changes with position.
+    A fixed mass matrix cannot straighten every part of it.
+  \pause
+  \item \uured{Funnels}: a step size suitable for the wide region may
+    be too large in the narrow region.
+  \pause
+  \item \uured{Separated modes}: HMC may also struggle to cross
+    low-density regions between modes.
   \end{itemize}
 
+  \vfill
+  For comparison with L5, these demos use \uured{random-walk Metropolis}:
+  \begin{center}
+    \href{https://chi-feng.github.io/mcmc-demo/app.html?algorithm=RandomWalkMH&target=banana}{Nonlinear dependence}
+    \quad
+    \href{https://chi-feng.github.io/mcmc-demo/app.html?algorithm=RandomWalkMH&target=funnel}{Funnel}
+    \quad
+    \href{https://chi-feng.github.io/mcmc-demo/app.html?algorithm=RandomWalkMH&target=multimodal}{Multiple modes}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Identifiability and heavy tails}
+
+  \begin{itemize}
+  \item \uured{Non-identifiability}: distinct parameter values imply the
+    same data distribution; weak identification gives similar likelihoods.
+    \begin{itemize}
+    \item With weak priors, this can produce posterior ridges or separated modes.
+    \item Priors can constrain these directions; a connected set of
+      posterior modes is not guaranteed.
+    \end{itemize}
+  \pause
+  \item \uured{Heavy tails}: the difficulty depends on the summary
+    $f(\theta)$ being estimated.
+    \begin{itemize}
+    \item If its posterior mean does not exist, there is no finite
+      expectation to estimate.
+    \item Infinite variance rules out the usual finite-variance CLT/MCSE
+      argument. Other summaries may still be well behaved.
+    \end{itemize}
+  \end{itemize}
+
+  \vfill
+  \href{https://chi-feng.github.io/mcmc-demo/app.html?algorithm=RandomWalkMH&target=donut}{Ridge demo: random-walk Metropolis, as in L5}
 \end{frame}
 
 
@@ -615,28 +664,25 @@ r = \min \left( 1, \frac{q(\theta^\star|y)}{q(\theta_{t-1}|y)}\frac{p(\psi^\star
 \frametitle{Adaptive dynamic HMC in Stan}
 
   \begin{itemize}
-  \item Dynamic HMC using growing tree to increase simulation
-    trajectory until no-U-turn criterion stopping
+  \item \uured{During warmup}, Stan adapts the mass matrix and step size.
     \begin{itemize}
-    \item max treedepth to keep computation in control
-    \item<2-> pick a draw along the trajectory with probabilities adjusted
-      to take into account the error in the discretized dynamic
-      simulation
-    \item<3-> give bigger weight for tree parts further away to increase
-      probability of jumping further away
+    \item The mass matrix accounts for parameter scales and, if dense,
+      linear correlations.
+    \item \texttt{adapt\_delta} is the target average acceptance statistic
+      used to tune the step size.
+    \item A higher target usually gives smaller steps and more computation.
     \end{itemize}
-  \item<4-> Mass matrix and step size adaptation in Stan
+  \pause
+  \item \texttt{adapt\_delta} is \uured{not a guarantee} that this fraction
+    of final NUTS draws will be accepted.
+  \pause
+  \item \uured{After warmup}, the adapted mass matrix and step size
+    stop adapting.
     \begin{itemize}
-    \item<4-> mass matrix refers to having different scaling for different
-      parameters and optionally also rotation to reduce correlations
-    \item<5-> mass matrix and step size adjustment and are estimated
-      during initial adaptation phase
-    \item<6-> step size is adjusted to be as big as possible while keeping
-      discretization error in control (adapt\_delta)
+    \item NUTS still chooses a trajectory length $L$ at \uured{each iteration}.
+    \item \texttt{max\_treedepth} limits the work per iteration.
     \end{itemize}
-  \item<7-> After adaptation the algorithm parameters are fixed
-  \item<8-> After warmup store iterations for inference
-  \item<9-> See more details in Stan reference manual
+  \item Use the post-warmup draws for inference.
 \end{itemize}
 
 \end{frame}
@@ -655,7 +701,8 @@ data {
   {\only<2>{\color{black}}
 \begin{lstlisting}[language=Stan]
 parameters {
-  real<lower=0,upper=1> theta; // parameter of the binomial
+  // success probability
+  real<lower=0,upper=1> theta;
 }
 \end{lstlisting}}
 {\only<3>{\color{black}}
@@ -675,8 +722,8 @@ model {
   {\small
   \begin{lstlisting}[language=Stan]
 data {
-  int<lower=0> N;     // number of experiments
-  int<lower=0,upper=N> y; // number of successes
+  int<lower=0> N;        // trials
+  int<lower=0,upper=N> y; // successes
 }
 \end{lstlisting}}
 
@@ -704,14 +751,19 @@ parameters {
 \end{lstlisting}}
 
   \begin{itemize}
-  \item Parameters may have constraints
-  \item Stan makes transformation to unconstrained space and samples in unconstrained space
-    \begin{itemize}
-    \item e.g. log transformation for \texttt{<lower=a>}
-    \item e.g. logit transformation for \texttt{<lower=a,upper=b>}
-    \end{itemize}
-  \item<2-> For these declared transformation Stan automatically takes
-    into account the Jacobian of the transformation (see BDA3 p. 21)
+  \item Stan samples an unconstrained variable $z$, then maps it back
+    to the declared parameter $\theta$.
+  \item For the interiors of the declared bounds:
+    \[
+    \begin{array}{ll}
+    \texttt{<lower=a>}: & z=\log(\theta-a),\\[6pt]
+    \texttt{<lower=a,upper=b>}: &
+    z=\operatorname{logit}\!\left(\dfrac{\theta-a}{b-a}\right).
+    \end{array}
+    \]
+  \item Here $a=0$, $b=1$, so $z=\operatorname{logit}(\theta)$.
+  \item<2-> Stan automatically adds the log-Jacobian adjustment for
+    these \uured{declared parameter constraints} (BDA3, p.\ 21).
   \end{itemize}
 \end{frame}
 
@@ -727,6 +779,15 @@ model {
 }
 \end{lstlisting}}
 
+  \begin{itemize}
+  \item Each \texttt{\textasciitilde} statement adds a log-density
+    contribution, evaluated at the current parameter values.
+  \item It \uured{does not generate a random draw}:
+    $y$ remains the observed data; the sampler proposes values of $\theta$.
+  \item Together these statements specify
+    $\log p(\theta)+\log p(y\mid\theta)$, up to constants.
+  \end{itemize}
+
 \end{frame}
 
 \begin{frame}[fragile]
@@ -743,7 +804,7 @@ model {
 
     \vspace{-0.5\baselineskip}
     \begin{itemize}
-    \item $\sim$ is syntactic sugar and this is equivalent to
+    \item Same target up to constants independent of the parameters:
     \end{itemize}
 
   {\small
@@ -756,11 +817,13 @@ model {
 
     \vspace{-0.5\baselineskip}
     \begin{itemize}
-    \item<2-> {\tt target} is the log posterior density
-    \item<3-> {\tt \_lpdf} for continuous, {\tt \_lpmf} for discrete distributions (discrete for the left hand side of {\tt |})
-    \item<4-> for Stan sampler there is no difference between prior and likelihood, all that matters is the final {\tt target}
-    \item<5-> you can write in Stan language any program to compute the
-      log density (Stan language is Turing complete)
+    \item<2-> At each evaluation, \texttt{target} accumulates an
+      \uured{unnormalized log density}, not a normalized posterior.
+    \item<3-> For sampling on the unconstrained scale, it also includes
+      the Jacobian adjustments from declared parameter constraints.
+    \item<4-> \texttt{\_lpdf}: continuous density;
+      \texttt{\_lpmf}: discrete probability mass.
+      Prior and likelihood terms both contribute to the same target.
     \end{itemize}
 
 \end{frame}
@@ -849,7 +912,11 @@ options(mc.cores = parallel::detectCores())
 {\only<2>{\color{black}}
 \begin{lstlisting}[language=R]
 d_bin <- list(N = 10, y = 7)
-fit_bin <- stan(file = 'binom.stan', data = d_bin)
+fit_bin <- stan(
+  file = 'binom.stan', data = d_bin,
+  chains = 4, iter = 2000, warmup = 1000,
+  seed = 123
+)
 \end{lstlisting}
 }
 }
@@ -857,21 +924,27 @@ fit_bin <- stan(file = 'binom.stan', data = d_bin)
 
 \begin{frame}[fragile]
 
-\frametitle{PyStan}
+\frametitle{PyStan 3}
 
   {\small\color{gray}
 {\only<1>{\color{black}}
-      PyStan
-\begin{lstlisting}
-import pystan
-import stan_utility
+\begin{lstlisting}[language=Python]
+from pathlib import Path
+import stan
+
+code = Path('binom.stan').read_text()
+data = dict(N=10, y=7)
 \end{lstlisting}
     }
     {\only<2>{\color{black}}
-\begin{lstlisting}
-data = dict(N=10, y=8)
-model = stan_utility.compile_model('binom.stan')
-fit = model.sampling(data=data)
+\begin{lstlisting}[language=Python]
+posterior = stan.build(
+    code, data=data, random_seed=123
+)
+fit = posterior.sample(
+    num_chains=4, num_warmup=1000,
+    num_samples=1000
+)
 \end{lstlisting}
     }
   }
@@ -879,15 +952,22 @@ fit = model.sampling(data=data)
 
 \begin{frame}
 
-\frametitle{Stan}
+\frametitle{Stan: from model to saved draws}
+
+  \begin{enumerate}
+  \item Compile the model, unless a compiled version is available.
+  \item Run warmup, including adaptation.
+  \item Sample after warmup. For \uured{each saved draw}:
+    \begin{itemize}
+    \item evaluate \texttt{generated quantities} using that draw;
+    \item save the parameters and generated quantities together.
+    \end{itemize}
+  \item Inspect diagnostics, including divergences, ESS and $\widehat R$.
+  \end{enumerate}
 
   \begin{itemize}
-  \item Compilation (unless previously compiled model available)
-  \item Warm-up including adaptation
-  \item Sampling
-  \item Generated quantities
-  \item Save posterior draws
-  \item Report divergences, $n_\eff$, $\widehat{R}$
+  \item Generated quantities are not evaluated just once at the end.
+    They do not change the fitted posterior.
   \end{itemize}
 
 \end{frame}
@@ -915,6 +995,7 @@ fit = model.sampling(data=data)
 %  Beta-blockers $N_1 = 674, y_1 = 39, N_2 = 680, y_2 = 22$
 
   {\small\color{gray}
+    \lstset{aboveskip=3pt,belowskip=3pt}
     {\only<1>{\color{black}}
 \begin{lstlisting}[language=Stan]
 data {
@@ -939,7 +1020,8 @@ model {
 \begin{lstlisting}[language=Stan]
 generated quantities {
   real oddsratio;
-  oddsratio = (theta2/(1-theta2))/(theta1/(1-theta1));
+  oddsratio = (theta2 / (1-theta2))
+              / (theta1 / (1-theta1));
 }
 \end{lstlisting}
     }
@@ -956,13 +1038,22 @@ generated quantities {
 \begin{lstlisting}[language=Stan]
 generated quantities {
   real oddsratio;
-  oddsratio = (theta2/(1-theta2))/(theta1/(1-theta1));
+  oddsratio = (theta2 / (1-theta2))
+              / (theta1 / (1-theta1));
 }
 \end{lstlisting}
     }
 
     \begin{itemize}
-    \item generated quantities is run after the sampling
+    \item Evaluated \uured{once for each saved draw}
+      $(\theta_1^{(s)},\theta_2^{(s)})$.
+    \item The odds ratio is \uured{deterministic given that draw}.
+      Across draws it has a posterior distribution.
+    \pause
+    \item An \texttt{\_rng} function instead generates a new random outcome.
+      For example, \texttt{binomial\_rng(N2, theta2)} simulates a
+      replicated death count for a group of size $N_2$.
+    \item Both use the fitted posterior; neither changes it.
     \end{itemize}
 
 \end{frame}
@@ -973,74 +1064,32 @@ generated quantities {
 
   {\small
 \begin{lstlisting}[language=R]
-d_bin2 <- list(N1 = 674, y1 = 39, N2 = 680, y2 = 22)
-fit_bin2 <- stan(file = 'binom2.stan', data = d_bin2)
+d_bin2 <- list(
+  N1 = 674, y1 = 39, N2 = 680, y2 = 22
+)
+fit_bin2 <- stan(
+  file = 'binom2.stan', data = d_bin2,
+  chains = 4, iter = 2000, warmup = 1000,
+  seed = 123
+)
 \end{lstlisting}
   }
 
-  {\tiny
+  {\footnotesize
 \begin{lstlisting}
-starting worker pid=10151 on localhost:11783 at 10:03:27.872
-starting worker pid=10164 on localhost:11783 at 10:03:28.087
-starting worker pid=10176 on localhost:11783 at 10:03:28.295
-starting worker pid=10185 on localhost:11783 at 10:03:28.461
-
-SAMPLING FOR MODEL 'binom2' NOW (CHAIN 1).
-
-Gradient evaluation took 6e-06 seconds
-1000 transitions using 10 leapfrog steps per transition would take 0.06 seconds.
-Adjust your expectations accordingly!
-
-
+SAMPLING FOR MODEL 'binom2' (CHAIN 1).
 Iteration:    1 / 2000 [  0%]  (Warmup)
-Iteration:  200 / 2000 [ 10%]  (Warmup)
 ...
 Iteration: 1000 / 2000 [ 50%]  (Warmup)
 Iteration: 1001 / 2000 [ 50%]  (Sampling)
 ...
 Iteration: 2000 / 2000 [100%]  (Sampling)
-
- Elapsed Time: 0.012908 seconds (Warm-up)
-               0.017027 seconds (Sampling)
-               0.029935 seconds (Total)
-
-
-SAMPLING FOR MODEL 'binom2' NOW (CHAIN 2).
-...
-\end{lstlisting}
-  }
-
-\end{frame}
-
-\begin{frame}[fragile]
-
-\frametitle{Difference between proportions}
-
-  {\small
-\begin{lstlisting}[language=R]
-monitor(fit_bin2, probs = c(0.1, 0.5, 0.9))
-\end{lstlisting}
-  }
-
-  {\scriptsize
-\begin{lstlisting}
-Inference for the input samples
-(4 chains: each with iter=1000; warmup=0):
-
-            mean se_mean  sd    10%    50%    90% n_eff Rhat
-theta1       0.1       0 0.0    0.0    0.1    0.1  3280    1
-theta2       0.0       0 0.0    0.0    0.0    0.0  3171    1
-oddsratio    0.6       0 0.2    0.4    0.6    0.8  3108    1
-lp__      -253.5       0 1.0 -254.8 -253.2 -252.6  1922    1
-
-For each parameter, n_eff is a crude measure of effective sample size,
-and Rhat is the potential scale reduction factor on split chains (at
-convergence, Rhat=1).
 \end{lstlisting}
   }
 
   \begin{itemize}
-  \item<2-> {\tt lp\_\_} is the log density, ie, same as {\tt target}
+  \item Each chain retains 1000 draws after 1000 warmup iterations.
+  \item Four chains give 4000 retained draws in total.
   \end{itemize}
 
 \end{frame}
@@ -1050,11 +1099,69 @@ convergence, Rhat=1).
 \frametitle{Difference between proportions}
 
   {\small
-\begin{lstlisting}
+\begin{lstlisting}[language=R]
+s <- summary(fit_bin2,
+  probs = c(0.1, 0.5, 0.9))$summary
+\end{lstlisting}
+  }
+
+  % RStan 2.32.7, seed 123, four chains, iter=2000, warmup=1000.
+  \begin{center}
+  {\small\setlength{\tabcolsep}{4pt}
+  \begin{tabular}{lrrrrr}
+  & Mean & SD & 10\% & 50\% & 90\% \\
+  \hline
+  $\theta_1$ & 0.0591 & 0.0091 & 0.0477 & 0.0587 & 0.0709 \\
+  $\theta_2$ & 0.0336 & 0.0070 & 0.0251 & 0.0330 & 0.0429 \\
+  Odds ratio & 0.5688 & 0.1573 & 0.3849 & 0.5504 & 0.7827
+  \end{tabular}}
+  \end{center}
+
+  \begin{itemize}
+  \item Four chains, each with 1000 warmup iterations and 1000 retained draws.
+  \item SD describes posterior uncertainty; the percentiles summarize the posterior distribution.
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Monte Carlo precision of the summaries}
+
+  {\small
+\begin{lstlisting}[language=R]
+s[, c("se_mean", "n_eff", "Rhat")]
+\end{lstlisting}}
+
+  \begin{center}
+  {\small\setlength{\tabcolsep}{7pt}
+  \begin{tabular}{lrrr}
+  & MCSE of mean & ESS & $\widehat R$ \\
+  \hline
+  $\theta_1$ & 0.00015 & 3856 & 0.9994 \\
+  $\theta_2$ & 0.00012 & 3604 & 0.9998 \\
+  Odds ratio & 0.00266 & 3505 & 0.9993 \\
+  \texttt{lp\_\_} & 0.02423 & 1730 & 1.0005
+  \end{tabular}}
+  \end{center}
+
+  \begin{itemize}
+  \item \texttt{se\_mean} measures Monte Carlo error, not posterior uncertainty. Here we use classical ESS and split-$\widehat R$.
+  \item \texttt{monitor()} may report \texttt{warmup=0} because it receives draws with warmup already removed.
+  \item \texttt{lp\_\_} is the log density accumulated in \texttt{target}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+
+\frametitle{Difference between proportions}
+
+  {\footnotesize
+\begin{lstlisting}[language=R]
 draws <- as.data.frame(fit_bin2)
-mcmc_hist(draws, pars = 'oddsratio') +
-  geom_vline(xintercept = 1) +
-  scale_x_continuous(breaks = c(seq(0.25,1.5,by=0.25)))
+breaks <- seq(0.25, 1.5, by = 0.25)
+bayesplot::mcmc_hist(draws, pars = 'oddsratio') +
+  ggplot2::geom_vline(xintercept = 1) +
+  ggplot2::scale_x_continuous(breaks = breaks)
 \end{lstlisting}
   }
 
@@ -1068,15 +1175,22 @@ mcmc_hist(draws, pars = 'oddsratio') +
 
 \frametitle{HMC specific diagnostics}
 
-  {\scriptsize
-\begin{lstlisting}
-check_treedepth(fit_bin2)
-check_div(fit_bin2)
+  {\small
+\begin{lstlisting}[language=R]
+rstan::check_hmc_diagnostics(fit_bin2)
+\end{lstlisting}
+  }
 
-[1] "0 of 4000 iterations saturated the maximum tree depth of 10 (0%)"
-[1] "0 of 4000 iterations ended with a divergence (0%)"
+  \begin{itemize}
+  \item This run: 0 divergences and 0 maximum-tree-depth hits among 4000 retained draws.
+  \end{itemize}
 
-get_num_leapfrog_per_iteration(fit_bin2)
+  {\small
+\begin{lstlisting}[language=R]
+n_leapfrog <-
+  rstan::get_num_leapfrog_per_iteration(
+    fit_bin2
+  )
 \end{lstlisting}
   }
 
@@ -1109,7 +1223,7 @@ get_num_leapfrog_per_iteration(fit_bin2)
 \begin{frame}[fragile]
 
 \frametitle{Gaussian linear model}
-  {\small
+  {\footnotesize
   \begin{lstlisting}[language=Stan]
 data {
     int<lower=0> N; // number of data points
@@ -1130,6 +1244,9 @@ model {
 }
   \end{lstlisting}
 }
+\begin{itemize}
+\item This first version uses implicit flat priors. Proper priors are added on the following slides.
+\end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]
@@ -1177,34 +1294,34 @@ transformed parameters {
   {\small
   \begin{lstlisting}[language=Stan]
 data {
-    int<lower=0> N; // number of data points
-    vector[N] x; //
-    vector[N] y; //
-    real pmualpha; // prior mean for alpha
-    real psalpha;  // prior std for alpha
-    real pmubeta;  // prior mean for beta
-    real psbeta;   // prior std for beta
+  // N, x and y as before
+  real pmualpha;
+  real<lower=0> psalpha;
+  real pmubeta;
+  real<lower=0> psbeta;
+  real<lower=0> pssigma;
 }
-...
-transformed parameters {
-    vector[N] mu;
-    mu = alpha + beta*x;
-}
+// parameters and mu as before
 model {
-    alpha ~ normal(pmualpha,psalpha);
-    beta ~ normal(pmubeta,psbeta);
-    y ~ normal(mu, sigma);
+  alpha ~ normal(pmualpha, psalpha);
+  beta ~ normal(pmubeta, psbeta);
+  sigma ~ normal(0, pssigma);
+  y ~ normal(mu, sigma);
 }
   \end{lstlisting}
 }
+\begin{itemize}
+\item Supply prior means and strictly positive scales in the units of the parameters.
+\item With \texttt{sigma > 0}, its normal prior is a half-normal. The constraint alone does not specify this prior.
+\end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]
 
 \frametitle{Student-t linear model}
-  {\small
+  {\footnotesize
   \begin{lstlisting}[language=Stan]
-...
+// Data and prior inputs as before
 parameters {
   real alpha;
   real beta;
@@ -1216,11 +1333,29 @@ transformed parameters {
   mu = alpha + beta*x;
 }
 model {
-  nu ~ gamma(2,0.1);
+  alpha ~ normal(pmualpha, psalpha);
+  beta ~ normal(pmubeta, psbeta);
+  sigma ~ normal(0, pssigma);
+  nu ~ gamma(2, 0.1);
   y ~ student_t(nu, mu, sigma);
 }
   \end{lstlisting}
 }
+\end{frame}
+
+\begin{frame}
+\frametitle{Student-t scale and degrees of freedom}
+\begin{itemize}
+\item $\mu$ is the location and $\sigma$ is a scale parameter, not generally the standard deviation.
+\item Smaller $\nu$ gives heavier tails; large $\nu$ approaches the Gaussian model.
+\item Here we restrict $1<\nu<80$:
+  \begin{itemize}
+  \item the lower bound ensures a finite conditional mean;
+  \item the upper bound caps the range at nearly Gaussian errors.
+  \end{itemize}
+\item These bounds are modelling choices, not requirements of Stan.
+\item \texttt{gamma(2, 0.1)} uses shape 2 and rate 0.1. Together with the bounds, this defines a truncated gamma prior.
+\end{itemize}
 \end{frame}
 
 %\begin{frame}
@@ -1320,9 +1455,13 @@ transformed data {
 Two group Binomial model:
   {\scriptsize
 \begin{lstlisting}
-d_bin2 <- data.frame(N = c(674, 680), y = c(39,22), grp2 = c(0,1))
-fit_bin2 <- stan_glm(y/N ~ grp2, family = binomial(), data = d_bin2,
-                    weights = N)
+d_bin2 <- data.frame(
+  N = c(674, 680), y = c(39, 22), grp2 = c(0, 1)
+)
+fit_bin2 <- stan_glm(
+  y/N ~ grp2, family = binomial(),
+  data = d_bin2, weights = N
+)
 \end{lstlisting}
   }
 % \begin{lstlisting}[language=R]
@@ -1353,9 +1492,13 @@ fit_bin2 <- stan_glm(y/N ~ grp2, family = binomial(), data = d_bin2,
 Two group Binomial model:
   {\scriptsize
 \begin{lstlisting}
-d_bin2 <- data.frame(N = c(674, 680), y = c(39,22), grp2 = c(0,1))
-fit_bin2 <- stan_glm(y/N ~ grp2, family = binomial(), data = d_bin2,
-                    weights = N)
+d_bin2 <- data.frame(
+  N = c(674, 680), y = c(39, 22), grp2 = c(0, 1)
+)
+fit_bin2 <- stan_glm(
+  y/N ~ grp2, family = binomial(),
+  data = d_bin2, weights = N
+)
 \end{lstlisting}
   }
     Gaussian linear model
@@ -1397,7 +1540,10 @@ fit_bin2 <- brm(
 )
 
 
-fit_lin_t <- brm(temp ~ year, data = d_lin, family = student())
+fit_lin_t <- brm(
+  temp ~ year, data = d_lin,
+  family = student()
+)
 \end{lstlisting}
     }
 
@@ -1416,10 +1562,10 @@ Geomagnetic storms
 \begin{frame}[fragile]
 
 \frametitle{Extreme value analysis}
-  {\small
+  {\footnotesize
   \begin{lstlisting}[language=Stan]
 data {
-  int<lower=0> N;
+  int<lower=1> N;
   vector<lower=0>[N] y;
   int<lower=0> Nt;
   vector<lower=0>[Nt] yt;
@@ -1427,6 +1573,8 @@ data {
 transformed data {
   real ymax;
   ymax = max(y);
+  if (ymax <= 0)
+    reject("At least one y must be positive");
 }
 parameters {
   real<lower=0> sigma;
@@ -1445,33 +1593,61 @@ generated quantities {
 
 \begin{frame}[fragile]
 
-\frametitle{Functions}
+\frametitle{Functions: generalized Pareto log density}
   {\footnotesize
   \begin{lstlisting}[language=Stan]
 functions {
-  real gpareto_lpdf(vector y, real k, real sigma) {
-    // generalised Pareto log pdf with mu=0
-    // should check and give error if k<0
-    // and max(y)/sigma > -1/k
-    int N;
-    N = dims(y)[1];
-    if (abs(k) > 1e-15)
-      return -(1+1/k)*sum(log1p(y*k/sigma)) -N*log(sigma);
-    else
-      return -sum(y/sigma) -N*log(sigma); // limit k->0
+  real gpareto_lpdf(vector y,
+                    real k, real sigma) {
+    int N = num_elements(y);
+    if (sigma <= 0)
+      reject("sigma must be positive");
+    if (N == 0) return 0;
+    if (min(y) < 0 ||
+        (k < 0 && max(y) >= -sigma/k))
+      return negative_infinity();
+    if (k == 0)
+      return -sum(y)/sigma - N*log(sigma);
+    return -(1 + k)*sum(log1p(k*y/sigma))/k
+           - N*log(sigma);
   }
-  vector gpareto_ccdf(vector y, real k, real sigma) {
-    // generalised Pareto log ccdf with mu=0
-    // should check and give error if k<0
-    // and max(y)/sigma < -1/k
-    if (abs(k) > 1e-15)
-      return exp((-1/k)*log1p(y/sigma*k));
-    else
-      return exp(-y/sigma); // limit k->0
-  }
+  // Add the survival function shown next here.
 }
   \end{lstlisting}
 }
+\begin{itemize}
+\item The density is zero outside the support, so its log is $-\infty$. For $k=0$, the model is exponential.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Functions: generalized Pareto survival}
+  {\footnotesize
+  \begin{lstlisting}[language=Stan]
+// In the same functions block:
+vector gpareto_ccdf(vector y,
+                    real k, real sigma) {
+  vector[num_elements(y)] s;
+  if (sigma <= 0)
+    reject("sigma must be positive");
+  for (n in 1:num_elements(y)) {
+    if (y[n] <= 0)
+      s[n] = 1;
+    else if (k < 0 && y[n] >= -sigma/k)
+      s[n] = 0;
+    else if (k == 0)
+      s[n] = exp(-y[n]/sigma);
+    else
+      s[n] = exp(-log1p(k*y[n]/sigma)/k);
+  }
+  return s;
+}
+  \end{lstlisting}
+}
+\begin{itemize}
+\item Returns $P(Y>y_n\mid k,\sigma)$, not its logarithm.
+\item For $k<0$, this probability is zero at and above the upper endpoint $-\sigma/k$.
+\end{itemize}
 \end{frame}
 
 

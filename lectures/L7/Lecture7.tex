@@ -279,11 +279,15 @@
   \item Hyperprior $p({\color{red}\alpha,\beta})$?
     \begin{itemize}
     \item ${\color{red}\alpha,\beta}$ both affect the location and scale
-    \item BDA3 (p. 110) has (vague)
+    \item BDA3 (pp. 110--111) uses, for $\alpha,\beta>0$,
       $p({\color{red}\alpha,\beta})\propto({\color{red}\alpha}+{\color{red}\beta})^{-5/2}$
+    \item This hyperprior is \textbf{improper}: its integral is infinite
+    \item BDA shows that the posterior is proper for these rat data;
+      posterior propriety must be checked when using an improper prior
+    \item An example-specific choice, not a general default
     \end{itemize}
     \pause
-    \item {\color{uured} What type of predicitive distributions can we have?}
+    \item {\color{uured} What predictive distributions can we have?}
     \end{itemize}
 \end{frame}
 
@@ -293,7 +297,13 @@
 
   \only<1>{\includegraphics[width=8cm]{figs/rats_posterior.pdf}}
   \only<2>{\includegraphics[width=8cm]{figs/rats_hierdraws.pdf}}
-  \only<3>{\includegraphics[width=8cm]{figs/rats_hierprior.pdf}}
+  \only<3>{\includegraphics[width=8cm]{figs/rats_hierprior.pdf}
+    \begin{itemize}
+    \item $p(\theta_{\mathrm{new}}\mid y)$ averages over posterior
+      uncertainty in $\alpha,\beta$
+    \item Predicts a new group's probability, not an existing
+      group's posterior $p(\theta_j\mid y)$
+    \end{itemize}}
   \only<4-5>{\vspace{-0.3\baselineskip}\includegraphics[width=6.7cm]{figs/rats_separate_less.pdf}\\}
   \only<5-6>{\vspace{-0.3\baselineskip}
     \includegraphics[width=6.7cm]{figs/rats_hier_less.pdf}\\}
@@ -343,13 +353,11 @@
 \frametitle{Hierarchical normal model: factory}
 
   \begin{itemize}
-  \item Factory has 6 machines which quality is evaluated
-  \item Assume hierarchical model
-    \begin{itemize}
-    \item each machine has its own (average) quality $\theta_j$ and
-      {\color{uured} own variance} $\sigma_j^2$
-    \end{itemize}
-\hspace{-1cm}~\begin{minipage}[b]{4cm}
+  \item Six machines with means $\theta_j$ and
+    {\color{uured} own variances} $\sigma_j^2$
+  \end{itemize}
+  \[
+    \begin{gathered}
       \begin{xy}
         \xygraph{
           []              !O{y_{ij}}
@@ -360,20 +368,25 @@
           ([u][l(0.33)] !V{\sigma_0^2}      !P{\sigma_j^2},
           [u][r(0.33)] !V{\nu_0} !P{\sigma_j^2}),
           [r(0.45)]*{i},
-          [r(0.9)]*{j},
-          [l(3.0)]*{y_{ij}|\theta_j \sim \N(\theta_j,\sigma_j^2)},
-          [u][l(3.0)]*{\theta_j|\mu_P,\sigma_P^2 \sim \N(\mu_P,\sigma_P^2)},
-          [u][r(3.25)]*{\sigma_j^2|\sigma_0^2,\nu_0 \sim \Invchi2(\sigma_0^2,\nu_0)}
+          [r(0.9)]*{j}
           )
           !B{y_{ij}}{i}{}
           !B{\theta_j}{j}{++}
         }
-      \end{xy}
-    \end{minipage}
-    \pause
-  \item {\color{uured} What type of predicitive distributions can we have?}
-    \pause
-  \item Can be used to predict the future quality produced by each machine and quality produced by a new similar machine
+      \end{xy}\\[2mm]
+    \begin{aligned}
+      y_{ij}\mid\theta_j,\sigma_j^2
+        &\sim \N(\theta_j,\sigma_j^2)\\
+      \theta_j\mid\mu_P,\sigma_P^2
+        &\sim \N(\mu_P,\sigma_P^2)\\
+      \sigma_j^2\mid\nu_0,\sigma_0^2
+        &\sim \Invchi2(\nu_0,\sigma_0^2)
+    \end{aligned}
+    \end{gathered}
+  \]
+  \begin{itemize}
+  \item<2-> {\color{uured} What predictive distributions can we have?}
+  \item<3-> Observations from existing or new similar machines
   \end{itemize}
 \end{frame}
 
@@ -411,15 +424,14 @@
   \begin{itemize}
   \item Effectiveness of the SAT coaching
     \begin{itemize}
-    \item students had made pre-tests PSAT-M and
-      PSAT-V
-    \item part of students were coached
-    \item linear regression was used to estimate the coaching effect
-      $y_j$ for the school $j$ (could be denoted with $\bar{y}_{.j}$,
-      too) and variances $\sigma_j^2$
-    \item $y_j$ approximately normally distributed, with variances
-      assumed to be known based on about 30 students per school
-    \item data is group means and variances (not personal results)
+    \item students took pre-tests PSAT-M and PSAT-V
+    \item some students received coaching
+    \item a regression in each school adjusts for pre-test scores and
+      estimates the coaching effect $y_j$ and its standard error $\sigma_j$
+    \item use a normal approximation for $y_j$, treating the estimated
+      sampling variances $\sigma_j^2$ as known
+    \item $y_j$ is an adjusted effect estimate, not a sample mean;
+      $\sigma_j$ is not the SD of individual students' scores
     \end{itemize}
     \pause
   \item Data:
@@ -427,7 +439,7 @@
     \begin{tabular}[t]{r | r r r r r r r r}
       School & A & B & C & D & E & F & G & H \\
       $y_j$ & 28 & 8 & -3 & 7 & -1 & 1 & 18 & 12 \\
-      $\sigma_j$ & 15 & 10 & 16 & 11 & 9 & 22 & 20 & 28
+      $\sigma_j$ & 15 & 10 & 16 & 11 & 9 & 11 & 10 & 18
     \end{tabular}}
   \end{itemize}
 \end{frame}
@@ -437,25 +449,23 @@
 \frametitle{Hierarchical normal model for group means}
 
   \begin{itemize}
-  \item $J$ experiments, unknown $\theta_j$ and known $\sigma^2$
+  \item Observations are independent given $\theta_j$; $\sigma^2$ is known
     \begin{equation*}
       y_{ij}|\theta_j \sim \N(\theta_j,\sigma^2), \quad
       i=1,\ldots,n_j; \quad j=1,\ldots,J
     \end{equation*}
-    \vspace{-6mm}
-  \item Group $j$ sample mean and sample variance
-    \begin{eqnarray*}
-      \bar{y}_{.j} & = & \frac{1}{n_j}\sum_{i=1}^{n_j}y_{ij}\\
-      \sigma_j^2 & = & \frac{\sigma^2}{n_j}
-    \end{eqnarray*}
-    \vspace{-6mm}
+  \item Group $j$ sample mean and its sampling variance
+    \begin{align*}
+      \bar{y}_{.j} & = \frac{1}{n_j}\sum_{i=1}^{n_j}y_{ij}\\
+      \operatorname{Var}(\bar{y}_{.j}\mid\theta_j)
+        & = \frac{\sigma^2}{n_j}=\sigma_j^2
+    \end{align*}
+    SD of observations: $\sigma$; SE of the mean: $\sigma_j=\sigma/\sqrt{n_j}$.
     \pause
-  \item Use model
-    \begin{eqnarray*}
-      \bar{y}_{.j}|\theta_j \sim \N(\theta_j,\sigma_j^2)
-    \end{eqnarray*}
-     this model can be generalized so that, $\sigma_j^2$ can be
-    different from each other for other reasons than $n_j$
+  \item Thus $\bar{y}_{.j}\mid\theta_j \sim \N(\theta_j,\sigma_j^2)$.
+
+    The same form applies to adjusted school effects $y_j$, using
+    their reported standard errors $\sigma_j$.
   \end{itemize}
 \end{frame}
 

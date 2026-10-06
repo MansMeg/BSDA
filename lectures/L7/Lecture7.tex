@@ -47,7 +47,7 @@
 \newgraphescape{F}[1]{!{*+=<2em>[F=]{#1}="#1"}}
 \newgraphescape{O}[1]{!{*+=<2em>[F]{#1}="#1"}}
 \newgraphescape{V}[1]{!{*+=<2em>[o][F]{#1}="#1"}}
-\newgraphescape{B}[3]{!{{ "#1"*+#3\frm{} }.{ "#2"*+#3\frm{} } *+[F:!\grayxy(0.75)]\frm{}}}
+\newgraphescape{B}[3]{!{{ "#1"*+#3\frm{} }.{ "#2"*+#3\frm{} } *+[F]\frm{}}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -87,10 +87,10 @@
 
 \begin{frame}
 
-\frametitle{Hierarchical model}
+\frametitle{Survival probabilities across hospitals}
 
   \begin{itemize}
-  \item Example: Treatment effectiveness
+  \item Example: comparing hospitals
     \begin{itemize}
     \item Hospital $j$: survival probability $\theta_j$
     \item Patient $i$'s survival outcome: $y_{ij}$\\[1mm]
@@ -232,6 +232,29 @@
 \end{frame}
 
 \begin{frame}
+\frametitle{Pair discussion: group size and pooling}
+
+  {\color{uured}\textbf{Discuss in pairs (1--2 minutes).}}
+
+  Two groups have the same observed success rate:
+  \[
+    \text{Group A: }\frac{1}{5}=20\%,\qquad
+    \text{Group B: }\frac{100}{500}=20\%.
+  \]
+  Both share the same population information, with a population
+  mean different from 20\%.
+
+  \textbf{Which estimate should move more toward the population mean?
+    Why?}
+
+  \uncover<2->{
+    \medskip
+    \textbf{Answer:} Group A. Its five observations provide weaker
+    evidence, so the population information receives more weight.
+  }
+\end{frame}
+
+\begin{frame}
 \frametitle{Predictive distributions for hierarchical models}
 
   \begin{itemize}
@@ -283,10 +306,50 @@
 
 \frametitle{Hierarchical binomial model: rats}
 
-  \only<1>{\includegraphics[width=9cm]{figs/rats_pooled.pdf}}
-  \only<2>{\includegraphics[width=9cm]{figs/rats_separate.pdf}}
+  {\color{uured}What assumption does each model make about the experiments?}
+  \begin{center}
+    \only<1>{\includegraphics[width=8.3cm]{figs/rats_pooled.pdf}}
+    \only<2>{\includegraphics[width=8.3cm]{figs/rats_separate.pdf}}
+  \end{center}
+  \only<1>{Complete pooling assumes one common probability for all experiments.}
+  \only<2>{No pooling estimates each probability separately, without
+    learning a shared population distribution.}
 
 
+\end{frame}
+
+\begin{frame}
+\frametitle{Reading the model diagrams}
+
+  \begin{columns}[c,onlytextwidth]
+    \begin{column}{0.37\textwidth}
+      \centering
+      \begin{xy}
+        \xygraph{
+          [] !O{y_j}
+          ([u] !V{\theta_j} !P{y_j}
+          ([u] !V{\phi} !P{\theta_j}),
+          [u][r(0.85)] !F{n_j} !P{y_j},
+          [r(1.1)]*{j})
+          !B{\theta_j}{j}{++}
+        }
+      \end{xy}
+    \end{column}
+    \begin{column}{0.60\textwidth}
+      \begin{itemize}
+      \item Circle: unknown quantity
+      \item Single box: observed quantity or a supplied estimate
+      \item Double box: fixed, given quantity
+      \item Arrow: the child's distribution depends on the parent
+      \item Outer box (\textbf{plate}): repeat its contents for
+        $j=1,\ldots,J$
+      \end{itemize}
+    \end{column}
+  \end{columns}
+  \medskip
+
+  These are the conventions used in this lecture.
+  A nested $i$ plate repeats observations within each group.
 \end{frame}
 
 \begin{frame}[fragile]
@@ -333,11 +396,57 @@
 \end{frame}
 
 \begin{frame}
+\frametitle{Beta-binomial conditional posterior}
+
+  For fixed $\alpha,\beta>0$, the binomial likelihood gives
+  \begin{align*}
+    p(\theta_j\mid\alpha,\beta,y_j)
+      &\propto \theta_j^{y_j}(1-\theta_j)^{n_j-y_j}
+        \theta_j^{\alpha-1}(1-\theta_j)^{\beta-1}\\
+      &\propto \theta_j^{\alpha+y_j-1}
+        (1-\theta_j)^{\beta+n_j-y_j-1}.
+  \end{align*}
+  Thus
+  \[
+    \theta_j\mid\alpha,\beta,y_j
+      \sim\operatorname{Beta}(\alpha+y_j,\beta+n_j-y_j).
+  \]
+  \begin{itemize}
+  \item The population distribution supplies $\alpha,\beta$
+  \item Group $j$ supplies $y_j$ successes and $n_j-y_j$ failures
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Beta-binomial shrinkage}
+
+  Write the population mean and concentration as
+  \[
+    m=\frac{\alpha}{\alpha+\beta},\qquad
+    \kappa=\alpha+\beta.
+  \]
+  For $n_j>0$,
+  \begin{align*}
+    \operatorname{E}(\theta_j\mid\alpha,\beta,y_j)
+      &=\frac{\alpha+y_j}{\alpha+\beta+n_j}\\
+      &=\underbrace{\frac{n_j}{n_j+\kappa}}_{\text{data weight}}
+        \frac{y_j}{n_j}
+        +\underbrace{\frac{\kappa}{n_j+\kappa}}_{\text{population weight}}m.
+  \end{align*}
+  \begin{itemize}
+  \item The conditional posterior mean lies between $y_j/n_j$ and $m$
+  \item With $\alpha,\beta$ fixed, smaller groups receive more
+    population weight
+  \item Full Bayes also averages over uncertainty in $\alpha,\beta$
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
 
 \frametitle{Hierarchical binomial model: rats}
 
   \begin{itemize}
-  \item Population prior $\Beta({\color{uulgr}\theta_j}|{\color{red}\alpha,\beta})$
+  \item Population prior $\Beta(\theta_j|{\color{red}\alpha,\beta})$
   \item Hyperprior $p({\color{red}\alpha,\beta})$?
     \begin{itemize}
     \item ${\color{red}\alpha,\beta}$ both affect the location and scale
@@ -354,25 +463,85 @@
 \end{frame}
 
 \begin{frame}
+\frametitle{Hierarchical inference with posterior draws}
 
-\frametitle{Hierarchical binomial model: rats}
+  For $s=1,\ldots,S$:
+  \begin{enumerate}
+  \item Draw $(\alpha^{(s)},\beta^{(s)})\sim p(\alpha,\beta\mid y)$
+  \item For every group $j$, draw independently conditional on this pair:
+    \[
+      \theta_j^{(s)}\sim\operatorname{Beta}
+        (\alpha^{(s)}+y_j,\beta^{(s)}+n_j-y_j)
+    \]
+  \end{enumerate}
+  \textbf{Share one hyperparameter draw across all groups at each step.}
+  \[
+    \operatorname{E}[h(\theta_j)\mid y]
+      =\int h(\theta_j)p(\theta_j\mid y)\,d\theta_j
+      \approx\frac{1}{S}\sum_{s=1}^S h(\theta_j^{(s)}).
+  \]
+  Choosing $h(\theta)=\theta$ estimates a mean;
+  $h(\theta)=\mathbf{1}(\theta>c)$ estimates a probability.
+\end{frame}
 
-  \only<1>{\includegraphics[width=8cm]{figs/rats_posterior.pdf}}
-  \only<2>{\includegraphics[width=8cm]{figs/rats_hierdraws.pdf}}
-  \only<3>{\includegraphics[width=8cm]{figs/rats_hierprior.pdf}
-    \begin{itemize}
-    \item $p(\theta_{\mathrm{new}}\mid y)$ averages over posterior
-      uncertainty in $\alpha,\beta$
-    \item Predicts a new group's probability, not an existing
-      group's posterior $p(\theta_j\mid y)$
-    \end{itemize}}
-  \only<4-5>{\vspace{-0.3\baselineskip}\includegraphics[width=6.7cm]{figs/rats_separate_less.pdf}\\}
-  \only<5-6>{\vspace{-0.3\baselineskip}
-    \includegraphics[width=6.7cm]{figs/rats_hier_less.pdf}\\}
-  \only<6>{\vspace{-0.3\baselineskip}
-    \includegraphics[width=6.7cm]{figs/rats_hierprior.pdf}\\}
+\begin{frame}
+\frametitle{Rats: learning the population distribution}
 
+  \only<1>{
+    {\color{uured}Which population distributions remain plausible?}
+    \begin{center}
+      \includegraphics[width=7.7cm,height=5cm,keepaspectratio]{figs/rats_posterior.pdf}
+    \end{center}
+    The hyperposterior $p(\alpha,\beta\mid y)$ uses all 71 experiments.
+  }
+  \only<2>{
+    {\color{uured}How does hyperparameter uncertainty affect the population?}
+    \begin{center}
+      \includegraphics[width=8cm]{figs/rats_hierdraws.pdf}
+    \end{center}
+    Each curve is $\operatorname{Beta}(\alpha,\beta)$ for one posterior
+    draw of $(\alpha,\beta)$.
+  }
+\end{frame}
 
+\begin{frame}
+\frametitle{Rats: a new experiment's probability}
+
+  {\color{uured}What does the green curve predict?}
+  \begin{center}
+    \includegraphics[width=8cm]{figs/rats_hierprior.pdf}
+  \end{center}
+  \[
+    p(\theta_{\mathrm{new}}\mid y)=\int_0^\infty\!\int_0^\infty
+      p(\theta_{\mathrm{new}}\mid\alpha,\beta)
+      p(\alpha,\beta\mid y)\,d\alpha\,d\beta.
+  \]
+  This averages the population curves over the hyperposterior.
+  It predicts a new experiment's probability, before observing its data.
+\end{frame}
+
+\begin{frame}
+\frametitle{Rats: partial pooling}
+
+  {\color{uured}Follow experiment 71 ($4/14$), shown in red. What changes?}
+  \begin{center}
+    \includegraphics[width=6.1cm]{figs/rats_separate_less.pdf}\\[-1mm]
+    \includegraphics[width=6.1cm]{figs/rats_hier_less.pdf}
+  \end{center}
+  Experiment 71 moves toward the population.\\
+  Both plots use the same experiments and scales.
+\end{frame}
+
+\begin{frame}
+\frametitle{Rats: existing and new experiments}
+
+  {\color{uured}Why do these distributions answer different questions?}
+  \begin{center}
+    \includegraphics[width=6.1cm]{figs/rats_hier_less.pdf}\\[-1mm]
+    \includegraphics[width=6.1cm]{figs/rats_hierprior.pdf}
+  \end{center}
+  Existing $p(\theta_j\mid y)$ uses group $j$'s data as well as the
+  population. New $p(\theta_{\mathrm{new}}\mid y)$ has no new-group data.
 \end{frame}
 
 \subsection{Factory example}
@@ -382,7 +551,7 @@
 \frametitle{Hierarchical normal model: factory}
 
   \begin{itemize}
-  \item Factory has 6 machines which quality is evaluated
+  \item We evaluate the quality produced by six machines in a factory
   \item Assume hierarchical model
     \begin{itemize}
     \item each machine has its own (average) quality $\theta_j$ and
@@ -408,6 +577,145 @@
     \end{minipage}
   \item Can be used to predict the future quality produced by each machine and quality produced by a new similar machine
   \end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Factory model: a complete hierarchy}
+
+  One illustrative choice of \textbf{proper, independent priors} is
+  \[
+    \begin{gathered}
+      \mu\sim\N(m_0,s_0^2),\\
+      \tau\sim\operatorname{HalfNormal}(A_\tau),\qquad
+      \sigma\sim\operatorname{HalfNormal}(A_\sigma).
+    \end{gathered}
+  \]
+  The common-variance factory model then has
+  \begin{align*}
+    \theta_j\mid\mu,\tau&\overset{\mathrm{iid}}{\sim}\N(\mu,\tau^2),
+      &&j=1,\ldots,J,\\
+    y_{ij}\mid\theta_j,\sigma&\sim\N(\theta_j,\sigma^2),
+      &&i=1,\ldots,n_j.
+  \end{align*}
+  \begin{itemize}
+  \item Observations are independent given the group means and $\sigma$
+  \item Fix $m_0,s_0,A_\tau,A_\sigma$ using subject knowledge and the
+    measurement scale
+  \item Here $\N$ uses variance as its second argument;
+    $A_\tau,A_\sigma$ are half-normal scale parameters
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{A half-normal prior for a standard deviation}
+
+  A simple way to restrict $\tau$ to positive values is
+  \[
+    Z\sim\N(0,A_\tau^2),\qquad \tau=|Z|.
+  \]
+  This defines $\tau\sim\operatorname{HalfNormal}(A_\tau)$, with
+  \[
+    \Pr(\tau<1.96A_\tau)\approx0.95.
+  \]
+  \begin{itemize}
+  \item $A_\tau$ has the same units as the outcome
+  \item Example: to put 95\% prior probability below a between-machine
+    SD of 20 quality units, choose $A_\tau\approx20/1.96=10.2$
+  \item Choose $A_\sigma$ separately for variation within a machine
+  \item These scales are illustrative, not universal defaults
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{The prior on variation affects pooling}
+
+  \begin{itemize}
+  \item Small $\tau$: machine means lie close to $\mu$, encouraging
+    stronger pooling
+  \item Large $\tau$: machine means can differ more, allowing less pooling
+  \item With few groups, the data may give little information about
+    $\tau$, so its prior can matter substantially
+  \item Check prior predictive outcomes and compare plausible prior scales
+  \item A uniform prior on $\tau$, on $\tau^2$, or on $\log\tau$
+    gives different assumptions; ``flat'' does not mean neutral
+  \end{itemize}
+  \medskip
+  {\small BDA3, Section 5.7 discusses priors for hierarchical variation.
+    The half-normal specification here is one modelling choice.}
+\end{frame}
+
+\begin{frame}
+\frametitle{Prediction for an existing machine}
+
+  In the common-variance model, distinguish the mean $\theta_j$
+  from a future observation $\tilde y_j$:
+  \[
+    p(\tilde y_j\mid y)=\int\!\int
+      p(\tilde y_j\mid\theta_j,\sigma)
+      p(\theta_j,\sigma\mid y)\,d\theta_j\,d\sigma.
+  \]
+  For each posterior draw $s$:
+  \begin{enumerate}
+  \item Take $(\theta_j^{(s)},\sigma^{(s)})$ from the
+    \textbf{same joint posterior draw}
+  \item Draw $\tilde y_j^{(s)}\sim
+    \N(\theta_j^{(s)},(\sigma^{(s)})^2)$
+  \end{enumerate}
+  \begin{itemize}
+  \item The $\theta_j^{(s)}$ summarize uncertainty about the machine's mean
+  \item The $\tilde y_j^{(s)}$ also include variation in a new observation
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Prediction for a new similar machine}
+
+  With no observations yet from the new machine,
+  \begin{align*}
+    p(\theta_{\mathrm{new}}\mid y)
+      &=\int\!\int p(\theta_{\mathrm{new}}\mid\mu,\tau)
+        p(\mu,\tau\mid y)\,d\mu\,d\tau,\\
+    p(\tilde y_{\mathrm{new}}\mid y)
+      &=\int\!\int p(\tilde y_{\mathrm{new}}\mid\theta_{\mathrm{new}},\sigma)
+        p(\theta_{\mathrm{new}},\sigma\mid y)\,d\theta_{\mathrm{new}}\,d\sigma.
+  \end{align*}
+  For each posterior draw $s$:
+  \begin{enumerate}
+  \item Take $(\mu^{(s)},\tau^{(s)},\sigma^{(s)})$ jointly from
+    $p(\mu,\tau,\sigma\mid y)$
+  \item Draw the new mean:
+    $\theta_{\mathrm{new}}^{(s)}\sim\N(\mu^{(s)},(\tau^{(s)})^2)$
+  \item For a new observation, also draw
+    $\tilde y_{\mathrm{new}}^{(s)}\sim
+      \N(\theta_{\mathrm{new}}^{(s)},(\sigma^{(s)})^2)$
+  \end{enumerate}
+  Predicting a new mean stops at step 2; predicting an observation
+  includes step 3.
+\end{frame}
+
+\begin{frame}
+\frametitle{Pair discussion: a new machine}
+
+  {\color{uured}\textbf{Discuss in pairs (1--2 minutes).}}
+
+  We have data from six machines and want to predict for a new,
+  similar machine 7.
+  \begin{itemize}
+  \item Its mean quality, $\theta_7$
+  \item The quality of its next item, $\tilde y_7$
+  \end{itemize}
+  \textbf{How do the simulation steps differ? What additional
+    uncertainty enters the second prediction?}
+
+  \uncover<2->{
+    \medskip
+    \textbf{Answer:} Both start by drawing a new machine mean using
+    posterior draws of the population parameters. Predicting an item
+    also adds within-machine variation:
+    \[
+      \tilde y_7^{(s)}\sim\N(\theta_7^{(s)},(\sigma^{(s)})^2).
+    \]
+  }
 \end{frame}
 
 \begin{frame}
@@ -457,25 +765,22 @@
 
 \begin{frame}
 
-\frametitle{Hierarchical normal model: 8 schools}
+\frametitle{Eight schools: historical SAT coaching study}
 
   \begin{itemize}
-  \item Example: SAT coaching effectiveness
+  \item Historical example from BDA3, Section 5.5
     \begin{itemize}
-    \item in USA commonly used Scholastic Aptitude Test (SAT) is
-      designed so that short term practice should not improve the
-      results significantly
-    \item schools have anyway coaching courses
-    \item test the effectiveness of the coaching courses
+    \item randomized coaching experiments in eight high schools
+    \item question: does short-term coaching improve verbal test scores?
+    \item estimate a coaching effect for each school
     \end{itemize}
     \pause
-  \item SAT
+  \item SAT-V in this study (the historical verbal test)
     \begin{itemize}
-    \item standardized multiple choice test
-    \item mean about 500 and standard deviation about 100
-    \item most scores between 200 and 800
-    \item different topics, e.g., V=Verbal, M=Mathematics
-    \item pre-test PSAT
+    \item standardized multiple-choice test
+    \item score range 200--800, with mean about 500 and SD about 100
+    \item pre-test PSAT scores in verbal (V) and mathematics (M)
+      help adjust for students' initial performance
     \end{itemize}
 \end{itemize}
 \end{frame}
@@ -559,16 +864,157 @@
 \end{frame}
 
 \begin{frame}
+\frametitle{Normal shrinkage: completing the square}
 
-\frametitle{Hierarchical normal model: 8 schools}
+  For fixed $\mu$ and $\tau>0$, with known sampling SD $\sigma_j>0$,
+  \[
+    y_j\mid\theta_j\sim\N(\theta_j,\sigma_j^2),\qquad
+    \theta_j\mid\mu,\tau\sim\N(\mu,\tau^2).
+  \]
+  Here $\N$ uses variance as its second argument.
+  \begin{align*}
+    p(\theta_j\mid\mu,\tau,y)
+      &\propto\exp\!\left[-\frac12\left\{
+        \frac{(y_j-\theta_j)^2}{\sigma_j^2}
+        +\frac{(\theta_j-\mu)^2}{\tau^2}\right\}\right]\\
+      &\propto\exp\!\left[-\frac{(\theta_j-m_j)^2}{2v_j}\right],
+  \end{align*}
+  where completing the square gives
+  \[
+    v_j=\left(\frac{1}{\sigma_j^2}+\frac{1}{\tau^2}\right)^{-1},
+    \qquad m_j=v_j\left(\frac{y_j}{\sigma_j^2}+\frac{\mu}{\tau^2}\right).
+  \]
+  Thus $\theta_j\mid\mu,\tau,y\sim\N(m_j,v_j)$.
+\end{frame}
 
-  \only<1-3>{\includegraphics[width=8.3cm]{figs/8schools_separate.pdf}\\}
-  \only<2-3>{\includegraphics[width=8.3cm]{figs/8schools_pooled.pdf}\\}
-  \only<3>{\includegraphics[width=8.3cm]{figs/8schools_hier.pdf}}
-  \only<4-6>{\includegraphics[width=5.5cm]{figs/8schools_tau.pdf}\\}
-  \only<5-6>{\includegraphics[width=5.5cm]{figs/8schools_condmu.pdf}\\}
-  \only<6>{\includegraphics[width=5.5cm]{figs/8schools_condsd.pdf}}
+\begin{frame}
+\frametitle{Normal shrinkage: the weights}
 
+  Rearranging the conditional posterior mean,
+  \[
+    \operatorname{E}(\theta_j\mid\mu,\tau,y)
+      =w_j y_j+(1-w_j)\mu,\qquad
+    w_j=\frac{\tau^2}{\tau^2+\sigma_j^2}.
+  \]
+  \begin{itemize}
+  \item A precise group estimate (small $\sigma_j$) receives more weight
+  \item Small between-group variation $\tau$ gives more weight to $\mu$
+  \item As $\tau\to0$, the conditional mean approaches $\mu$;
+    as $\tau\to\infty$, it approaches $y_j$
+  \item In full Bayes, average these conditional results over
+    $p(\mu,\tau\mid y)$
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Normal shrinkage: a numerical example}
+
+  Use School A's $y_j=28$, $\sigma_j=15$ and, for illustration,
+  \textbf{fix} $\mu=8$, $\tau=5$.
+  \begin{align*}
+    w_j&=\frac{5^2}{5^2+15^2}=\frac{25}{250}=0.10,\\
+    m_j&=0.10\cdot28+0.90\cdot8=10,\\
+    v_j&=\left(\frac{1}{225}+\frac{1}{25}\right)^{-1}=22.5.
+  \end{align*}
+  \begin{itemize}
+  \item The noisy school estimate receives 10\% of the weight
+  \item Conditional posterior: mean $10$, SD $\sqrt{22.5}\approx4.74$
+  \item This illustrates fixed hyperparameters; the full
+    eight-schools posterior also averages over $\mu,\tau$
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Pair discussion: precision and shrinkage}
+
+  {\color{uured}\textbf{Discuss in pairs (1--2 minutes).}}
+
+  Two schools have the same estimated effect, different from the
+  population mean $\mu$, but different standard errors:
+  \[
+    \sigma_1=5,\qquad \sigma_2=20.
+  \]
+  Hold $\mu$ and $\tau>0$ fixed.
+
+  \textbf{Which school's estimate is shrunk more toward $\mu$? Why?}
+
+  \uncover<2->{
+    \medskip
+    \textbf{Answer:} School 2. Its larger standard error means less
+    precise evidence, so its estimate receives less weight and
+    $\mu$ receives more weight.
+  }
+\end{frame}
+
+\begin{frame}
+\frametitle{Eight schools: pooling assumptions}
+
+  {\color{uured}How does the posterior for School A (red) change?}
+  \begin{center}
+    \only<1>{\includegraphics[width=9cm]{figs/8schools_separate.pdf}}
+    \only<2>{\includegraphics[width=9cm]{figs/8schools_pooled.pdf}}
+    \only<3>{\includegraphics[width=9cm]{figs/8schools_hier.pdf}}
+  \end{center}
+  \only<1>{\textbf{No pooling:} each school's effect uses its own data.
+    School A's estimate is high but uncertain.}
+  \only<2>{\textbf{Complete pooling:} all schools share a common effect.
+    School A's posterior is identical to the others.}
+  \only<3>{\textbf{Partial pooling:} the marginal posteriors
+    $p(\theta_j\mid y)$ share information while allowing different effects.}
+  \medskip
+
+  {\small The hierarchical plots follow BDA3, Section 5.5, with flat
+    independent priors on $\mu$ and $\tau>0$, rather than the illustrative
+    half-normal prior above.}
+\end{frame}
+
+\begin{frame}
+\frametitle{Eight schools: uncertainty about variation}
+
+  {\color{uured}Does the peak near zero establish that all effects are equal?}
+  \begin{center}
+    \includegraphics[width=8cm]{figs/8schools_tau.pdf}
+  \end{center}
+  \begin{itemize}
+  \item This is $p(\tau\mid y)$, with $\mu$ and the school effects integrated out
+  \item A range of between-school SDs remains plausible
+  \item Full Bayes averages over this distribution; fixing $\tau$ at
+    its mode would impose much stronger pooling
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Eight schools: conditional posterior means}
+
+  {\color{uured}What happens to the school estimates as $\tau$ changes?}
+  \begin{center}
+    \includegraphics[width=8cm]{figs/8schools_condmu.pdf}
+  \end{center}
+  \begin{itemize}
+  \item Curves show $\operatorname{E}(\theta_j\mid\tau,y)$:
+    $\tau$ is fixed and $\mu$ is integrated out
+  \item Small $\tau$: means come together near the pooled estimate, $7.7$
+  \item Large $\tau$: means approach the separate estimates $y_j$
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Eight schools: uncertainty given $\tau$}
+
+  {\color{uured}Does small $\tau$ make the common effect precisely known?}
+  \begin{center}
+    \includegraphics[width=8cm]{figs/8schools_condsd.pdf}
+  \end{center}
+  \begin{itemize}
+  \item Curves show $\operatorname{sd}(\theta_j\mid\tau,y)$,
+    with uncertainty in $\mu$ included
+  \item As $\tau\to0$, effects coincide, but their common value is uncertain:
+    \[
+      \operatorname{sd}(\theta_j\mid\tau,y)\longrightarrow
+        \left(\sum_{k=1}^J\frac{1}{\sigma_k^2}\right)^{-1/2}
+        \approx4.1.
+    \]
+  \end{itemize}
 \end{frame}
 
 
@@ -610,16 +1056,16 @@
     \begin{equation*}
       p(\theta_1,\theta_2,\theta_3) = p(\theta_{\pi(1)},\theta_{\pi(2)},\theta_{\pi(3)})
     \end{equation*}
-    for any permutation $\pi$ of the indicies. E.g.
+    for any permutation $\pi$ of the indices. E.g.
     \begin{equation*}
       p(\theta_1,\theta_2,\theta_3) = p(\theta_2,\theta_3,\theta_1)
     \end{equation*}
 \pause
   \uured{Can we come up with a situation where this doesn't hold?} \\ \pause
-  E.g. when we have a trend over indicies (like in time series data)
+  E.g. when we have a trend over indices (like in time series data)
 \pause
   \item Exchangeability implies symmetry: \\If there is no information
-    which can be used \textit{a priori} to separate $\theta_j$ form
+    which can be used \textit{a priori} to separate $\theta_j$ from
     each other, we can assume exchangeability. ("Ignorance implies exchangeability")
 
   \end{itemize}
@@ -654,22 +1100,52 @@
 
 \begin{frame}
 
-\frametitle{Example}
+\frametitle{Coin flips: exchangeable but dependent}
 
+  Let $\theta\sim\operatorname{Beta}(1,1)$ and, given $\theta$,
+  let the flips be IID Bernoulli$(\theta)$.
+  Write $H_i$ for heads on flip $i$.
+  \[
+    \Pr(H_1)=\operatorname{E}(\theta)=\frac12.
+  \]
+  \pause
+  After observing $H_1$,
+  \[
+    \theta\mid H_1\sim\operatorname{Beta}(2,1),\qquad
+    \Pr(H_2\mid H_1)=\operatorname{E}(\theta\mid H_1)=\frac23.
+  \]
   \begin{itemize}
-  \item Suppose we're observing coin flips, but we're not sure about the bias $\theta$
-    \begin{itemize}
-      \item We think the flips are 'the same kind of thing' (no reason to treat flip 1 differently from flip 2): \uured{Exchangeability}
-      \item But we might not believe they are strictly independent because were uncertain about the bias: they share information through the unknown $\theta$
-    \end{itemize}
-    \pause
-    \item Given $\theta$ the flips are i.i.d.
-    \item Without conditioning on $\theta$, the flips are only exchangeable, not iid.
+  \item Marginally $\Pr(H_2)=1/2$, so the flips are dependent
+  \item Their joint distribution remains unchanged when we swap the flips
+  \item Observing heads updates the shared unknown bias;
+    one toss does not physically affect the next
   \end{itemize}
 \end{frame}
 
 
 
+
+\begin{frame}
+\frametitle{Pair discussion: learning about the coin}
+
+  {\color{uured}\textbf{Discuss in pairs (1--2 minutes).}}
+
+  The coin's bias has prior $\theta\sim\operatorname{Beta}(1,1)$,
+  and the flips are independent given $\theta$.
+
+  \textbf{Why does observing heads change our prediction for the next
+    flip? Does this contradict conditional independence?}
+
+  \uncover<2->{
+    \medskip
+    \textbf{Answer:} We learn about the shared unknown bias.
+    After heads, $\theta\mid H_1\sim\operatorname{Beta}(2,1)$,
+    changing the predictive probability from $1/2$ to $2/3$.
+
+    The coin has not changed. Independence holds when $\theta$ is
+    fixed; averaging over an uncertain $\theta$ creates dependence.
+  }
+\end{frame}
 
 \begin{frame}
 
@@ -685,7 +1161,7 @@
       experiments have been made in which laboratory
     \item a priori experiments are exchangeable
     \item model could have unknown parameter for the laboratory with a
-      conditional prior for rats assumed to come form the same place (clustering model)
+      conditional prior for rats assumed to come from the same place (clustering model)
     \end{itemize}
   \end{itemize}
 \end{frame}
@@ -848,6 +1324,28 @@
 
 \end{frame}
 
+\begin{frame}
+\frametitle{Why non-centering preserves the model}
+
+  Start with $\eta_j\overset{\mathrm{iid}}{\sim}\N(0,1)$,
+  independent of the hyperparameters a priori, and set
+  \[
+    \theta_j=\mu+\tau\eta_j,\qquad \tau>0.
+  \]
+  Conditional on $\mu,\tau$, an affine transformation of a normal
+  variable is normal, with
+  \begin{align*}
+    \operatorname{E}(\theta_j\mid\mu,\tau)
+      &=\mu+\tau\operatorname{E}(\eta_j)=\mu,\\
+    \operatorname{Var}(\theta_j\mid\mu,\tau)
+      &=\tau^2\operatorname{Var}(\eta_j)=\tau^2.
+  \end{align*}
+  Thus the $\theta_j$ are conditionally independent normals with
+  mean $\mu$ and SD $\tau$, as in the centered hierarchy.
+
+  Keep the same hyperpriors and likelihood, evaluated at
+  $\theta_j=\mu+\tau\eta_j$. Only the sampling coordinates change.
+\end{frame}
+
 
 \end{document}
-

@@ -54,6 +54,20 @@
 \section{Introduction}
 %\frame{\sectionpage}
 
+
+\begin{frame}
+  \frametitle{Practicalities}
+
+\begin{itemize}
+  \item Next week (Monday): Oral exam assignment 1-2
+  \pause
+  \item Next week (Wednesday): Deadline mini-project proposal
+  \pause
+  \item \uured{On assignment evaluations}: Be specific "Some questions are unclear" is hard to act on...
+  \end{itemize}
+\end{frame}
+
+
 \begin{frame}
 
 \frametitle{Example of uncertainty in modeling}
@@ -81,28 +95,59 @@
   \only<6>{\includegraphics[width=8cm]{figs/fakel_postdrawspred2.pdf}}
 
 \end{frame}
-\begin{frame}
-
-\frametitle{Monte Carlo and Posterior Draws}
+\begin{frame}{Monte Carlo and posterior integrals}
 
   \begin{itemize}
-  \item Assume we can get draws from $p(\theta \mid y)$
+  \item Assume we can get posterior draws
+    \[
+      \theta^{(1)},\ldots,\theta^{(S)}
+      \stackrel{\mathrm{iid}}{\sim} p(\theta \mid y).
+    \]
   \pause
-  \item $\theta^{(s)}$ draws from $p(\theta \mid y)$ can be used
-    \begin{itemize}
-    \item<1-> for visualization
-    \item<2-> to approximate expectations (integrals)
-      \begin{align*}
-        E_{p(\theta \mid y)}[\theta] = \int \theta p(\theta \mid y) \approx \frac{1}{S}\sum_{s=1}^{S} \theta^{(s)}
-      \end{align*}
-    \end{itemize}
-    \item<3-> to approximate uncertainty intervals for $\theta$
+  \item Many posterior summaries are integrals:
+    \[
+      I_h = \E[h(\theta) \mid y]
+          = \int h(\theta)p(\theta \mid y)\,d\theta.
+    \]
+  \pause
+  \item Monte Carlo approximation:
+    \[
+      I_h \approx \hat{I}_S
+      = \frac{1}{S}\sum_{s=1}^{S} h(\theta^{(s)}).
+    \]
   \end{itemize}
 
 \end{frame}
 
+\begin{frame}{Monte Carlo approximation}
+
+  Short (simplified) proof: \\(given $\E[Z_s \mid y] <\infty$ and  $\Var[Z_s \mid y]<\infty$):
+  \begin{enumerate}
+  \item Let $Z_s=h(\theta^{(s)})$. Then
+    $\E[Z_s \mid y]=I_h$.\pause
+  \item The average $\hat{I}_S=S^{-1}\sum_{s=1}^{S}Z_s$ has
+    $\E[\hat{I}_S \mid y]=\frac{S}{S} I_h = I_h$.\pause
+  \item Let $\Var[Z_s \mid y]=\sigma_h^2$, then
+    $\Var[\hat{I}_S \mid y]=\sigma_h^2/S$.\pause
+  \item By the law of large numbers, $\hat{I}_S \to^P I_h$ as $S$ grows.
+  \end{enumerate}
+\pause
+  Examples of $h(\theta)$:
+  \begin{align*}
+    h(\theta)&=\theta
+      && \text{posterior mean}\\
+    h(\theta)&=\mathbf{1}\{\theta>0\}
+      && \text{posterior probability}\\
+    h(\theta)&=g(\theta)
+      && \text{derived quantity}
+  \end{align*}
+
+
+
+\end{frame}
+
 \section{Multiple parameter models}
-%\frame{\sectionpage}
+\frame{\sectionpage}
 \subsection{Marginalization}
 
 \begin{frame}
@@ -156,7 +201,7 @@
 
 \end{frame}
 
-\subsection{Gaussian}
+\section{Gaussian Model}
 
 \begin{frame}
 \frametitle{Gaussian with unknown $\mu$ and $\sigma^2$}
@@ -265,6 +310,26 @@
        \uncover<2->{p(\sigma \mid y) & = \int p(\mu,\sigma \mid y) d \mu }
      \end{align*}
   \end{minipage}
+
+\end{frame}
+
+\begin{frame}{Pair discussion: nuisance parameters}
+
+  \begin{itemize}
+  \item Suppose we care about $\mu$ in the Gaussian model.
+  \item Which parameter is a nuisance parameter?
+  \item Why integrate it out instead of plug in one estimate?
+  \end{itemize}
+
+  \uncover<2->{
+  \vspace{0.5\baselineskip}
+  {\small
+  {\color{uured}After discussion:}
+  \begin{itemize}
+  \item $\sigma$ (or $\sigma^2$) is nuisance if the target is $\mu$.
+  \item Marginalization keeps uncertainty about $\sigma$ in $p(\mu \mid y)$.
+  \item Plug-in conditions on one value and usually understates uncertainty.
+  \end{itemize}}}
 
 \end{frame}
 
@@ -378,11 +443,35 @@
     \begin{align*}
     \uncover<1->{p(\mu|y) &\propto {\only<1>{\color{blue}}[(n-1)s^2+n(\mu-\bar{y})^2]^{-n/2}}\\}
     \uncover<2->{&\propto \left[1+\frac{n(\mu-\bar{y})^2}{(n-1)s^2}\right]^{-n/2}\\}
-    \uncover<3->{p(\mu \mid y) & = t_{n-1}(\mu \mid \bar{y},s^2/n) \color{gray} \quad \text{Student's $t$}}
+    \uncover<3->{&= \left[1+\frac{1}{n-1}\frac{(\mu-\bar{y})^2}{s^2/n}\right]^{-(n-1+1)/2}\\}
+    \uncover<4->{\color{gray} p(x|\mu_\star,\sigma_\star,\nu_\star) & \color{gray} = {\displaystyle {\frac {\Gamma {\left({\frac {\nu_\star +1}{2}}\right)}}{{\sqrt {\pi \nu_\star \sigma_\star^2}}\,\Gamma {\left({\frac {\nu_\star }{2}}\right)}}}\left(1+{\frac {1}{\nu_\star }\frac {(x - \mu_\star)^2}{\sigma_\star^2}}\right)^{-{\frac {\nu_\star +1}{2}}}}\\}
+    \uncover<5->{p(\mu \mid y) & = \underbrace{t_{n-1}(\mu \mid \bar{y},s^2/n)}_{\text{Student's $t$}}}
     \end{align*}
 
 \end{frame}
 
+
+\begin{frame}{Pair discussion: future observations}
+
+  \begin{itemize}
+  \item For a new observation $\tilde{y}$, which uncertainties should be included?
+  \item uncertainty about $\mu$?
+  \item noise in a new observation?
+  \item both?
+  \item What are the two types of uncertainties called?
+  \end{itemize}
+
+  \uncover<2->{
+  \vspace{0.5\baselineskip}
+  {\small
+  {\color{uured}After discussion:}
+  \begin{itemize}
+  \item Parameter uncertainty is epistemic uncertainty.
+  \item New observation noise is aleatoric uncertainty.
+  \item The posterior predictive distribution includes both.
+  \end{itemize}}}
+
+\end{frame}
 
 
 \begin{frame}
@@ -400,7 +489,7 @@
     { \small Predictive distribution for new $\tilde{y}$}
     %\vspace{-2.75\baselineskip}
     \begin{align*}
-      \only<6> {\color{orange}} \scriptstyle p(\tilde{y} \mid y) & \scriptstyle = \int p(\tilde{y} \mid \mu,\sigma)p(\mu,\sigma \mid y)d\mu\sigma\\
+      \only<6> {\color{orange}} \scriptstyle p(\tilde{y} \mid y) & \scriptstyle = \int p(\tilde{y} \mid \mu,\sigma)p(\mu,\sigma \mid y)\,d\mu\,d\sigma\\
       \uncover<2->{{\color{red} \scriptstyle \mu^{(s)}, \sigma^{(s)}} & \scriptstyle \sim p(\mu, \sigma  \mid  y)}\\
       \uncover<3->{{\color{red} \scriptstyle \tilde{y}^{(s)}} & \scriptstyle \sim \color{blue} p(\tilde{y} \mid \mu^{(s)},\sigma^{(s)})}
      \end{align*}
@@ -418,7 +507,7 @@
 
 \begin{frame}{Gaussian - posterior predictive distribution}
 
-   Posterior predictive distribution given known variance
+   First condition on $\sigma^2$, then integrate it out
     \begin{align*}
       p(\tilde{y} \mid \sigma^2,y) & = \int p(\tilde{y} \mid \mu,\sigma^2)p(\mu \mid \sigma^2,y)d\mu\\
        \uncover<2->{& = \int \N(\tilde{y} \mid \mu,\sigma^2)\N(\mu \mid \bar{y},\sigma^2/n)d\mu\\ }
@@ -429,32 +518,170 @@
 
 \end{frame}
 
-\subsection{Example}
+\begin{frame}{Gaussian unknown variance: summary}
 
-\begin{frame}{Simon Newcomb's light of speed experiment in 1882}
+  With $p(\mu,\sigma^2)\propto \sigma^{-2}$ and
+  $s^2=\frac{1}{n-1}\sum_{i=1}^n(y_i-\bar{y})^2$:
 
-  {\small
-  Newcomb measured ($n=66$) the time required for light to travel from
-  his laboratory on the Potomac River to a mirror at the base of the
-  Washington Monument and back, a total distance of 7422 meters.}
-  \begin{center}
-    \vspace{-0.5\baselineskip}
-    {\includegraphics[width=6cm]{figs/newcomb_data.pdf}}\\
-    \vspace{-1\baselineskip}
-    \only<1>{\phantom{\includegraphics[width=6cm]{figs/newcomb_posterior1.pdf}}}
-    \only<2>{\includegraphics[width=6cm]{figs/newcomb_posterior1.pdf}}
-    \only<3>{\includegraphics[width=6cm]{figs/newcomb_posterior2.pdf}}
-    \only<4>{\includegraphics[width=6cm]{figs/newcomb_posterior3.pdf}}
-  \end{center}
+  \begin{align*}
+    \sigma^2 \mid y &\sim \Invchi2(n-1,s^2)\\
+    \mu \mid y &\sim t_{n-1}(\cdot \mid \bar{y},s^2/n)\\
+    \tilde{y} \mid y &\sim t_{n-1}(\cdot \mid \bar{y},(1+{\textstyle \frac{1}{n}})s^2)
+  \end{align*}
+
+  \begin{itemize}
+  \item Posterior uncertainty for $\mu$ is smaller than predictive
+    uncertainty for a new $\tilde{y}$.
+  \end{itemize}
 
 \end{frame}
 
-\subsection{Gaussian - conjugate prior}
+\begin{frame}{Student's $t$: scale convention}
+
+  \begin{itemize}
+  \item In these slides, $t_\nu(\cdot \mid m,v)$ uses $v$ as scale squared.
+  \item If software expects a scale parameter, use $\sqrt{v}$.
+  \item Examples:
+    \begin{align*}
+      \mu \mid y &\sim t_{n-1}(\cdot \mid \bar{y},s^2/n)\\
+      \tilde{y} \mid y &\sim t_{n-1}(\cdot \mid \bar{y},(1+{\textstyle \frac{1}{n}})s^2)
+    \end{align*}
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Posterior draws for derived quantities}
+
+  \begin{itemize}
+  \item Often the quantity of interest is $q=g(\theta)$.
+  \item If $\theta^{(s)} \sim p(\theta \mid y)$, then compute
+    \[
+      q^{(s)}=g(\theta^{(s)}).
+    \]
+  \item The draws $q^{(s)}$ summarize $p(q \mid y)$.
+  \item Examples: $\theta_1-\theta_2$, $\mu_1-\mu_2$,
+    $x_{\mathrm{LD50}}=-\alpha/\beta$.
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Two independent proportions: odds ratio}
+
+  \begin{itemize}
+  \item For groups $j=0,1$:
+    \begin{align*}
+      y_j \mid p_j &\sim \Bin(n_j,p_j), &
+      p_j &\sim \Beta(a_j,b_j)
+    \end{align*}
+    \pause
+  \item Conjugacy gives
+    \begin{align*}
+      p_j \mid y_j \sim \Beta(a_j+y_j,b_j+n_j-y_j)
+    \end{align*}
+    \pause
+  \item Draw $p_0^{(s)}$ and $p_1^{(s)}$ independently, then compute
+    \begin{align*}
+      \mathrm{OR}^{(s)}
+      =
+      \frac{p_1^{(s)}/(1-p_1^{(s)})}
+           {p_0^{(s)}/(1-p_0^{(s)})}.
+    \end{align*}
+    \pause
+  \item Summarize the draws with a point estimate, posterior interval,
+    histogram, and a prior sensitivity check.
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Two independent normal means}
+
+  \begin{itemize}
+  \item For groups $j=1,2$:
+    \begin{align*}
+      y_{ij} \mid \mu_j,\sigma_j^2 &\sim \N(\mu_j,\sigma_j^2), &
+      p(\mu_j,\sigma_j^2) &\propto \sigma_j^{-2}
+    \end{align*}
+    \pause
+  \item From the one-sample result:
+    \begin{align*}
+      \mu_j \mid y_j \sim
+      t_{n_j-1}(\cdot \mid \bar{y}_j,s_j^2/n_j)
+    \end{align*}
+    \pause
+  \item Draw $\mu_1^{(s)}$ and $\mu_2^{(s)}$ independently, then compute
+    \begin{align*}
+      \mu_d^{(s)} = \mu_1^{(s)}-\mu_2^{(s)}.
+    \end{align*}
+    \pause
+  \item Summarize $p(\mu_d \mid y)$ with a point estimate, posterior
+    interval, histogram, and probabilities of scientifically meaningful
+    differences.
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Pair discussion: continuous posteriors}
+
+  \begin{itemize}
+  \item Suppose $\mu_d=\mu_1-\mu_2$ has a continuous posterior.
+  \item What is $\Pr(\mu_d=0 \mid y)$?
+  \item What would be a more useful posterior summary?
+  \end{itemize}
+
+  \uncover<2->{
+  \vspace{0.5\baselineskip}
+  {\small
+  {\color{uured}After discussion:}
+  \begin{itemize}
+  \item $\Pr(\mu_d=0 \mid y)=0$ for a continuous posterior.
+  \item More useful: $\Pr(\mu_d>0 \mid y)$ and a credible interval.
+  \end{itemize}}}
+
+\end{frame}
+
+\subsection{Example}
+
+\begin{frame}{Newcomb's speed of light experiment}
+
+  \begin{center}
+    \vspace{-0.5\baselineskip}
+    {\includegraphics[width=5cm]{figs/newcomb_data.pdf}}\\
+    \vspace{-1\baselineskip}
+    \only<1>{\phantom{\includegraphics[width=5cm]{figs/newcomb_posterior1.pdf}}}
+    \only<2>{\includegraphics[width=5cm]{figs/newcomb_posterior1.pdf}}
+    \only<3>{\includegraphics[width=5cm]{figs/newcomb_posterior2.pdf}}
+    \only<4>{\includegraphics[width=5cm]{figs/newcomb_posterior3.pdf}}
+  \end{center}
+
+
+  {\small
+  Newcomb measured in 1882 ($n=66$) the time required for light to travel from
+  his laboratory on the Potomac River to a mirror at the base of the
+  Washington Monument and back, a total distance of 7442 meters. Here $y_i$ is one coded round-trip time: measured time minus 24,800
+  nanoseconds. }
+
+  {\small
+  \only<3->{ The $y>0$ curve is a sensitivity check that removes the two
+  negative coded values (not negative travel times).}}
+\end{frame}
+
+\begin{frame}{Newcomb: model checking}
+
+  \begin{itemize}
+  \item The Gaussian model is useful as a first analysis.
+  \item The negative coded values hint at outliers or model misfit.
+  \item Later: check whether the model can generate data that look like what we
+    observed.
+  \end{itemize}
+
+\end{frame}
+
+\subsection{Conjugate prior}
 
 \begin{frame}{Gaussian - conjugate prior}
 
   \begin{itemize}
-  \item[-] Conjugate prior has to have a form
+  \item[-] Conjugate prior on the form
     $p(\sigma^2)p(\mu \mid \sigma^2)$\\
     \pause
   \item[-] Handy parameterization
@@ -467,7 +694,7 @@
       p(\mu,\sigma^2)=\NInvchi2(\mu_0,\sigma_0^2/\kappa_0;\nu_0,\sigma_0^2)
     \end{align*}
     \pause
-  \item[-] $\mu$ and $\sigma^2$ are a priori dependent
+  \item[-] $\mu$ and $\sigma^2$ are \uured{a priori dependent}
     \begin{itemize}
       \item[-] if $\sigma^2$ is large, then $\mu$ has wide prior
     \end{itemize}
@@ -518,67 +745,6 @@
 \end{frame}
 
 
-\subsection{Multinomial model}
-
-\begin{frame}{Multinomial model for categorical data}
-
-  \begin{itemize}
-  \item[-] Extension of binomial to $K$ categories
-  \item[-] Observation model (Categorical distribution, $n=1$)\\
-  $y_i = (0,1,0,0,0)$ - {\color{uured} what is $K$ here?}
-  \pause
-    \begin{align*}
-      p(y  \mid  \theta) \propto \prod_{k=1}^K \theta_j^{y_j},
-    \end{align*}
-    \begin{align*}
-      \text{where } \sum_k^K \theta_k = 1\,, \text{ and } \forall \theta_k > 0
-    \end{align*}
-  \item[-] {\color{uured} What is important when choosing the prior for $\theta$?}
-  \pause
-  \item[-] Conjugate prior: The Dirichlet distribution
-  \begin{align*}
-    p(\theta) \propto \prod_{k=1}^K \theta_k^{\alpha_k-1},
-  \end{align*}
-  \begin{align*}
-      \text{where } \forall \alpha_k > 0
-  \end{align*}
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{Multinomial model for categorical data: The posterior}
-
-  \begin{itemize}
-  \item The posterior $p(\theta|y)$
-    \begin{align*}
-      p(\theta \mid y) & \propto p(y \mid \theta) p(\theta)\\
-       \uncover<2->{& \propto \prod_{k=1}^K \theta_k^{\alpha_k-1} \prod^n_i \prod_{k=1}^K \theta_k^{y_{k,i}}}\\
-       \uncover<3->{& = \prod_{k=1}^K \theta_k^{\alpha_k-1} \prod_{k=1}^K \theta_k^{\sum^n_i y_{k,i}}}\\
-       \uncover<4->{& = \prod_{k=1}^K \theta_k^{\alpha_k - 1 + \sum^n_i y_{k,i}}}
-    \end{align*}
-
-  \uncover<5->{\item The posterior is $p(\theta|y) = \text{Dir}(\alpha + \sum y)$}
-  \end{itemize}
-\end{frame}
-
-\subsection{Multivariate Gaussian}
-
-\begin{frame}{Multivariate Gaussian}
-
-  \begin{itemize}
-  \item[-] Observation model
-    \begin{align*}
-      p(y \mid \mu,\Sigma)\propto  \mid \Sigma \mid ^{-1/2}
-      \exp\left( -\frac{1}{2} (y-\mu)^T \Sigma^{-1} (y-\mu)\right),
-    \end{align*}
-    \begin{align*}
-      \text{where } y \in \mathcal{R}^D\,
-    \end{align*}
-  \item[-] See BDA3 p. 72--
-  \item[-] New recommended LKJ-prior mentioned in Appendix A, see more
-    in Stan manual
-  \end{itemize}
-\end{frame}
-
 \section{Bioassay example}
 
 \begin{frame}{Bioassay}
@@ -621,7 +787,7 @@
   \only<6>{\includegraphics[width=8cm]{figs/bioassay_fitbinom.pdf}\\}
   \only<5->{Binomial model
     \begin{align*}
-    y_i \mid {\only<6>{\color{blue}} \theta}_i & \sim \Bin({\only<6>{\color{blue}} \theta}_i,n_i) \uncover<6>{, \quad \logit({\only<6>{\color{blue}}\theta}_i)= \log\left(\frac{{\only<6>{\color{blue}}\theta}_i}{1-{\only<6>{\color{blue}}\theta}_i}\right) = \alpha+\beta x_i}
+    y_i \mid {\only<6>{\color{blue}} \theta}_i & \sim \Bin(n_i,{\only<6>{\color{blue}} \theta}_i) \uncover<6>{, \quad \logit({\only<6>{\color{blue}}\theta}_i)= \log\left(\frac{{\only<6>{\color{blue}}\theta}_i}{1-{\only<6>{\color{blue}}\theta}_i}\right) = \alpha+\beta x_i}
     \end{align*}
   }
 
@@ -632,7 +798,7 @@
 
     \begin{minipage}[b][5cm][t]{4cm}
     \begin{align*}
-      y_i \mid \color{blue} \theta_i & \sim \Bin({\color{blue} \theta}_i, n_i)\\
+      y_i \mid \color{blue} \theta_i & \sim \Bin(n_i, {\color{blue} \theta}_i)\\
       \logit({\color{blue} \theta}_i) & = \log\left(\frac{{\color{blue} \theta}_i}{1-{\color{blue} \theta}_i}\right)\\
                                      & = {\color{uured} \alpha+\beta x_i} \\
       \uncover<2->{\\ {\color{blue} \theta_i} & = \frac{1}{1+\exp(-({\color{uured}\alpha+\beta x_i}))}}
@@ -642,6 +808,32 @@
     {\includegraphics[width=4.5cm]{figs/bioassay_fitbinom.pdf}}
     {\includegraphics[width=4.5cm]{figs/bioassay_fitlogitspace.pdf}}
   \end{minipage}
+\end{frame}
+
+\begin{frame}{Pair discussion: bioassay assumptions}
+
+  \begin{itemize}
+  \item What assumptions are needed for
+    $y_i \mid \theta_i \sim \Bin(n_i,\theta_i)$?
+  \item Are animals within a dose group exchangeable and independent?
+  \item Name one practical reason why the binomial model could fail.
+  \item Why use a logit model instead of $\theta_i=\alpha+\beta x_i$?
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Bioassay: monotone toxicity}
+
+  \begin{itemize}
+  \item In this lecture, we constrain toxicity to be monotone.
+  \item The grid is restricted to $\beta \geq 0$; increasing dose cannot
+    decrease the probability of death.
+  \item Conceptually, the LD50 summary is interpreted under the
+    positive-dose-effect assumption $\beta > 0$.
+  \item If $\beta \leq 0$ were allowed, we would also report
+    $\Pr(\beta > 0 \mid y)$ and LD50 conditional on $\beta > 0$.
+  \end{itemize}
+
 \end{frame}
 
 \begin{frame}{Bioassay: Lethal Dose 50\%}
@@ -665,7 +857,7 @@
   \vspace{-1.5\baselineskip}
     \begin{align*}
       \intertext{Binomial model}
-      y_i \mid \theta_i & \sim \Bin(\theta_i,n_i)\\
+      y_i \mid \theta_i & \sim \Bin(n_i,\theta_i)\\
       \intertext{Link function}
       \logit(\theta_i) & = \alpha+\beta x_i
       \uncover<2->{
@@ -678,7 +870,7 @@
       \uncover<4->{
       \vspace{-1\baselineskip} \\
       \intertext{Posterior}
-      p(\alpha,\beta \mid y,n,x) & \propto p(\alpha,\beta)\prod_{i=1}^n p(y_i \mid \alpha,\beta,n_i,x_i)}
+      p(\alpha,\beta \mid y,n,x) & \propto p(\alpha,\beta)\prod_{i=1}^k p(y_i \mid \alpha,\beta,n_i,x_i)}
       \uncover<4->{
       \vspace{-1\baselineskip} \\
       \intertext{\color{uured} No analytic posterior distribution? What can we do?}
@@ -687,14 +879,31 @@
 
 \end{frame}
 
+\begin{frame}{Grid evaluation on the log scale}
+
+  For grid point $g$ with parameters $(\alpha_g,\beta_g)$:
+  \begin{align*}
+    \log \tilde{p}_g
+    &= \log p(\alpha_g,\beta_g)
+       + \sum_{i=1}^k \log p(y_i \mid \alpha_g,\beta_g,n_i,x_i)\\
+    \uncover<2->{\hat{p}_g
+    &= \frac{\exp(\log \tilde{p}_g)}
+            {\sum_{h=1}^G \exp(\log \tilde{p}_h)}}
+  \end{align*}
+
+  \uncover<3->{Computing on the log scale avoids numerical underflow and
+  matches the log weights we use later.}
+
+\end{frame}
+
 \begin{frame}{Grid evaluation}
 
 \begin{enumerate}
-   \item Setup an area (can be hard) for $\alpha$ and $\beta$ that capture most mass (here $\alpha = [-1,5]$ and $\beta = [0,30]$)
+   \item Set up an area (can be hard) for $\alpha$ and $\beta$ that captures most mass (here $\alpha \in [-1,5]$ and $\beta \in [0,30]$)
    \pause
    \item Compute unnormalized $p(\alpha^{(g)},\beta^{(g)} \mid y,n,x)$, here $\tilde{p}$, at the grid points $g$
    \pause
-   \item Sum up $\tilde{p}$ over the whole grid (for all $g \in \{1,...,G\}$)
+   \item Sum up $\tilde{p}$ over the whole grid (for all $g \in \{1,\ldots,G\}$)
    \pause
    \item Compute (normalize) the pmf approximation of the posterior $\hat{p}$
 \end{enumerate}
@@ -703,18 +912,18 @@
 \begin{tabular}{c c c c}
        $g$ & ($\alpha$, $\beta$) & $\tilde{p}$ & $\hat{p}$ \\
       \hline
-      1 & (0, -1) & 0.02 & 0.0002 \\
-      2 & (0, -0.8) & 0.03 & 0.0003 \\
+      1 & (-1, 0) & 0.02 & 0.0002 \\
+      2 & (-0.8, 0.2) & 0.03 & 0.0003 \\
       ... & ... & ... & ... \\
-      G & (30, 5) & 0.001 & 0.00001 \\
+      G & (5, 30) & 0.001 & 0.00001 \\
       \hline
-       $\sum_g^G$ & - & 100 & 1
+       $\sum_{g=1}^G$ & - & 100 & 1
 \end{tabular}
 
 \end{frame}
 
 
-\begin{frame}{Bioassay (with uniform prior on $\alpha,\beta$)}
+\begin{frame}{Bioassay: uniform prior on constrained grid}
 
   \only<1>{\includegraphics[width=8cm]{figs/bioassay_grid1.pdf}}
   \only<2>{\includegraphics[width=8cm]{figs/bioassay_grid2.pdf}\\
@@ -764,12 +973,12 @@
   \begin{itemize}
   \item[-] Draws can be used to estimate expectations, for example
     \begin{align*}
-      E[x_{\mathrm{LD50}}] = E[-\alpha/\beta] & \approx \frac{1}{S}\sum_{s=1}^{S} \frac{\alpha^{(s)}}{\beta^{(s)}}
+      E[x_{\mathrm{LD50}}] = E[-\alpha/\beta] & \approx \frac{1}{S}\sum_{s=1}^{S} \frac{-\alpha^{(s)}}{\beta^{(s)}}
     \end{align*}
   \item<2->[-] Instead of sampling, grid could be used to evaluate
     functions directly, for example
     \begin{align*}
-      \E[-\alpha/\beta] \approx \sum_{t=1}^{T} w_{\mathrm{cell}}^{(t)} \frac{\alpha^{(t)}}{\beta^{(t)}},
+      \E[-\alpha/\beta] \approx \sum_{t=1}^{T} w_{\mathrm{cell}}^{(t)} \frac{-\alpha^{(t)}}{\beta^{(t)}},
     \end{align*}
     where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$, and $\alpha^{(t)}$ and $\beta^{(t)}$ are center locations of grid cells
   \item<3-> Grid sampling gets computationally too expensive in high
@@ -778,13 +987,97 @@
 
 \end{frame}
 
+\begin{frame}{Recap}
+
+  \begin{itemize}
+  \item Multiparameter posteriors are joint distributions.\pause
+  \item Marginalization removes nuisance parameters.\pause
+  \item Predictive distributions include parameter uncertainty and new
+    observation noise.\pause
+  \item Posterior draws make derived quantities easy to summarize.\pause
+  \item Bioassay: grid evaluation works here because the parameter dimension is
+    small (only 2 parameters).\pause
+  \item This motivates more scalable computation for larger Bayesian models.
+  \end{itemize}
+
+\end{frame}
+
+\section{Additional examples}
+\subsection{Multinomial model}
+
+\begin{frame}{Multinomial model for categorical data}
+
+  \begin{itemize}
+  \item[-] Extension of binomial to $K$ categories
+  \item[-] Observation model: {\color{uured}Multinomial model}
+  \[
+  \mathbf{y} \mid \boldsymbol{\theta}, m \sim \mathrm{Multinomial}(m,\boldsymbol{\theta})
+  \]
+  \pause
+    \begin{align*}
+      p(\mathbf{y} \mid \boldsymbol{\theta}, m) \propto \prod_{k=1}^K \theta_k^{y_k},
+    \end{align*}
+    \begin{align*}
+      \text{where } \sum_{k=1}^K \theta_k = 1\,, \text{ and } \theta_k > 0
+    \end{align*}
+  \pause
+  \item[-] Example: $\mathbf{y} = (0,1,0,6,30)$ - {\color{uured} what is $K$ here?}
+  \pause
+  \item[-] Categorical distribution: $\mathrm{Multinomial}(1,\boldsymbol{\theta})$
+  \end{itemize}
+\end{frame}
 
 
-\end{document}
+\begin{frame}{Prior for the multinomial model}
 
+  \begin{itemize}
+  \item[-] {\color{uured} What is important when choosing the prior for $\theta$?}
+  \pause
+  \item[-] Conjugate prior: The Dirichlet distribution
+  \begin{align*}
+    p(\boldsymbol{\theta}) \propto \prod_{k=1}^K \theta_k^{\alpha_k-1},
+  \end{align*}
+  \begin{align*}
+      \text{where } \alpha_k > 0, \sum_{k=1}^K \theta_k = 1\,, \text{ and } \theta_k > 0
+  \end{align*}
+  \pause
+  \item[-] {\color{uured} What is the connection to the Beta distribution?}
+  \end{itemize}
 
+\end{frame}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Posterior for the multinomial model}
+
+  {\small Let $y_k=\sum_{i=1}^n y_{k,i}$ be the observed count in category $k$.}
+
+    \begin{align*}
+      p(\boldsymbol{\theta} \mid \mathbf{y}) & \propto p(\mathbf{y} \mid \boldsymbol{\theta}) p(\boldsymbol{\theta})\\
+       \uncover<2->{& \propto \prod_{k=1}^K \theta_k^{\alpha_k-1} \prod_{i=1}^n \prod_{k=1}^K \theta_k^{y_{k,i}}}\\
+       \uncover<3->{& = \prod_{k=1}^K \theta_k^{\alpha_k-1} \prod_{k=1}^K \theta_k^{\sum_{i=1}^n y_{k,i}}}\\
+       \uncover<4->{& = \prod_{k=1}^K \theta_k^{\alpha_k - 1 + \sum_{i=1}^n y_{k,i}}}\\
+       \uncover<5->{& = \mathrm{Dirichlet}(\alpha_1+y_1,\ldots,\alpha_K+y_K)}
+    \end{align*}
+
+\end{frame}
+
+\subsection{Multivariate Gaussian}
+
+\begin{frame}{Multivariate Gaussian}
+
+  \begin{itemize}
+  \item[-] Observation model
+    \begin{align*}
+      p(\mathbf{y} \mid \boldsymbol{\mu},\Sigma)\propto |\Sigma|^{-1/2}
+      \exp\left( -\frac{1}{2} (\mathbf{y}-\boldsymbol{\mu})^T \Sigma^{-1} (\mathbf{y}-\boldsymbol{\mu})\right),
+    \end{align*}
+    \begin{align*}
+      \text{where } \mathbf{y} \in \R^D\,
+    \end{align*}
+  \item[-] See BDA3 p. 72.
+  \item[-] New recommended LKJ-prior mentioned in Appendix A, see more
+    in Stan manual
+  \end{itemize}
+\end{frame}
 
 
 \end{document}

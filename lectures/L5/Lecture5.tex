@@ -35,6 +35,16 @@
 % Input new commands
 \input{../common/commands.tex}
 
+% Replace a code-style annotation embedded in the original R-hat figures.
+\newcommand{\rhatplot}[2]{%
+  \includegraphics[width=8cm]{#1}%
+  \begin{picture}(0,0)
+    \put(-132,18){\begingroup\setlength{\fboxsep}{0.5pt}%
+      \colorbox{white}{\makebox[42pt]{\scriptsize\color{red}$\widehat{\operatorname{var}}^{+}=#2$}}%
+      \endgroup}
+  \end{picture}%
+}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \setlength{\parskip}{3mm}
@@ -48,16 +58,18 @@
 % \thispagestyle{empty}
 }
 
+\input{Lecture5_announcements}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 
 \section{Monte Carlo recap}
 %\frame{\sectionpage}
 
-
 \begin{frame}
 
-\frametitle{ It's all about expectations}
+\frametitle{It's all about expectations}
 
   \vspace{-1.5\baselineskip}
    \begin{align*}
@@ -67,8 +79,9 @@
    \end{align*}
      \uncover<2->{We can easily evaluate ${\color{uured} p(y|\theta)p(\theta)}$ for any $\theta$, but the integral ${\color{red} \int p(y|\theta)p(\theta) d\theta}$ is usually difficult.}
 
-   \uncover<3->{We can use the unnormalized posterior ${\color{uured} q(\theta|y)
-     = p(y|\theta)p(\theta)}$, for example, in}
+   \uncover<3->{Define the unnormalized posterior
+     ${\color{uured}q(\theta)=p(y|\theta)p(\theta)}$, so that
+     ${\color{blue}p(\theta|y)\propto q(\theta)}$. We can use $q$, for example, in}
  \begin{itemize}
    \vspace{-0.5\baselineskip}
 %    \item<4-> Grid (equal spacing) evaluation with self-normalization
@@ -78,7 +91,7 @@
 %      \end{align*}
     \item<4-> Monte Carlo methods which can sample from
       ${\color{blue}p(\theta^{(s)}|y)}$ using only
-      ${\color{uured}q(\theta^{(s)}|y)}$
+      ${\color{uured}q(\theta^{(s)})}$
          \vspace{-0.5\baselineskip}
       \begin{align*}
         E_{\color{blue} p(\theta|y)}[f(\theta)] \approx \frac{1}{S} \sum_{s=1}^S f(\theta^{(s)})
@@ -90,16 +103,17 @@
 
 \begin{frame}
 
-\frametitle{ Monte Carlo}
+\frametitle{Monte Carlo}
 
   \begin{itemize}
   \item Monte Carlo methods we have discussed so far
     \begin{itemize}
-    \item Inverse CDF works for 1D \pause
-    \item Analytic transformations work for only certain distributions \pause
+    \item Inverse CDF works mainly for 1D \pause
+%    \item Analytic transformations work for only certain distributions \pause
 %    \item Factorization works only for certain joint distributions
-    \item Grid methods works in less than a few dimensions \pause
-    \item Rejection sampling works mostly in 1D (truncation is a special case) \pause
+    \item Grid methods work in a few dimensions \pause
+    \item Rejection sampling typically becomes inefficient as dimension
+      increases (truncation is a special case) \pause
     \item Importance sampling is reliable only in special cases
     \end{itemize}
     \pause
@@ -120,19 +134,60 @@
 \frametitle{Markov chains}
 
   \begin{itemize}
-  \item<1-> Andrey Markov proved weak law of large numbers and central
-    limit theorem for certain dependent-random sequences, which were
-    later named Markov chains
-  \item<2-> The probability of each event depends only on the state
-    attained in the previous event (or finite number of previous events)
+  \item<1-> A Markov chain is a sequence in which the next state depends
+    on the current state, but not on earlier states
     \[
-    p(\theta_t|\theta_{t-1}, \theta_{t-2}, ...) = p(\theta_t|\theta_{t-1})
+    p(\theta^{(t)}\mid\theta^{(t-1)},\ldots,\theta^{(0)})
+    =p(\theta^{(t)}\mid\theta^{(t-1)}).
     \]
-%  \item<3-> Markov's one example was the sequence of letters in
-%    Pushkin's novel ``Yevgeniy Onegin''
-    \item<3-> $T_t(\theta_{t} \mid \theta_{t-1}) \equiv p(\theta_t|\theta_{t-1})$ is usually refered to as the {\color{uured} transition distribution}
-    \item<4-> Under some assumptions $p(\theta_t|\theta_{t-1})$ will converge (in total variation) to \emph{one} {\color{uured} stationary distribution} $p(\theta)$
-    \item<5-> Goal in MCMC: Construct a {\color{uured} transition distribution} with $p(\theta|y)$ as the {\color{uured} stationary distribution}
+  \item<2-> $T(\theta^{(t)}\mid\theta^{(t-1)})$ is the
+    {\color{uured}transition distribution}
+  \item<3-> For a well-behaved chain, the distribution $P_t$ of
+    $\theta^{(t)}$ approaches a stationary distribution $\pi$
+  \item<4-> Total variation distance is
+    \[
+      d_{\mathrm{TV}}(P_t,\pi)
+      =\sup_A\left|P_t(A)-\pi(A)\right|.
+    \]
+    It is the largest difference between the probabilities that $P_t$
+    and $\pi$ assign to the same event $A$
+  \item<5-> Convergence in total variation means
+    $d_{\mathrm{TV}}(P_t,\pi)\rightarrow0$
+  \item<6-> \uured{Goal in MCMC}: construct $T$ with
+    $\pi(\theta)=p(\theta\mid y)$
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+
+\frametitle{A stationary distribution: two-state example}
+
+  Consider a chain with states 1 and 2 and transition matrix
+  \[
+    T=
+    \begin{pmatrix}
+      0.8 & 0.2\\
+      0.4 & 0.6
+    \end{pmatrix}.
+  \]
+  Each row gives the probabilities of the next state.
+  \pause
+  \begin{itemize}
+  \item The distribution $\pi=(2/3,1/3)$ is stationary because
+    \[
+      \pi T=(2/3,1/3)=\pi.
+    \]
+  \pause
+  \item Starting from state 1 gives
+    \[
+      P_0=(1,0),\qquad P_1=(0.8,0.2),\qquad
+      P_2=(0.72,0.28),\quad\ldots
+    \]
+    and $P_t$ approaches $\pi$
+  \item<4-> Stationary means that applying the transition leaves the
+    distribution unchanged; convergence means approaching it from another
+    starting distribution
   \end{itemize}
 
 \end{frame}
@@ -156,18 +211,17 @@
 \frametitle{Markov chain Monte Carlo (MCMC)}
 
   \begin{itemize}
-  \item Produce draws $\theta_{(t)}$ given $\theta_{(t-1)}$ from a
+  \item Produce draws $\theta^{(t)}$ given $\theta^{(t-1)}$ from a
     Markov chain, with {\color{uured}stationary distribution} $p(\theta|y)$
     \begin{itemize}
     \item<2->[+] generic
     \item<2->[+] combine sequence of easier Monte Carlo draws to form a Markov chain
-    \item<3->[+] chain goes where most of the posterior mass is
-    \item<3->[+] asymptotically chain spends the $\alpha$\% of time where
-      $\alpha$\% posterior mass is
-    \item<4->[+] central limit theorem holds for expectations
+    \item<3->[+] under suitable irreducibility and aperiodicity conditions,
+      converges in total variation to $p(\theta|y)$ as $t\rightarrow\infty$
+    \item<4->[+] for well-behaved chains, a central limit theorem holds
+      for Monte Carlo averages
     \item<5->[-] draws are dependent
-    \item<5->[-] construction of efficient Markov chains is not always
-      easy
+    \item<5->[-] constructing an \uured{efficient} Markov chain is not always easy
     \end{itemize}
 \end{itemize}
 
@@ -175,17 +229,18 @@
 
 \begin{frame}
 
-\frametitle{Markov chain Monte Carlo (MCMC)}
+\frametitle{MCMC summary}
 
   \begin{itemize}
-  \item Random variables $\theta_1,\theta_2,\ldots$ where $\theta_t$ depends only on the previous $\theta_{(t-1)}$
+  \item Random variables $\theta^{(1)},\theta^{(2)},\ldots$ where
+    $\theta^{(t)}$ depends only on the previous state $\theta^{(t-1)}$
     \begin{equation*}
-      p(\theta_t|\theta_1,\ldots,\theta_{(t-1)})=p(\theta_t|\theta_{(t-1)})
+      p(\theta^{(t)}|\theta^{(1)},\ldots,\theta^{(t-1)})
+      =p(\theta^{(t)}|\theta^{(t-1)})
     \end{equation*}
     \pause
-  \item Chain has to be initialized with some starting point $\theta_0$ \pause
-  \item Transition distribution $T_t(\theta_t|\theta_{t-1})$ (may
-    depend on $t$) \pause
+  \item Chain has to be initialized with some starting point $\theta^{(0)}$ \pause
+  % \item Transition distribution $T_t(\theta_t|\theta_{t-1})$ (may depend on $t$) \pause
   \item Choose a transition distribution so the
     {\color{uured}stationary distribution} of the Markov chain is $p(\theta|y)$
   \end{itemize}
@@ -193,7 +248,7 @@
 \end{frame}
 
 \subsection{Gibbs sampling}
-%\frame{\sectionpage}
+\frame{\subsectionpage}
 
 \begin{frame}
 
@@ -201,20 +256,71 @@
 
   \begin{itemize}
   \item Alternate sampling from conditional distributions
-  \item Basic algorithm, for $j \in \{1,...,J\}$ {
-      \begin{align*}
-         \text{sample $\theta_{j,t}$ from} \quad & p(\theta_j|\theta_{-j,t-1}, y),\\
-      \text{where} \quad 
-          \theta_{-j,t-1} = & (\theta_{1,t},\dots,\theta_{j-1,t}, 
-          \theta_{j+1,t-1},\dots,\theta_{J,t-1})
-      \end{align*}
-      }
-  \item Will converge (in total variation) to $p(\theta|y)$ as $N\rightarrow\infty$\pause
-  \item $j$ can be multiple (blocked) parameters
-  \item 1D sampling ($|j|=1$) is generally easy\pause
-  \item Related to the (stochastic) EM algorithm
+  \item For two parameters, one complete sweep is
+    \begin{align*}
+      \theta_1^{(t)}&\sim
+        p(\theta_1\mid\theta_2^{(t-1)},y),\\
+      \theta_2^{(t)}&\sim
+        p(\theta_2\mid\theta_1^{(t)},y).
+    \end{align*}
+  \pause
+  \item More generally, update $j=1,\ldots,J$ in order using
+    \[
+      \theta_j^{(t)}\sim p\!\left(\theta_j\mid
+      \theta_1^{(t)},\ldots,\theta_{j-1}^{(t)},
+      \theta_{j+1}^{(t-1)},\ldots,\theta_J^{(t-1)},y\right).
+    \]
+  \pause
+  \item Under standard conditions, the distribution of $\theta^{(t)}$
+    converges to $p(\theta\mid y)$ as $t\rightarrow\infty$
+  \item Several parameters can be updated together in a block
+%  \item Related to the (stochastic) EM algorithm
   \end{itemize}
 \end{frame}
+
+\begin{frame}
+
+\frametitle{Example: Bivariate Normal using Gibbs}
+
+For $n$ independent observations $y_i\sim\mathcal{N}(\theta,\Sigma)$
+and a flat prior, let $\bar y$ be the sample mean. Then
+\[
+\theta \mid y \;\sim\; \mathcal{N}\!\left( \bar{y}, \tfrac{1}{n}\Sigma \right),
+\qquad
+\Sigma=
+\begin{pmatrix}
+  \sigma_1^2 & \rho\sigma_1\sigma_2\\
+  \rho\sigma_1\sigma_2 & \sigma_2^2
+\end{pmatrix}.
+\]
+The known $\Sigma$ has observation standard deviations $\sigma_1,\sigma_2$
+and correlation $\rho$. The posterior standard deviations are
+$\sigma_j/\sqrt n$.
+\pause
+
+One \uured{Gibbs sweep}, given $(\theta_1^{(t-1)},\theta_2^{(t-1)})$:
+
+\[
+\theta_1^{(t)} \;\sim\; \mathcal{N}\!\left(
+\bar{y}_1 + \rho\frac{\sigma_1}{\sigma_2}
+  \big(\theta_2^{(t-1)} - \bar{y}_2\big),\;
+\frac{\sigma_1^2}{n}(1-\rho^2)
+\right),
+\]
+
+\[
+\theta_2^{(t)} \;\sim\; \mathcal{N}\!\left(
+\bar{y}_2 + \rho\frac{\sigma_2}{\sigma_1}
+  \big(\theta_1^{(t)} - \bar{y}_1\big),\;
+\frac{\sigma_2^2}{n}(1-\rho^2)
+\right).
+\]
+
+\end{frame}
+
+
+
+
 
 \begin{frame}
 
@@ -230,21 +336,37 @@
      \end{center}
 \end{frame}
 
-% TODO: Add example of a Gibbs sampling algorithm here (in math). Derive the conditional distributions
-
 \begin{frame}
 
-\frametitle{ Gibbs sampling}
+\frametitle{Gibbs sampling}
 
   \vspace{-0.5\baselineskip}
   \begin{itemize}
-  \item With \uured{conditionally conjugate} priors, the sampling from
-    the conditional distributions is easy for wide range of models
-  \item<2-> BUGS / WinBUGS / OpenBUGS / JAGS
-  \item<3-> No algorithm parameters to tune
-  \item<4-> For not so easy conditionals, use  e.g. inverse-CDF
-  \item<5-> Several parameters can be updated in blocks ({\em blocking})
-  \item<6-> Slow if parameters are highly dependent in the posterior...
+  \item When the full conditional distributions have standard forms,
+    exact Gibbs updates are easy to draw
+  \item<2-> Exact Gibbs updates have no proposal scale or rejection step
+    \begin{itemize}
+    \item blocking, parameterization, and update order can still strongly
+      affect efficiency
+    \end{itemize}
+  \item<3-> For a nonstandard full conditional, use a Metropolis--Hastings
+    update within the Gibbs sweep
+  \item<4-> Several parameters can be updated in blocks ({\em blocking})
+  \item<5-> Slow if parameters are highly dependent in the posterior...
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}<0>[label=backup_gibbs_software]
+
+\frametitle{Gibbs software: BUGS and JAGS}
+
+  \begin{itemize}
+  \item BUGS popularized automatic Gibbs sampling for Bayesian models
+  \item WinBUGS and OpenBUGS provided widely used BUGS implementations
+  \item JAGS follows a similar model-description and sampling approach
+  \item These systems work especially naturally for models with
+    conditionally conjugate components
   \end{itemize}
 
 \end{frame}
@@ -262,8 +384,26 @@
      \end{center}
 \end{frame}
 
-\subsection{Metropolis-Hastings}
-%\frame{\sectionpage}
+\begin{frame}{Pair discussion: correlated Gibbs sampling}
+
+  \begin{itemize}
+  \item Both Gibbs samplers accept every update. Why does the sampler for
+    the correlated target nevertheless produce fewer effective draws?
+  \item What would you expect its trace plot and autocorrelation function
+    to look like?
+  \end{itemize}
+
+  \uncover<2->{
+  \vspace{0.5\baselineskip}
+  {\color{uured}After discussion:}
+  \begin{itemize}
+  \item Each coordinate update moves only horizontally or vertically, while
+    the posterior mass lies along a narrow diagonal region.
+  \item The chain therefore moves slowly along that region, producing high
+    autocorrelation and a small effective sample size.
+  \end{itemize}}
+
+\end{frame}
 
 \begin{frame}
 
@@ -274,13 +414,18 @@
     \begin{itemize}
     \item e.g. it is easy to sample from multivariate normal
     \end{itemize}
-    \item<2-> Can we use that to form a Markov chain?
+  \item<2-> If direct joint sampling is available, use it
+    \begin{itemize}
+    \item the draws are independent, so a Markov chain is unnecessary
+    \end{itemize}
+  \item<3-> MCMC is useful when direct joint sampling is unavailable but
+    full conditionals or local proposals are manageable
   \end{itemize}
 
 \end{frame}
 
-
-
+\subsection{Metropolis-Hastings}
+\frame{\subsectionpage}
 
 \begin{frame}
 
@@ -289,53 +434,126 @@
   \begin{itemize}
   \item Algorithm
     \begin{itemize}
-      \item[1.] starting point $\theta^0$
+      \item[1.] starting point $\theta^{(0)}$
       \item[2.] $t=1,2,\ldots$
         \begin{itemize}
         \item[(a)] pick a proposal $\theta^{*}$ from a {\color{uured} proposal distribution}
-          $J_t(\theta^{*}|\theta_{t-1})$. \\
-          Proposal distribution has to be symmetric, i.e.\\
-          $J_t(\theta_a|\theta_b)=J_t(\theta_b|\theta_a)$, for all
-          $\theta_a,\theta_b$
+          $J(\theta^{*}|\theta^{(t-1)})$. \\
+          (Proposal distribution has to be symmetric, i.e.\\
+          $J(\theta_a|\theta_b)=J(\theta_b|\theta_a)$, for all
+          $\theta_a,\theta_b$)
         \item<2->[(b)] calculate acceptance ratio
           \begin{equation*}
-            r=\frac{p(\theta^{*}|y)}{p(\theta_{t-1}|y)}
+            r=\frac{p(\theta^{*}|y)}{p(\theta^{(t-1)}|y)}
           \end{equation*}
           \vspace{-6mm}
         \item<3->[(c)] set
           \begin{equation*}
-            \theta_t=
+            \theta^{(t)}=
             \begin{cases}
               \theta^{*} & \text{with probability $\min(r,1)$}\\
-              \theta_{t-1} & \text{otherwise}
+              \theta^{(t-1)} & \text{otherwise}
             \end{cases}
           \end{equation*}
           \uncover<4>{
-          ie, if $p(\theta^{*}|y)>p(\theta_{t-1}|y)$ accept the proposal always \\
+          i.e., if $p(\theta^{*}|y)>p(\theta^{(t-1)}|y)$, always accept the proposal \\
           \hspace{0.4cm}and otherwise accept the proposal with probability $r$}
       \end{itemize}
       \vspace{-1.5\baselineskip}
     \item<5-> rejection of a proposal increments the time $t$ also by one\\
-      ie, the new state is the same as previous
-      \item<6-> step c is executed by generating a random number from
-        $\U(0,1)$
-      \item<7-> $p(\theta^*|y)$ and $p(\theta_{t-1}|y)$ have the same
-        normalization terms, and thus instead of $p(\cdot|y)$,
-        unnormalized $q(\cdot|y)$ can be used, { \color{uured} as the normalization terms cancel out}!
+      i.e., the new state is the same as the previous state
+      \item<6-> draw $U\sim\U(0,1)$ and accept if $U<\min(1,r)$
+      \item<7-> $p(\theta^*|y)$ and $p(\theta^{(t-1)}|y)$ have the same
+        normalizing constant, so the unnormalized density $q(\cdot)$
+        can be used: {\color{uured}the constant cancels}
     \end{itemize}
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Metropolis on the log scale}
+
+  \begin{itemize}
+  \item For a symmetric proposal, use the unnormalized log posterior
+    \[
+      \ell(\theta)=\log q(\theta)
+      =\log p(y\mid\theta)+\log p(\theta).
+    \]
+  \pause
+  \item Compute the log density ratio
+    \[
+      \Delta=\ell(\theta^*)-\ell(\theta^{(t-1)}).
+    \]
+  \pause
+  \item Draw $U\sim\U(0,1)$ and accept the proposal if
+    \[
+      \log U<\min(0,\Delta).
+    \]
+    Otherwise repeat the current state: $\theta^{(t)}=\theta^{(t-1)}$
+  \pause
+  \item This avoids evaluating tiny densities or exponentiating large
+    log density ratios
   \end{itemize}
 
 \end{frame}
 
 \begin{frame}
 
-\frametitle{ Metropolis algorithm}
+\frametitle{Rejection sampling vs. Metropolis rejection}
 
   \begin{itemize}
-  \item Example: one bivariate observation $(y_1,y_2)$
+  \item In rejection sampling, a rejected proposal is discarded
     \begin{itemize}
-    \item bivariate normal distribution with unknown mean and known
-      covariance
+    \item only accepted proposals are included in the output
+    \item the next proposal is drawn independently from $g$
+    \end{itemize}
+  \pause
+  \item In the Metropolis algorithm, a rejected proposal is discarded,
+    but the current state is repeated
+    \[
+      \theta^{(t)}=\theta^{(t-1)}.
+    \]
+    \begin{itemize}
+    \item the repeated state is a valid draw from the Markov chain
+    \item it must be retained when computing posterior summaries
+    \end{itemize}
+  \pause
+  \item Keeping only accepted Metropolis proposals changes the distribution
+    and generally gives incorrect estimates
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Proposal scale: discussion}
+
+  Consider a random-walk Metropolis proposal
+  \[
+    \theta^*\sim\mathcal{N}(\theta^{(t-1)},\sigma_p^2 I).
+  \]
+
+  \begin{itemize}
+  \item Predict what happens when $\sigma_p$ is much too small.
+  \item Predict what happens when $\sigma_p$ is much too large.
+  \item For each case, what do you expect for the acceptance rate, trace
+    plot, and autocorrelation?
+  \end{itemize}
+
+  \uncover<2->{
+  {\color{uured}After discussion:} Small proposals are often accepted but
+  move slowly. Large proposals move farther when accepted, but are often
+  rejected. Both choices can give high autocorrelation and low ESS.}
+
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Metropolis algorithm}
+
+  \begin{itemize}
+  \item Example: one bivariate observation $y=(y_1,y_2)$
+    \begin{itemize}
+    \item $y\mid\theta\sim\N(\theta,\Sigma)$, with known covariance
+      $\Sigma$ and a flat prior $p(\theta)\propto1$
        \begin{equation*}
          \left.
          \begin{pmatrix}
@@ -355,7 +573,8 @@
        \right)
        \end{equation*}
      \item proposal distribution
-       $J_t(\theta^{*}|\theta_{t-1})=\N(\theta^{*}|\theta_{t-1},\sigma_p^2)$
+       $J(\theta^{*}|\theta^{(t-1)})
+       =\N(\theta^{*}|\theta^{(t-1)},\sigma_p^2 I)$
      \end{itemize}
    \end{itemize}
 
@@ -366,48 +585,31 @@
 
  \begin{frame}
 
-\frametitle{Why Metropolis algorithm works}
+\frametitle{Why the Metropolis algorithm works}
 
+  \small
   \begin{itemize}
-  \item Intuitively more draws from the higher density areas as
-    jumps to higher density are always accepted and only some of the
-    jumps to the lower density are accepted
-    \vspace{5mm}
-    \pause
-  \item Theoretically
+  \item Intuitively, the chain spends more time in high-density regions
     \begin{itemize}
-    \item[1.] Prove that simulated series is a Markov chain
-      which has unique stationary distribution
-    \item[2.] Prove that this stationary distribution is the desired target distribution $p(\theta|y)$
+    \item proposals to higher density are always accepted
+    \item proposals to lower density are accepted only sometimes
     \end{itemize}
-\end{itemize}
-
-\end{frame}
-
-\begin{frame}
-
-\frametitle{Why Metropolis algorithm works}
-
-  \begin{itemize}
-  \item[1.] Prove that simulated series is a Markov chain
-    which has unique stationary distribution
+  \pause
+  \item Detailed balance will show that $p(\theta\mid y)$ is a
+    stationary distribution of the Metropolis chain
+  \pause
+  \item Convergence to that stationary distribution also requires a
+    well-behaved chain
     \begin{itemize}
-    \item[a)] irreducible
-      \begin{itemize}
-      \item<2->[=] positive probability of eventually reaching any
-        state from any other state
-      \end{itemize}
-    \item[b)] aperiodic
-      \begin{itemize}
-      \item<3->[=] aperiodic (return times are not periodic)
-      \item<3->[-] holds for a random walk on any proper distribution (except for trivial exceptions)
-      \end{itemize}
-    \item[c)] recurrent / not transient
-      \begin{itemize}
-      \item<4->[=] probability to return to a state $i$ is 1 as $T\rightarrow \infty$
-      \item<4->[-] holds for a random walk on any proper distribution (except for trivial exceptions)
-      \end{itemize}
+    \item the proposal must allow the chain to reach all relevant regions
+      of the target distribution
+    \item the chain must not be trapped in a deterministic cycle
     \end{itemize}
+  \pause
+  \item<4-> These ideas are formalized by \uured{irreducibility} and
+    \uured{aperiodicity}
+  \item<5-> They depend on both the target and the proposal; they do not
+    follow merely because the target is a proper distribution
   \end{itemize}
 
 \end{frame}
@@ -415,10 +617,37 @@
 
 \begin{frame}
 
-\frametitle{ Why Metropolis algorithm works}
+\frametitle{Detailed balance for the Metropolis algorithm}
 
   \begin{itemize}
-  \item[2.] Prove that this stationary distribution is the desired target distribution $p(\theta|y)$: see book
+  \item For a symmetric proposal $J(\theta'\mid\theta)$, the Metropolis
+    acceptance probability is
+    \[
+      \alpha(\theta,\theta')=
+      \min\!\left(1,\frac{p(\theta'\mid y)}{p(\theta\mid y)}\right).
+    \]
+  \pause
+  \item For $\theta'\neq\theta$, the probability flow from $\theta$ to
+    $\theta'$ is
+    \begin{align*}
+      &p(\theta\mid y)J(\theta'\mid\theta)\alpha(\theta,\theta')\\
+      &\qquad=J(\theta'\mid\theta)
+        \min\!\left(p(\theta\mid y),p(\theta'\mid y)\right).
+    \end{align*}
+  \pause
+  \item Symmetry of $J$ makes this expression unchanged when
+    $\theta$ and $\theta'$ are exchanged. Hence
+    \[
+      p(\theta\mid y)T(\theta'\mid\theta)
+      =p(\theta'\mid y)T(\theta\mid\theta').
+    \]
+  \item<4-> The self-transition caused by rejection balances trivially.
+    Thus detailed balance holds for the full transition kernel $T$, and
+    $p(\theta\mid y)$ is stationary
+  \end{itemize}
+
+
+
 %    \begin{itemize}
 %    \item[-] consider starting algorithm at time $t-1$ with a draw
 %      $\theta_{t-1} \sim p(\theta|y)$
@@ -447,7 +676,6 @@
 %      $\theta_{t-1}$ have the same marginal distributions, and so
 %      $p(\theta|y)$ is the stationary distribution of the Markov chain of $\theta$
 %    \end{itemize}
-  \end{itemize}
 
 \end{frame}
 
@@ -461,8 +689,8 @@
     \item acceptance ratio includes ratio of proposal distributions
       \begin{equation*}
         r =
-        \frac{p(\theta^{*}|y)/J_t(\theta^{*}|\theta_{t-1})}{p(\theta_{t-1}|y)/J_t(\theta_{t-1}|\theta^{*})} \pause =
-        \frac{p(\theta^{*}|y)J_t(\theta_{t-1}|\theta^{*})}{p(\theta_{t-1}|y)J_t(\theta^{*}|\theta_{t-1})}
+        \frac{p(\theta^{*}|y)J(\theta^{(t-1)}|\theta^{*})}
+        {p(\theta^{(t-1)}|y)J(\theta^{*}|\theta^{(t-1)})}
       \end{equation*}
     \end{itemize}
   \end{itemize}
@@ -485,32 +713,27 @@
 
 \begin{frame}
 
-\frametitle{ Metropolis-Hastings algorithm}
+\frametitle{Metropolis-Hastings algorithm}
 
   \begin{itemize}
-  \item Ideal proposal distribution is the distribution itself
+  \item The ideal proposal is the target distribution itself
     \begin{itemize}
-    \item $J(\theta^{*}|\theta)\equiv p(\theta^{*}|y)$ for all
-      $\theta$
-    \item acceptance probability is $1$
-    \item independent draws
-    \item not usually feasible
+    \item $J(\theta^{*}|\theta)\equiv p(\theta^{*}|y)$ gives independent
+      draws with acceptance probability 1, but is not usually feasible
     \end{itemize}
-  \item<2-> Good proposal distribution resembles the target distribution
+  \item<2-> A good proposal resembles the target distribution
+  \item<3-> Proposal scale controls movement through the target
     \begin{itemize}
-    \item if the shape of the target distribution is unknown, usually
-      normal or $t$ distribution is used
+    \item small scale: many accepted steps, but each step moves little
+    \item large scale: longer proposed steps, but many are rejected
     \end{itemize}
-  \item<3-> After the proposal distribution shape has been selected, it is important to select the scale
+  \item<4-> There is no universal optimal acceptance rate
     \begin{itemize}
-    \item small scale \\$\rightarrow$ many steps accepted, but the chain moves slowly due to small steps
-    \item big scale \\$\rightarrow$ long steps proposed, but many of
-      those rejected and again chain moves slowly
+    \item it depends on the target, dimension, proposal, and quantity
+      of interest
+    \item compare proposals using ESS per computation time or MCSE
     \end{itemize}
-    \begin{center}
-  \href{https://chi-feng.github.io/mcmc-demo/app.html?algorithm=RandomWalkMH&target=standard}{demo}
-  \end{center}
-  \item<4-> Generic rule for rejection rate is 60-90\% %(but depends on dimensionality and a specific algorithm variation)
+  \item<5-> \href{https://chi-feng.github.io/mcmc-demo/app.html?algorithm=RandomWalkMH&target=standard}{Interactive demonstration}
 \end{itemize}
 
 \end{frame}
@@ -520,25 +743,35 @@
 \frametitle{Gibbs sampling as a special case}
 
   \begin{itemize}
-  \item Specific case of Metropolis-Hastings algorithm
-    \begin{itemize}
-    \item single updated (or blocked)
-    \item proposal distribution is the conditional distribution\\
-      $\rightarrow$ proposal and target distributions are same\\
-      $\rightarrow$ acceptance probability is $1$
-    \end{itemize}
+  \item Update one component while holding $\theta_{-j}$ fixed, proposing
+    \[
+      \theta_j^*\sim p(\theta_j\mid\theta_{-j},y).
+    \]
+  \pause
+  \item The Metropolis--Hastings acceptance ratio is
+    \begin{align*}
+      r
+      &=\frac{p(\theta_j^*,\theta_{-j}\mid y)\,
+        p(\theta_j\mid\theta_{-j},y)}
+        {p(\theta_j,\theta_{-j}\mid y)\,
+        p(\theta_j^*\mid\theta_{-j},y)}\\
+      &=1,
+    \end{align*}
+    because each joint posterior factors into the same marginal for
+    $\theta_{-j}$ times its full conditional
+  \item<3-> Therefore every exact Gibbs proposal is accepted
   \end{itemize}
 
 \end{frame}
 
 \begin{frame}
 
-\frametitle{ Metropolis}
+\frametitle{Metropolis}
 
   \begin{itemize}
-  \item Usually doesn't scale well to high dimensions
+  \item Random-walk Metropolis usually does not scale well to high dimensions
     \begin{itemize}
-    \item if the shape doesn't match the whole distribution, the efficiency drops
+    \item if the shape does not match the whole distribution, efficiency drops
 %    \item demo11\_2\\
       \vspace{1\baselineskip}
       \hspace{-1cm}\includegraphics[width=4cm]{figs/Metrop2.pdf}\includegraphics[width=4cm]{figs/Metrop3.pdf}
@@ -552,71 +785,61 @@
 
 \begin{frame}
 
-\frametitle{Gibbs sampling as a special case}
-
-  \begin{itemize}
-  \item Specific case of Metropolis-Hastings algorithm
-    \begin{itemize}
-    \item single updated (or blocked)
-    \item proposal distribution is the conditional distribution\\
-      $\rightarrow$ proposal and target distributions are same\\
-      $\rightarrow$ acceptance probability is $1$
-    \end{itemize}
-  \end{itemize}
-
-\end{frame}
-
-\begin{frame}
-
 \frametitle{What we want to know}
 
   \begin{enumerate}
-  \item Has the chains \uured{converged} to the posterior distribution?
-  \item How many \uured{efficient} samples do I have?
+  \item Do the chains show evidence of poor \uured{convergence} or mixing?
+  \pause
+  \item How many \uured{effective} samples do I have?
   \end{enumerate}
 
 \end{frame}
 
 \subsection{Warm-up}
-%\frame{\sectionpage}
+\frame{\subsectionpage}
 
 \begin{frame}
 
 \frametitle{Warm-up}
 
   \begin{itemize}
-  \item Asymptotically chain spends the $\alpha$\% of time where
-    $\alpha$\% posterior mass is
+  \item Early draws can be strongly influenced by the starting value
     \uncover<2->{
       \begin{itemize}
-      \item but in finite time the initial part of the Markov chain may be
-        non-representative \\
-        \hspace{2cm}\includegraphics[width=4cm]{figs/Metrop1.pdf}
+      \item the chain may not yet have reached the typical posterior region
+        \\
+        \hspace{2cm}\includegraphics[width=2.8cm]{figs/Metrop1.pdf}
       \end{itemize}
       }
       \vspace{-.5\baselineskip}
-    \item<3-> Warm-up period = (non-representative) draws from the beginning of the Markov chain
+    \item<3-> Warm-up is the initial phase before retained sampling
     \begin{itemize}
-      \item remove warm-up before using samples for inference
-      \item warm-up may include also phase for adapting algorithm parameters
+      \item tune the proposal during warm-up if needed
+      \item for our Metropolis samplers, keep the proposal fixed during
+        retained sampling
+      \item discard warm-up ({\color{uured} burn-in}) draws
       \end{itemize}
-    \item<4-> Also called {\color{uured} burn-in}
+    \item<4-> Discarding warm-up does not guarantee good sampling
+      \begin{itemize}
+      \item the retained chains can still mix slowly or miss posterior regions
+      \item convergence and efficiency diagnostics are still required
+      \end{itemize}
   \end{itemize}
 
 \end{frame}
 
 \subsection{Convergence}
-%\frame{\sectionpage}
+\frame{\subsectionpage}
 
 \begin{frame}
 
-\frametitle{Assesing convergence}
+\frametitle{Assessing convergence}
 
   \vspace{-0.5\baselineskip}
   \begin{itemize}
   \item Several Markov chains make convergence diagnostics easier
   \pause
-    \item Start chains from different starting points -- preferably overdispersed
+    \item Start chains from different, preferably overdispersed, starting points
       \begin{center}
   \vspace{-0.5\baselineskip}
       \includegraphics[width=6cm]{figs/10chains1.pdf}
@@ -648,18 +871,42 @@
   \begin{itemize}
   \item $\widehat{R}$ or {\color{uured} potential scale reduction factor} (PSRF)
   \item Compare means and variances of the chains\\
-    \uncover<2->{W = within chain variance estimate\\
-    var\_hat\_plus = total variance estimate\\}
+    \uncover<2->{$W$ = within-chain variance estimate\\
+    $\widehat{\operatorname{var}}^{+}$ = total variance estimate\\}
     \vspace{1\baselineskip}
     \only<1>{\hspace{-0.5cm}\phantom{\includegraphics[width=8cm]{figs/10chains_rhat1.pdf}}}
-    \only<2>{\hspace{-0.5cm}\includegraphics[width=8cm]{figs/10chains_rhat1.pdf}}
-    \only<3>{\hspace{-0.5cm}\includegraphics[width=8cm]{figs/10chains_rhat2.pdf}}
-    \only<4>{\hspace{-0.5cm}\includegraphics[width=8cm]{figs/10chains_rhat3.pdf}}
+    \only<2>{\hspace{-0.5cm}\rhatplot{figs/10chains_rhat1.pdf}{1.42}}
+    \only<3>{\hspace{-0.5cm}\rhatplot{figs/10chains_rhat2.pdf}{1.06}}
+    \only<4>{\hspace{-0.5cm}\rhatplot{figs/10chains_rhat3.pdf}{0.96}}
   \end{itemize}
 
 \end{frame}
 
 \begin{frame}
+
+\frametitle{Classical $\widehat R$: interpretation}
+
+  \begin{itemize}
+  \item The classical diagnostic compares a total variance estimate
+    $\widehat{\operatorname{var}}^{+}$ with the within-chain variance $W$
+    \[
+      \widehat R=\sqrt{\frac{\widehat{\operatorname{var}}^{+}}{W}}.
+    \]
+  \pause
+  \item $\widehat R$ close to 1 means the between-chain and within-chain
+    variation are similar
+  \item $\widehat R>1$ indicates that the chains disagree more than expected
+    from their within-chain variation
+  \item Course rule of thumb: aim for $\widehat R<1.01$, with values closer
+    to 1 preferred
+  \pause
+  \item A value close to 1 is necessary but not sufficient: also inspect
+    trace plots, ESS, and MCSE
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}<0>[label=backup_rhat_wb]
 
 \frametitle{ $\widehat{R}$}
 
@@ -692,7 +939,7 @@
 \end{frame}
 
 
-\begin{frame}
+\begin{frame}<0>[label=backup_rhat_vplus]
 
 \frametitle{ $\widehat{R}$}
 
@@ -704,18 +951,18 @@
     \end{equation*}
     \vspace{-0.5\baselineskip}
     \begin{itemize}
-    \item this \emph{overestimates} marginal posterior variance if the
-      starting points are overdispersed
+    \item with overdispersed starting points and incomplete mixing, this
+      typically \emph{overestimates} the marginal posterior variance
     \end{itemize}
     \vspace{0.5\baselineskip}
-  \item<2-> Given finite $N$, $W$ \emph{underestimates} marginal posterior variance
+  \item<2-> Before chains have fully explored the posterior, $W$ typically
+    \emph{underestimates} the marginal posterior variance
     \begin{itemize}
     \item single chains have not yet visited all points in the distribution
     \item when $N\rightarrow\infty, \quad \E(W)\rightarrow \var(\theta|y)$
     \end{itemize}
     \vspace{0.5\baselineskip}
-  \item<3-> As $\widehat{\var}^{+}(\theta|y)$ overestimates and $W$ underestimates,
-    compute
+  \item<3-> Comparing these two estimates motivates
     \begin{equation*}
       \widehat{R}=\sqrt{\frac{\widehat{\var}^{+}}{W}}
     \end{equation*}
@@ -724,67 +971,67 @@
 \end{frame}
 
 
-\begin{frame}[fragile]
+%\begin{frame}[fragile]
 
-\frametitle{ $\widehat{R}$}
+%\frametitle{ $\widehat{R}$}
 
-  \begin{itemize}
-  \item BDA3: $\widehat{R}$ aka {\em potential scale reduction factor} (PSRF)
-  \item Compare means and variances of the chains\\
-    W = within chain variance estimate\\
-    var\_hat\_plus = total variance estimate\\
-    \vspace{1\baselineskip}
-    \only<1>{\hspace{-0.5cm}\includegraphics[width=8cm]{figs/10chains_rhat1.pdf}}
-    \only<2>{\hspace{-0.5cm}\includegraphics[width=8cm]{figs/10chains_rhat2.pdf}}
-    \only<3>{\hspace{-0.5cm}\includegraphics[width=8cm]{figs/10chains_rhat3.pdf}}
-  \end{itemize}
+%  \begin{itemize}
+%  \item BDA3: $\widehat{R}$ aka {\em potential scale reduction factor} (PSRF)
+%  \item Compare means and variances of the chains\\
+%    W = within chain variance estimate\\
+%    var\_hat\_plus = total variance estimate\\
+%    \vspace{1\baselineskip}
+%    \only<1>{\hspace{-0.5cm}\includegraphics[width=8cm]{figs/10chains_rhat1.pdf}}
+%    \only<2>{\hspace{-0.5cm}\includegraphics[width=8cm]{figs/10chains_rhat2.pdf}}
+%    \only<3>{\hspace{-0.5cm}\includegraphics[width=8cm]{figs/10chains_rhat3.pdf}}
+%  \end{itemize}
 
-\end{frame}
+%\end{frame}
 
-\begin{frame}
+%\begin{frame}
 
-\frametitle{ $\widehat{R}$}
+%\frametitle{ $\widehat{R}$}
 
-  \begin{equation*}
-      \widehat{R}=\sqrt{\frac{\widehat{\var}^{+}}{W}}
-    \end{equation*}
-    \begin{itemize}
-    \item<1-> Estimates how much the scale could reduce if $N\rightarrow\infty$
-    \item<1-> $\widehat{R}\rightarrow 1$, when $N\rightarrow\infty$
-    \item<1-> If $\widehat{R}$ is big (e.g., $R>1.01$), keep sampling
-    \item<2-> If $\widehat{R}$ close to 1, it is still possible that chains have not converged
-      \begin{itemize}
-      \item if starting points were not overdispersed
-      \item distribution far from normal (especially if infinite variance)
-      \item just by chance when $N$ is finite
-      \end{itemize}
-    \end{itemize}
+%  \begin{equation*}
+%      \widehat{R}=\sqrt{\frac{\widehat{\var}^{+}}{W}}
+%    \end{equation*}
+%    \begin{itemize}
+%    \item<1-> Estimates how much the scale could reduce if $N\rightarrow\infty$
+%    \item<1-> $\widehat{R}\rightarrow 1$, when $N\rightarrow\infty$
+%    \item<1-> If $\widehat{R}$ is big (e.g., $R>1.01$), keep sampling
+%    \item<2-> If $\widehat{R}$ close to 1, it is still possible that chains have not converged
+%      \begin{itemize}
+%      \item if starting points were not overdispersed
+%      \item distribution far from normal (especially if infinite variance)
+%      \item just by chance when $N$ is finite
+%      \end{itemize}
+%    \end{itemize}
 
-\end{frame}
+%\end{frame}
 
-\begin{frame}[fragile]
+%\begin{frame}[fragile]
 
-\frametitle{$\widehat{R}$}
+%\frametitle{$\widehat{R}$}
 
-  \begin{itemize}
-  \item Additional $\widehat{R}$ methods to assess convergence
-  \item Split-$\widehat{R}$
-  \begin{itemize}
-    \item Examines {\it mixing} and {\it stationarity} of chains
-    \item To examine stationarity chains are split to two parts: compare means and variances of the split chains
-  \end{itemize}
-  \pause
-  \item Rank normalized $\widehat{R}$
-  \begin{itemize}
-    \item Does not requires that the target distribution has finite mean and variance
-  \end{itemize}
-  \end{itemize}
+%  \begin{itemize}
+%  \item Additional $\widehat{R}$ methods to assess convergence
+%  \item Split-$\widehat{R}$
+%  \begin{itemize}
+%    \item Examines {\it mixing} and {\it stationarity} of chains
+%    \item To examine stationarity chains are split to two parts: compare means and variances of the split chains
+%  \end{itemize}
+%  \pause
+%  \item Rank normalized $\widehat{R}$
+%  \begin{itemize}
+%    \item Does not requires that the target distribution has finite mean and variance
+%  \end{itemize}
+%  \end{itemize}
 
-\end{frame}
+%\end{frame}
 
 
 \subsection{$S_\text{eff}$, MCSE, and autocorrelation}
-%\frame{\sectionpage}
+\frame{\subsectionpage}
 
 
 \begin{frame}
@@ -792,11 +1039,15 @@
 \frametitle{MCMC draws are dependent}
 
   \begin{itemize}
-    \item Monte Carlo estimates still valid (central limit theorem)
+    \item Notation: $M$ chains, $N$ retained draws per chain, and
+      $S=MN$ retained draws in total
+    \item For well-behaved chains, Monte Carlo averages converge to
+      posterior expectations
       \begin{align*}
         E_{\color{blue} p(\theta|y)}[f(\theta)] \approx \frac{1}{S} \sum_{s=1}^S f(\theta^{(s)})
       \end{align*}
-    \item Estimation of Monte Carlo error is more difficult
+    \item A Markov chain central limit theorem can then be used to estimate
+      Monte Carlo error, but dependence makes this more difficult
       \begin{itemize}
         \item evaluation of {\it effective} sample size, $S_\text{eff}$.
       \end{itemize}
@@ -805,13 +1056,15 @@
 
 \begin{frame}
 
-\frametitle{MCMC Autocorrelation}
+\frametitle{Autocorrelation in MCMC}
 
   \begin{itemize}
-  \item Auto correlation function
+  \item The autocorrelation function measures dependence between draws
+    separated by a given lag
     \begin{itemize}
-    \item describes the correlation given a certain lag
-    \item can be used to compare efficiency of MCMC methods
+    \item high autocorrelation means that successive draws contain less
+      new information
+    \item it helps compare the efficiency of MCMC methods
     \end{itemize}
   \end{itemize}
 %\vspace{.5cm}
@@ -822,8 +1075,9 @@
 
 \begin{frame}
 
-\frametitle{Autocorrelation}
+\frametitle{Autocorrelation: one worked example}
 
+  \uured{Less correlated target: faster exploration}
   \vspace{-0.5\baselineskip}
   \includegraphics[width=4cm]{figs/Metrop1.pdf}
   \uncover<2->{\includegraphics[width=5cm]{figs/Metrop1trace.pdf}\\}
@@ -833,19 +1087,21 @@
 
 \begin{frame}
 
-\frametitle{Autocorrelation}
+\frametitle{Autocorrelation: comparison example 1}
 
+  \uured{Stronger target correlation, same proposal scale}
   \vspace{-0.5\baselineskip}
-  \includegraphics[width=4cm]{figs/Metrop2.pdf}
-  {\includegraphics[width=5cm]{figs/Metrop2trace.pdf}\\}
-  {\includegraphics[width=5cm]{figs/Metrop2acf.pdf}}
+  \includegraphics[width=3.7cm]{figs/Metrop2.pdf}
+  {\includegraphics[width=4.7cm]{figs/Metrop2trace.pdf}\\}
+  {\includegraphics[width=4.7cm]{figs/Metrop2acf.pdf}}
 
 \end{frame}
 
 \begin{frame}
 
-\frametitle{Autocorrelation}
+\frametitle{Autocorrelation: comparison example 2}
 
+  \uured{Same strongly correlated target, larger proposals}
   \vspace{-0.5\baselineskip}
   \includegraphics[width=4cm]{figs/Metrop3.pdf}
   {\includegraphics[width=5cm]{figs/Metrop3trace.pdf}\\}
@@ -853,23 +1109,60 @@
 
 \end{frame}
 
+\begin{frame}{From autocorrelation to Monte Carlo error}
+
+  Consider one stationary chain with $X_s=f(\theta^{(s)})$ and
+  $\sigma_f^2=\operatorname{Var}(X_s)<\infty$. Write
+  $\bar X=S^{-1}\sum_{s=1}^S X_s$ and
+  $\rho_{f,k}=\operatorname{Corr}(X_s,X_{s+k})$.
+
+  \pause
+  \begin{align*}
+    \operatorname{Var}(\bar X)
+    &=\frac{1}{S^2}\sum_{s=1}^S\sum_{t=1}^S
+      \operatorname{Cov}(X_s,X_t)\\
+    &=\frac{\sigma_f^2}{S}
+      \left[1+2\sum_{k=1}^{S-1}
+        \left(1-\frac{k}{S}\right)\rho_{f,k}\right].
+  \end{align*}
+  Each pair contributes twice, and there are $S-k$ pairs at lag $k$.
+
+  \pause
+  For a long run with absolutely summable autocorrelations,
+  \[
+    \operatorname{Var}(\bar X)\approx\frac{\sigma_f^2\tau_f}{S},
+    \qquad \tau_f=1+2\sum_{k=1}^{\infty}\rho_{f,k}.
+  \]
+  \uncover<4->{\uured{Positive autocorrelations add uncertainty to the
+  average, increasing its Monte Carlo standard error.}}
+
+\end{frame}
+
 \begin{frame}
 
-\frametitle{Autocorrelation}
+\frametitle{Effective sample size and MCSE}
 
   \begin{itemize}
-  \item The autocorrleation can be used to estimate Monte Carlo error in case of MCMC
-  \item For expectation $\bar{\theta}$
-    \begin{equation*}
-      \Var[\bar{\theta}] = \frac{\sigma^2_\theta}{S_\text{eff}}
-    \end{equation*}
-    where $S_\text{eff}=S/\tau$, and $\tau$ is sum of autocorrelations
-    \begin{itemize}
-      \item<2-> $\tau$ describes how many dependent draws correspond to one independent draw
-      \item<3-> Here $S=NM$ (in BDA3 $N=nm$ and $n_\text{eff}=N/\tau$)
-      \item<4-> BDA3 focuses on $S_\text{eff}$ and not the Monte Carlo error directly
-%        new R-hat paper discusses more about MCSEs for different quantities
-    \end{itemize}
+  \item Suppose we estimate $\mu_f=\E[f(\theta)\mid y]$ using
+    \[
+      \widehat\mu_f=\frac{1}{S}\sum_{s=1}^S f(\theta^{(s)}).
+    \]
+  \pause
+  \item If the autocorrelation time for $f(\theta)$ is $\tau_f$, define
+    \[
+      S_{\mathrm{eff},f}=\frac{S}{\tau_f}.
+    \]
+  \pause
+  \item The Monte Carlo standard error is approximately
+    \[
+      \operatorname{MCSE}(\widehat\mu_f)
+      \approx \frac{\operatorname{sd}(f(\theta))}
+      {\sqrt{S_{\mathrm{eff},f}}}.
+    \]
+  \item<4-> Larger effective sample size means a more precise Monte Carlo
+    estimate; doubling ESS reduces MCSE by a factor of $\sqrt{2}$
+  \item<5-> In practice, MCSE should be small relative to the posterior
+    uncertainty and the precision needed for reporting
   \end{itemize}
 \end{frame}
 
@@ -878,19 +1171,22 @@
 \frametitle{Autocorrelation}
 
   \begin{itemize}
-  \item Estimation of the autocorrelation using several chains
+  \item For lag $k$, estimate the expected squared change within chains
     \begin{equation*}
-      \hat{\rho}_n=1-\frac{W - \frac{1}{M}\sum_{m=1}^M \hat{\rho}_{n,m}}{2\widehat{\var}^{+}}
+      \widehat V_k=\frac{1}{M(N-k)}
+      \sum_{m=1}^M\sum_{n=1}^{N-k}
+      \left(\theta_{n+k,m}-\theta_{n,m}\right)^2.
     \end{equation*}
-    where $\hat{\rho}_{n,m}$ is autocorrelation at lag $n$ for chain $m$
-%  \item<2-> This combines $\widehat{R}$ and autocorrelation estimates
-%    \begin{itemize}
-%    \item takes into account if the chains are not mixing (the chains have not converged)
-%    \end{itemize}
-  \item<2-> BDA3 has slightly different and less accurate equation. The
-    above equation is used in Stan 2.18+
-  \item<3-> Compared to a method which computes the autocorrelation
-    from a single chain, the multi-chain estimate has smaller variance
+  \pause
+  \item Estimate the lag-$k$ autocorrelation by
+    \begin{equation*}
+      \widehat\rho_k
+      =1-\frac{\widehat V_k}{2\widehat{\operatorname{var}}^{+}}.
+    \end{equation*}
+  \item<3-> Small squared changes imply high autocorrelation; large changes
+    imply lower autocorrelation
+  \item<4-> Using $\widehat{\operatorname{var}}^{+}$ incorporates information
+    from all chains and penalizes chains that have not mixed well
  \end{itemize}
 \end{frame}
 
@@ -898,52 +1194,53 @@
 
 \begin{frame}
 
-\frametitle{Estimating $\tau$}
+\frametitle{Integrated autocorrelation time}
 
   \begin{itemize}
-  \item Estimation of $\tau$
+  \item Let $\rho_k$ be the autocorrelation at lag $k$. The integrated
+    autocorrelation time is
     \begin{align*}
-      \tau = 1 + 2 \sum_{t=1}^\infty \hat{\rho}_t
+      \tau = 1 + 2 \sum_{k=1}^\infty \rho_k,
+      \qquad S_\text{eff}=\frac{S}{\tau}.
     \end{align*}
-    where $\hat{\rho}_t$ is empirical autocorrelation
+  \pause
+  \item $\tau$ measures how many correlated draws provide roughly the
+    same information as one independent draw
+  \pause
+  \item Estimated autocorrelations become noisy at long lags
     \begin{itemize}
-    \item<2-> empirical autocorrelation function is noisy %and thus
-%      estimate of $\tau$ is noisy
-    \item<2-> noise is larger for longer lags (less observations)
-    \item<3-> less noisy estimate is obtained by truncating
+    \item practical estimators truncate the sum at a finite lag $K$
     \begin{align*}
-      \hat{\tau} = 1 + 2 \sum_{t=1}^T \hat{\rho}_t
+      \hat{\tau} = 1 + 2 \sum_{k=1}^K \hat{\rho}_k
     \end{align*}
+    \item statistical software chooses the maximum lag $K$ adaptively
     \end{itemize}
-%    \item<4-> As $\tau$ is estimated from a finite number of draws,
-%      it's expectation is overoptimistic
-%      \begin{itemize}
-%      \item if $\hat{\tau}>MN/20$ then the estimate is unreliable
-%
-%      \end{itemize}
     \end{itemize}
 \end{frame}
 
-\begin{frame}
+\begin{frame}<0>[label=backup_geyer]
 
 \frametitle{Geyer's adaptive window estimator of $\tau$}
 
   \begin{itemize}
-  \item Truncation $T$ can be decided adaptively
+  \item The maximum lag $K$ can be chosen adaptively
     \begin{itemize}
-    \item for stationary, irreducible, recurrent Markov chain
-    \item let $\Gamma_m=\rho_{2m}+\rho_{2m+1}$, which is sum of two
-      consequent autocorrelations
-    \item $\Gamma_m$ is positive, decreasing and convex function of $m$
+    \item for a stationary, reversible Markov chain
+    \item let $\Gamma_m=\rho_{2m}+\rho_{2m+1}$ for $m=0,1,\ldots$
+      and $\rho_0=1$
+    \item $\Gamma_m$ is a positive, decreasing, and convex function of $m$
     \end{itemize}
-    \vspace{0.5\baselineskip}
   \item<2-> Initial positive sequence estimator (Geyer's IPSE)
       \begin{itemize}
-        \item Choose the largest $m$ so, that all values of the sequence
-        $\hat{\Gamma}_1, \ldots, \hat{\Gamma}_m$ are positive
+        \item Starting at $m=0$, retain consecutive positive estimated
+          pairs and stop before the first nonpositive pair
+        \item If $L$ is the last retained pair, the maximum lag is $K=2L+1$
       \end{itemize}
-  \vspace{0.5\baselineskip}
-      \includegraphics[width=6cm]{figs/Metrop1acf.pdf}
+    \uncover<2->{\[
+      \widehat\tau=-1+2\sum_{m=0}^L\widehat\Gamma_m
+      =1+2\sum_{k=1}^K\widehat\rho_k.
+    \]}
+      \includegraphics[width=4.8cm]{figs/Metrop1acf.pdf}
   \end{itemize}
 \end{frame}
 
@@ -955,25 +1252,36 @@
 
 \begin{frame}
 
- \frametitle{Effective sample size, $S_\text{eff}$}
+ \frametitle{Fast ACF decay and larger ESS}
 
-   Effective sample size $\ESS = S_\text{eff} \approx S/\hat{\tau}$\\
+   \only<1>{
+   \begin{itemize}
+   \item All examples use $S=4500$ retained draws after warm-up
+   \item Pair discussion: rank the three chains by expected ESS using their
+     ACF plots
+   \item Which chain should give the smallest MCSE if their posterior
+     standard deviations are similar?
+   \end{itemize}}
+   \only<2->{\uured{Fastest decay:}
+   $\widehat\tau\approx24 \Rightarrow \widehat S_\text{eff}\approx188$
+   for $S=4500$ retained draws\\}
    \uncover<2->{
   \makebox[10cm][t]{
 %    \hspace{-.7cm}
      \begin{minipage}{10cm}
-     \includegraphics[width=4.5cm]{figs/Metrop1trace.pdf}
-     \includegraphics[width=4.5cm]{figs/Metrop1acf.pdf}\\
-     \includegraphics[width=4.5cm]{figs/Metrop1mcerr.pdf}
+     \includegraphics[width=4.2cm]{figs/Metrop1trace.pdf}
+     \includegraphics[width=4.2cm]{figs/Metrop1acf.pdf}\\
+     \includegraphics[width=4.2cm]{figs/Metrop1mcerr.pdf}
      \hspace{0cm}
      \begin{minipage}[t][4cm][t]{4.5cm}
        \vspace{-2.5cm}
+       {\small ESS for one scalar parameter:\par}
        \begin{align*}
-         \hat{\tau} & = 1 + 2 \sum_{t=1}^T \hat{\rho}_t\\
+         \widehat{\tau} & = 1 + 2 \sum_{k=1}^K \widehat{\rho}_k\\
                  & \approx 24
        \end{align*}
                \begin{align*}
-         \hat{S}_\text{eff} & = \frac{4500}{24} \approx  188
+         \widehat{S}_\text{eff} & = \frac{4500}{24} \approx 188
        \end{align*}
      \end{minipage}
    \end{minipage}
@@ -984,24 +1292,26 @@
 
 \begin{frame}
 
- \frametitle{Effective sample size, $S_\text{eff}$}
+ \frametitle{Slow ACF decay and smaller ESS}
 
-   Effective sample size $\ESS = S_\text{eff} \approx S/\hat{\tau}$\\
+   \uured{Slowest ACF decay:} $\widehat\tau\approx104$ and
+   $\widehat S_\text{eff}\approx43$ from $S=4500$ retained draws\\
   \makebox[10cm][t]{
 %    \hspace{-.7cm}
      \begin{minipage}{10cm}
-     \includegraphics[width=4.5cm]{figs/Metrop2trace.pdf}
-     \includegraphics[width=4.5cm]{figs/Metrop2acf.pdf}\\
-     \includegraphics[width=4.5cm]{figs/Metrop2mcerr.pdf}
+     \includegraphics[width=4.2cm]{figs/Metrop2trace.pdf}
+     \includegraphics[width=4.2cm]{figs/Metrop2acf.pdf}\\
+     \includegraphics[width=4.2cm]{figs/Metrop2mcerr.pdf}
      \hspace{0cm}
      \begin{minipage}[t][4cm][t]{4cm}
        \vspace{-2.5cm}
+       {\small ESS for one scalar parameter:\par}
        \begin{align*}
-         \hat{\tau} & = 1 + 2 \sum_{t=1}^T \hat{\rho}_t\\
+         \widehat{\tau} & = 1 + 2 \sum_{k=1}^K \widehat{\rho}_k\\
                  & \approx 104
        \end{align*}
                \begin{align*}
-         \hat{S}_\text{eff} & = \frac{4500}{104} \approx  43
+         \widehat{S}_\text{eff} & = \frac{4500}{104} \approx 43
        \end{align*}
      \end{minipage}
    \end{minipage}
@@ -1012,24 +1322,27 @@
 
 \begin{frame}
 
-\frametitle{Effective sample size, $S_\text{eff}$}
+\frametitle{Comparing autocorrelation and ESS}
 
-   Effective sample size $\ESS = S_\text{eff} \approx S/\hat{\tau}$\\
+   \uured{Across all three examples: slower ACF decay
+   $\Rightarrow$ larger $\widehat\tau$
+   $\Rightarrow$ smaller $\widehat S_\text{eff}$.}\\
   \makebox[10cm][t]{
 %    \hspace{-.7cm}
      \begin{minipage}{10cm}
-     \includegraphics[width=4.5cm]{figs/Metrop3trace.pdf}
-     \includegraphics[width=4.5cm]{figs/Metrop3acf.pdf}\\
-     \includegraphics[width=4.5cm]{figs/Metrop3mcerr.pdf}
+     \includegraphics[width=4.2cm]{figs/Metrop3trace.pdf}
+     \includegraphics[width=4.2cm]{figs/Metrop3acf.pdf}\\
+     \includegraphics[width=4.2cm]{figs/Metrop3mcerr.pdf}
      \hspace{0cm}
      \begin{minipage}[t][4cm][t]{4cm}
        \vspace{-2.5cm}
+       {\small ESS for one scalar parameter:\par}
        \begin{align*}
-         \hat{\tau} & = 1 + 2 \sum_{t=1}^T \hat{\rho}_t\\
+         \widehat{\tau} & = 1 + 2 \sum_{k=1}^K \widehat{\rho}_k\\
                  & \approx 63
        \end{align*}
         \begin{align*}
-         \hat{S}_\text{eff} & = \frac{4500}{63} \approx  71
+         \widehat{S}_\text{eff} & = \frac{4500}{63} \approx 71
        \end{align*}
      \end{minipage}
    \end{minipage}
@@ -1042,35 +1355,98 @@
 
 \begin{frame}
 
-\frametitle{Problematic distributions}
+\frametitle{Difficult geometry: changing scale and direction}
 
   \begin{itemize}
-  \item<1-> Nonlinear dependencies
+  \item \uured{Nonlinear dependence}: posterior mass follows a curved,
+    narrow region
     \begin{itemize}
-    \item optimal proposal depends on location
+    \item a fixed proposal shape and scale cannot follow the curve, so
+      many proposals fall outside the high-density region
+    \item symptoms: slow movement, high autocorrelation, and low ESS
     \end{itemize}
-  \item<2-> Funnels
+  \pause
+  \item \uured{Funnel geometry}: the appropriate step size changes across
+    the posterior
     \begin{itemize}
-    \item optimal proposal depends on location
+    \item a step size suitable for the wide part is too large for the neck
+    \item a step size suitable for the neck moves very slowly in the wide part
+    \item symptoms: chains explore different scales or rarely enter the neck
     \end{itemize}
-    \begin{center}
-      \href{https://chi-feng.github.io/mcmc-demo/app.html?algorithm=RandomWalkMH&target=funnel}{demo}
-    \end{center}
-  \item<3-> Multimodal
-    \begin{itemize}
-    \item difficult to move from one mode to another
-    \end{itemize}
-        \begin{center}
-      \href{https://chi-feng.github.io/mcmc-demo/app.html?algorithm=RandomWalkMH&target=multimodal}{demo}
-    \end{center}
-  \item<4-> Long-tailed with non-finite variance and mean
-    \begin{itemize}
-    \item central limit theorem for expectations does not hold
-    \end{itemize}
-
   \end{itemize}
 
+  \vfill
+  \centering
+  \href{https://chi-feng.github.io/mcmc-demo/app.html?algorithm=RandomWalkMH&target=banana}{Banana demo}
+  \qquad
+  \href{https://chi-feng.github.io/mcmc-demo/app.html?algorithm=RandomWalkMH&target=funnel}{Funnel demo}
+
 \end{frame}
+
+\begin{frame}
+
+\frametitle{Difficult geometry: hidden regions}
+
+  \begin{itemize}
+  \item \uured{Multimodality}: chains can remain in different modes
+    \begin{itemize}
+    \item chain means disagree and $\widehat R$ can remain above 1
+    \item if every chain starts in the same mode, diagnostics may fail to
+      reveal the missing mode
+    \end{itemize}
+  \pause
+  \item \uured{Non-identifiability}: many parameter combinations fit the
+    data almost equally well
+    \begin{itemize}
+    \item with weak prior information, the posterior can contain a long ridge
+    \item symptoms: drifting traces, strong dependence, and low ESS
+    \end{itemize}
+  \pause
+  \item \uured{Heavy tails}: occasional extreme draws dominate summaries
+    \begin{itemize}
+    \item means or variances may not exist, so the usual CLT and MCSE may
+      not apply
+    \end{itemize}
+  \end{itemize}
+
+  \vfill
+  \centering
+  \href{https://chi-feng.github.io/mcmc-demo/app.html?algorithm=RandomWalkMH&target=multimodal}{Multimodal demo}
+  \qquad
+  \href{https://chi-feng.github.io/mcmc-demo/app.html?algorithm=RandomWalkMH&target=donut}{Ridge demo}
+
+\end{frame}
+
+\begin{frame}
+
+\frametitle{MCMC diagnostic workflow}
+
+  \begin{enumerate}
+  \item Run several chains from different, reasonably dispersed starting
+    values
+  \item Remove warm-up draws before computing posterior summaries
+  \item Inspect trace plots: chains should explore the same regions without
+    persistent trends
+  \item Check that $\widehat R<1.01$ for all reported quantities
+  \item Check ESS and MCSE for the posterior summaries that matter
+  \item If diagnostics are poor, investigate the proposal, parameterization,
+    model, and posterior geometry
+  \end{enumerate}
+
+  \pause
+  \vspace{0.5\baselineskip}
+  {\color{uured}Running longer helps only if the chain is exploring the
+  relevant posterior regions.}
+
+\end{frame}
+
+\section{Additional material}
+\frame{\sectionpage}
+
+\againframe<1->{backup_gibbs_software}
+\againframe<1->{backup_rhat_wb}
+\againframe<1->{backup_rhat_vplus}
+\againframe<1->{backup_geyer}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

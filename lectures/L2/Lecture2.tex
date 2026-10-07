@@ -52,6 +52,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
+
 \section{Posterior distributions}
 %\frame{\sectionpage}
 
@@ -147,14 +148,35 @@
     \begin{align*}
       p(\theta|n,M)=p(\theta|M)=1,\, \text{when}\,\, 0\leq\theta\leq 1
     \end{align*}
-  \item<4-> Then
-    \begin{align*}
-      p(\theta|y,n,M)&=\frac{p(y|\theta,n,M)}{p(y|n,M)}
-      =\frac{\binom{n}{y} \theta^y(1-\theta)^{n-y}}{\int_0^1
-        \binom{n}{y} \theta^y(1-\theta)^{n-y} d\theta} \\
-        &=\frac{1}{Z}\theta^y(1-\theta)^{n-y} \\
-        \propto \theta^y(1-\theta)^{n-y}
-    \end{align*}
+  \item<4-> \uured{Discussion question}: Which parts of this expression change
+    when $\theta$ changes, and which parts are fixed after observing $y$ and $n$?
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Binomial: unknown $\theta$}
+  \framesubtitle{Posterior derivation with a uniform prior}
+  \small
+
+  \begin{align*}
+    \uncover<1->{p(\theta|y,n,M)
+      &= \frac{p(y|\theta,n,M)p(\theta|M)}{p(y|n,M)}=\frac{p(y|\theta,n,M)}{p(y|n,M)}}\\[-0.5ex]
+    \uncover<2->{&= \frac{\binom{n}{y} \theta^y(1-\theta)^{n-y}}
+      {p(y|n,M)}}\\
+    \uncover<3->{&= \frac{\binom{n}{y} \theta^y(1-\theta)^{n-y}}
+      {\int_0^1 \binom{n}{y} \theta^y(1-\theta)^{n-y} d\theta}}\\[-0.5ex]
+    \uncover<4->{&= \frac{1}{Z}\theta^y(1-\theta)^{n-y}}\\[-0.5ex]
+    \uncover<5->{&\propto \theta^y(1-\theta)^{n-y}}
+  \end{align*}
+
+  \begin{itemize}
+  \setlength{\itemsep}{0mm}
+  \item<1-> Uniform prior: $p(\theta|M)=1$ on $0\leq\theta\leq 1$
+  \item<1-> The prior appears in the numerator and denominator
+  \item<1-> Since it is $1$, it drops out
+  \item<4-> $Z$ is constant as a function of $\theta$
+  \item<5-> For inference, keep the part that depends on $\theta$
   \end{itemize}
 
 \end{frame}
@@ -165,15 +187,22 @@
   \begin{itemize}
   \item Normalization term $Z$ (constant given $y$)
     \begin{equation*}
-      Z= \int_0^1 \theta^y(1-\theta)^{n-y} d\theta = \frac{\Gamma(y+1)\Gamma(n-y+1)}{\Gamma(n+2)}
+      Z= \int_0^1 \theta^y(1-\theta)^{n-y} d\theta
+      = B(y+1,n-y+1)
     \end{equation*}
   \item Normalisation term has \emph{Beta} function form
+    \begin{equation*}
+      B(a,b)=\int_0^1 t^{a-1}(1-t)^{b-1}dt
+      = \frac{\Gamma(a)\Gamma(b)}{\Gamma(a+b)}
+    \end{equation*}
     \begin{itemize}
-    \item when integrated over $(0,1)$
-      the result can presented with Gamma functions
-    \item with integers  $\Gamma(n)=(n-1)!$
-    \item for large integers even this is challenging and usually
-      $\log \Gamma(\cdot)$ is computed instead of $\Gamma(\cdot)$
+    \item Where does $B(a,b)=\frac{\Gamma(a)\Gamma(b)}{\Gamma(a+b)}$
+      come from?
+    \item with integers $\Gamma(n)=(n-1)!$\\
+    (for large integers even this is challenging and usually
+      $\log \Gamma(\cdot)$ is computed instead of $\Gamma(\cdot)$)
+    \item \uured{Study recommendation}: ask an LLM to step through the standard-integral
+      derivation, or work it through yourself using change of variables
     \end{itemize}
   \end{itemize}
 
@@ -220,21 +249,10 @@
     \item prctile {\tt beta.ppf}
     \item random number {\tt beta.rvs}
     \end{itemize}
+  \item CDFs and quantiles are numerically nontrivial, so use library functions
+  \item \uured{Study recommendation}: use an LLM to dig deeper into why CDFs and
+    quantiles often require numerical methods
   \end{itemize}
-
-\end{frame}
-
-\begin{frame}
-  \frametitle{Binomial: computation*}
-
-  \begin{itemize}
-  \item Beta CDF not trivial to compute
-  \item For example, {\tt pbeta} in R uses a continued fraction with
-    weighting factors and asymptotic expansion
-  \item Laplace developed normal approximation (Laplace
-    approximation), because he didn't know how to compute Beta CDF
-  \end{itemize}
-  % Lagandre, Gamma function
 
 \end{frame}
 % Beta distribution named by C. Gini 1911
@@ -260,8 +278,12 @@
 
 \begin{frame}
   \frametitle{Predictive distribution -- Effect of integration}
+  \small
 
   \begin{itemize}
+  \setlength{\itemsep}{0mm}
+  \item \uured{Discussion}: Why integrate over $\theta$ instead of plug in one estimate?
+    \pause
   \item Predictive distribution for new $\tilde{y}$ (discrete)
     \begin{align*}
       \uncover<2->{p(\tilde{y}=1|y,n,M)} & \uncover<2->{= \int_0^1} p(\tilde{y}=1|\theta,y,n,M) \uncover<2->{p(\theta|y,n,M)d\theta}\\
@@ -278,10 +300,23 @@
       p(\tilde{y}=1|y=0,n,M) &= \frac{1}{n+2} \\
       p(\tilde{y}=1|y=n,n,M) &= \frac{n+1}{n+2}
     \end{align*}
-    \vskip -2mm
+  \end{itemize}
+\end{frame}
 
-  \item<6-> cf. maximum likelihood
+\begin{frame}
+  \frametitle{Posterior mean vs maximum likelihood}
 
+  \begin{itemize}
+  \item Maximum likelihood estimate
+    \[
+      \hat\theta_{\text{MLE}}=\frac{y}{n}
+    \]
+  \item Posterior mean with uniform prior
+    \[
+      \E[\theta|y]=\frac{y+1}{n+2}
+    \]
+  \item \uured{Discussion question}: Why can the posterior mean be a better
+    estimate than the maximum likelihood estimate when $n$ is small?
   \end{itemize}
 \end{frame}
 
@@ -350,22 +385,39 @@
 
 \begin{frame}
 
-  \frametitle{Conjugate prior}
+  \frametitle{Conjugate priors}
 
   \begin{itemize}
-  \item Prior and posterior have the same form
+  \item A prior is \emph{conjugate} for a likelihood if the posterior
+    is in the same distribution family as the prior
+    \[
+      \text{prior family} + \text{likelihood}
+      \quad \Rightarrow \quad
+      \text{same posterior family}
+    \]
+
+  \pause
+  \item Example:
+    \[
+      \begin{aligned}
+      \theta &\sim \mathrm{Beta}(\alpha,\beta)\\
+      y|\theta &\sim \mathrm{Binomial}(n,\theta)\\
+      \theta|y &\sim \mathrm{Beta}(\alpha+y,\beta+n-y)
+      \end{aligned}
+    \]
+
+  \pause
+  \item Why useful?
     \begin{itemize}
-    \item only for exponential family distributions (plus for
-      some irregular cases)
+    \item gives closed-form posteriors
+    \item helps us understand Bayesian updating
+    \item provides checks for simulation-based methods
+    \item can sometimes allow analytic marginalization
     \end{itemize}
-    \pause
-  \item Used to be important for computational reasons
-  \item Still used for special models to allow partial analytic
-    marginalization (Ch 3)
-  \begin{itemize}
-  \item with dynamic Hamiltonian Monte Carlo used e.g. in Stan no any
-      computational benefit
-  \end{itemize}
+
+  \pause
+  \item But conjugacy is not required: later we use simulation and Stan
+    when closed forms are unavailable
   \end{itemize}
 
 \end{frame}
@@ -392,9 +444,11 @@
       &\uncover<3->{ = \text{Beta}(\theta|\alpha+y,\beta+n-y)}
     \end{align*}
     \vskip -2mm
-  \item<4-> $\alpha$ and $\beta$ can considered to be number of prior observations
-  \item<4-> Uniform prior when $\alpha=1$ and $\beta=1$
-  \end{itemize}
+    \item<4-> \uured{Discussion question}: What do $\alpha$ and $\beta$ behave like
+      in terms of prior successes/failures?
+		  \item<5-> $\alpha$ and $\beta$ can be considered to be number of prior observations
+		  \item<6-> Uniform prior when $\alpha=1$ and $\beta=1$
+	  \end{itemize}
 \end{frame}
 
 
@@ -437,6 +491,8 @@
     \begin{itemize}
     \item combination prior and likelihood information
     \item when $n\rightarrow\infty$, $\text{E}[\theta|y]\rightarrow y/n$
+    \item \uured{Discussion question}: Why can the posterior mean be a better
+      estimate than the maximum likelihood estimate $y/n$ when $n$ is small?
     \end{itemize}
     \pause
   \item  Posterior variance
@@ -453,38 +509,64 @@
 \end{frame}
 
 \begin{frame}
-\frametitle{Noninformative prior}
+\frametitle{Weakly informative and ``noninformative'' priors}
 
-% TODO: Add Jeffreys prior here
 \begin{itemize}
-  \item Vague, flat, diffuse, or noninformative
+  \item Goal: use a prior that does not dominate the likelihood
+  \item Common terms: vague, flat, diffuse, weakly informative
+  \pause
+  \item But ``flat'' does not always mean ``noninformative''
   \begin{itemize}
-    \item try to ``to let the data speak for themselves''
-    \item flat is not non-informative
-    \item flat can be stupid
-    \item making prior flat somewhere can make it non-flat somewhere
-      else
+    \item flat in $\theta$ is not flat in $\log(\theta)$
+    \item flat in $\theta$ is not flat in $\mathrm{logit}(\theta)$
   \end{itemize}
+  \pause
+  \item Prior choice should be checked on the scale that matters
+  \item Prefer weakly informative priors when possible:
+    rule out unreasonable values without forcing a narrow answer
 \end{itemize}
 
 \end{frame}
 
 \begin{frame}
-\frametitle{Proper and improper prior}
+
+  \frametitle{Example of informative prior}
+
+  \begin{itemize}
+  \item The percentage of girl births is remarkably stable at about
+    48.8\% girls, rarely varying by more than 0.5\% from this rate
+  \only<2-3>{\item There was a study on the percentage of girl births among
+    parents in attractiveness categories 1--5 (assessed by
+    interviewers in a face-to-face survey)}
+  \end{itemize}
+  \begin{center}
+  \only<3>{\includegraphics[width=8cm]{figs/sexratio_bayes_1.pdf}}
+  \only<4>{\includegraphics[width=8cm]{figs/sexratio_bayes_2.pdf}}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Proper and improper priors}
 
 \begin{itemize}
-  \item Proper prior has $\int p(\theta) = 1$
-  \item Improper prior density doesn't have a finite integral
-  \begin{itemize}
-    \item the posterior can still sometimes be proper
-  \end{itemize}
+  \item A proper prior integrates to one:
+  \[
+    \int p(\theta)\,d\theta = 1
+  \]
+  \item An improper prior does not have a finite integral:
+  \[
+    \int p(\theta)\,d\theta = \infty
+  \]
   \pause
-  \item Example: Binomial model
-  \begin{itemize}
-    \item Beta(0,0) prior is improper
-    \item If $y\neq 0$ and $y \neq n$, the posterior is proper
-  \end{itemize}
-  \item \emph{Be careful with improper priors!}
+  \item An improper prior can sometimes still give a proper posterior
+  \item Example: binomial model with
+    $p(\theta)\propto\theta^{-1}(1-\theta)^{-1}$
+  \[
+    \theta|y,n \sim \mathrm{Beta}(y,n-y)
+  \]
+  \item This posterior is proper only if $0<y<n$
+  \pause
+  \item Always check that the posterior is proper
 \end{itemize}
 
 \end{frame}
@@ -524,23 +606,6 @@
     \item Stan team prior choice recommendations \url{https://github.com/stan-dev/stan/wiki/Prior-Choice-Recommendations}
   \end{itemize}
 
-\end{frame}
-
-\begin{frame}
-
-  \frametitle{Example of informative prior}
-
-  \begin{itemize}
-  \item The percentage of girl births is remarkably stable at about
-    48.8\% girls, rarely varying by more than 0.5\% from this rate
-  \only<2-3>{\item There was a study on the percentage of girl births among
-    parents in attractiveness categories 1--5 (assessed by
-    interviewers in a face-to-face survey)}
-  \end{itemize}
-  \begin{center}
-  \only<3>{\includegraphics[width=8cm]{figs/sexratio_bayes_1.pdf}}
-  \only<4>{\includegraphics[width=8cm]{figs/sexratio_bayes_2.pdf}}
-  \end{center}
 \end{frame}
 
 \begin{frame}
@@ -593,24 +658,26 @@
   \item The function $t(y)$ of data $y$ is said to be a {\em sufficient statistic} for $\theta$ if the likelihood for $\theta$ depends on the
 data $y$ only through the value of $t(y)$.
   \item Example: Binomial model (with known $n$, and $y_i \in \{0,1\}$)
+  \item<2-> \uured{Discussion question}: What do you think is the sufficient
+    statistic for $\theta$ in this model?
   \begin{align*}
-      p(\theta|y) & \propto p(\theta) \prod^n p(y_i | \theta) \\
-      &\uncover<2->{ \propto \theta^{\alpha-1} (1-\theta)^{\beta-1} \prod^n\theta^y_i (1-\theta)^{1-y_i}} \\
-      &\uncover<3->{ \propto \theta^{\alpha-1} (1-\theta)^{\beta-1} \theta^{\sum y_i} (1-\theta)^{n - \sum y_i}} \\
-      &\uncover<4->{ \propto
+      \uncover<3->{p(\theta|y)} &\uncover<3->{ \propto p(\theta) \prod^n p(y_i | \theta)} \\
+      &\uncover<4->{ \propto \theta^{\alpha-1} (1-\theta)^{\beta-1} \prod^n\theta^y_i (1-\theta)^{1-y_i}} \\
+      &\uncover<5->{ \propto \theta^{\alpha-1} (1-\theta)^{\beta-1} \theta^{\sum y_i} (1-\theta)^{n - \sum y_i}} \\
+      &\uncover<6->{ \propto
         \theta^{\sum y_i+\alpha-1} (1-\theta)^{n-\sum y_i+\beta-1}}\\
-      \uncover<5->{\text{after normalization}} &\\
-      \uncover<5->{p(\theta|y,n,M)}
-      &\uncover<5->{ = \text{Beta}(\theta|\alpha+\sum^n y_i,\beta+n-\sum^n y_i)}
+      \uncover<7->{\text{after normalization}} &\\
+      \uncover<7->{p(\theta|y,n,M)}
+      &\uncover<7->{ = \text{Beta}(\theta|\alpha+\sum^n y_i,\beta+n-\sum^n y_i)}
   \end{align*}
-  \uncover<6->{
+  \uncover<8->{
   Hence, $\sum y_i$ is a sufficient statistic for $\theta$ \color{uured}{in this model}}.
 \end{itemize}
 
 \end{frame}
 
 %%% demos
-\section{Demo}
+% \section{Demo}
 %\frame{\sectionpage}
 
 \begin{frame}
@@ -622,23 +689,23 @@ data $y$ only through the value of $t(y)$.
 
 \end{frame}
 
-\begin{frame}
-\frametitle{Algae}
-\framesubtitle{Exercise}
-
-Algae status is monitored in 274 sites at Finnish lakes and rivers.
-The observations for the 2008 algae status at each site are presented
-in file \emph{algae.mat} ('0': no algae, '1': algae present).
-% In year 2008 blue-green algae was observed at 44 sites.
-Let $\pi$ be the probability of a monitoring site having detectable
-blue-green algae levels.
-
-\begin{itemize}
-\item Use a binomial model for observations and a \emph{beta}(2,10) prior.
-\item What can you say about the value of the unknown $\pi$?
-\item Experiment how the result changes if you change the prior.
-\end{itemize}
-\end{frame}
+% \begin{frame}
+% \frametitle{Algae}
+% \framesubtitle{Exercise}
+%
+% Algae status is monitored in 274 sites at Finnish lakes and rivers.
+% The observations for the 2008 algae status at each site are presented
+% in file \emph{algae.mat} ('0': no algae, '1': algae present).
+% % In year 2008 blue-green algae was observed at 44 sites.
+% Let $\pi$ be the probability of a monitoring site having detectable
+% blue-green algae levels.
+%
+% \begin{itemize}
+% \item Use a binomial model for observations and a \emph{beta}(2,10) prior.
+% \item What can you say about the value of the unknown $\pi$?
+% \item Experiment how the result changes if you change the prior.
+% \end{itemize}
+% \end{frame}
 
 \section{The Normal model}
 %\frame{\sectionpage}
@@ -664,11 +731,24 @@ blue-green algae levels.
 
 \begin{frame}
 
-  \frametitle{Reasons to use Normal distribution}
+  \frametitle{Why use the Normal distribution?}
 
   \begin{itemize}
-  \item Normal distribution often justified based on central limit theorem
-  \item More often used due to the computational convenience or tradition
+  \item Many measurements are approximately continuous and symmetric
+  \item Sums and averages are often approximately Normal
+  \begin{itemize}
+    \item this is the central limit theorem intuition
+  \end{itemize}
+  \pause
+  \item Normal models are mathematically and computationally convenient
+  \item Convenience is not a model check
+  \pause
+  \item Always ask:
+  \begin{itemize}
+    \item Is the outcome continuous?
+    \item Is the distribution roughly symmetric?
+    \item Are extreme values reasonably described by Normal tails?
+  \end{itemize}
   \end{itemize}
 
 \end{frame}
@@ -677,19 +757,26 @@ blue-green algae levels.
 
 \begin{frame}
 
-  \frametitle{Central limit theorem (recap)}
+  \frametitle{Central limit theorem: useful but limited}
 
   \begin{itemize}
-  \item De Moivre, Laplace, Gauss, Chebysev, Liapounov, Markov, et al.
-  \item Given certain conditions, sums (and means) of random variables
-    approach Gaussian distribution as $n \rightarrow \infty$
-  \item Problems
-    \begin{itemize}
-    \item does not hold for all distributions, e.g., Cauchy
-    \item may require large $n$,\\ e.g.
-      Binomial, when $\theta$ close to $0$ or $1$
-    %\item does not hold if one the variables has much larger scale
-    \end{itemize}
+  \item Under certain conditions, sums and averages of many random variables
+    become approximately Normal
+  \[
+    \bar{y} \approx \N\left(\mu,\frac{\sigma^2}{n}\right)
+  \]
+  \pause
+  \item This often justifies Normal approximations for averages and estimates
+  \pause
+  \item The central limit theorem has limits:
+  \begin{itemize}
+    \item it does not apply to all distributions, for example Cauchy
+    \item the approximation may be poor for small $n$
+    \item it may be poor for binomial data when $\theta$ is close to 0 or 1
+  \end{itemize}
+  \pause
+  \item \uured{Discussion question}: Are we modeling the raw data, or an
+    average/estimate?
   \end{itemize}
 
 \end{frame}
@@ -753,6 +840,8 @@ blue-green algae levels.
   \only<2>{\includegraphics[width=8cm]{figs/pguessprior.pdf}}
   \only<3>{\includegraphics[width=8cm]{figs/ppost.pdf}}
 
+  Blue: data point(s), Red: Prior, Purple: Posterior
+
 \end{frame}
 
 \begin{frame}
@@ -778,27 +867,91 @@ blue-green algae levels.
 \frametitle{Normal distribution - conjugate prior for $\theta$}
 \framesubtitle{Several observations (iid)}
 
+\begin{itemize}
+  \item Assume
+  \[
+    y_i|\theta \sim \N(\theta,\sigma^2),
+    \qquad
+    \theta \sim \N(\mu_0,\tau_0^2),
+  \]
+  where $\sigma^2$ is known
+  \pause
+  \item The posterior is also Normal:
+  \[
+    \theta|y \sim \N(\mu_n,\tau_n^2)
+  \]
+  \pause
+  \item The posterior mean is a weighted average:
+  \[
+    \mu_n =
+    \frac{
+      \frac{1}{\tau_0^2}\mu_0 + \frac{n}{\sigma^2}\bar{y}
+    }{
+      \frac{1}{\tau_0^2} + \frac{n}{\sigma^2}
+    }
+  \]
+  \pause
+  \item \uured{Prior mean and data mean are weighted by precision}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Normal distribution - posterior uncertainty}
+\framesubtitle{Several observations (iid)}
+
+\begin{itemize}
+  \item The posterior precision is
+  \[
+    \frac{1}{\tau_n^2}
+    =
+    \frac{1}{\tau_0^2}
+    +
+    \frac{n}{\sigma^2}
+  \]
+  \pause
+  \item Information adds:
+  \[
+    \text{posterior precision}
+    =
+    \text{prior precision}
+    +
+    \text{data precision}
+  \]
+  \pause
+  \item Interpretation:
   \begin{itemize}
-  \item Several observations $y=(y_1,\ldots,y_n)$
-    \begin{align*}
-      p(\theta|y) = \N(\theta|\mu_n,\tau_n^2)
-    \end{align*}
-    \vskip -6mm
-    \begin{align*}
-      \text{where} \quad
-      \mu_n=\frac{\frac{1}{\tau_0^2}\mu_0+\frac{n}{\sigma^2}\bar{y}}{\frac{1}{\tau_0^2}+\frac{n}{\sigma^2}} \quad
-      \text{and} \quad \frac{1}{\tau_n^2} = \frac{1}{\tau_0^2}+\frac{n}{\sigma^2}
-    \end{align*}
-  \item If $\tau_0^2=\sigma^2$, prior corresponds to one virtual observation with value $\mu_0$
-    \pause
-    \item If $\tau_0\rightarrow\infty$ when $n$ fixed\\
-      or if $n\rightarrow\infty$ when $\tau_0$ fixed
-      \begin{equation*}
-        p(\theta|y) \approx \N(\theta|\bar{y},\sigma^2/n)
-      \end{equation*}
-      \pause
-      \item Find the {\color{uured}sufficient statistic} for $\theta$!
+    \item smaller $\tau_0^2$ means a stronger prior
+    \item smaller $\sigma^2$ means more informative observations
+    \item larger $n$ means more information from data
   \end{itemize}
+  \pause
+  \item \uured{Discussion question}: What is the sufficient statistic for
+    $\theta$ here?
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Normal distribution - limiting cases}
+\framesubtitle{Several observations (iid)}
+
+\begin{itemize}
+  \item If $\tau_0^2=\sigma^2$, the prior has the same weight as one observation:
+  \[
+    \mu_n = \frac{\mu_0+n\bar{y}}{1+n}
+  \]
+  \pause
+  \item If $\tau_0^2\rightarrow\infty$, the prior becomes very weak:
+  \[
+    \theta|y \approx \N\left(\bar{y},\frac{\sigma^2}{n}\right)
+  \]
+  \pause
+  \item If $n\rightarrow\infty$, the data dominate the prior:
+  \[
+    \theta|y \approx \N\left(\bar{y},\frac{\sigma^2}{n}\right)
+  \]
+\end{itemize}
 
 \end{frame}
 
@@ -825,9 +978,12 @@ blue-green algae levels.
     \item posterior variance $\tau_1^2$
   \end{enumerate}
   \pause
-  \item {\color{uured}Aleatoric} and {\color{uured}epistemic} uncertainty?
+  \item \uured{Discussion question}: Where do aleatoric and epistemic uncertainty
+    appear in $\sigma^2+\tau_1^2$?
   \end{itemize}
 \end{frame}
+
+\section{Poisson Model}
 
 \begin{frame}
   \frametitle{Poisson model}
@@ -839,10 +995,61 @@ blue-green algae levels.
   \[
   E(X) = V(X) = \lambda
   \]
+  \item \uured{Discussion}: What would make this assumption questionable
+    for observed count data?
   \pause
-  \item The gamma distribution is a conjugate prior - what is the posterior?
+  \item The gamma distribution is a conjugate prior
   \pause
-  \item Today: Mostly the negative binomial is used for count data
+  \item \uured{Today:} Mostly the negative binomial is used for count data
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Poisson-Gamma model}
+
+  \begin{itemize}
+  \item Observations $y=(y_1,\ldots,y_n)$
+    \begin{align*}
+      y_i|\lambda &\sim \Poisson(\lambda),\\
+      \lambda &\sim \text{Gamma}(\alpha,\beta)
+    \end{align*}
+    where $\beta$ is the rate parameter
+  \pause
+  \item Posterior
+    \begin{align*}
+      p(\lambda|y) &\propto
+      \lambda^{\sum_i y_i}\exp(-n\lambda)
+      \lambda^{\alpha-1}\exp(-\beta\lambda)\\
+      &\propto \lambda^{\alpha+\sum_i y_i-1}
+      \exp[-(\beta+n)\lambda]
+    \end{align*}
+  \item<3-> Thus
+    \[
+      \lambda|y \sim \text{Gamma}\left(\alpha+\sum_i y_i,\beta+n\right)
+    \]
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Poisson-Gamma posterior predictive}
+
+  \begin{itemize}
+  \item Integrate over uncertainty in $\lambda$
+    \[
+      p(\tilde{y}|y)=\int p(\tilde{y}|\lambda)p(\lambda|y)d\lambda
+    \]
+  \pause
+  \item If $\lambda|y\sim\text{Gamma}(\alpha_n,\beta_n)$, then
+    \[
+      \tilde{y}|y\sim\text{NegBinomial}
+      \left(\text{size}=\alpha_n,\text{prob}=\frac{\beta_n}{\beta_n+1}\right)
+    \]
+  \pause
+  \item Here
+    \[
+      \alpha_n=\alpha+\sum_i y_i,\qquad \beta_n=\beta+n
+    \]
+  \item This is the count-data analogue of posterior predictive averaging
   \end{itemize}
 \end{frame}
 

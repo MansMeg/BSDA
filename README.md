@@ -34,9 +34,12 @@ You can find the course schedule on TimeEdit [here](https://cloud.timeedit.net/u
 ## Grading
 The course is graded with U (Underkänd/Fail), G (Godkänd/Pass), VG (väl godkänd/Pass with distinction).
 
-To pass, you should pass all assignments and the mini-project *at the set deadline*. 
+To pass, you should pass all assignments, the oral exams connected to the assignments, and the mini-project *at the set deadline*. 
 
-On each assignment, if everything is correct (>90% of points), a VG point will be awarded. Similarly on the mini-project, if it is considered to be very good, 2 VG points can be awarded. A total of 7 or more VG points is needed to get VG on the course. 
+On each assignment, if everything is correct (>90% of points), a VG point will be awarded. To receive the VG point for an assignment, you also need to pass the oral exam for that assignment. Similarly on the mini-project, if it is considered to be very good, 2 VG points can be awarded. A total of 7 or more VG points is needed to get VG on the course. 
+
+### Oral exams
+There will be oral exams connected to the assignments. Each oral exam covers a set of assignments, and for each covered assignment you will answer one randomly drawn oral question. See the [oral exam document](https://github.com/MansMeg/BSDA/blob/main/oral_exam/oral_exam_questions.pdf) for detailed instructions and the question list.
 
 ### Reassessing grades
 Grades are not subject to appeal. However, a grading decision must be reassessed if it is clearly incorrect. Grades can never be lowered. If students want grades to be reassessed, they should contact the course administration who will distribute a form for reassessment the students have to fill out. 
@@ -50,7 +53,7 @@ There are two follow up deadlines (or follow-up corrections) during the course. 
 The project can also be turned in a second time a month after the end of the course. Then the student(s) need to submit both a project report, a PDF with presentation slides and a link to a video presentation of the mini-project.
 *Projects submitted in after the first deadline cannot get VG*.
 
-In the case not anyone can attend the oral presentation known in advance, you can still pass and get a VG if you submit the project report, slides and a recorded video presentation 23.59 before the day of the presentation.
+In the case not anyone can attend the oral presentation known in advance, you can still pass and get a VG if you submit the project report, slides and a recorded video presentation *23.59* before the day of the presentation.
 
 ## Course Literature and Video Material
 Below are the main references for the course.
@@ -93,6 +96,24 @@ Below are some suggested complementary reading for the interested student.
 [Part 1](https://www.youtube.com/watch?v=ZRpo41l02KQ)
 [Part 2](https://www.youtube.com/watch?v=6cc4N1vT8pk)
 
+### Short Stan tutorials
+
+The [Stan Tutorials playlist](https://www.youtube.com/playlist?list=PLCrWEzJgSUqwL85xIj1wubGdY15C5Gf7H) has shorter practical videos that are useful when you start writing Stan code.
+
+Recommended course clips:
+
+- [Getting started with Stan in R](https://www.youtube.com/watch?v=4t6niM6sksI) before the first Stan assignment.
+- [Have I converged? Convergence checks in Stan.](https://www.youtube.com/watch?v=0FdMZwIbJ_4) before reporting Stan diagnostics.
+- [Hierarchical Modelling in Stan: Predicting the Premier League](https://www.youtube.com/watch?v=dNZQrcAjgXQ) before the hierarchical models assignment.
+
+Python users may also find [Getting started with Stan in Python](https://www.youtube.com/watch?v=YtR18hdAWmU) useful.
+
+### Stan Playground
+
+[Stan Playground](https://stan-playground.flatironinstitute.org/) is a browser-based environment for writing, compiling and running Stan models without a local Stan installation. It is useful for learning Stan syntax, checking compiler messages, trying small changes to a model, and inspecting posterior draws during the Stan parts of the course.
+
+Stan Playground is especially useful around the lectures and assignments where you first write Stan code yourself. For assignment submissions and the mini-project, you should still include reproducible Stan and R/Python code as described in the assignment instructions.
+
 ### Aki Vehtari lectures
 
 Aki Vehtari at Aalto University has recorded lectures with very similar content as the content presented in the course.
@@ -118,6 +139,16 @@ Aki Vehtari at Aalto University has recorded lectures with very similar content 
 ### Additional video material
 
 - [Stan YouTube channel](https://www.youtube.com/channel/UCwgN5srGpBH4M-Zc2cAluOA) contains good introductions to Stan and some basic suggestions on how to fit models
+- [Matthew Kay, Systematic uncertainty visualization design (StanCon 2026)](https://youtu.be/drngQr8eyXg) is recommended project material after the lectures on Stan, hierarchical models, and model checking. It gives useful guidance for visualizing posterior uncertainty, predictive distributions, and other Bayesian model output.
+
+#### Research front: Bayesian computation
+
+The following talks are optional advanced material after the HMC/Stan lecture. You are not expected to understand every technical detail; use them to see examples of current research on making Bayesian computation more adaptive and efficient.
+
+- [Bob Carpenter, Within-orbit adaptive leapfrog sampler (WALNUTS) with continuous Nutpie adaptation](https://www.youtube.com/watch?v=Usjt1cK5fQc)
+- [Adrian Seyboldt, From Mass Matrix Adaptation to Normalizing Flows (StanCon 2026)](https://www.youtube.com/watch?v=wIR1YXFrNaE)
+
+While watching, focus on three questions: What limitation of current HMC/NUTS is being discussed? What new idea is proposed? Why might this matter for difficult Bayesian models?
 
 
 ## Course practicalities
@@ -161,8 +192,9 @@ Each assignment will be graded and evaluated within 10 working days.
 
 Students are not allowed to show your assignments (text or code) to anyone. Only discuss the assignments with other students. The student that show their assignment to anyone else could also be considered to cheat. Similarly, on zoom labs, only screen share when you are in a separate zoom room with teaching assistants.
 
-### Bayesian Model Averaging
-A guest lecture will be given on by Ph.D. student [Valentin Zulj](https://katalog.uu.se/empinfo/?id=N19-813).
+You may use large language models (LLMs), such as ChatGPT, like you may discuss with fellow students: to learn, ask for explanations, and get feedback. You may not use LLMs to produce the solution you submit. You must be able to explain every part of your submitted work orally. **Note!** When writing an oral exam question and solution, you are not allowed to use an LLM at all.
+
+The assignment PDFs may contain hidden machine-readable integrity text. This is used to detect inappropriate use of LLMs, such as asking an LLM to solve the assignment directly. Do not copy or upload the full assignment text into an LLM.
 
 ## Course Mini-Project
 The last two weeks will focus on a course project where 2-3 students choose their data and will conduct a Bayesian data analysis of the given data. 
@@ -173,4 +205,3 @@ You can find details and instructions on the project work [here](https://github.
 ## Frequently Asked Questions (FAQ)
 
 Frequently asked questions will be collected [here](https://github.com/MansMeg/BSDA/blob/master/FAQ.md).
-

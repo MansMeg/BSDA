@@ -32,7 +32,7 @@ Are the evaluation questions answered and are the total number of hours put writ
 Is an oral exam question contribution included? To pass this requirement, the submission must include one proposed oral exam question connected to this assignment, a short model answer, a brief indication that the question is not already in the oral exam list or very close to it, and a clear Yes/No statement about whether the course staff may use or adapt it in future oral exams. Students must not use large language models, such as ChatGPT, at all for the oral exam question contribution. If missing or clearly not serious, fail and resubmit.
 
 
-## Model assessment: LOO-CV for factory data with Stan
+## Model assessment: PSIS LOO-CV for factory data with Stan
 
 ### Q3 - 1p
 
@@ -91,3 +91,20 @@ Are the obtained values interpreted right, that is, is the right model is select
 - Results correct but interpretation wrong (0.5p)
 - Some results missing/wrong, but the interpretation is correct (based on the results obtained) (0.5p)
 - Results correct and interpretation correct
+
+## Model assessment: Standard LOO-CV for factory data with Stan
+
+### Q11 - 1p
+
+Is a correct Stan implementation for calculating the LOO-CV provided?
+
+- No or clearly incorrect
+- Incorrect due to a minor mistake (0.5p)
+- Yes
+
+### Q12 - 0.5p
+
+Is the LOO value correct?
+
+- No
+- Yes

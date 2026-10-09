@@ -696,6 +696,93 @@
 \end{frame}
 
 \begin{frame}
+\frametitle{Factory: observations and means}
+
+  \begin{itemize}
+  \item In the common-variance model, observations are independent
+    given $\theta_j$ and $\sigma$:
+    \[
+      y_{ij}\mid\theta_j,\sigma\sim\N(\theta_j,\sigma^2),
+      \qquad i=1,\ldots,n_j.
+    \]
+  \item Machine $j$'s sample mean and its sampling variance are
+    \begin{align*}
+      \bar y_{.j}&=\frac{1}{n_j}\sum_{i=1}^{n_j}y_{ij},\\
+      \operatorname{Var}(\bar y_{.j}\mid\theta_j,\sigma)
+        &=\frac{\sigma^2}{n_j}=s_j^2.
+    \end{align*}
+    SD of observations: $\sigma$; SE of the mean: $s_j=\sigma/\sqrt{n_j}$.
+    \pause
+  \item Thus $\bar y_{.j}\mid\theta_j,\sigma\sim\N(\theta_j,s_j^2)$.
+    We condition on $\sigma$ here; full Bayes also learns $\sigma$
+    from the data.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Normal shrinkage: the weights}
+
+  For fixed $\mu$, $\tau>0$ and $\sigma>0$, let $s_j=\sigma/\sqrt{n_j}$.
+  \[
+    \operatorname{E}(\theta_j\mid\mu,\tau,\sigma,y)
+      =w_j\bar y_{.j}+(1-w_j)\mu,\qquad
+    w_j=\frac{\tau^2}{\tau^2+s_j^2}.
+  \]
+  \begin{itemize}
+  \item A precise machine mean (small $s_j$) receives more weight
+  \item Small between-machine variation $\tau$ gives more weight to $\mu$
+  \item As $\tau\to0$, the conditional mean approaches $\mu$;
+    as $\tau\to\infty$, it approaches $\bar y_{.j}$
+  \item In full Bayes, average over $p(\mu,\tau,\sigma\mid y)$
+  \item Strong pooling makes the machine means similar;
+    their common value can still be uncertain because $\mu$ is unknown
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Normal shrinkage: a numerical example}
+
+  Suppose machine 1 has $\bar y_{.1}=28$ from $n_1=4$ observations.
+  For illustration, \textbf{fix} $\mu=8$, $\tau=5$ and $\sigma=30$,
+  so $s_1=30/\sqrt{4}=15$.
+  \begin{align*}
+    w_1&=\frac{5^2}{5^2+15^2}=\frac{25}{250}=0.10,\\
+    m_1&=0.10\cdot28+0.90\cdot8=10,\\
+    v_1&=\left(\frac{1}{225}+\frac{1}{25}\right)^{-1}=22.5.
+  \end{align*}
+  The conditional posterior is
+  $\theta_1\mid\mu,\tau,\sigma,y\sim\N(m_1,v_1)$:
+  mean $10$, SD $\sqrt{22.5}\approx4.74$.
+  \begin{itemize}
+  \item The noisy machine mean receives 10\% of the weight
+  \item The full factory posterior also averages over $\mu,\tau,\sigma$
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Pair discussion: precision and shrinkage}
+
+  {\color{uured}\textbf{Discuss in pairs (1--2 minutes).}}
+
+  Two machines have the same sample mean, different from $\mu$.
+  They share a within-machine SD $\sigma$, but different sample sizes
+  give different standard errors of their means:
+  \[
+    s_1=5,\qquad s_2=20.
+  \]
+  Hold $\mu$, $\tau>0$ and $\sigma>0$ fixed.
+
+  \textbf{Which machine's estimate is shrunk more toward $\mu$? Why?}
+
+  \uncover<2->{
+    \medskip
+    \textbf{Answer:} Machine 2. Its larger standard error means less
+    precise evidence, so its sample mean receives less weight and
+    $\mu$ receives more weight.
+  }
+\end{frame}
+
+\begin{frame}
 \frametitle{Prediction for an existing machine}
 
   In the common-variance model, distinguish the mean $\theta_j$
@@ -811,263 +898,6 @@
   \item<3-> Observations from existing or new similar machines
   \end{itemize}
 \end{frame}
-
-\subsection{8 schools example}
-
-\begin{frame}
-
-\frametitle{Eight schools: historical SAT coaching study}
-
-  \begin{itemize}
-  \item Historical example from BDA3, Section 5.5
-    \begin{itemize}
-    \item randomized coaching experiments in eight high schools
-    \item question: does short-term coaching improve verbal test scores?
-    \item estimate a coaching effect for each school
-    \end{itemize}
-    \pause
-  \item SAT-V in this study (the historical verbal test)
-    \begin{itemize}
-    \item standardized multiple-choice test
-    \item score range 200--800, with mean about 500 and SD about 100
-    \item pre-test PSAT scores in verbal (V) and mathematics (M)
-      help adjust for students' initial performance
-    \end{itemize}
-\end{itemize}
-\end{frame}
-
-\begin{frame}
-
-\frametitle{Hierarchical normal model: 8 schools}
-
-  \begin{itemize}
-  \item Effectiveness of the SAT coaching
-    \begin{itemize}
-    \item students took pre-tests PSAT-M and PSAT-V
-    \item some students received coaching
-    \item a regression in each school adjusts for pre-test scores and
-      estimates the coaching effect $y_j$ and its standard error $\sigma_j$
-    \item use a normal approximation for $y_j$, treating the estimated
-      sampling variances $\sigma_j^2$ as known
-    \item $y_j$ is an adjusted effect estimate, not a sample mean;
-      $\sigma_j$ is not the SD of individual students' scores
-    \end{itemize}
-    \pause
-  \item Data:
-    {\small
-    \begin{tabular}[t]{r | r r r r r r r r}
-      School & A & B & C & D & E & F & G & H \\
-      $y_j$ & 28 & 8 & -3 & 7 & -1 & 1 & 18 & 12 \\
-      $\sigma_j$ & 15 & 10 & 16 & 11 & 9 & 11 & 10 & 18
-    \end{tabular}}
-  \end{itemize}
-\end{frame}
-
-\begin{frame}
-
-\frametitle{Hierarchical normal model for group means}
-
-  \begin{itemize}
-  \item Observations are independent given $\theta_j$; $\sigma^2$ is known
-    \begin{equation*}
-      y_{ij}|\theta_j \sim \N(\theta_j,\sigma^2), \quad
-      i=1,\ldots,n_j; \quad j=1,\ldots,J
-    \end{equation*}
-  \item Group $j$ sample mean and its sampling variance
-    \begin{align*}
-      \bar{y}_{.j} & = \frac{1}{n_j}\sum_{i=1}^{n_j}y_{ij}\\
-      \operatorname{Var}(\bar{y}_{.j}\mid\theta_j)
-        & = \frac{\sigma^2}{n_j}=\sigma_j^2
-    \end{align*}
-    SD of observations: $\sigma$; SE of the mean: $\sigma_j=\sigma/\sqrt{n_j}$.
-    \pause
-  \item Thus $\bar{y}_{.j}\mid\theta_j \sim \N(\theta_j,\sigma_j^2)$.
-
-    The same form applies to adjusted school effects $y_j$, using
-    their reported standard errors $\sigma_j$.
-  \end{itemize}
-\end{frame}
-
-\begin{frame}
-
-\frametitle{Hierarchical normal model for group means}
-
-    \begin{minipage}[b]{4cm}
-      \begin{xy}
-        \xygraph{
-          []              !O{\bar{y}_{.j}}
-          ([u][l(0.5)]   !V{\theta_j}      !P{\bar{y}_{.j}}
-          ([u][l(0.33)] !V{\mu}      !P{\theta_j},
-          [u][r(0.33)] !V{\tau} !P{\theta_j}),
-          [u][r(0.5)]   !O{\sigma_j^2}   !P{\bar{y}_{.j}},
-  [r(1.0)]*{j},
-  [l(3.0)]*{\bar{y}_{.j}|\theta_j \sim \N(\theta_j,\sigma^2_j)},
-  [u][l(3.0)]*{\theta_j|\mu,\tau \sim \N(\mu,\tau)}
-  )
-  !B{\theta_j}{j}{++}
-}
-\end{xy}
-\end{minipage}
-  \medskip
-
-  Here $\N(\mu,\tau)$ is written in mean--SD form;
-  $\tau$ is the between-group SD.
-\end{frame}
-
-\begin{frame}
-\frametitle{Normal shrinkage: completing the square}
-
-  For fixed $\mu$ and $\tau>0$, with known sampling SD $\sigma_j>0$,
-  \[
-    y_j\mid\theta_j\sim\N(\theta_j,\sigma_j^2),\qquad
-    \theta_j\mid\mu,\tau\sim\N(\mu,\tau^2).
-  \]
-  Here $\N$ uses variance as its second argument.
-  \begin{align*}
-    p(\theta_j\mid\mu,\tau,y)
-      &\propto\exp\!\left[-\frac12\left\{
-        \frac{(y_j-\theta_j)^2}{\sigma_j^2}
-        +\frac{(\theta_j-\mu)^2}{\tau^2}\right\}\right]\\
-      &\propto\exp\!\left[-\frac{(\theta_j-m_j)^2}{2v_j}\right],
-  \end{align*}
-  where completing the square gives
-  \[
-    v_j=\left(\frac{1}{\sigma_j^2}+\frac{1}{\tau^2}\right)^{-1},
-    \qquad m_j=v_j\left(\frac{y_j}{\sigma_j^2}+\frac{\mu}{\tau^2}\right).
-  \]
-  Thus $\theta_j\mid\mu,\tau,y\sim\N(m_j,v_j)$.
-\end{frame}
-
-\begin{frame}
-\frametitle{Normal shrinkage: the weights}
-
-  Rearranging the conditional posterior mean,
-  \[
-    \operatorname{E}(\theta_j\mid\mu,\tau,y)
-      =w_j y_j+(1-w_j)\mu,\qquad
-    w_j=\frac{\tau^2}{\tau^2+\sigma_j^2}.
-  \]
-  \begin{itemize}
-  \item A precise group estimate (small $\sigma_j$) receives more weight
-  \item Small between-group variation $\tau$ gives more weight to $\mu$
-  \item As $\tau\to0$, the conditional mean approaches $\mu$;
-    as $\tau\to\infty$, it approaches $y_j$
-  \item In full Bayes, average these conditional results over
-    $p(\mu,\tau\mid y)$
-  \end{itemize}
-\end{frame}
-
-\begin{frame}
-\frametitle{Normal shrinkage: a numerical example}
-
-  Use School A's $y_j=28$, $\sigma_j=15$ and, for illustration,
-  \textbf{fix} $\mu=8$, $\tau=5$.
-  \begin{align*}
-    w_j&=\frac{5^2}{5^2+15^2}=\frac{25}{250}=0.10,\\
-    m_j&=0.10\cdot28+0.90\cdot8=10,\\
-    v_j&=\left(\frac{1}{225}+\frac{1}{25}\right)^{-1}=22.5.
-  \end{align*}
-  \begin{itemize}
-  \item The noisy school estimate receives 10\% of the weight
-  \item Conditional posterior: mean $10$, SD $\sqrt{22.5}\approx4.74$
-  \item This illustrates fixed hyperparameters; the full
-    eight-schools posterior also averages over $\mu,\tau$
-  \end{itemize}
-\end{frame}
-
-\begin{frame}
-\frametitle{Pair discussion: precision and shrinkage}
-
-  {\color{uured}\textbf{Discuss in pairs (1--2 minutes).}}
-
-  Two schools have the same estimated effect, different from the
-  population mean $\mu$, but different standard errors:
-  \[
-    \sigma_1=5,\qquad \sigma_2=20.
-  \]
-  Hold $\mu$ and $\tau>0$ fixed.
-
-  \textbf{Which school's estimate is shrunk more toward $\mu$? Why?}
-
-  \uncover<2->{
-    \medskip
-    \textbf{Answer:} School 2. Its larger standard error means less
-    precise evidence, so its estimate receives less weight and
-    $\mu$ receives more weight.
-  }
-\end{frame}
-
-\begin{frame}
-\frametitle{Eight schools: pooling assumptions}
-
-  {\color{uured}How does the posterior for School A (red) change?}
-  \begin{center}
-    \only<1>{\includegraphics[width=9cm]{figs/8schools_separate.pdf}}
-    \only<2>{\includegraphics[width=9cm]{figs/8schools_pooled.pdf}}
-    \only<3>{\includegraphics[width=9cm]{figs/8schools_hier.pdf}}
-  \end{center}
-  \only<1>{\textbf{No pooling:} each school's effect uses its own data.
-    School A's estimate is high but uncertain.}
-  \only<2>{\textbf{Complete pooling:} all schools share a common effect.
-    School A's posterior is identical to the others.}
-  \only<3>{\textbf{Partial pooling:} the marginal posteriors
-    $p(\theta_j\mid y)$ share information while allowing different effects.}
-  \medskip
-
-  {\small The hierarchical plots follow BDA3, Section 5.5, with flat
-    independent priors on $\mu$ and $\tau>0$, rather than the illustrative
-    half-normal prior above.}
-\end{frame}
-
-\begin{frame}
-\frametitle{Eight schools: uncertainty about variation}
-
-  {\color{uured}Does the peak near zero establish that all effects are equal?}
-  \begin{center}
-    \includegraphics[width=8cm]{figs/8schools_tau.pdf}
-  \end{center}
-  \begin{itemize}
-  \item This is $p(\tau\mid y)$, with $\mu$ and the school effects integrated out
-  \item A range of between-school SDs remains plausible
-  \item Full Bayes averages over this distribution; fixing $\tau$ at
-    its mode would impose much stronger pooling
-  \end{itemize}
-\end{frame}
-
-\begin{frame}
-\frametitle{Eight schools: conditional posterior means}
-
-  {\color{uured}What happens to the school estimates as $\tau$ changes?}
-  \begin{center}
-    \includegraphics[width=8cm]{figs/8schools_condmu.pdf}
-  \end{center}
-  \begin{itemize}
-  \item Curves show $\operatorname{E}(\theta_j\mid\tau,y)$:
-    $\tau$ is fixed and $\mu$ is integrated out
-  \item Small $\tau$: means come together near the pooled estimate, $7.7$
-  \item Large $\tau$: means approach the separate estimates $y_j$
-  \end{itemize}
-\end{frame}
-
-\begin{frame}
-\frametitle{Eight schools: uncertainty given $\tau$}
-
-  {\color{uured}Does small $\tau$ make the common effect precisely known?}
-  \begin{center}
-    \includegraphics[width=8cm]{figs/8schools_condsd.pdf}
-  \end{center}
-  \begin{itemize}
-  \item Curves show $\operatorname{sd}(\theta_j\mid\tau,y)$,
-    with uncertainty in $\mu$ included
-  \item As $\tau\to0$, effects coincide, but their common value is uncertain:
-    \[
-      \operatorname{sd}(\theta_j\mid\tau,y)\longrightarrow
-        \left(\sum_{k=1}^J\frac{1}{\sigma_k^2}\right)^{-1/2}
-        \approx4.1.
-    \]
-  \end{itemize}
-\end{frame}
-
 
 \section{Exchangeability}
 \frame{\sectionpage}
@@ -1432,5 +1262,182 @@
   $\theta_j=\mu+\tau\eta_j$. Only the sampling coordinates change.
 \end{frame}
 
+
+\section{Additional material}
+\frame{\sectionpage}
+\subsection{8 schools example}
+
+\begin{frame}
+
+\frametitle{Eight schools: historical SAT coaching study}
+
+  \begin{itemize}
+  \item Historical example from BDA3, Section 5.5
+    \begin{itemize}
+    \item randomized coaching experiments in eight high schools
+    \item question: does short-term coaching improve verbal test scores?
+    \item estimate a coaching effect for each school
+    \end{itemize}
+    \pause
+  \item SAT-V in this study (the historical verbal test)
+    \begin{itemize}
+    \item standardized multiple-choice test
+    \item score range 200--800, with mean about 500 and SD about 100
+    \item pre-test PSAT scores in verbal (V) and mathematics (M)
+      help adjust for students' initial performance
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Hierarchical normal model: 8 schools}
+
+  \begin{itemize}
+  \item Effectiveness of the SAT coaching
+    \begin{itemize}
+    \item students took pre-tests PSAT-M and PSAT-V
+    \item some students received coaching
+    \item a regression in each school adjusts for pre-test scores and
+      estimates the coaching effect $y_j$ and its standard error $\sigma_j$
+    \item use a normal approximation for $y_j$, treating the estimated
+      sampling variances $\sigma_j^2$ as known
+    \item $y_j$ is an adjusted effect estimate, not a sample mean;
+      $\sigma_j$ is not the SD of individual students' scores
+    \end{itemize}
+    \pause
+  \item Data:
+    {\small
+    \begin{tabular}[t]{r | r r r r r r r r}
+      School & A & B & C & D & E & F & G & H \\
+      $y_j$ & 28 & 8 & -3 & 7 & -1 & 1 & 18 & 12 \\
+      $\sigma_j$ & 15 & 10 & 16 & 11 & 9 & 11 & 10 & 18
+    \end{tabular}}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Hierarchical normal model for school effects}
+
+    \begin{minipage}[b]{4cm}
+      \begin{xy}
+        \xygraph{
+          []              !O{y_j}
+          ([u][l(0.5)]   !V{\theta_j}      !P{y_j}
+          ([u][l(0.33)] !V{\mu}      !P{\theta_j},
+          [u][r(0.33)] !V{\tau} !P{\theta_j}),
+          [u][r(0.5)]   !O{\sigma_j^2}   !P{y_j},
+  [r(1.0)]*{j},
+  [l(3.0)]*{y_j|\theta_j \sim \N(\theta_j,\sigma^2_j)},
+  [u][l(3.0)]*{\theta_j|\mu,\tau \sim \N(\mu,\tau)}
+  )
+  !B{\theta_j}{j}{++}
+}
+\end{xy}
+\end{minipage}
+  \medskip
+
+  The observed $y_j$ is a school effect estimate;
+  $\sigma_j$ is its reported standard error, treated as known.
+
+  Here $\N(\mu,\tau)$ is written in mean--SD form;
+  $\tau$ is the between-school SD.
+\end{frame}
+
+\begin{frame}
+\frametitle{Normal shrinkage: completing the square}
+
+  For fixed $\mu$ and $\tau>0$, with known sampling SD $\sigma_j>0$,
+  \[
+    y_j\mid\theta_j\sim\N(\theta_j,\sigma_j^2),\qquad
+    \theta_j\mid\mu,\tau\sim\N(\mu,\tau^2).
+  \]
+  Here $\N$ uses variance as its second argument.
+  \begin{align*}
+    p(\theta_j\mid\mu,\tau,y)
+      &\propto\exp\!\left[-\frac12\left\{
+        \frac{(y_j-\theta_j)^2}{\sigma_j^2}
+        +\frac{(\theta_j-\mu)^2}{\tau^2}\right\}\right]\\
+      &\propto\exp\!\left[-\frac{(\theta_j-m_j)^2}{2v_j}\right],
+  \end{align*}
+  where completing the square gives
+  \[
+    v_j=\left(\frac{1}{\sigma_j^2}+\frac{1}{\tau^2}\right)^{-1},
+    \qquad m_j=v_j\left(\frac{y_j}{\sigma_j^2}+\frac{\mu}{\tau^2}\right).
+  \]
+  Thus $\theta_j\mid\mu,\tau,y\sim\N(m_j,v_j)$.
+\end{frame}
+
+\begin{frame}
+\frametitle{Eight schools: pooling assumptions}
+
+  {\color{uured}How does the posterior for School A (red) change?}
+  \begin{center}
+    \only<1>{\includegraphics[width=9cm]{figs/8schools_separate.pdf}}
+    \only<2>{\includegraphics[width=9cm]{figs/8schools_pooled.pdf}}
+    \only<3>{\includegraphics[width=9cm]{figs/8schools_hier.pdf}}
+  \end{center}
+  \only<1>{\textbf{No pooling:} each school's effect uses its own data.
+    School A's estimate is high but uncertain.}
+  \only<2>{\textbf{Complete pooling:} all schools share a common effect.
+    School A's posterior is identical to the others.}
+  \only<3>{\textbf{Partial pooling:} the marginal posteriors
+    $p(\theta_j\mid y)$ share information while allowing different effects.}
+  \medskip
+
+  {\small The hierarchical plots follow BDA3, Section 5.5, with flat
+    independent priors on $\mu$ and $\tau>0$, rather than the illustrative
+    half-normal prior in the factory example.}
+\end{frame}
+
+\begin{frame}
+\frametitle{Eight schools: uncertainty about variation}
+
+  {\color{uured}Does the peak near zero establish that all effects are equal?}
+  \begin{center}
+    \includegraphics[width=8cm]{figs/8schools_tau.pdf}
+  \end{center}
+  \begin{itemize}
+  \item This is $p(\tau\mid y)$, with $\mu$ and the school effects integrated out
+  \item A range of between-school SDs remains plausible
+  \item Full Bayes averages over this distribution; fixing $\tau$ at
+    its mode would impose much stronger pooling
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Eight schools: conditional posterior means}
+
+  {\color{uured}What happens to the school estimates as $\tau$ changes?}
+  \begin{center}
+    \includegraphics[width=8cm]{figs/8schools_condmu.pdf}
+  \end{center}
+  \begin{itemize}
+  \item Curves show $\operatorname{E}(\theta_j\mid\tau,y)$:
+    $\tau$ is fixed and $\mu$ is integrated out
+  \item Small $\tau$: means come together near the pooled estimate, $7.7$
+  \item Large $\tau$: means approach the separate estimates $y_j$
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Eight schools: uncertainty given $\tau$}
+
+  {\color{uured}Does small $\tau$ make the common effect precisely known?}
+  \begin{center}
+    \includegraphics[width=8cm]{figs/8schools_condsd.pdf}
+  \end{center}
+  \begin{itemize}
+  \item Curves show $\operatorname{sd}(\theta_j\mid\tau,y)$,
+    with uncertainty in $\mu$ included
+  \item As $\tau\to0$, effects coincide, but their common value is uncertain:
+    \[
+      \operatorname{sd}(\theta_j\mid\tau,y)\longrightarrow
+        \left(\sum_{k=1}^J\frac{1}{\sigma_k^2}\right)^{-1/2}
+        \approx4.1.
+    \]
+  \end{itemize}
+\end{frame}
 
 \end{document}

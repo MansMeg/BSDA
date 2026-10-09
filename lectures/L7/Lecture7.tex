@@ -1071,6 +1071,18 @@
 
 \section{Exchangeability}
 \frame{\sectionpage}
+
+\begin{frame}
+\frametitle{Independence and exchangeability}
+
+  \begin{enumerate}
+  \item \textbf{Independence:} knowing one outcome does not change the
+    distribution of another.
+  \item \textbf{Exchangeability:} swapping the labels or positions of
+    observations leaves their joint distribution unchanged.
+  \end{enumerate}
+\end{frame}
+
 % In other words exchangeability is not a fundamental property of a system being observed but rather a consequence of how we choose to observe that system!
 
 % In any principled modeling application we have to remain diligent in recognizing that exchangeability is an assumption, and one that cannot be made without careful consideration. Knowledge about the source of heterogeneity can drastically improve inferences, and we should consider exploiting that information whenever possible. Only when we don't have that knowledge, or don't have the resources to properly exploit it, will exchangeability be a reasonable assumption.
@@ -1148,6 +1160,28 @@
 \end{frame}
 
 
+
+\begin{frame}
+
+\frametitle{De Finetti's takeaway}
+
+  \textbf{Exchangeability provides a justification for modelling
+    observations as independent conditional on a shared unknown
+    parameter, even though they need not be independent marginally.}
+
+  \begin{enumerate}
+  \item \textbf{Usually, we start with a Bayesian model:} an unknown
+    coin bias $\theta$, a prior for $\theta$, and independent flips
+    given $\theta$.
+  \item \textbf{De Finetti starts with symmetry:} the order of the
+    flips carries no information.
+  \item For an \textbf{infinite exchangeable Bernoulli sequence}, the
+    theorem says its distribution must admit exactly that Bayesian
+    representation: a distribution over $\theta$ and IID flips
+    conditional on $\theta$.
+  \end{enumerate}
+
+\end{frame}
 
 \begin{frame}
 

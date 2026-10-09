@@ -242,7 +242,7 @@
     \text{Group B: }\frac{100}{500}=20\%.
   \]
   Both share the same population information, with a population
-  mean different from 20\%.
+  mean of 32\%.
 
   \textbf{Which estimate should move more toward the population mean?
     Why?}
@@ -283,7 +283,7 @@
   \item Medicine testing
   \item Type F344 female rats in control group given placebo
     \begin{itemize}
-    \item count how many get endometrial stromal polyps
+    \item count how many get endometrial stromal polyps\\(benign (noncancerous) growths in the uterus)
     \item familiar binomial model example
     \end{itemize}
   \item<2-> Experiment has been repeated 71 times
@@ -306,7 +306,7 @@
 
 \frametitle{Hierarchical binomial model: rats}
 
-  {\color{uured}What assumption does each model make about the experiments?}
+%  {\color{uured}What assumption does each model make about the experiments?}
   \begin{center}
     \only<1>{\includegraphics[width=8.3cm]{figs/rats_pooled.pdf}}
     \only<2>{\includegraphics[width=8.3cm]{figs/rats_separate.pdf}}
@@ -457,8 +457,6 @@
       posterior propriety must be checked when using an improper prior
     \item An example-specific choice, not a general default
     \end{itemize}
-    \pause
-    \item {\color{uured} What predictive distributions can we have?}
     \end{itemize}
 \end{frame}
 
@@ -473,6 +471,7 @@
       \theta_j^{(s)}\sim\operatorname{Beta}
         (\alpha^{(s)}+y_j,\beta^{(s)}+n_j-y_j)
     \]
+  \item In Stan we usually get $\theta_j$ right away as a parameter
   \end{enumerate}
   \textbf{Share one hyperparameter draw across all groups at each step.}
   \[
@@ -488,14 +487,14 @@
 \frametitle{Rats: learning the population distribution}
 
   \only<1>{
-    {\color{uured}Which population distributions remain plausible?}
+%    {\color{uured}Which population distributions remain plausible?}
     \begin{center}
       \includegraphics[width=7.7cm,height=5cm,keepaspectratio]{figs/rats_posterior.pdf}
     \end{center}
     The hyperposterior $p(\alpha,\beta\mid y)$ uses all 71 experiments.
   }
   \only<2>{
-    {\color{uured}How does hyperparameter uncertainty affect the population?}
+%    {\color{uured}How does hyperparameter uncertainty affect the population?}
     \begin{center}
       \includegraphics[width=8cm]{figs/rats_hierdraws.pdf}
     \end{center}
@@ -507,7 +506,7 @@
 \begin{frame}
 \frametitle{Rats: a new experiment's probability}
 
-  {\color{uured}What does the green curve predict?}
+%  {\color{uured}What does the green curve predict?}
   \begin{center}
     \includegraphics[width=8cm]{figs/rats_hierprior.pdf}
   \end{center}
@@ -521,9 +520,36 @@
 \end{frame}
 
 \begin{frame}
+\frametitle{Pair discussion: a new rat experiment}
+
+  {\color{uured}\textbf{Discuss in pairs (1--2 minutes).}}
+  \begin{center}
+    \includegraphics[width=7.8cm]{figs/rats_hierprior.pdf}
+  \end{center}
+  \begin{overlayarea}{\textwidth}{2.5cm}
+    \only<1>{
+      A new experiment will include $n_{\mathrm{new}}$ rats.
+
+      \textbf{How would you use this distribution to predict the number
+        of affected rats, $y_{\mathrm{new}}$? Describe the simulation steps.}
+    }
+    \only<2>{
+      \textbf{Answer:} Draw a probability from the green distribution,
+      then draw a count:
+      \[
+        \theta_{\mathrm{new}}^{(s)}\sim p(\theta_{\mathrm{new}}\mid y),
+        \qquad y_{\mathrm{new}}^{(s)}\sim
+          \operatorname{Binomial}(n_{\mathrm{new}},\theta_{\mathrm{new}}^{(s)}).
+      \]
+      Repeat and summarize the simulated counts.
+    }
+  \end{overlayarea}
+\end{frame}
+
+\begin{frame}
 \frametitle{Rats: partial pooling}
 
-  {\color{uured}Follow experiment 71 ($4/14$), shown in red. What changes?}
+  Experiment 71 ($4/14$), shown in red.
   \begin{center}
     \includegraphics[width=6.1cm]{figs/rats_separate_less.pdf}\\[-1mm]
     \includegraphics[width=6.1cm]{figs/rats_hier_less.pdf}
@@ -535,13 +561,35 @@
 \begin{frame}
 \frametitle{Rats: existing and new experiments}
 
-  {\color{uured}Why do these distributions answer different questions?}
+%  {\color{uured}Why do these distributions answer different questions?}
   \begin{center}
     \includegraphics[width=6.1cm]{figs/rats_hier_less.pdf}\\[-1mm]
     \includegraphics[width=6.1cm]{figs/rats_hierprior.pdf}
   \end{center}
   Existing $p(\theta_j\mid y)$ uses group $j$'s data as well as the
   population. New $p(\theta_{\mathrm{new}}\mid y)$ has no new-group data.
+\end{frame}
+
+\begin{frame}
+\frametitle{Pair discussion: predictions for rats}
+
+  {\color{uured}\textbf{Discuss in pairs (1--2 minutes).}}
+
+  \textbf{What predictive distributions can we have?}
+
+  Think about both an existing experiment and a new similar experiment.
+
+  \uncover<2->{
+    \medskip
+    \begin{itemize}
+    \item Future outcomes or counts in an existing experiment,
+      using $p(\theta_j\mid y)$
+    \item A new experiment's probability,
+      $p(\theta_{\mathrm{new}}\mid y)$
+    \item Outcomes or counts in that new experiment, also including
+      binomial sampling variation
+    \end{itemize}
+  }
 \end{frame}
 
 \subsection{Factory example}
@@ -586,8 +634,8 @@
   \[
     \begin{gathered}
       \mu\sim\N(m_0,s_0^2),\\
-      \tau\sim\operatorname{HalfNormal}(A_\tau),\qquad
-      \sigma\sim\operatorname{HalfNormal}(A_\sigma).
+      \tau\sim\operatorname{HalfNormal}(0,A_\tau),\qquad
+      \sigma\sim\operatorname{HalfNormal}(0,A_\sigma).
     \end{gathered}
   \]
   The common-variance factory model then has
@@ -598,11 +646,12 @@
       &&i=1,\ldots,n_j.
   \end{align*}
   \begin{itemize}
+  \item $\operatorname{HalfNormal}(0,A)$: a $\N(0,A^2)$ restricted to
+    $\mathbb{R}^+=(0,\infty)$
   \item Observations are independent given the group means and $\sigma$
-  \item Fix $m_0,s_0,A_\tau,A_\sigma$ using subject knowledge and the
-    measurement scale
-  \item Here $\N$ uses variance as its second argument;
-    $A_\tau,A_\sigma$ are half-normal scale parameters
+  \item Fix $m_0,s_0,A_\tau,A_\sigma$ using subject knowledge (e.g. prior predictive distribution)
+%  \item Here $\N$ uses variance as its second argument;
+%    $A_\tau,A_\sigma$ are half-normal scale parameters
   \end{itemize}
 \end{frame}
 
@@ -613,11 +662,13 @@
   \[
     Z\sim\N(0,A_\tau^2),\qquad \tau=|Z|.
   \]
-  This defines $\tau\sim\operatorname{HalfNormal}(A_\tau)$, with
+  This defines $\tau\sim\operatorname{HalfNormal}(0,A_\tau)$ on
+  $\mathbb{R}^+=(0,\infty)$, with
   \[
     \Pr(\tau<1.96A_\tau)\approx0.95.
   \]
   \begin{itemize}
+  \item The 0 denotes the mean of the underlying normal $Z$, not of $\tau$
   \item $A_\tau$ has the same units as the outcome
   \item Example: to put 95\% prior probability below a between-machine
     SD of 20 quality units, choose $A_\tau\approx20/1.96=10.2$

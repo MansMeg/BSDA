@@ -471,8 +471,10 @@
       \theta_j^{(s)}\sim\operatorname{Beta}
         (\alpha^{(s)}+y_j,\beta^{(s)}+n_j-y_j)
     \]
-  \item In Stan we usually get $\theta_j$ right away as a parameter
   \end{enumerate}
+  {\small\textit{Stan note:} If $\theta_j$ is a model parameter,
+    Stan returns its posterior draws directly.}
+
   \textbf{Share one hyperparameter draw across all groups at each step.}
   \[
     \operatorname{E}[h(\theta_j)\mid y]
@@ -615,7 +617,7 @@
   [u][r(1.75)]   !V{\sigma^2}   !P{y_{ij}},
   [r(0.45)]*{i},
   [r(0.9)]*{j},
-[l(3)]*{y_{ij}|\theta_j \sim \N(\theta_j,\sigma^2)},
+[l(3)]*{y_{ij}|\theta_j,\sigma \sim \N(\theta_j,\sigma^2)},
 [u][l(3)]*{\theta_j|\mu,\tau \sim \N(\mu,\tau^2)},
 )
 !B{y_{ij}}{i}{}
@@ -748,8 +750,11 @@
   \begin{align*}
     w_1&=\frac{5^2}{5^2+15^2}=\frac{25}{250}=0.10,\\
     m_1&=0.10\cdot28+0.90\cdot8=10,\\
-    v_1&=\left(\frac{1}{225}+\frac{1}{25}\right)^{-1}=22.5.
+    v_1&=\left(s_1^{-2}+\tau^{-2}\right)^{-1}
+      =\left(\frac{1}{225}+\frac{1}{25}\right)^{-1}=22.5.
   \end{align*}
+  Posterior precision = data precision + prior precision.
+
   The conditional posterior is
   $\theta_1\mid\mu,\tau,\sigma,y\sim\N(m_1,v_1)$:
   mean $10$, SD $\sqrt{22.5}\approx4.74$.
@@ -854,49 +859,6 @@
       \tilde y_7^{(s)}\sim\N(\theta_7^{(s)},(\sigma^{(s)})^2).
     \]
   }
-\end{frame}
-
-\begin{frame}
-
-\frametitle{Hierarchical normal model: factory}
-
-  \begin{itemize}
-  \item Six machines with means $\theta_j$ and
-    {\color{uured} own variances} $\sigma_j^2$
-  \end{itemize}
-  \[
-    \begin{gathered}
-      \begin{xy}
-        \xygraph{
-          []              !O{y_{ij}}
-          ([u][l(0.75)]   !V{\theta_j}      !P{y_{ij}}
-          ([u][l(0.33)] !V{\mu}      !P{\theta_j},
-          [u][r(0.33)] !V{\tau} !P{\theta_j}),
-          [u][r(0.75)]   !V{\sigma_j^2}   !P{y_{ij}}
-          ([u][l(0.33)] !V{\sigma_0^2}      !P{\sigma_j^2},
-          [u][r(0.33)] !V{\nu_0} !P{\sigma_j^2}),
-          [r(0.45)]*{i},
-          [r(0.9)]*{j}
-          )
-          !B{y_{ij}}{i}{}
-          !B{\theta_j}{j}{++}
-        }
-      \end{xy}\\[2mm]
-    \begin{aligned}
-      y_{ij}\mid\theta_j,\sigma_j^2
-        &\sim \N(\theta_j,\sigma_j^2)\\
-      \theta_j\mid\mu,\tau
-        &\sim \N(\mu,\tau^2)\\
-      \sigma_j^2\mid\nu_0,\sigma_0^2
-        &\sim \Invchi2(\nu_0,\sigma_0^2)
-    \end{aligned}
-    \end{gathered}
-  \]
-  \begin{itemize}
-  \item<2-> {\color{uured}\textbf{Pair discussion (1--2 minutes):}
-    What predictive distributions can we have?}
-  \item<3-> Observations from existing or new similar machines
-  \end{itemize}
 \end{frame}
 
 \section{Exchangeability}
@@ -1014,6 +976,28 @@
 \end{frame}
 
 \begin{frame}
+\frametitle{Pair discussion: learning about the coin}
+
+  {\color{uured}\textbf{Discuss in pairs (1--2 minutes).}}
+
+  The coin's bias has prior $\theta\sim\operatorname{Beta}(1,1)$,
+  and the flips are independent given $\theta$.
+
+  \textbf{Why does observing heads change our prediction for the next
+    flip? Does this contradict conditional independence?}
+
+  \uncover<2->{
+    \medskip
+    \textbf{Answer:} We learn about the shared unknown bias.
+    After observing heads, $\theta\mid\text{heads}\sim\operatorname{Beta}(2,1)$,
+    changing the predictive probability from $1/2$ to $2/3$.
+
+    The coin has not changed. Independence holds when $\theta$ is
+    fixed; averaging over an uncertain $\theta$ creates dependence.
+  }
+\end{frame}
+
+\begin{frame}
 
 \frametitle{Coin flips: exchangeable but dependent}
 
@@ -1037,47 +1021,21 @@
   \end{itemize}
 \end{frame}
 
-
-
-
-\begin{frame}
-\frametitle{Pair discussion: learning about the coin}
-
-  {\color{uured}\textbf{Discuss in pairs (1--2 minutes).}}
-
-  The coin's bias has prior $\theta\sim\operatorname{Beta}(1,1)$,
-  and the flips are independent given $\theta$.
-
-  \textbf{Why does observing heads change our prediction for the next
-    flip? Does this contradict conditional independence?}
-
-  \uncover<2->{
-    \medskip
-    \textbf{Answer:} We learn about the shared unknown bias.
-    After heads, $\theta\mid H_1\sim\operatorname{Beta}(2,1)$,
-    changing the predictive probability from $1/2$ to $2/3$.
-
-    The coin has not changed. Independence holds when $\theta$ is
-    fixed; averaging over an uncertain $\theta$ creates dependence.
-  }
-\end{frame}
-
 \begin{frame}
 
 \frametitle{Exchangeability}
 
   \begin{itemize}
-  \item Exchangeability does not mean that the results of the
-    experiments could not be different
-    \begin{itemize}
-    \item e.g. if we know that the experiments have been in two
-      different laboratories, and we know that the other laboratory
-      has better conditions for the rats, but we do not know which
-      experiments have been made in which laboratory
-    \item a priori experiments are exchangeable
-    \item model could have unknown parameter for the laboratory with a
-      conditional prior for rats assumed to come from the same place (clustering model)
-    \end{itemize}
+  \item Exchangeability does not require identical experiment probabilities
+  \item Suppose experiments came from two laboratories with different
+    conditions, but their laboratory memberships are unknown
+  \item If we treat these unknown memberships symmetrically across
+    experiments, we can model the probabilities $\theta_j$ as
+    \textbf{exchangeable a priori}
+  \item A model with unknown laboratory membership can represent
+    clustering among experiments from the same laboratory
+  \item This concerns $\theta_j$, not the counts $y_j$:
+    different sample sizes $n_j$ can make the counts non-exchangeable
   \end{itemize}
 \end{frame}
 
@@ -1265,6 +1223,50 @@
 
 \section{Additional material}
 \frame{\sectionpage}
+\subsection{Factory extension}
+
+\begin{frame}
+\frametitle{Factory: separate variances}
+
+  \begin{itemize}
+  \item Six machines with means $\theta_j$ and
+    {\color{uured} own variances} $\sigma_j^2$
+  \end{itemize}
+  \[
+    \begin{gathered}
+      \begin{xy}
+        \xygraph{
+          []              !O{y_{ij}}
+          ([u][l(0.75)]   !V{\theta_j}      !P{y_{ij}}
+          ([u][l(0.33)] !V{\mu}      !P{\theta_j},
+          [u][r(0.33)] !V{\tau} !P{\theta_j}),
+          [u][r(0.75)]   !V{\sigma_j^2}   !P{y_{ij}}
+          ([u][l(0.33)] !V{\sigma_0^2}      !P{\sigma_j^2},
+          [u][r(0.33)] !V{\nu_0} !P{\sigma_j^2}),
+          [r(0.45)]*{i},
+          [r(0.9)]*{j}
+          )
+          !B{y_{ij}}{i}{}
+          !B{\theta_j}{j}{++}
+        }
+      \end{xy}\\[2mm]
+    \begin{aligned}
+      y_{ij}\mid\theta_j,\sigma_j^2
+        &\sim \N(\theta_j,\sigma_j^2)\\
+      \theta_j\mid\mu,\tau
+        &\sim \N(\mu,\tau^2)\\
+      \sigma_j^2\mid\nu_0,\sigma_0^2
+        &\sim \Invchi2(\nu_0,\sigma_0^2)
+    \end{aligned}
+    \end{gathered}
+  \]
+  \begin{itemize}
+  \item<2-> {\color{uured}\textbf{Pair discussion (1--2 minutes):}
+    What predictive distributions can we have?}
+  \item<3-> Observations from existing or new similar machines
+  \end{itemize}
+\end{frame}
+
 \subsection{8 schools example}
 
 \begin{frame}

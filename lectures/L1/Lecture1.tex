@@ -199,6 +199,34 @@
 \section{Bayesian Reasoning}
 \frame{\sectionpage}
 
+\begin{frame}{Steve: farmer or librarian?}
+
+  In a hypothetical population containing only farmers and librarians,
+  Steve is selected uniformly at random.
+
+  \begin{quote}
+    Steve is reserved, comfortable working alone, and attentive to detail.
+  \end{quote}
+
+  \begin{itemize}
+  \item Which occupation seems more likely?
+  \item What probability would you assign to ``librarian''?
+  \item What additional information would help?
+  \end{itemize}
+
+  \uncover<2->{\textbf{There is not yet enough information for a unique
+    numerical answer. Keep your initial estimate for later.}}
+
+  \medskip
+  {\footnotesize Adapted from Tversky \& Kahneman (1974),
+    \href{https://doi.org/10.1126/science.185.4157.1124}{\textit{Judgment under
+    Uncertainty: Heuristics and Biases}}, \textit{Science}, 185, 1124--1131.
+    The population and all numerical values in this walkthrough are
+    invented for teaching.}
+
+\end{frame}
+
+
 \begin{frame}{Probability in Bayesian Reasoning}
 
   \begin{itemize}
@@ -251,6 +279,56 @@ A bookmaker could then take both bets from you and be sure to profit, because yo
     \item {\footnotesize Source: \href{https://plato.stanford.edu/entries/epistemology-bayesian/}{Stanford Encyclopedia of Philosophy}}
     \end{itemize}
   \end{itemize}
+\end{frame}
+
+
+\begin{frame}{Pascalian and Baconian probability}
+
+  L. Jonathan Cohen distinguishes two ways of assessing a claim:
+
+  \begin{itemize}
+  \item \textbf{Pascalian:} How probable is the claim $H$, given the
+    evidence $E$? Uses the ordinary probability calculus, for example
+    $P(H\mid E)=0.8$.
+  \item \textbf{Baconian:} How thoroughly has the claim been supported
+    by investigating relevant possibilities and testing alternative
+    explanations?
+  \item In the Baconian sense, little support for a claim need not mean
+    strong support for its opposite: the investigation may simply be
+    incomplete.
+  \end{itemize}
+
+  \medskip
+  \textbf{In this course, we calculate Pascalian probabilities, but also
+    critically examine the evidence and modelling assumptions behind them.}
+
+  \medskip
+  {\footnotesize Source: L. Jonathan Cohen (1977),
+    \href{https://academic.oup.com/book/3708}{\textit{The Probable and the Provable}}.}
+
+\end{frame}
+
+
+\begin{frame}{Pair discussion: trusting a probability}
+
+  {\color{uured}\textbf{Discuss in pairs (1--2 minutes).}}
+
+  An analyst reports:
+
+  \begin{quote}
+    ``There is a 90\% probability that this batch meets the quality standard.''
+  \end{quote}
+
+  \begin{itemize}
+  \item What does this probability tell us?
+  \item What would you want to know about the evidence and assumptions
+    before trusting the conclusion?
+  \end{itemize}
+
+  \medskip
+  Consider how items were sampled, how quality was measured, and whether
+  important sources of failure were investigated.
+
 \end{frame}
 
 
@@ -400,6 +478,151 @@ A bookmaker could then take both bets from you and be sure to profit, because yo
   \pause
   \item Bayesian statistics obey the \emph{likelihood principle}: \\ data only affects $p(\theta|y)$ through the likelihood $p(y|\theta)$
   \end{itemize}
+\end{frame}
+
+
+\begin{frame}{Steve: reveal the base rates}
+
+  Return to Steve, selected uniformly from our hypothetical population:
+
+  \begin{itemize}
+  \item 100 librarians ($L$) and 2,000 farmers ($F$)
+  \item Description $D$: reserved, comfortable working alone, attentive
+    to detail
+  \end{itemize}
+
+  \textbf{Before using the description}, the base-rate prior is
+  \[
+    P(L)=\frac{100}{2100}=\frac{1}{21}\approx4.8\%.
+  \]
+
+  \textbf{Does this settle the question, or do we still need something?}
+
+  \uncover<2->{
+    We need to know how common the description is in each occupation:
+    $P(D\mid L)$ and $P(D\mid F)$.
+
+    The 4.8\% is a baseline, not the posterior after considering $D$.
+  }
+
+\end{frame}
+
+
+\begin{frame}{Steve: reveal the likelihoods}
+
+  Suppose the description $D$ matches the following people in our
+  hypothetical population:
+
+  \begin{center}
+    \begin{tabular}{lrr}
+      \hline
+      Occupation & Total & Matching $D$ \\
+      \hline
+      Librarian & 100 & 80 (80\%) \\
+      Farmer & 2,000 & 200 (10\%) \\
+      \hline
+    \end{tabular}
+  \end{center}
+
+  {\color{uured}\textbf{Discuss in pairs (1--2 minutes).}}
+  Among people matching $D$, what proportion are librarians?
+
+  \uncover<2->{
+    \[
+      P(L\mid D)=\frac{80}{80+200}=\frac{2}{7}\approx28.6\%.
+    \]
+    The description raises the probability of librarian from 4.8\%
+    to 28.6\%, but farmer remains more probable.
+  }
+
+\end{frame}
+
+
+\begin{frame}{Steve: from counts to Bayes' theorem}
+
+  \begin{itemize}
+  \item \textbf{Prior:} $P(L)=1/21$, $P(F)=20/21$
+  \item \textbf{Likelihoods:} $P(D\mid L)=0.8$, $P(D\mid F)=0.1$
+  \end{itemize}
+
+  \[
+    \begin{aligned}
+      P(L\mid D)
+      &=\frac{P(D\mid L)P(L)}{P(D\mid L)P(L)+P(D\mid F)P(F)}\\[0.5em]
+      &=\frac{0.8\cdot(1/21)}{0.8\cdot(1/21)+0.1\cdot(20/21)}
+        =\frac{2}{7}.
+    \end{aligned}
+  \]
+
+  The description is eight times as likely among librarians, but there
+  are twenty times as many farmers.
+
+  \textbf{Evidence favouring a hypothesis need not make it the most
+    probable hypothesis.}
+
+  {\footnotesize Representativeness: judging probability by resemblance
+    to a stereotype can neglect the base rates.}
+
+\end{frame}
+
+
+\begin{frame}{Steve: one more observation}
+
+  Now we learn that Steve works mainly indoors ($I$).
+
+  \textbf{Among people already matching the description $D$}, suppose:
+
+  \begin{center}
+    \begin{tabular}{ll}
+      \hline
+      Occupation & Also working mainly indoors \\
+      \hline
+      Librarian & 75\% of 80: $80\cdot0.75=60$ \\
+      Farmer & 10\% of 200: $200\cdot0.10=20$ \\
+      \hline
+    \end{tabular}
+  \end{center}
+
+  \textbf{What is the updated probability that Steve is a librarian?}
+
+  \uncover<2->{
+    \[
+      P(L\mid D,I)=\frac{60}{60+20}=75\%.
+    \]
+    Librarian is now more probable. The first posterior becomes the
+    prior for this update.
+  }
+
+  {\footnotesize These invented rates are conditional on $D$:
+    $P(I\mid L,D)=0.75$, $P(I\mid F,D)=0.10$.
+    We have not assumed that $D$ and $I$ are conditionally independent.}
+
+\end{frame}
+
+
+\begin{frame}{Pair discussion: Steve's evidence}
+
+  {\color{uured}\textbf{Discuss in pairs (1--2 minutes).}}
+
+  \begin{itemize}
+  \item What if Steve was actually selected at a library conference?
+  \item What would we need to check about the description-matching
+    percentages before using them in a real analysis?
+  \item What if the description was unreliable?
+  \end{itemize}
+
+  \uncover<2->{
+    \medskip
+    \textbf{Pascalian calculation:} the probabilities follow from our
+    stated model and evidence.
+
+    \textbf{Baconian concern:} how thoroughly have the evidence and
+    alternative explanations been investigated?
+
+    Bayesian analysis can address these concerns too: revisit the
+    sampling process, model measurement uncertainty, and check assumptions.
+  }
+
 \end{frame}
 
 
@@ -828,22 +1051,27 @@ generated quantities {
    \end{itemize}
 \end{frame}
 
+% Suggested improvement for the final questions section:
+% Keep this as a short oral-exam-style recap if there is time.
+% The old robot/quantum prompts are interesting, but they may pull the
+% discussion away from the main lecture goals. A tighter version would ask
+% students to classify uncertainty, say what data would reduce it, and create
+% one example of their own.
+%
 %\begin{frame}{Questions}
 %
 %  \begin{itemize}
-%  \item<1-> Pick a number between 1--5
+%  \item<1-> Classify the uncertainty:
 %    \begin{itemize}
-%    \item<2-> raise as many fingers
-%    \item<3-> is the number of fingers raised random (by you or by others)?
+%    \item the next roll of a fair die
+%    \item the unknown fraction of red chips in a bag
+%    \item tomorrow's temperature in Uppsala
 %    \end{itemize}
 %    \vspace{\baselineskip}
-%  \item<4-> If we build a robot with very fast vision which can observe
-%    the rotating coin accurately, is the throw random for the robot?
+%  \item<2-> For each example, what data or information would reduce the
+%    epistemic part of the uncertainty?
 %    \vspace{\baselineskip}
-%  \item<5-> Is the quantum uncertainty aleatoric or epistemic?
-%    \vspace{\baselineskip}
-%  \item<6-> What is your own example with both aleatoric and epistemic
-%    uncertainty?
+%  \item<3-> Give your own example with both aleatoric and epistemic uncertainty.
 %  \end{itemize}
 %\end{frame}
 

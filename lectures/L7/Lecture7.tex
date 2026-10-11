@@ -957,21 +957,25 @@
 
 \frametitle{De Finetti's takeaway}
 
-  \textbf{Exchangeability provides a justification for modelling
-    observations as independent conditional on a shared unknown
-    parameter, even though they need not be independent marginally.}
-
-  \begin{enumerate}
+  % Interpretation: David Spiegelhalter, "Probability Probably Doesn't Exist".
+  % https://www.scientificamerican.com/article/why-probability-probably-doesnt-exist-but-its-useful-to-act-like-it-does/
+  \begin{itemize}
   \item \textbf{Usually, we start with a Bayesian model:} an unknown
     coin bias $\theta$, a prior for $\theta$, and independent flips
     given $\theta$.
   \item \textbf{De Finetti starts with symmetry:} the order of the
     flips carries no information.
-  \item For an \textbf{infinite exchangeable Bernoulli sequence}, the
-    theorem says its distribution must admit exactly that Bayesian
-    representation: a distribution over $\theta$ and IID flips
-    conditional on $\theta$.
-  \end{enumerate}
+  \item For an \textbf{infinite exchangeable sequence of binary outcomes},
+    our beliefs can be represented \textbf{as if} there were a shared
+    unknown success probability $\theta$.
+  \item Given $\theta$, the outcomes are independent; a prior
+    distribution describes our uncertainty about $\theta$.
+    The outcomes need not be independent marginally.
+  \end{itemize}
+
+  \medskip
+  \textbf{We do not need to assume an objectively existing chance first:
+    exchangeability justifies this familiar Bayesian representation.}
 
 \end{frame}
 

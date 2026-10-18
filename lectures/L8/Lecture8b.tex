@@ -68,6 +68,20 @@
 \section{Model assessment and selection}
 \frame{\sectionpage}
 
+\begin{frame}{Model checking and predictive performance}
+
+  \begin{itemize}
+  \item<1-> \uured{In L8a: What does the model miss?}\\
+    Posterior predictive checks compare features of observed and replicated data.
+  \item<2-> \uured{In L8b: How well does the model predict?}\\
+    We assess predictions for the task of interest using held-out observations.
+  \item<3-> \uured{The best candidate can still fit poorly.}\\
+    All candidates may miss important features. Predictive comparisons
+    complement model checks; they do not replace them.
+  \end{itemize}
+
+\end{frame}
+
 
 \begin{frame}
 \frametitle{Predictive performance}
@@ -97,9 +111,11 @@
 \pause
 \item Evaluate the \uured{utility} of a model $M$ for new \uured{unseen data} $\tilde{y}$:
 \[
-U = \int u(\tilde{y}) p_\text{true}({\color{uured}\tilde{y}}) d{\color{uured}\tilde{y}}\,,
+U_M = \int u_M(\tilde{y};y) p_\text{true}({\color{uured}\tilde{y}}) d{\color{uured}\tilde{y}}\,,
 \]
-where ${\color{uured}\tilde{y}}$ is an unseen observation generated from the true data generating process $p_\text{true}({\color{uured}\tilde{y}})$, and $y$ are observed data and $u(\color{uured}{\tilde{y}})$ is a utility function.
+where $\tilde y$ is an unseen observation and $y$ are the training data.
+The utility $u_M(\tilde y;y)$ evaluates the prediction made by model $M$
+after fitting it to $y$.
   \pause
   \item The expectation is with respect to $p_\text{true}$ ($f$ in BDA3)
   \pause
@@ -136,21 +152,21 @@ where ${\color{uured}\tilde{y}}$ is an unseen observation generated from the tru
 
 \begin{frame}
 
-\frametitle{(Bayesian) Points Prediction Accuracy}
+\frametitle{Bayesian point prediction accuracy}
 
 %  \item Scoring \uured{function}:
     \begin{itemize}
-      \item Point residuals
+      \item Training residuals (the model is fitted to all of $y$)
       \begin{align*}
         e_i =  y_i - E(\tilde{y}_i|y)\,,
       \end{align*}
       where
       \begin{align*}
-        E(\tilde{y}|y) = \int \tilde{y}_i p(\tilde{y}_i|y) d\tilde{y}\,,
+        E(\tilde{y}_i|y) = \int \tilde{y}_i p(\tilde{y}_i|y) d\tilde{y}_i\,,
       \end{align*}
       i.e. the \uured{expected predicted value}
       \pause
-      \item Mean squared (prediction) error (MSE)
+      \item Training mean squared error (MSE)
       \begin{align*}
         \text{MSE} = \frac{1}{n}\sum^n_i [y_i - E(\tilde{y}_i|y)]^2 \,.
       \end{align*}
@@ -165,19 +181,21 @@ where ${\color{uured}\tilde{y}}$ is an unseen observation generated from the tru
 \frametitle{Probabilistic predictions: Scoring rules}
 
   \begin{itemize}
-      \item Scoring \uured{rules}: \emph{How well does the predictive distribution align with observation?}
+      \item A scoring rule evaluates a predictive distribution $q$ at an outcome $z$:
       \[
-      S(F,y)\,,
+      S(q,z)\in\mathbb R\qquad\text{(higher is better).}
       \]
-      where $S(F,y) \in \mathbb{R}$, $F$ is a density, and $y$ is an observation.
+      Here $q$ is a probability density or probability mass function.
       \pause
-      \item \uured{Proper scoring rules}: $S(F,y)$ is minimized when the forecasted distribution matches the (true) distribution of the observation
+      \item A \uured{proper} rule has its highest \emph{expected} score when the
+        forecast matches the true distribution:
             \[
-            \mathbb{E}_{y \sim p_{true}}[S(p_{true},y)]\leq \mathbb {E}_{y\sim p_{true}}[S(F,y)]\,,
+            \mathbb{E}_{Z\sim p_{\mathrm{true}}}[S(p_{\mathrm{true}},Z)]
+            \geq \mathbb{E}_{Z\sim p_{\mathrm{true}}}[S(q,Z)].
             \]
-            where $p_{true}$ is the true data generating process.
         \pause
-      \item \uured{Local scoring rules}: $S(p_{true},y_i)$ only depend on the actual observation $y_i$
+      \item A \uured{local} rule depends on the forecast $q$ only through its
+        value $q(z)$ at the observed outcome.
   \end{itemize}
 
 \end{frame}
@@ -187,18 +205,19 @@ where ${\color{uured}\tilde{y}}$ is an unseen observation generated from the tru
 \frametitle{Probabilistic predictions}
 
     \begin{itemize}
-      \item The log score (a local and proper scoring rule) % Do example on blackboard
+      \item The log score is local and proper: higher is better.
       \begin{align*}
-         S(p(\tilde{y}|y),y_i) = \log p(y_i|y)
+         S(p(\cdot\mid y),\tilde y_i) = \log p(\tilde y_i\mid y).
       \end{align*}
 %      proportional to MSE if constant variance
 % TODO: Add example of different prediction normal distributions and the density
       \pause
-      \item The log predictive density (lpd)
+      \item Evaluate the predictive density at an observed value $y_i$:
       \begin{align*}
-        \text{lpd} & = \log p(y|y)\\
-        & =  \log \int  p(y|\theta) p(\theta|y) d\theta
+        \log p(y_i\mid y)
+        &= \log\int p(y_i\mid\theta)p(\theta\mid y)d\theta.
       \end{align*}
+      This is a training score: $y_i$ was also used in fitting the model.
   \end{itemize}
 
 \end{frame}
@@ -207,15 +226,17 @@ where ${\color{uured}\tilde{y}}$ is an unseen observation generated from the tru
 \frametitle{Probabilistic predictions}
 
     \begin{itemize}
-      \item The lpd is usually approximated with the log \uured{point} predictive density (lppd or just lpd)
+      \item The log \uured{pointwise} predictive density (lppd, called lpd below):
       \begin{align*}
-        \text{lppd} & = \sum_i^n \log \, p(y_i|y)\\
-        & \approx \log p(y|y)
+        \text{lppd} &= \sum_{i=1}^n\log p(y_i\mid y).
       \end{align*}
+      This is not generally the joint log predictive density $\log p(y\mid y)$:
+      integrating out shared parameters can induce dependence.
       \pause
-      \item Estimation using MCMC
+      \item Monte Carlo approximation with $\theta^{(s)}\sim p(\theta\mid y)$:
       \begin{align*}
-        \text{lppd} & = \sum_i^n \log \left(\frac{1}{S} \sum^S_s p(y_i|\theta_{s}) \right)
+        \text{lppd} &\approx \sum_{i=1}^n\log\left(\frac{1}{S}
+          \sum_{s=1}^S p(y_i\mid\theta^{(s)})\right).
       \end{align*}
   \end{itemize}
 
@@ -228,18 +249,21 @@ where ${\color{uured}\tilde{y}}$ is an unseen observation generated from the tru
 \begin{frame}{Model selection}
 
 \begin{itemize}
-\item Evaluate how model $M$ \uured{generalizes to unseen data} $\tilde{y}$\\(the \emph{expected log predictive density}):
+\item Evaluate model $M$ on unseen outcomes, one for each of $n$ prediction cases:
 \[
-\text{elpd}_M= \int \log p_M({\color{uured}\tilde{y}}|y) p_\text{true}({\color{uured}\tilde{y}}) d{\color{uured}\tilde{y}}\,,
+\text{elpd}_M=\sum_{i=1}^n\int\log p_M(\tilde y_i\mid y)
+  p_\text{true}(\tilde y_i)d\tilde y_i.
 \]
-where ${\color{uured}\tilde{y}}$ is an unseen observation generated from the true data generating process $p_\text{true}({\color{uured}\tilde{y}})$, and $y$ are observed data.
-\item $\log p_M({\color{uured}\tilde{y}}|y)$ is the log score (the utility of the model)
+Here $\tilde y_i$ is a future outcome for case $i$ and $y$ are the training data.
+For regression, each prediction conditions on its covariates (not shown).
+\item This is the \uured{total} expected log predictive density; divide by $n$
+  for an average per observation.
 \pause
 \item The expectation is with respect to $p_\text{true}$
 \pause
 \item $p_\text{true}$ is (almost always) \uured{unknown}
 \pause
-\item The utility function is the log scoring rule.
+\item The utility for each case is $\log p_M(\tilde y_i\mid y)$: higher is better.
 \end{itemize}
 \end{frame}
 
@@ -252,13 +276,15 @@ where ${\color{uured}\tilde{y}}$ is an unseen observation generated from the tru
 
 \begin{frame}{Leave-one-out cross-validation (LOO-CV)}
 \begin{itemize}
-\item Evaluate how model $M$ \emph{generalizes} to unseen data \\(the \emph{expected log predictive density}):
+\item Our target is the total expected log predictive density:
 \[
-\text{elpd}_{M}= \int \log p_M({\color{uured}\tilde{y}}|y) p_\text{true}({\color{uured}\tilde{y}}) d{\color{uured}\tilde{y}}\,,
+\text{elpd}_M=\sum_{i=1}^n\int\log p_M(\tilde y_i\mid y)
+  p_\text{true}(\tilde y_i)d\tilde y_i.
 \]
-where ${\color{uured}\tilde{y}}$ are unseen observations generated from the true data generating process $p_\text{true}({\color{uured}\tilde{y}})$, and $y$ are observed data.
+The future outcomes $\tilde y_i$ come from the true data-generating process;
+$y$ are the observed training data.
 \pause
-\item Can we approximate $p_\text{true}(\tilde{y}_i)$?
+\item How can we estimate these expectations without collecting new data?
 \end{itemize}
 \end{frame}
 
@@ -266,7 +292,7 @@ where ${\color{uured}\tilde{y}}$ are unseen observations generated from the true
 \begin{frame}{Leave-one-out cross-validation (LOO-CV)}
 
 \begin{itemize}
-\item Approximate $p_\text{true}(\tilde{y}_i)$ with data $y$
+\item Use held-out observations to estimate expected log predictive performance.
 \pause
 \item Hold out observation $i$ and try to predict $y_i$ based on $\mathbf{y}_{-i}$
 %\pause
@@ -277,12 +303,13 @@ where ${\color{uured}\tilde{y}}$ are unseen observations generated from the true
  = & \sum^n_{i=1} \log \int p_M(y_i|\theta) p(\theta|\mathbf{y}_{-i})d\theta
 \end{align*}
 \pause
-\item \uured{Analogy:} Monte Carlo approximation using our data: $y \sim p_\text{true}({\tilde{y}})$
+\item \uured{Analogy:} replace expectations over future outcomes with held-out
+  observations. Each fitted model uses $n-1$ observations.
 %\item Similar to \uured{jack-knife resampling}
 %\pause
 %\item Pareto-Smoothed Importance Sampling (PSIS) can be used to efficiently compute each ${\color{uured}\pi_i}$ (see Gelfand, 1996 and Vehtari et. al., 2019)
 \pause
-\item The elpd, lpd and efficient number of parameters ($p_\text{loo}$)
+\item The elpd, lpd and effective number of parameters ($p_\text{loo}$)
 \[
 \text{elpd}_\text{loo} = \text{lpd} - p_\text{loo}
 \]
@@ -310,7 +337,7 @@ where ${\color{uured}\tilde{y}}$ are unseen observations generated from the true
 
   {\includegraphics[width=8cm]{figs/fake7r.pdf}}
   \\
-  \onslide<2->{{\color{blue} $y_{18} - E[p(\tilde{y}|\tilde{x}=18,x_{-18},y_{-18})]$}\\ \vspace{0.5\baselineskip}}
+  \onslide<2->{{\color{blue} $y_{18} - E[\tilde{y}\mid\tilde{x}=18,x_{-18},y_{-18}]$}\\ \vspace{0.5\baselineskip}}
   \onslide<3->{Can be use to compute, e.g., RMSE, $R^2$, 90\% error}
 %  \onslide<4>{\\~\\ \small See LOO-$R^2$ at \url{avehtari.github.io/bayes_R2/bayes_R2.html}}
 \end{frame}
@@ -342,7 +369,7 @@ where ${\color{uured}\tilde{y}}$ are unseen observations generated from the true
   \only<2>{\color{blue} $\log p(y_i|x_i,x_{-i},y_{-i}), \quad i=1,\ldots,20$}
   \only<3>{\color{blue} $\sum_{i=1}^{20} \log p(y_i|x_i,x_{-i},y_{-i}) \approx -29.5$}
   \only<4->{\color{blue} $\mbox{elpd\_loo} = \sum_{i=1}^{20} \log p(y_i|x_i,x_{-i},y_{-i}) \approx -29.5$\\ \vspace{0.2\baselineskip}}
-  \only<5> {\color{blue} unbiased estimate of log posterior pred. density for new data}
+  \only<5> {\color{blue} estimate of out-of-sample predictive performance}
   \only<6-7>{\color{red} $\mbox{lpd} = \sum_{i=1}^{20} \log p(y_i|x_i,x,y) \approx -26.8$\\ \vspace{0.2\baselineskip}}
   \only<7>{\color{blue} $\mbox{p\_loo} = \mbox{lpd}-\mbox{elpd\_loo} \approx 2.7$}
   \only<8-> {\color{blue} $\mbox{SE} = \mbox{sd}(\log p(y_i|x_i,x_{-i},y_{-i}))\cdot \sqrt{20} \approx 3.3$}
@@ -469,7 +496,8 @@ See help('pareto-k-diagnostic') for details.
 \begin{enumerate}
 \item You have to make some assumptions on data generating mechanism $p_\text{true}$
 \[
-\text{elpd}_M= \int \log p_M({\color{uured}\tilde{y}}|y) p_\text{true}({\color{uured}\tilde{y}}) d{\color{uured}\tilde{y}}\,,
+\text{elpd}_M=\sum_{i=1}^n\int\log p_M(\tilde y_i\mid y)
+  p_\text{true}(\tilde y_i)d\tilde y_i\,,
 \]
 \item Use the knowledge of the prediction task if available
 \item Cross-validation can be used to analyse different parts, even if
@@ -599,15 +627,17 @@ See help('pareto-k-diagnostic') for details.
   \frametitle{Importance sampling for LOO-CV}
 
    \begin{itemize}
-   \item Let $f = p(\tilde{y}_i|y_{-i})$, $g = p(\theta|y)$, and $q = p(\theta|y_{-i})$
+   \item Let $f(\theta)=p(\tilde y_i\mid\theta)$, with proposal
+     $g(\theta)=p(\theta\mid y)$ and target $q(\theta)=p(\theta\mid y_{-i})$.
    \pause
-   \item Having samples $\theta^s$ from $p(\theta^s|y)$
+   \item Using draws $\theta^{(s)}\sim p(\theta\mid y)$:
      \begin{align*}
-       p(\tilde{y}_i|y_{-i})\approx\frac{\sum_{s=1}^S p(\tilde{y}_i|\theta^s) w_i^s}{\sum_{s=1}^S w_i^s},
+       p(\tilde y_i\mid y_{-i})\approx
+       \frac{\sum_{s=1}^S p(\tilde y_i\mid\theta^{(s)})r_i^{(s)}}{\sum_{s=1}^S r_i^{(s)}},
      \end{align*}
-     where $w_i^s$ are importance weights and
+     where the raw importance weights need only be proportional to
      \begin{align*}
-       w_i^s=\frac{p(\theta^s|y_{-i})}{p(\theta^s|y)}.
+       r_i^{(s)}\propto\frac{p(\theta^{(s)}\mid y_{-i})}{p(\theta^{(s)}\mid y)}.
      \end{align*}
    \end{itemize}
 
@@ -617,19 +647,23 @@ See help('pareto-k-diagnostic') for details.
   \frametitle{Importance sampling for LOO-CV}
 
    \begin{itemize}
-   \item We get a nice solution
+   \item For conditionally independent observations,
+     $p(y\mid\theta)=\prod_j p(y_j\mid\theta)$:
      \begin{align*}
-       w_i^s=\frac{p(\theta^s|y_{-i})}{p(\theta^s|y)} = \frac{\frac{p(\theta^s) \prod_{j \neq i} p(y_j | \theta^s)}{p(y_{-i})}}{\frac{p(\theta^s) \prod_j p(y_j | \theta^s)}{p(y)}}\propto\frac{1}{\color{red} p(y_i|\theta^s)}.
+       \frac{p(\theta^{(s)}\mid y_{-i})}{p(\theta^{(s)}\mid y)}
+       =\frac{p(y)}{p(y_{-i})}\frac{1}{p(y_i\mid\theta^{(s)})}
+       \propto\frac{1}{\color{red}p(y_i\mid\theta^{(s)})}.
      \end{align*}
+   \item Define $r_i^{(s)}=1/p(y_i\mid\theta^{(s)})$, so
+     $\log r_i^{(s)}=-\log p(y_i\mid\theta^{(s)})$.
  \pause
-   \item If evaluated with $\tilde{y}_i=y_i$
+   \item Evaluating at $\tilde y_i=y_i$ gives the raw IS estimate:
         \begin{align*}
-       p(\tilde{y}_i|y_{-i})\approx\frac{\sum_{s=1}^S p(\tilde{y}_i|\theta^s) w_i^s}{\sum_{s=1}^S w_i^s} = \frac{1}{\sum_{s=1}^S\frac{1}{p(y_i|\theta^s)}},
+       p(y_i\mid y_{-i})&\approx
+       \frac{\sum_{s=1}^S p(y_i\mid\theta^{(s)})r_i^{(s)}}{\sum_{s=1}^S r_i^{(s)}}
+       =\frac{S}{\sum_{s=1}^S\frac{1}{p(y_i\mid\theta^{(s)})}}.
      \end{align*}
-     and
-    \begin{align*}
-       \log w^{(s)}_i = - \log p(y_i|\theta^{(s)}) %= - \text{log_lik[i]}
-    \end{align*}
+     Each term in the numerator is 1, so the numerator is $S$.
 %    \pause
 %    \item What $\theta^{(s)}$ will give large weights?
 % TODO: Add normal likelihood with known variance and compute the weights as an example.
@@ -648,12 +682,12 @@ See help('pareto-k-diagnostic') for details.
   \\
   \only<2>{$\theta^{(s)} \sim p(\theta|x,y)$}
   \only<3-4>{$\theta^{(s)} \sim p(\theta|x,y), \quad p(\tilde{y}|\tilde{x},x,y) \approx \frac{1}{S}\sum_{s=1}^S p(\tilde{y}|\tilde{x},\theta^{(s)})$ }
-  \only<5>{$\theta^{(s)} \sim p(\theta|x,y)$\\ \vspace{0.2\baselineskip}$ w_i^{(s)} = p(\theta^{(s)}|x_{-i},y_{-i}) / p(\theta^{(s)}|x,y)$ }
-  \only<6-8>{$\theta^{(s)} \sim p(\theta|x,y)$\\ \vspace{0.2\baselineskip} $ w_i^{(s)} = p(\theta^{(s)}|x_{-i},y_{-i}) / p(\theta^{(s)}|x,y) \propto 1/p(y_i|x_i,\theta^{(s)})$\\ \vspace{0.2\baselineskip} }
+  \only<5>{$\theta^{(s)} \sim p(\theta|x,y)$\\ \vspace{0.2\baselineskip}$ r_i^{(s)} \propto p(\theta^{(s)}|x_{-i},y_{-i}) / p(\theta^{(s)}|x,y)$ }
+  \only<6-7>{$\theta^{(s)} \sim p(\theta|x,y)$\\ \vspace{0.2\baselineskip} $ r_i^{(s)} = 1/p(y_i|x_i,\theta^{(s)})$\\ \vspace{0.2\baselineskip} }
   \only<7>{$\log(1/p(y_i|x_i,\theta^{(s)})) = -\mbox{log\_lik}[i]$}
-  \only<9-10>{$\theta^{(s)} \sim p(\theta|x,y)$\\ \vspace{0.2\baselineskip}
-    $ w_i^{(s)} = p(\theta^{(s)}|x_{-i},y_{-i}) / p(\theta^{(s)}|x,y) \propto 1/p(y_i|x_i,\theta^{(s)})$\\ \vspace{0.2\baselineskip}
-  $p(y_i|x_i,x_{-i},y_{-i}) \approx \sum_{s=1}^S [w_i^{(s)} p(y_i|x_i,\theta^{(s)})]$}%\only<10>{, where $w \leftarrow \mbox{PSIS}(r)$}
+  \only<8>{PSIS smooths the largest raw weights $r_i^{(s)}$ to give $w_i^{(s)}$.}
+  \only<9-10>{Normalise the smoothed weights: $\bar w_i^{(s)}=w_i^{(s)}/\sum_{t=1}^S w_i^{(t)}$.\\ \vspace{0.2\baselineskip}
+  $p(y_i|x_i,x_{-i},y_{-i}) \approx \sum_{s=1}^S \bar w_i^{(s)} p(y_i|x_i,\theta^{(s)})$.}
 
 \end{frame}
 
@@ -662,12 +696,16 @@ See help('pareto-k-diagnostic') for details.
 \frametitle{Recap: Pareto smoothed importance sampling}
 
   \begin{itemize}
-  \item Pareto-Smoothed Importance sampling smooth the weights according to a Generalized Pareto($k$) distribution
-  \item Pareto-$k$ diagnostic estimate the number of existing moments ($\lfloor 1/k \rfloor$)
-  \item<2-> Finite variance and central limit theorem for $k<1/2$
-  \item<3-> Finite mean and generalized central limit theorem for $k<1$,
-    but pre-asymptotic constant grows impractically large for $k>0.7$
-  \item<4-> Hence $k>0.7$ can be used to indicate what observation that can be "held-out" using IS
+  \item PSIS fits a generalized Pareto distribution to the largest raw weights
+    and smooths these extreme weights.
+  \item The estimated tail shape $\widehat k$ measures how heavy that tail is:
+    larger values mean a few draws can dominate the estimate.
+  \item<2-> As a rule of thumb, $\widehat k<0.7$ is reassuring;
+    smaller values generally indicate more stable importance sampling.
+  \item<3-> Software may use a stricter threshold when fewer posterior draws
+    are available. Check its warnings.
+  \item<4-> $\widehat k>0.7$ warns that the \uured{PSIS approximation is unreliable}.
+    It does not mean that exact leave-one-out prediction is impossible.
   \end{itemize}
 \end{frame}
 
@@ -713,7 +751,7 @@ Pareto $\hat{k}$ estimates the tail shape which determines the convergence rate 
 \frametitle{Stan code}
 
   \vspace{\baselineskip}
-  $ \log(w_i^{(s)}) = \log(1/p(y_i|x_i,\theta^{(s)})) = {\color{red}-\mbox{log\_lik}[i]}$
+  $ \log(r_i^{(s)}) = \log(1/p(y_i|x_i,\theta^{(s)})) = {\color{red}-\mbox{log\_lik}[i]}$
   \vspace{\baselineskip}
 
   \pause
@@ -806,19 +844,24 @@ See help('pareto-k-diagnostic') for details.
 \frametitle{K-fold cross-validation}
 
 \begin{itemize}
-\item We can approximate $elpd_\text{loo}$ using K-fold CV
+\item Split observations into $K$ folds $I_1,\ldots,I_K$, each containing
+  approximately $1/K$ of the observations.
 \pause
 \begin{enumerate}
-\item \texttt{for k in K}
+\item For $k=1,\ldots,K$:
   \begin{enumerate}
-  \item hold $1/K$ observations out (i.e. $y_{-y(k)}$)
-  \item compute $p(\theta|y_{-y(k)})$
-  \item compute lpd for $y_{-y(k)}$
+  \item hold out $y_{I_k}$; use $y_{-I_k}$ as the training data
+  \item fit $p(\theta\mid y_{-I_k})$
+  \item score only the held-out observations:
+    \[
+      L_k=\sum_{i\in I_k}\log\int p(y_i\mid\theta)p(\theta\mid y_{-I_k})d\theta
+    \]
   \end{enumerate}
-\item sum the lpd over $K$ folds
+\item sum the scores: $\text{elpd}_{K\text{-fold}}=\sum_{k=1}^K L_k$
 \end{enumerate}
 \pause
-\item We only need to estimate $K$ models
+\item Fit $K$ models, each with fewer training observations than in LOO
+  when $K<n$.
 \end{itemize}
 
 \end{frame}
@@ -1028,8 +1071,8 @@ model1 -14.4       6.1
   \item<4-> In a nested case choose simpler if assuming some cost for
     extra parts?
 %    {\small \url{andrewgelman.com/2018/07/26/parsimonious-principle-vs-integration-uncertainties/}}
-  \item<5-> In a nested case choose more complex if you want to take
-    into account all the uncertainties.%\\
+  \item<5-> A larger nested model can retain uncertainty about additional effects,
+    especially with regularising priors. It does not account for all model uncertainty.%\\
 %    {\small \url{andrewgelman.com/2018/07/26/parsimonious-principle-vs-integration-uncertainties/}}
   \end{enumerate}
 
@@ -1188,13 +1231,16 @@ model1 -14.4       6.1
 \frametitle{WAIC vs PSIS-LOO}
 
 \begin{enumerate}
-  \item<2-> WAIC has same assumptions as LOO
-  \item<3-> PSIS-LOO is more accurate
-  \item<4-> PSIS-LOO has much better diagnostics
-  \item<5-> LOO makes the prediction assumption more clear,\\ which
-    helps if K-fold-CV is needed instead
-  \item<6-> Multiplying by -2 doesn't give any benefit\\ (Watanabe
-    didn't multiply by -2)
+  \item<2-> WAIC and LOO estimate pointwise predictive performance;
+    they can differ substantially with finite data.
+  \item<3-> PSIS-LOO is generally preferable when its importance-sampling
+    diagnostics are satisfactory.
+  \item<4-> Pareto $\widehat k$ helps diagnose unreliable PSIS approximations.
+    Switching to WAIC is not a reliable fix for large $\widehat k$.
+  \item<5-> LOO makes the held-out prediction task explicit;
+    another validation split may be needed for a different task.
+  \item<6-> ELPD: higher is better. On the $-2\times\text{ELPD}$ scale,
+    lower is better; the ranking contains the same information.
 \end{enumerate}
 
 %\vspace{6\baselineskip}

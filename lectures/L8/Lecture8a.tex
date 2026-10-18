@@ -80,6 +80,19 @@ Use the exact models that are in the papers. (2) Ignore prior recommendations - 
 \section{Model Checking and Assessment}
 \frame{\sectionpage}
 
+\begin{frame}{Model checking and predictive performance}
+
+  \begin{itemize}
+  \item<1-> \uured{L8a: Model checking}\\
+    What features of the data does our model fail to reproduce?
+  \item<2-> \uured{L8b: Predictive performance}\\
+    How well does it predict the observations we care about?
+  \item<3-> \uured{Winning a comparison does not establish adequate fit.}\\
+    Even the best candidate model may miss important features of the data.
+  \end{itemize}
+
+\end{frame}
+
 
 
 \begin{frame}{The Box process: Probabilistic modeling}
@@ -122,17 +135,19 @@ Use the exact models that are in the papers. (2) Ignore prior recommendations - 
 \frametitle{Posterior predictive checking -- example}
 
   \begin{itemize}
-  \item<1-> Newcombs speed of light measurements
+  \item<1-> Newcomb's speed of light measurements ($n=66$)
     \begin{itemize}
-    \item model $y \sim \N(\mu,\sigma)$ with prior $(\mu, \log \sigma) \propto 1$
+    \item $y_i\mid\mu,\sigma \sim \N(\mu,\sigma^2)$, conditionally independently
+    \item improper prior $p(\mu,\log\sigma)\propto 1$, or $p(\mu,\sigma)\propto 1/\sigma$
     \end{itemize}
-  \item<2-> Posterior predictive replicate $y^{\rm rep}$
+  \item<2-> Generate one replicated dataset $y^{\mathrm{rep},(s)}$:
     \begin{itemize}
-    \item<3-> draw $\mu^{(s)},\sigma^{(s)}$ from the posterior $p(\mu,\sigma|y)$
-    \item<4-> draw $y^{\mathrm{rep}\,(s)}$ from $\N(\mu^{(s)},\sigma^{(s)})$
-    \item<5-> repeat $n$ times to get $y^{\mathrm{rep}}$ with $n$ replicates\\~\\
-    \item<6-> example $y^{\mathrm{rep}}$:
-    \uncover<6->{\includegraphics[width=7cm]{figs/light_ppc_1hist.pdf}}
+    \item<3-> draw one pair $(\mu^{(s)},\sigma^{(s)})$ from $p(\mu,\sigma\mid y)$
+    \item<4-> holding that pair fixed, draw $n$ independent values\\
+      $y_i^{\mathrm{rep},(s)}\sim\N(\mu^{(s)},(\sigma^{(s)})^2)$, $i=1,\ldots,n$
+    \item<5-> repeat both steps for $s=1,\ldots,S$: $S$ datasets of size $n$
+    \item<6-> one replicated dataset:
+    \uncover<6->{\includegraphics[width=6cm]{figs/light_ppc_1hist.pdf}}
       \end{itemize}
     \end{itemize}
 
@@ -144,13 +159,16 @@ Use the exact models that are in the papers. (2) Ignore prior recommendations - 
 \frametitle{Replicates vs. predictive distributions}
 
   \begin{itemize}
-  \item Predictive $\tilde{y}$ is the next not yet observed possible
-    observation. \pause
     % TODO: Add predictive distribution here
-    \item $y^{\mathrm{rep}}$ refers to replicating the \uured{whole
-    experiment} (potentially with same values of $x$)\\i.e. obtaining as
-    many replicated observations as in the original data.
     % TODO: Double check that y^rep is also a predictive distribution
+  \item $\tilde{y}$ denotes an unobserved outcome or dataset to be predicted.
+    \pause
+  \item $y^{\mathrm{rep}}$ denotes a replication of the \uured{whole experiment}:
+    the same sample size and experimental design, including fixed covariates.
+  \item Both are drawn from predictive distributions. For a replicated dataset,
+    \[
+      p(y^{\mathrm{rep}}\mid y)=\int p(y^{\mathrm{rep}}\mid\theta)p(\theta\mid y)d\theta.
+    \]
   \end{itemize}
 
 \end{frame}
@@ -162,7 +180,6 @@ Use the exact models that are in the papers. (2) Ignore prior recommendations - 
 
   \begin{itemize}
   \item<1-> Generate replicated datasets $y^{\rm rep}$
-  %\item<2-> Commonly done using Monte Carlo draws
   % TODO: Double check how yrep is draw (ie using monte carlo draws)
   \item<2-> Compare to the original dataset
   \end{itemize}
@@ -209,32 +226,28 @@ Use the exact models that are in the papers. (2) Ignore prior recommendations - 
 \frametitle{Posterior predictive checking -- example}
 
   \begin{itemize}
-  \item<1-> Good test statistic is \href{https://en.wikipedia.org/wiki/Ancillary_statistic}{ancillary} (or almost)
+  \item<1-> A statistic is \uured{ancillary} if its \emph{sampling distribution}
+    does not depend on the unknown parameters.
     \begin{itemize}
-    \item a statistic $T(X)$ that does not depend on the parameters of the model are ancillary\\e.g. in a normal model with \uured{known} $\sigma^2$,
+    \item In a Normal model with \uured{known} $\sigma^2$,
     \[
-    s^2 = \sum_i^n \frac{(x_i-\bar{x})^2}{n-1}\,,
+    s^2 = \frac{1}{n-1}\sum_{i=1}^n (x_i-\bar{x})^2
     \]
-    is ancillary ($\mu$ cancel out).
-    \item So is the (interquantile) range
+    has a distribution that does not depend on the unknown $\mu$.
     \end{itemize}
-  \item<2-> Bad test statistic is highly dependent of the parameters
-    \begin{itemize}
-    \item e.g. variance (or mean) for normal model with \uured{unknown} $\sigma^2$. If $\sigma^2$ changes so will $T(X)$.
-    \end{itemize}
-  \item<3-> We want to \uured{identify problems} in data not captured by the \uured{model}
-  \item<4-> Connections:
-  \begin{itemize}
-    \item \uured{Sufficient statistic}: contains all the information about $\theta$
-    \item \uured{Ancillary statistic}: contains no information about $\theta$
-  \end{itemize}
+  \item<2-> If $\sigma^2$ is also unknown, $s^2$ is not ancillary:
+    its sampling distribution depends on $\sigma^2$.
+  \item<3-> Checks of fitted features such as the mean and variance may have
+    little power to reveal other model problems.
+  \item<4-> Choose statistics that target features the model may miss,
+    such as tails, skewness or dependence. They need not be ancillary.
   \end{itemize}
 
 \end{frame}
 
 \begin{frame}[fragile]
 
-\frametitle{Posterior predictive checking -- bad example}
+\frametitle{Posterior predictive checking -- a less informative check}
 
   \includegraphics[width=9cm]{figs/light_ppc_var.pdf}
 
@@ -246,30 +259,29 @@ Use the exact models that are in the papers. (2) Ignore prior recommendations - 
 \frametitle{Posterior predictive $p$-value}
 
   \begin{itemize}
-  \item<1-> \textit{Posterior predictive $p$-value}
-    \begin{eqnarray*}
-      p & = & \Pr(T(y^{\rep},\theta)\geq T(y,\theta)|y)\\
-      & = & \int\int
-      I_{T(y^{\rep},\theta)\geq T(y,\theta)}p(y^{\rep}|\theta)p(\theta|y)dy^{\rep}d\theta
-    \end{eqnarray*}
-    where $I$ is an indicator function
-    \begin{itemize}
-    \item<2-> having $(y^{\rep\,(s)},\theta^{(s)})$ from the posterior predictive
-      distribution (Monte Carlo):
-      \begin{equation*}
-        T(y^{\rep (s)},\theta^{(s)})\geq T(y,\theta^{(s)}), \quad s=1,\ldots,S
-      \end{equation*}
-    \end{itemize}
-    \vspace{-1.5\baselineskip}
-  \item<3-> Posterior predictive $p$-value (ppp-value):\\
-    \uured{could difference between the model and data  arise by chance}
-  \item<4-> Not commonly used, since the distribution of test
-    statistic $T(y,\theta)$ has more information
+  \item<1-> How often is the replicated discrepancy at least as large?
+    {\small
+    \begin{align*}
+      p_B &= \Pr(T(y^{\rep},\theta)\geq T(y,\theta)\mid y)\\
+          &= \iint I\{T(y^{\rep},\theta)\geq T(y,\theta)\}
+             p(y^{\rep}\mid\theta)p(\theta\mid y)dy^{\rep}d\theta.
+    \end{align*}
+    }
+  \item<2-> Draw $\theta^{(s)}\sim p(\theta\mid y)$, then
+    $y^{\rep,(s)}\sim p(y^{\rep}\mid\theta^{(s)})$:
+    \[
+      \widehat p_B=\frac{1}{S}\sum_{s=1}^S
+      I\{T(y^{\rep,(s)},\theta^{(s)})\geq T(y,\theta^{(s)})\}.
+    \]
+    Here $I\{\cdot\}$ is 1 if the condition holds, and 0 otherwise.
+  \item<3-> Values near 0 or 1 can reveal a mismatch; a non-extreme value
+    does not establish that the model fits well.
+  \item<4-> Not the probability that the model is correct; not generally
+    uniform under a correct model.
   \end{itemize}
 
 \end{frame}
 
-% TODO: Add the special case when thtea is know then, p values follows a uniform distributions. See book.
 \subsection{Marginal Predictive Checking}
 \frame{\subsectionpage}
 
@@ -279,25 +291,19 @@ Use the exact models that are in the papers. (2) Ignore prior recommendations - 
 \frametitle{Marginal and CV predictive checking}
 
   \begin{itemize}
-  \item Consider marginal predictive distributions $p(\tilde{y}_i|y)$
-    and each observation separately
-    \begin{itemize}
-    \item marginal posterior p-values
-      \begin{align*}
-        p_i = \mbox{Pr}(T(y_i^{\rep}) \leq T(y_i) | y)
-      \end{align*}
-      \pause
-    \item<2-> if $T(y_i)=y_i$
-      \begin{align*}
-        p_i = \mbox{Pr}(y_i^{\rep} \leq y_i | y)
-      \end{align*}
-    \end{itemize}
-  \item<2-> if $Pr(\tilde{y}_i|y)$ well calibrated, distribution of $p_i$
-    would be uniform between 0 and 1
-    \begin{itemize}
-    \item holds better for cross-validation predictive tests: $Pr(\tilde{y}_i|y_{-i})$
-      (cross-validation)
-    \end{itemize}
+  \item For continuous observations, consider each predictive distribution:
+    \[
+      p_i=\Pr(y_i^{\rep}\leq y_i\mid y).
+    \]
+    The observation $y_i$ is also used to fit the model. These tail areas
+    are not generally uniform, even for a correct model.
+  \item<2-> Leave-one-out probability integral transform (LOO-PIT):
+    \[
+      u_i=\Pr(\tilde y_i\leq y_i\mid y_{-i})=F_{-i}(y_i).
+    \]
+    Here $F_{-i}$ is the predictive CDF fitted without $y_i$.
+  \item<2-> For calibrated continuous predictions, approximate uniformity
+    on $[0,1]$ is a useful benchmark, not an exact small-sample guarantee.
   \end{itemize}
 
 \end{frame}
@@ -307,15 +313,14 @@ Use the exact models that are in the papers. (2) Ignore prior recommendations - 
 \frametitle{Marginal predictive checking - Example}
 
   \begin{itemize}
-  \item Marginal tail area or Probability integral transform (PIT)
+  \item Posterior predictive tail areas (the same data are used for fitting):
     \begin{align*}
-      p_i = p(y_i^{\rep} \leq y_i | y)
+      p_i = \Pr(y_i^{\rep} \leq y_i \mid y)
     \end{align*}
-  if $p(\tilde{y}_i|y)$ is well calibrated, distribution of $p_i$'s
-    would be uniform between 0 and 1
+  \item Uniformity is not an exact reference for this plot.
+    LOO-PIT reduces the reuse of observations in fitting and checking.
   \end{itemize}
-  \vspace{-1.5\baselineskip}
-  \uncover<2->{\includegraphics[width=9cm]{figs/light_ppc_pit.pdf}}
+  \uncover<2->{\includegraphics[width=7.5cm]{figs/light_ppc_pit.pdf}}
 
 \end{frame}
 
@@ -334,7 +339,7 @@ Use the exact models that are in the papers. (2) Ignore prior recommendations - 
       \item<3-> alternatively combine different models to one model
         \begin{itemize}
         \item e.g. hierarchical model instead of separate and pooled
-        \item e.g. $t$ distribution contains Gaussian as a special case
+        \item e.g. Student's $t$ approaches a Gaussian as $\nu\to\infty$
       \end{itemize}
       \item<3-> robust models are good for testing sensitivity to ``outliers''
         \begin{itemize}
@@ -343,8 +348,8 @@ Use the exact models that are in the papers. (2) Ignore prior recommendations - 
     \end{itemize}
     \item<4-> Compare sensitivity of essential inference quantities
       \begin{itemize}
-      \item extreme quantiles are more sensitive than means and medians
-      \item extrapolation is more sensitive than interpolation
+      \item extreme quantiles are often more sensitive than means and medians
+      \item extrapolation is often more sensitive than interpolation
       \end{itemize}
     \end{itemize}
 
@@ -405,13 +410,18 @@ Use the exact models that are in the papers. (2) Ignore prior recommendations - 
   \[
   y_{ij} \sim N(\beta_0 + \beta_1 x_{ij}, \sigma^2)
   \]
-  \item Hiearchical linear regression (WHO super regions)
-  \item Hiearchical linear regression (clustered super regions)
+  \item Hierarchical linear regression (WHO super regions)
+  \item Hierarchical linear regression (clustered super regions)
   \[
-  y_{ij} \sim N(\beta_0 \beta_{0j} + (\beta_1 + \beta_{1j}) x_{ij}, \sigma^2)
+  y_{ij} \sim N(\beta_0 + \beta_{0j} + (\beta_1 + \beta_{1j}) x_{ij}, \sigma^2)
+  \]
+  \[
+  \beta_{0j}\sim N(0,\tau_0^2),\qquad \beta_{1j}\sim N(0,\tau_1^2)
   \]
   \end{enumerate}
-  where $y_{ij}$ is the log of $\text{PM}_{2.5}$ concentration and $x_{ij}$ is the satellite estimate, and $j \in \{1,...,J \}$ is the super-region indicator.
+  Here $y_{ij}$ is log $\text{PM}_{2.5}$ concentration, $x_{ij}$ is the log
+  satellite estimate, and $j$ indexes regions. The model also requires priors
+  for $\beta_0,\beta_1,\tau_0,\tau_1,\sigma$.
   \end{itemize}
 \end{frame}
 

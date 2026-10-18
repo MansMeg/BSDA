@@ -67,12 +67,12 @@
 \frametitle{Mini-project comments}
 
   \begin{itemize}
-  \item Priors are part of model. Describe them only there. \pause
   \item $\hat{R}$ and computational details - not the main interest. Describe the general results (that you can trust the computations) and refer to the appendix first details \pause
   \item Legend text same size as body text. \pause
-  \item Remember - look at the instructions. I have failed people with 4.5 pages. Or just 3 pages. \uured{Why do I care about this?} \pause
-  \item For \texttt{posteriordb} students: (1) Please describe the data (or how you similate data) under data.
-Use the exact models that are in the papers. (2) Ignore prior recommendations - see it as replication study
+  \item Describe the priors as part of the model. \pause
+  \item \uured{Report length: 3.5--4 pages}, excluding references and appendices. \pause
+  \item For \texttt{posteriordb}: describe the data or simulation method.
+    Use the paper's exact model and priors for this replication study.
   \end{itemize}
 
 \end{frame}
@@ -176,16 +176,34 @@ Use the exact models that are in the papers. (2) Ignore prior recommendations - 
 
 \begin{frame}[fragile]
 
-\frametitle{Posterior predictive checking -- example}
+\frametitle{Newcomb: observed and replicated data}
 
-  \begin{itemize}
-  \item<1-> Generate replicated datasets $y^{\rm rep}$
-  % TODO: Double check how yrep is draw (ie using monte carlo draws)
-  \item<2-> Compare to the original dataset
-  \end{itemize}
-  \vspace{-1\baselineskip}
-  \uncover<3->{\includegraphics[width=9cm]{figs/light_ppc_10hist.pdf}}
+  Compare datasets of the same size, using the same axes.
+  \begin{center}
+    \includegraphics[width=8.8cm]{figs/newcomb_ppc_comparison.pdf}
+  \end{center}
 
+\end{frame}
+
+
+\begin{frame}
+
+\frametitle{Pair discussion: Newcomb's data}
+
+  {\color{uured}\textbf{Discuss in pairs (1--2 minutes).}}
+
+  \textbf{Which feature of the observed data is poorly reproduced?
+    What statistic would you use to check it?}
+
+  \begin{center}
+    \includegraphics[width=7.3cm]{figs/newcomb_ppc_comparison.pdf}
+  \end{center}
+
+  \uncover<2->{
+    \textbf{Answer:} The unusually low observations are poorly reproduced.
+    A useful check is $T(y)=\min_i y_i$, compared with the minima of
+    \emph{many} replicated datasets.
+  }
 \end{frame}
 
 
@@ -223,24 +241,16 @@ Use the exact models that are in the papers. (2) Ignore prior recommendations - 
 
 \begin{frame}[fragile]
 
-\frametitle{Posterior predictive checking -- example}
+\frametitle{Choosing a discrepancy: ancillarity}
 
   \begin{itemize}
-  \item<1-> A statistic is \uured{ancillary} if its \emph{sampling distribution}
+  \item<1-> A statistic is \uured{ancillary} if its sampling distribution
     does not depend on the unknown parameters.
-    \begin{itemize}
-    \item In a Normal model with \uured{known} $\sigma^2$,
-    \[
-    s^2 = \frac{1}{n-1}\sum_{i=1}^n (x_i-\bar{x})^2
-    \]
-    has a distribution that does not depend on the unknown $\mu$.
-    \end{itemize}
-  \item<2-> If $\sigma^2$ is also unknown, $s^2$ is not ancillary:
-    its sampling distribution depends on $\sigma^2$.
-  \item<3-> Checks of fitted features such as the mean and variance may have
-    little power to reveal other model problems.
-  \item<4-> Choose statistics that target features the model may miss,
-    such as tails, skewness or dependence. They need not be ancillary.
+  \item<2-> Example: in a Normal model with known $\sigma^2$, the sampling
+    distribution of $s^2$ does not depend on the unknown $\mu$.
+    If $\sigma^2$ is also unknown, $s^2$ is no longer ancillary.
+  \item<3-> For checking, target features the model may miss, such as
+    tails, skewness or dependence. A useful discrepancy need not be ancillary.
   \end{itemize}
 
 \end{frame}
@@ -251,6 +261,30 @@ Use the exact models that are in the papers. (2) Ignore prior recommendations - 
 
   \includegraphics[width=9cm]{figs/light_ppc_var.pdf}
 
+\end{frame}
+
+
+\begin{frame}[fragile]
+
+\frametitle{Pair discussion: a reassuring variance?}
+
+  {\color{uured}\textbf{Discuss in pairs (1--2 minutes).}}
+
+  The observed variance looks typical among the variances of the
+  replicated datasets.
+
+  \textbf{Does this mean that the Normal model fits well?
+    Why, or why not?}
+
+  \uncover<2->{
+    \medskip
+    \textbf{Answer:} No. The model uses the observed variance to learn
+    $\sigma^2$, so reproducing that feature is a weak check.
+
+    A model can reproduce the variance while missing the shape of the
+    distribution, including its lower tail. We need checks of several
+    relevant features.
+  }
 \end{frame}
 
 
@@ -393,9 +427,9 @@ Use the exact models that are in the papers. (2) Ignore prior recommendations - 
   \item High-resolution satellite data of aerosol optical depth
   \end{itemize}
   \begin{center}
-    \only<1>{\vspace{-1.8\baselineskip}\includegraphics[height=6cm]{figs/map-data.png}}
-    \only<2>{\vspace{-1.8\baselineskip}\includegraphics[height=6cm]{figs/plot1.png}}
-    \only<3>{\hspace{-3cm}\includegraphics[height=5.55cm]{figs/plot2.png}}
+    \only<1>{\includegraphics[width=\linewidth,height=4.8cm,keepaspectratio]{figs/map-data.png}}
+    \only<2>{\includegraphics[width=\linewidth,height=4.8cm,keepaspectratio]{figs/plot1.png}}
+    \only<3>{\includegraphics[width=\linewidth,height=4.8cm,keepaspectratio]{figs/plot2.png}}
 \end{center}
 \end{frame}
 
@@ -419,8 +453,9 @@ Use the exact models that are in the papers. (2) Ignore prior recommendations - 
   \beta_{0j}\sim N(0,\tau_0^2),\qquad \beta_{1j}\sim N(0,\tau_1^2)
   \]
   \end{enumerate}
-  Here $y_{ij}$ is log $\text{PM}_{2.5}$ concentration, $x_{ij}$ is the log
-  satellite estimate, and $j$ indexes regions. The model also requires priors
+  Here $y_{ij}$ is the natural log of $\text{PM}_{2.5}$ concentration,
+  $x_{ij}$ is the natural log of the satellite estimate, and $j$ indexes regions.
+  The model also requires priors
   for $\beta_0,\beta_1,\tau_0,\tau_1,\sigma$.
   \end{itemize}
 \end{frame}
@@ -428,13 +463,54 @@ Use the exact models that are in the papers. (2) Ignore prior recommendations - 
 
 \begin{frame}
 
-\frametitle{Example: Prior predictive checking}
+\frametitle{Air pollution: which priors change?}
 
-  \begin{center}
-    \only<1>{\includegraphics[width=8cm]{figs/pm25_pp1a.pdf}}
-    \only<2>{\includegraphics[width=8cm]{figs/pm25_pp1b.pdf}}
-    \only<3>{\includegraphics[width=8cm]{figs/pm25_pp2.pdf}}
-\end{center}
+  Both concentrations are measured in $\mu\mathrm{g}/\mathrm{m}^3$.
+  We model their \uured{natural logarithms}: $y=\ln(c)$, $x=\ln(s)$.
+
+  \begin{columns}[T,onlytextwidth]
+    \begin{column}{0.49\textwidth}
+      \uured{Vague priors}
+      \begin{align*}
+        \beta_0,\beta_1&\sim N(0,100^2),\\
+        \tau_0^2,\tau_1^2,\sigma^2&\sim\mathrm{IG}(1,100).
+      \end{align*}
+    \end{column}
+    \begin{column}{0.49\textwidth}
+      \uured{Weakly informative}
+      \begin{align*}
+        \beta_0&\sim N(0,1),\\
+        \beta_1&\sim N(1,1),\\
+        \tau_0,\tau_1,\sigma&\sim N_+(0,1).
+      \end{align*}
+    \end{column}
+  \end{columns}
+
+  {\small $N$ uses variance as its second parameter.
+  IG is inverse-gamma with shape and scale; $N_+$ is half-normal on positive values.}
+
+  The tighter priors centre the calibration around intercept 0 and slope 1.
+
+  {\scriptsize Priors follow the simulation code accompanying
+  \href{https://github.com/jgabry/bayes-vis-paper}{Gabry et al. (2019)}.}
+\end{frame}
+
+\begin{frame}
+\frametitle{Air pollution: prior predictive check}
+
+  \only<1>{\uured{Vague priors}}
+  \only<2>{\uured{Weakly informative priors}}
+  {\centering
+    \only<1>{\includegraphics[width=7.8cm]{figs/air_prior_vague.pdf}}
+    \only<2>{\includegraphics[width=7.8cm]{figs/air_prior_weak.pdf}}
+    \par}
+  100 datasets at the observed design. Both plots use $\ln$, with
+  different horizontal scales.
+
+  $y=0,\;2.30,\;4.61$ means approximately
+  $c=1,\;10,\;100\;\mu\mathrm{g}/\mathrm{m}^3$.
+
+  \uncover<2->{Even the tighter priors allow extreme concentrations.}
 \end{frame}
 
 \begin{frame}

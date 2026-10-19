@@ -1,0 +1,594 @@
+%\documentclass[10pt,handout]{beamer}
+\documentclass[10pt]{beamer}
+\usepackage{babel} % Anpassa efter svenska. Ger svensk logga.
+\usepackage[utf8]{inputenc} % Anpassa efter linux
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+%\input{../common/lststan} % Stan listing
+\usepackage{lstbayes}
+\usepackage[all,poly,ps,color]{xy}
+
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=cyan,
+}
+\usepackage{../common/beamerthemeUppsala}
+%\usetheme{Uppsala}
+%\usecolortheme{UU} % Anpassa efter UU:s frger och logga
+%\hypersetup{pdfpagemode=FullScreen} % Adobe Reader ska ppna fullskrm
+\setbeamertemplate{itemize items}[circle]
+
+% \usepackage{beamerthemesplit}
+\usepackage{amsmath,amsfonts,amssymb}
+% \usepackage{amssymb}
+% \usepackage{graphics}
+% \usepackage{graphicx}
+% \usepackage{epsfig}
+% \usepackage[latin1]{inputenc}
+ \usepackage{color}
+% \usepackage{fancybox}
+% \usepackage{psfrag}
+% \usepackage[english]{babel}
+ \setbeamertemplate{footline}{\hfill\insertframenumber/\inserttotalframenumber}
+
+% Input new commands
+\input{../common/commands.tex}
+
+\def\dashxy(#1){%
+  /xydash{[#1] 0 setdash}def}
+\def\grayxy(#1){%
+  /xycolor{#1 setgray}def}
+\newgraphescape{D}[1]{!{\ar @*{[!\dashxy(2 2)]} "#1"}}
+\newgraphescape{P}[1]{!{\ar "#1"}}
+\newgraphescape{F}[1]{!{*+=<2em>[F=]{#1}="#1"}}
+\newgraphescape{O}[1]{!{*+=<2em>[F]{#1}="#1"}}
+\newgraphescape{V}[1]{!{*+=<2em>[o][F]{#1}="#1"}}
+\newgraphescape{B}[3]{!{{ "#1"*+#3\frm{} }.{ "#2"*+#3\frm{} } *+[F:!\grayxy(0.75)]\frm{}}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\setlength{\parskip}{3mm}
+\title[]{{\color{black}Bayesian Statistics and Data Analysis \\ Lecture 8a}}
+\author[]{M{\aa}ns Magnusson \\ Department of Statistics, Uppsala University \\ Thanks to Aki Vehtari, Aalto University}
+\date{}
+
+\begin{document}
+
+\frame{\titlepage
+% \thispagestyle{empty}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Mini-project comments}
+
+  \begin{itemize}
+  \item $\hat{R}$ and computational details - not the main interest. Describe the general results (that you can trust the computations) and refer to the appendix first details \pause
+  \item Legend text same size as body text. \pause
+  \item Describe the priors as part of the model. \pause
+  \item \uured{Report length: 3.5--4 pages}, excluding references and appendices. \pause
+  \item For \texttt{posteriordb}: describe the data or simulation method.
+    Use the paper's exact model and priors for this replication study.
+  \end{itemize}
+
+\end{frame}
+
+\section{Model Checking and Assessment}
+\frame{\sectionpage}
+
+\begin{frame}{Model checking and predictive performance}
+
+  \begin{itemize}
+  \item<1-> \uured{L8a: Model checking}\\
+    What features of the data does our model fail to reproduce?
+  \item<2-> \uured{L8b: Predictive performance}\\
+    How well does it predict the observations we care about?
+  \item<3-> \uured{Winning a comparison does not establish adequate fit.}\\
+    Even the best candidate model may miss important features of the data.
+  \end{itemize}
+
+\end{frame}
+
+
+
+\begin{frame}{The Box process: Probabilistic modeling}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\textwidth]{figs/Boxs_loop.png}
+    \caption{The Box approach (Box, 1976, Blei, 2014)}
+\end{figure}
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Model assessment}
+
+  \begin{itemize}
+  \item<+-> Sensibility with respect to additional information not used in model
+    \begin{itemize}
+    \item e.g., if posterior would claim that hazardous chemical
+      decreases probability of death
+    \end{itemize}
+  \item<+-> External validation
+    \begin{itemize}
+    \item compare predictions to completely new observations
+%    \item cf. relativity theory predictions
+    \end{itemize}
+  \item<+-> Internal validation
+    \begin{itemize}
+    \item posterior predictive checking
+    \item cross-validation predictive checking
+    \end{itemize}
+  \end{itemize}
+
+\end{frame}
+
+\section{Posterior predictive checking}
+\frame{\sectionpage}
+
+\begin{frame}[fragile]
+\frametitle{Posterior predictive checking -- example}
+
+  \begin{itemize}
+  \item<1-> Newcomb's speed of light measurements ($n=66$)
+    \begin{itemize}
+    \item $y_i\mid\mu,\sigma \sim \N(\mu,\sigma^2)$, conditionally independently
+    \item improper prior $p(\mu,\log\sigma)\propto 1$, or $p(\mu,\sigma)\propto 1/\sigma$
+    \end{itemize}
+  \item<2-> Generate one replicated dataset $y^{\mathrm{rep},(s)}$:
+    \begin{itemize}
+    \item<3-> draw one pair $(\mu^{(s)},\sigma^{(s)})$ from $p(\mu,\sigma\mid y)$
+    \item<4-> holding that pair fixed, draw $n$ independent values\\
+      $y_i^{\mathrm{rep},(s)}\sim\N(\mu^{(s)},(\sigma^{(s)})^2)$, $i=1,\ldots,n$
+    \item<5-> repeat both steps for $s=1,\ldots,S$: $S$ datasets of size $n$
+    \item<6-> one replicated dataset:
+    \uncover<6->{\includegraphics[width=6cm]{figs/light_ppc_1hist.pdf}}
+      \end{itemize}
+    \end{itemize}
+
+\end{frame}
+
+
+\begin{frame}
+
+\frametitle{Replicates vs. predictive distributions}
+
+  \begin{itemize}
+    % TODO: Add predictive distribution here
+    % TODO: Double check that y^rep is also a predictive distribution
+  \item $\tilde{y}$ denotes an unobserved outcome or dataset to be predicted.
+    \pause
+  \item $y^{\mathrm{rep}}$ denotes a replication of the \uured{whole experiment}:
+    the same sample size and experimental design, including fixed covariates.
+  \item Both are drawn from predictive distributions. For a replicated dataset,
+    \[
+      p(y^{\mathrm{rep}}\mid y)=\int p(y^{\mathrm{rep}}\mid\theta)p(\theta\mid y)d\theta.
+    \]
+  \end{itemize}
+
+\end{frame}
+
+
+\begin{frame}[fragile]
+
+\frametitle{Newcomb: observed and replicated data}
+
+  Compare datasets of the same size, using the same axes.
+  \begin{center}
+    \includegraphics[width=8.8cm]{figs/newcomb_ppc_comparison.pdf}
+  \end{center}
+
+\end{frame}
+
+
+\begin{frame}
+
+\frametitle{Pair discussion: Newcomb's data}
+
+  {\color{uured}\textbf{Discuss in pairs (1--2 minutes).}}
+
+  \textbf{Which feature of the observed data is poorly reproduced?
+    What statistic would you use to check it?}
+
+  \begin{center}
+    \includegraphics[width=7.3cm]{figs/newcomb_ppc_comparison.pdf}
+  \end{center}
+
+  \uncover<2->{
+    \textbf{Answer:} The unusually low observations are poorly reproduced.
+    A useful check is $T(y)=\min_i y_i$, compared with the minima of
+    \emph{many} replicated datasets.
+  }
+\end{frame}
+
+
+\begin{frame}
+
+\frametitle{Posterior predictive checking with test statistic}
+
+  \begin{itemize}
+  \item Replicated data sets $y^{\rep}$
+  \item Test quantity (or discrepancy measure) $T(y,\theta)$
+    \begin{itemize}
+    \item summary quantity for the observed data $T(y,\theta)$
+    \item summary quantity for a replicated data $T(y^{\rep},\theta)$
+    \item can be easier to compare summary quantities ($y^{\rep}$ statistics) than data sets
+    \end{itemize}
+  \end{itemize}
+
+\end{frame}
+
+% TODO: Define test statistic here from the book.
+
+\begin{frame}[fragile]
+
+\frametitle{Posterior predictive checking -- example}
+
+  \begin{itemize}
+  \item<1-> Compute test statistic for data $T(y,\theta)=\min(y)$
+  \item<2-> Compute test statistic $\min(y^{\rm rep})$ for many replicated datasets
+  \end{itemize}
+  \vspace{-1.5\baselineskip}
+  \uncover<3->{\includegraphics[width=9cm]{figs/light_ppc_min.pdf}}
+
+\end{frame}
+
+
+\begin{frame}[fragile]
+
+\frametitle{Choosing a discrepancy: ancillarity}
+
+  \begin{itemize}
+  \item<1-> A statistic is \uured{ancillary} if its sampling distribution
+    does not depend on the unknown parameters.
+  \item<2-> Example: in a Normal model with known $\sigma^2$, the sampling
+    distribution of $s^2$ does not depend on the unknown $\mu$.
+    If $\sigma^2$ is also unknown, $s^2$ is no longer ancillary.
+  \item<3-> For checking, target features the model may miss, such as
+    tails, skewness or dependence. A useful discrepancy need not be ancillary.
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+
+\frametitle{Posterior predictive checking -- a less informative check}
+
+  \includegraphics[width=9cm]{figs/light_ppc_var.pdf}
+
+\end{frame}
+
+
+\begin{frame}[fragile]
+
+\frametitle{Pair discussion: a reassuring variance?}
+
+  {\color{uured}\textbf{Discuss in pairs (1--2 minutes).}}
+
+  The observed variance looks typical among the variances of the
+  replicated datasets.
+
+  \textbf{Does this mean that the Normal model fits well?
+    Why, or why not?}
+
+  \uncover<2->{
+    \medskip
+    \textbf{Answer:} No. The model uses the observed variance to learn
+    $\sigma^2$, so reproducing that feature is a weak check.
+
+    A model can reproduce the variance while missing the shape of the
+    distribution, including its lower tail. We need checks of several
+    relevant features.
+  }
+\end{frame}
+
+
+\begin{frame}[fragile]
+
+\frametitle{Posterior predictive $p$-value}
+
+  \begin{itemize}
+  \item<1-> How often is the replicated discrepancy at least as large?
+    {\small
+    \begin{align*}
+      p_B &= \Pr(T(y^{\rep},\theta)\geq T(y,\theta)\mid y)\\
+          &= \iint I\{T(y^{\rep},\theta)\geq T(y,\theta)\}
+             p(y^{\rep}\mid\theta)p(\theta\mid y)dy^{\rep}d\theta.
+    \end{align*}
+    }
+  \item<2-> Draw $\theta^{(s)}\sim p(\theta\mid y)$, then
+    $y^{\rep,(s)}\sim p(y^{\rep}\mid\theta^{(s)})$:
+    \[
+      \widehat p_B=\frac{1}{S}\sum_{s=1}^S
+      I\{T(y^{\rep,(s)},\theta^{(s)})\geq T(y,\theta^{(s)})\}.
+    \]
+    Here $I\{\cdot\}$ is 1 if the condition holds, and 0 otherwise.
+  \item<3-> Values near 0 or 1 can reveal a mismatch; a non-extreme value
+    does not establish that the model fits well.
+  \item<4-> Not the probability that the model is correct; not generally
+    uniform under a correct model.
+  \end{itemize}
+
+\end{frame}
+
+\subsection{Marginal Predictive Checking}
+\frame{\subsectionpage}
+
+
+\begin{frame}[fragile]
+
+\frametitle{Marginal and CV predictive checking}
+
+  \begin{itemize}
+  \item For continuous observations, consider each predictive distribution:
+    \[
+      p_i=\Pr(y_i^{\rep}\leq y_i\mid y).
+    \]
+    The observation $y_i$ is also used to fit the model. These tail areas
+    are not generally uniform, even for a correct model.
+  \item<2-> Leave-one-out probability integral transform (LOO-PIT):
+    \[
+      u_i=\Pr(\tilde y_i\leq y_i\mid y_{-i})=F_{-i}(y_i).
+    \]
+    Here $F_{-i}$ is the predictive CDF fitted without $y_i$.
+  \item<2-> For calibrated continuous predictions, approximate uniformity
+    on $[0,1]$ is a useful benchmark, not an exact small-sample guarantee.
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+
+\frametitle{Marginal predictive checking - Example}
+
+  \begin{itemize}
+  \item Posterior predictive tail areas (the same data are used for fitting):
+    \begin{align*}
+      p_i = \Pr(y_i^{\rep} \leq y_i \mid y)
+    \end{align*}
+  \item Uniformity is not an exact reference for this plot.
+    LOO-PIT reduces the reuse of observations in fitting and checking.
+  \end{itemize}
+  \uncover<2->{\includegraphics[width=7.5cm]{figs/light_ppc_pit.pdf}}
+
+\end{frame}
+
+
+\subsection{Sensitivity analysis}
+\frame{\subsectionpage}
+
+\begin{frame}
+
+\frametitle{Sensitivity analysis}
+
+  \begin{itemize}
+  \item How much different choices in model structure and priors affect the results
+    \begin{itemize}
+      \item<2-> test different models and priors
+      \item<3-> alternatively combine different models to one model
+        \begin{itemize}
+        \item e.g. hierarchical model instead of separate and pooled
+        \item e.g. Student's $t$ approaches a Gaussian as $\nu\to\infty$
+      \end{itemize}
+      \item<3-> robust models are good for testing sensitivity to ``outliers''
+        \begin{itemize}
+        \item e.g. $t$ instead of Gaussian
+        \end{itemize}
+    \end{itemize}
+    \item<4-> Compare sensitivity of essential inference quantities
+      \begin{itemize}
+      \item extreme quantiles are often more sensitive than means and medians
+      \item extrapolation is often more sensitive than interpolation
+      \end{itemize}
+    \end{itemize}
+
+\end{frame}
+
+\subsection{Example}
+\frame{\subsectionpage}
+
+
+\begin{frame}
+
+\frametitle{Example: Exposure to air pollution}
+
+  \begin{itemize}
+  \item Example from Jonah Gabry, Daniel Simpson, Aki Vehtari, Michael
+    Betancourt, and Andrew Gelman (2019). Visualization in Bayesian
+    workflow. \url{https://doi.org/10.1111/rssa.12378}
+  \item Estimation of human exposure to air pollution from particulate
+    matter measuring less than 2.5 microns in diameter ($\mathrm{PM}_{2.5}$)
+    \begin{itemize}
+    \item Exposure to $\mathrm{PM}_{2.5}$ is linked to a number of
+      poor health outcomes and a recent report estimated that
+      $\mathrm{PM}_{2.5}$ is responsible for three million deaths
+      worldwide each year (Shaddick et al., 2017)
+    \item In order to estimate the public health effect of ambient
+      $\mathrm{PM}_{2.5}$, we need a good estimate of the
+      $\mathrm{PM}_{2.5}$ concentration at the same spatial resolution
+      as our population estimates.
+    \end{itemize}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Example: Exposure to air pollution}
+
+  \begin{itemize}
+  \item Direct measurements of PM 2.5 from ground monitors at 2980
+    locations
+  \item High-resolution satellite data of aerosol optical depth
+  \end{itemize}
+  \begin{center}
+    \only<1>{\includegraphics[width=\linewidth,height=4.8cm,keepaspectratio]{figs/map-data.png}}
+    \only<2>{\includegraphics[width=\linewidth,height=4.8cm,keepaspectratio]{figs/plot1.png}}
+    \only<3>{\includegraphics[width=\linewidth,height=4.8cm,keepaspectratio]{figs/plot2.png}}
+\end{center}
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Example: Exposure to air pollution}
+
+  \begin{itemize}
+  \item Three models:
+  \begin{enumerate}
+  \item Linear regression
+  \[
+  y_{ij} \sim N(\beta_0 + \beta_1 x_{ij}, \sigma^2)
+  \]
+  \item Hierarchical linear regression (WHO super regions)
+  \item Hierarchical linear regression (clustered super regions)
+  \[
+  y_{ij} \sim N(\beta_0 + \beta_{0j} + (\beta_1 + \beta_{1j}) x_{ij}, \sigma^2)
+  \]
+  \[
+  \beta_{0j}\sim N(0,\tau_0^2),\qquad \beta_{1j}\sim N(0,\tau_1^2)
+  \]
+  \end{enumerate}
+  Here $y_{ij}$ is the natural log of $\text{PM}_{2.5}$ concentration,
+  $x_{ij}$ is the natural log of the satellite estimate, and $j$ indexes regions.
+  The model also requires priors
+  for $\beta_0,\beta_1,\tau_0,\tau_1,\sigma$.
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}
+
+\frametitle{Air pollution: which priors change?}
+
+  Both concentrations are measured in $\mu\mathrm{g}/\mathrm{m}^3$.
+  We model their \uured{natural logarithms}: $y=\ln(c)$, $x=\ln(s)$.
+
+  \begin{columns}[T,onlytextwidth]
+    \begin{column}{0.49\textwidth}
+      \uured{Vague priors}
+      \begin{align*}
+        \beta_0,\beta_1&\sim N(0,100^2),\\
+        \tau_0^2,\tau_1^2,\sigma^2&\sim\mathrm{IG}(1,100).
+      \end{align*}
+    \end{column}
+    \begin{column}{0.49\textwidth}
+      \uured{Weakly informative}
+      \begin{align*}
+        \beta_0&\sim N(0,1),\\
+        \beta_1&\sim N(1,1),\\
+        \tau_0,\tau_1,\sigma&\sim N_+(0,1).
+      \end{align*}
+    \end{column}
+  \end{columns}
+
+  {\small $N$ uses variance as its second parameter.
+  IG is inverse-gamma with shape and scale; $N_+$ is half-normal on positive values.}
+
+  The tighter priors centre the calibration around intercept 0 and slope 1.
+
+  {\scriptsize Priors follow the simulation code accompanying
+  \href{https://github.com/jgabry/bayes-vis-paper}{Gabry et al. (2019)}.}
+\end{frame}
+
+\begin{frame}
+\frametitle{Air pollution: prior predictive check}
+
+  \only<1>{\uured{Vague priors}}
+  \only<2>{\uured{Weakly informative priors}}
+  {\centering
+    \only<1>{\includegraphics[width=7.8cm]{figs/air_prior_vague.pdf}}
+    \only<2>{\includegraphics[width=7.8cm]{figs/air_prior_weak.pdf}}
+    \par}
+  100 datasets at the observed design. Both plots use $\ln$, with
+  different horizontal scales.
+
+  $y=0,\;2.30,\;4.61$ means approximately
+  $c=1,\;10,\;100\;\mu\mathrm{g}/\mathrm{m}^3$.
+
+  \uncover<2->{Even the tighter priors allow extreme concentrations.}
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Example: Marginal predictive distributions}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.7\textwidth]{figs/ppc_dens1.png}
+\caption{Model 1}
+\end{figure}
+Kernel density estimate of the observed dataset $y$ (dark curve), with density
+estimates for 100 simulated datasets $y^{(\text{rep})}$ drawn from the posterior predictive distribution (thin, lighter lines)
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Example: Marginal predictive distributions}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.7\textwidth]{figs/ppc_dens2.png}
+\caption{Model 2}
+\end{figure}
+Kernel density estimate of the observed dataset $y$ (dark curve), with density
+estimates for 100 simulated datasets $y^{(\text{rep})}$ drawn from the posterior predictive distribution (thin, lighter lines)
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Example: Marginal predictive distributions}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.7\textwidth]{figs/ppc_dens3.png}
+\caption{Model 3}
+\end{figure}
+Kernel density estimate of the observed dataset $y$ (dark curve), with density
+estimates for 100 simulated datasets $y^{(\text{rep})}$ drawn from the posterior predictive distribution (thin, lighter lines)
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Example: Test statistic (skewness)}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.9\textwidth]{figs/ppc_skew1.png}
+\caption{Model 1}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Example: Test statistic (skewness)}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.9\textwidth]{figs/ppc_skew2.png}
+\caption{Model 2}
+\end{figure}
+
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Example: Test statistic (skewness)}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.9\textwidth]{figs/ppc_skew3.png}
+\caption{Model 3}
+\end{figure}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\end{document}

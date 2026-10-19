@@ -202,6 +202,21 @@ after fitting it to $y$.
 
 
 \begin{frame}
+\frametitle{Densities and probabilities}
+
+  \begin{itemize}
+  \item For a continuous outcome, $p(y_i\mid y)$ is a \uured{density}.
+    The probability of exactly one value is zero; probabilities come
+    from integrating the density over intervals.
+  \item<2-> A density can exceed 1, so its logarithm can be positive.
+    For example, a $\mathrm{Uniform}(0,0.5)$ density is 2 inside its support:
+    $\log 2\approx0.69$.
+  \item<3-> For a discrete outcome, $p(y_i\mid y)$ is a probability mass,
+    between 0 and 1. Compare scores on the same outcome scale and units.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
 \frametitle{Probabilistic predictions}
 
     \begin{itemize}
@@ -223,10 +238,36 @@ after fitting it to $y$.
 \end{frame}
 
 \begin{frame}
+\frametitle{Pair discussion: log scores}
+
+  {\color{uured}\textbf{Discuss in pairs (1--2 minutes).}}
+
+  For a new Bernoulli outcome $\tilde y$, model A predicts
+  $\Pr(\tilde y=1)=0.8$ and model B predicts $\Pr(\tilde y=1)=0.4$.
+
+  \textbf{Which model has the higher log score if success occurs?
+    What if failure occurs?}
+
+  \uncover<2->{
+    \medskip
+    \textbf{Answer:} Using natural logarithms,
+    \[
+      \begin{array}{lcc}
+        & \text{Model A} & \text{Model B} \\
+        \text{Success }(\tilde y=1) & \log(0.8)\approx-0.22 & \log(0.4)\approx-0.92 \\
+        \text{Failure }(\tilde y=0) & \log(0.2)\approx-1.61 & \log(0.6)\approx-0.51
+      \end{array}
+    \]
+    A scores higher for success, B for failure. A confident prediction
+    earns a better score when right and a worse score when wrong.
+  }
+\end{frame}
+
+\begin{frame}
 \frametitle{Probabilistic predictions}
 
     \begin{itemize}
-      \item The log \uured{pointwise} predictive density (lppd, called lpd below):
+      \item The log \uured{pointwise} predictive density (lppd):
       \begin{align*}
         \text{lppd} &= \sum_{i=1}^n\log p(y_i\mid y).
       \end{align*}
@@ -305,18 +346,30 @@ $y$ are the observed training data.
 \pause
 \item \uured{Analogy:} replace expectations over future outcomes with held-out
   observations. Each fitted model uses $n-1$ observations.
-%\item Similar to \uured{jack-knife resampling}
-%\pause
-%\item Pareto-Smoothed Importance Sampling (PSIS) can be used to efficiently compute each ${\color{uured}\pi_i}$ (see Gelfand, 1996 and Vehtari et. al., 2019)
-\pause
-\item The elpd, lpd and effective number of parameters ($p_\text{loo}$)
-\[
-\text{elpd}_\text{loo} = \text{lpd} - p_\text{loo}
-\]
 \end{itemize}
 \end{frame}
 
+\begin{frame}
+\frametitle{What does $p_{\mathrm{loo}}$ measure?}
+
+  \[
+    p_{\mathrm{loo}}=
+    \underbrace{\sum_i\log p(y_i\mid y)}_{\mathrm{lppd}:\ \text{training fit}}
+    -\underbrace{\sum_i\log p(y_i\mid y_{-i})}_{\mathrm{elpd}_{\mathrm{loo}}:\ \text{held-out fit}}.
+  \]
+  \begin{itemize}
+  \item<1-> The gap measures how much better the model predicts observations
+    it has already seen than observations left out of fitting.
+  \item<2-> Often interpreted as an \uured{effective number of parameters}.
+    It need not equal the number of coefficients, or even be an integer.
+  \item<3-> In the coming example: $-26.8-(-29.5)=2.7$.
+    Interpret this only after checking that the LOO computations are reliable.
+  \end{itemize}
+  {\scriptsize \href{https://mc-stan.org/loo/reference/loo-glossary.html}{loo glossary: effective number of parameters}.}
+\end{frame}
+
 \begin{frame}{}
+\frametitle{LOO example: leaving out observation 18}
 
   \only<1>{\includegraphics[width=8cm]{figs/fake1.pdf}}
   \only<2>{\includegraphics[width=8cm]{figs/fake2.pdf}}
@@ -334,34 +387,43 @@ $y$ are the observed training data.
 \end{frame}
 
 \begin{frame}{}
-
+\frametitle{LOO example: a held-out prediction error}
   {\includegraphics[width=8cm]{figs/fake7r.pdf}}
   \\
   \onslide<2->{{\color{blue} $y_{18} - E[\tilde{y}\mid\tilde{x}=18,x_{-18},y_{-18}]$}\\ \vspace{0.5\baselineskip}}
-  \onslide<3->{Can be use to compute, e.g., RMSE, $R^2$, 90\% error}
+  \onslide<3->{Held-out errors can be summarised using RMSE or an absolute-error quantile.}
 %  \onslide<4>{\\~\\ \small See LOO-$R^2$ at \url{avehtari.github.io/bayes_R2/bayes_R2.html}}
 \end{frame}
 
 \begin{frame}{}
-
+\frametitle{LOO example: the predictive distribution}
   {\includegraphics[width=8cm]{figs/fake8.pdf}}
   \\
-  \onslide<2>{\color{uulgr} $p(\tilde{y}|\tilde{x}=18,x_{-18},y_{-18})=\int p(\tilde{y}|\tilde{x}=18,\theta)p(\theta|x_{-18},y_{-18})d\theta$}
+  \onslide<2>{
+    \begin{align*}
+      p(\tilde y\mid\tilde x=18,x_{-18},y_{-18})
+      &=\int p(\tilde y\mid\tilde x=18,\theta)\\
+      &\qquad\cdot p(\theta\mid x_{-18},y_{-18})d\theta.
+    \end{align*}
+  }
 
 \end{frame}
 
 \begin{frame}{}
-
+\frametitle{Training and LOO predictive densities}
   \only<1-2>{\includegraphics[width=8cm]{figs/fake8pd.pdf}}
   \only<3>{\includegraphics[width=8cm]{figs/fake8loopd.pdf}}
   \\
-  \onslide<2->{\color{red} $p(\tilde{y}=y_{18}|\tilde{x}=18,x,y) \approx 0.07$\\ \vspace{0.5\baselineskip}}
-  \onslide<3>{\color{uulgr} $p(\tilde{y}=y_{18}|\tilde{x}=18,x_{-18},y_{-18}) \approx 0.03$}
+  \onslide<2->{\uured{Training density:}
+    $p(y_{18}\mid\tilde x=18,x,y)\approx0.07$.\\}
+  \onslide<3>{\textbf{LOO density:}
+    $p(y_{18}\mid\tilde x=18,x_{-18},y_{-18})\approx0.03$.\\
+    These are density heights, not probabilities of an exact outcome.}
 
 \end{frame}
 
 \begin{frame}{}
-
+\frametitle{From pointwise densities to ELPD}
   \only<1>{\includegraphics[width=8cm]{figs/fake8loopds.pdf}}
   \only<2->{\includegraphics[width=8cm]{figs/fake8loolpds.pdf}}
   \\ \vspace{-0.5\baselineskip}
@@ -370,8 +432,8 @@ $y$ are the observed training data.
   \only<3>{\color{blue} $\sum_{i=1}^{20} \log p(y_i|x_i,x_{-i},y_{-i}) \approx -29.5$}
   \only<4->{\color{blue} $\mbox{elpd\_loo} = \sum_{i=1}^{20} \log p(y_i|x_i,x_{-i},y_{-i}) \approx -29.5$\\ \vspace{0.2\baselineskip}}
   \only<5> {\color{blue} estimate of out-of-sample predictive performance}
-  \only<6-7>{\color{red} $\mbox{lpd} = \sum_{i=1}^{20} \log p(y_i|x_i,x,y) \approx -26.8$\\ \vspace{0.2\baselineskip}}
-  \only<7>{\color{blue} $\mbox{p\_loo} = \mbox{lpd}-\mbox{elpd\_loo} \approx 2.7$}
+  \only<6-7>{\color{red} $\mbox{lppd} = \sum_{i=1}^{20} \log p(y_i|x_i,x,y) \approx -26.8$\\ \vspace{0.2\baselineskip}}
+  \only<7>{\color{blue} $\mbox{p\_loo} = \mbox{lppd}-\mbox{elpd\_loo} \approx 2.7$}
   \only<8-> {\color{blue} $\mbox{SE} = \mbox{sd}(\log p(y_i|x_i,x_{-i},y_{-i}))\cdot \sqrt{20} \approx 3.3$}
 % TOMOVE:  \only<9>{\\~\\~\\ \color{black} \footnotesize see \href{http://link.springer.com/article/10.1007/s11222-016-9696-4}{Vehtari, Gelman \& Gabry (2017a)} and \href{http://dx.doi.org/10.1214/12-SS102}{Vehtari \& Ojanen (2012)} for more}
 
@@ -562,7 +624,7 @@ See help('pareto-k-diagnostic') for details.
 
 \end{frame}
 
-\begin{frame}{LOO for hiearchical data}
+\begin{frame}{LOO for hierarchical data}
 
   \only<1>{\includegraphics[width=8cm]{figs/rats1data.pdf}}
   \only<2>{\includegraphics[width=8cm]{figs/rats1loo.pdf}}
@@ -574,6 +636,30 @@ See help('pareto-k-diagnostic') for details.
   \only<1>{Can LOO or other cross-validation be used with hierarchical data?}
   \only<2->{Yes!}
 
+\end{frame}
+
+\begin{frame}
+\frametitle{Pair discussion: what should we leave out?}
+
+  {\color{uured}\textbf{Discuss in pairs (1--2 minutes).}}
+
+  Recall the factory example, with several measurements from each machine.
+  We want to predict:
+  \begin{enumerate}
+    \item a new measurement from an \uured{existing machine};
+    \item a measurement from a \uured{new, similar machine}, with no data yet.
+  \end{enumerate}
+
+  \textbf{What should we leave out in each case?}
+
+  \uncover<2->{
+    \medskip
+    \textbf{Answer:} For an existing machine, leave out one measurement
+    and retain the others from that machine.
+
+    For a new machine, leave out \emph{all} measurements from one machine.
+    The split should match the information available at prediction time.
+  }
 \end{frame}
 
 
@@ -670,8 +756,62 @@ See help('pareto-k-diagnostic') for details.
    \end{itemize}
  \end{frame}
 
+\begin{frame}
+\frametitle{Pair discussion: LOO importance weights}
+
+  {\color{uured}\textbf{Discuss in pairs (1--2 minutes).}}
+
+  Three draws from the full posterior give likelihood values for $y_i$:
+  \[
+    p(y_i\mid\theta^{(1)})=0.2,\quad
+    p(y_i\mid\theta^{(2)})=0.1,\quad
+    p(y_i\mid\theta^{(3)})=0.05.
+  \]
+
+  \textbf{Which draw receives the greatest importance weight when we
+    remove $y_i$? Why?}
+
+  \uncover<2->{
+    \medskip
+    \textbf{Answer:} The third draw. The raw weights are
+    \[
+      r_i^{(s)}=\frac{1}{p(y_i\mid\theta^{(s)})}:
+      \quad 5,\;10,\;20,
+      \qquad\text{normalised: }\frac17,\;\frac27,\;\frac47.
+    \]
+    Observation $y_i$ penalised the third draw most strongly in the full
+    posterior. Removing $y_i$ reverses that likelihood contribution.
+  }
+\end{frame}
+
+
+\begin{frame}
+\frametitle{LOO importance sampling: worked example}
+
+  The three likelihood values are $0.2,\;0.1,\;0.05$.
+  Their raw weights are $5,\;10,\;20$, with sum 35.
+  \[
+    \bar r_i^{(1)}=\frac17,\qquad
+    \bar r_i^{(2)}=\frac27,\qquad
+    \bar r_i^{(3)}=\frac47.
+  \]
+  \uncover<2->{
+    The weighted predictive density is
+    \begin{align*}
+      \widehat p(y_i\mid y_{-i})
+      &=\frac17(0.2)+\frac27(0.1)+\frac47(0.05)\\
+      &=\frac{3}{35}\approx0.0857.
+    \end{align*}
+  }
+  \uncover<3->{The unweighted training density is
+    $(0.2+0.1+0.05)/3\approx0.1167$.
+    Removing $y_i$ increases the relative weight of draws that predicted it poorly.}
+
+  {\small Three draws illustrate the calculation; they are not enough for reliable estimation.}
+\end{frame}
 
 \begin{frame}{}
+\frametitle{PSIS-LOO: reweighting posterior draws}
 
   \only<1>{\includegraphics[width=8cm]{figs/fakedata.pdf}}
   \only<2>{\includegraphics[width=8cm]{figs/fakedraws.pdf}}
@@ -711,7 +851,7 @@ See help('pareto-k-diagnostic') for details.
 
 
 \begin{frame}{}
-
+\frametitle{PSIS weights and tail behaviour}
   \only<1>{\includegraphics[width=8cm]{figs/fakepsisweights.pdf}}
   \only<2->{\includegraphics[width=8cm]{figs/fakepsisweights4000.pdf}}
   \\
@@ -724,13 +864,13 @@ Pareto $\hat{k}$ estimates the tail shape which determines the convergence rate 
 \end{frame}
 
 \begin{frame}[fragile]
-
+\frametitle{Pareto diagnostics for each observation}
   \includegraphics[width=8cm]{figs/fakepks.pdf}
 
 \end{frame}
 
 \begin{frame}[fragile]
-
+\frametitle{Pareto diagnostics and PSIS ESS}
   \only<1>{\includegraphics[width=8cm]{figs/fakepks.pdf}}
   \only<2>{\includegraphics[width=8cm]{figs/fakeneffs.pdf}}
   \\
@@ -745,6 +885,50 @@ Pareto $\hat{k}$ estimates the tail shape which determines the convergence rate 
 \end{lstlisting}
 }
 
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Pair discussion: Pareto diagnostics}
+
+  {\color{uured}\textbf{Discuss in pairs (1--2 minutes).}}
+
+  \begin{itemize}
+    \item Model A has a higher estimated ELPD, but several
+      Pareto diagnostics have $\widehat k>1$.
+    \item Model B has reliable PSIS diagnostics.
+  \end{itemize}
+
+  \textbf{Can we conclude that A predicts better?
+    What should we do next?}
+
+  \uncover<2->{
+    \medskip
+    \textbf{Answer:} Not yet. A's PSIS estimate is unreliable.
+    Reliable diagnostics for B do not establish that B predicts better.
+
+    Refit A leaving out each problematic observation in turn to compute
+    those LOO predictions directly, or evaluate both models with suitable
+    K-fold CV. Then compare the estimates and their uncertainty.
+  }
+\end{frame}
+
+\begin{frame}
+\frametitle{What if $\widehat k$ is large?}
+
+  \begin{enumerate}
+  \item<1-> Inspect the influential observations and model assumptions.
+    Check for data errors and whether the model represents plausible variation.
+  \item<2-> For a few problematic observations, refit the model without
+    each one and compute its LOO predictive density directly.
+  \item<3-> For many problematic observations, use suitable K-fold validation
+    or revise the model and evaluate it again.
+  \end{enumerate}
+
+  \uncover<4->{\uured{Large $\widehat k$ is a warning about the approximation,
+    not an instruction to delete an observation.}
+    Match the validation split to the prediction task.}
+
+  {\scriptsize \href{https://mc-stan.org/loo/reference/pareto-k-diagnostic.html}{loo: Pareto diagnostic guidance}.}
 \end{frame}
 
 \begin{frame}[fragile]
@@ -800,40 +984,6 @@ See help('pareto-k-diagnostic') for details.
 
 \end{frame}
 
-\begin{frame}
-\frametitle{PSIS-LOO}
-
-\begin{enumerate}
-  \item PSIS-LOO for hierarchical models
-  \begin{enumerate}
-  \item leave-one-group out is challenging for PSIS-LOO
-  %\\ \vspace{0.2\baselineskip}
-%    {\small see Merkel, Furr and Rabe-Hesketh
-%      (2018) for an approach using quadrature integration}
-  \end{enumerate}
-  \item<2-> PSIS-LOO for non-factorizable models
-  %  \begin{enumerate}
- %   \item {\url{mc-stan.org/loo/articles/loo2-non-factorizable.html}}
-%    \end{enumerate}
-  \item<3-> PSIS-LOO for time series
-  \begin{enumerate}
-  \item Approximate leave-future-out cross-validation %\\ \vspace{0.2\baselineskip}
-%    {\url{mc-stan.org/loo/articles/loo2-lfo.html}}
-  \end{enumerate}
-\end{enumerate}
-
-\end{frame}
-
-\begin{frame}{PSIS-LOO for time series}
-
-  \only<1>{\includegraphics[width=8cm]{figs/lake4data.pdf}}
-  \only<2>{\includegraphics[width=8cm]{figs/lake4pred.pdf}}
-  \only<3>{\includegraphics[width=8cm]{figs/lake4psisrefits.pdf}}
-
-  \vspace{3\baselineskip}
-  \only<3> {\small \url{mc-stan.org/loo/articles/loo2-lfo.html}}
-
-\end{frame}
 
 
 \subsection{K-fold CV}
@@ -888,7 +1038,7 @@ See help('pareto-k-diagnostic') for details.
 \end{frame}
 
 \begin{frame}{}
-
+\frametitle{K-fold splits for different prediction tasks}
   \only<1>{\includegraphics[width=8cm]{figs/lake3kfoldbal1.pdf}}
   \only<2>{\includegraphics[width=8cm]{figs/lake3kfoldbal2.pdf}}
   \only<3>{\includegraphics[width=8cm]{figs/lake3kfoldrand.pdf}}
@@ -925,6 +1075,47 @@ See help('pareto-k-diagnostic') for details.
 \subsection{Model Comparison}
 \frame{\subsectionpage}
 
+\begin{frame}
+\frametitle{Paired model comparison}
+
+  Score both models on the \uured{same held-out observations}:
+  \[
+    \ell_{mi}=\log p_m(y_i\mid y_{-i}),\qquad
+    d_i=\ell_{1i}-\ell_{2i}.
+  \]
+  \[
+    \widehat\Delta=\sum_{i=1}^n d_i
+      =\mathrm{elpd}_{\mathrm{loo},1}-\mathrm{elpd}_{\mathrm{loo},2}.
+  \]
+  \begin{itemize}
+    \item<2-> Positive differences favour model 1; negative differences favour model 2.
+    \item<3-> Use the same prediction task, outcome units and validation split.
+      Pairing accounts for observations that are easy or hard for both models.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Uncertainty in a model comparison}
+
+  For approximately independent held-out units,
+  \[
+    \bar d=\frac1n\sum_i d_i,\quad
+    s_d^2=\frac{1}{n-1}\sum_i(d_i-\bar d)^2,
+    \quad
+    \mathrm{SE}(\widehat\Delta)\approx\sqrt{n\,s_d^2}.
+  \]
+  \begin{itemize}
+  \item<2-> Use the variability of the \uured{paired differences}.
+    Do not subtract the two models' standard errors.
+  \item<3-> This is an approximation. Small samples, influential observations
+    or dependent validation units require care.
+  \item<4-> \texttt{loo\_compare()} reports each model minus the model with
+    the largest ELPD. The best row is 0; other rows are negative.
+    \texttt{se\_diff} is the paired standard error.
+  \end{itemize}
+  {\scriptsize \href{https://mc-stan.org/loo/reference/loo_compare.html}{loo: model comparison}.}
+\end{frame}
+
 
 \begin{frame}{}
 \frametitle{Model comparison}
@@ -945,7 +1136,7 @@ See help('pareto-k-diagnostic') for details.
 \end{frame}
 
 \begin{frame}
-
+\frametitle{Milk example: pointwise log scores}
    \only<1-2>{\includegraphics[width=8cm]{figs/milkelpdloo.pdf}}
    \only<3>{\includegraphics[width=8cm]{figs/milkelpdloo2.pdf}}
    \\
@@ -955,17 +1146,20 @@ See help('pareto-k-diagnostic') for details.
 \end{frame}
 
 \begin{frame}[fragile]
+\frametitle{Milk example: paired differences}
 
-   {\includegraphics[width=8cm]{figs/milkelpddiff.pdf}}
+   {\includegraphics[width=7.5cm]{figs/milkelpddiff_standardised.pdf}}
    \\
    {\scriptsize
  \begin{lstlisting}
- Model comparison:
- (negative 'elpd_diff' favors 1st model, positive favors 2nd)
-
- elpd_diff        se
-       4.7       2.7
+> loo_compare(model1, model2)
+       elpd_diff se_diff
+model2   0.0       0.0
+model1  -4.7       2.7
  \end{lstlisting}}
+
+ Model 1 minus model 2: $\widehat\Delta=-4.7$, SE $=2.7$.
+ The estimate favours model 2, with substantial uncertainty.
 
  \end{frame}
 
@@ -1016,7 +1210,7 @@ See help('pareto-k-diagnostic') for details.
 
 \frametitle{Arsenic well example -- Model comparison}
 
-  {\includegraphics[width=6.5cm]{figs/arsenicelpddiff.pdf}}
+  {\includegraphics[width=6.1cm]{figs/arsenicelpddiff.pdf}}
   \\
   {\scriptsize
 \begin{lstlisting}
@@ -1025,6 +1219,7 @@ See help('pareto-k-diagnostic') for details.
 model2   0.0       0.0
 model1 -14.4       6.1
 \end{lstlisting}}
+  Model 1 minus model 2: $\widehat\Delta=-14.4$, SE $=6.1$.
 %\vspace{-\baselineskip}
 %    {\scriptsize \hspace{6cm} see \href{http://link.springer.com/article/10.1007/s11222-016-9696-4}{Vehtari, Gelman \& Gabry (2017a)}}
 
@@ -1042,9 +1237,12 @@ model2   0.0       0.0
 model1 -14.4       6.1
 \end{lstlisting}}
 
-    {\tt se\_diff} and normal approximation for the uncertainty in the
-    difference is good only if models are well specified and the
-    number of observations is relatively big.
+    The estimate favours model 2 by 14.4 ELPD units.
+    The paired SE is 6.1, not the difference between 17 and 16.
+
+    A normal approximation can be useful with enough observations and
+    no severe misspecification. Small samples or influential observations
+    can make it misleading.
 
 %\vspace{9\baselineskip}
 %    {\scriptsize \hspace{6cm} see \href{http://link.springer.com/article/10.1007/s11222-016-9696-4}{Vehtari, Gelman \& Gabry (2017a)}}
@@ -1147,105 +1345,6 @@ model1 -14.4       6.1
 
 
 
-\section{Information criteria}
-\frame{\sectionpage}
-
-\begin{frame}{}
-
-\frametitle{Akaike Information Criteria}
-
-\begin{enumerate}
-  \item Remember the relationship between the elpd and the lpd
-  \[
-    \text{elpd}_\text{loo} = \sum_i \log p(y_i|y) - p_\text{loo}
-  \]
-  \pause
-  \item Akaike information criteria
-  \[
-    \text{elpd}_\text{AIC} = \sum_i \log p(y_i|\hat{\theta}_\text{MLE}) - k
-  \]
-  \item AIC
-  \[
-    \text{AIC} = - 2 \text{elpd}_\text{AIC}
-  \]
-\end{enumerate}
-
-\end{frame}
-
-
-\begin{frame}{}
-
-\frametitle{Deviance Information Criteria}
-
-\begin{enumerate}
-  \item Deviance information criteria
-  \[
-    \text{elpd}_\text{DIC} = \sum_i \log p(y_i|\hat{\theta}_\text{Bayes}) - p_\text{DIC}
-  \]
-  \item We estimate the number of effeicient parameters with
-  \[
-  p_\text{DIC1} = 2 (\log p(y|\hat{\theta}_\text{Bayes}) - \E_{p(\theta|y)} (\log p(y|\theta)) )
-  \]
-  or
-  \[
-  p_\text{DIC2} = 2 V_{p(\theta|y)} (\log p(y|\theta))
-  \]
-  \item DIC
-  \[
-    \text{DIC} = - 2 \text{elpd}_\text{DIC}
-  \]
-\end{enumerate}
-
-\end{frame}
-
-\begin{frame}{}
-
-\frametitle{Watanabe Information Criteria}
-
-\begin{enumerate}
-  \item Watanabe information criteria
-  \[
-    \text{elpd}_\text{WAIC} = \sum_i \log \uured{p(y_i|y)} - p_\text{WAIC}
-  \]
-  \item We estimate the number of efficient parameters with
-  \[
-  p_\text{WAIC1} = 2 \sum^n_i (\log \E_{p(\theta|y)}(p(y_i|\theta)) - \E_{p(\theta|y)} (\log p(y_i|\theta)))
-  \]
-  or
-  \[
-  p_\text{WAIC2} = 2 \sum^n_i (V_{p(\theta|y)} (\log p(y_i|\theta)) )
-  \]
-  \item WAIC
-  \[
-    \text{WAIC} = - 2 \text{elpd}_\text{WAIC}
-  \]
-  \item WAIC can be seen as an approximation of the $elpd_\text{loo}$
-\end{enumerate}
-
-\end{frame}
-
-
-
-\begin{frame}{}
-
-\frametitle{WAIC vs PSIS-LOO}
-
-\begin{enumerate}
-  \item<2-> WAIC and LOO estimate pointwise predictive performance;
-    they can differ substantially with finite data.
-  \item<3-> PSIS-LOO is generally preferable when its importance-sampling
-    diagnostics are satisfactory.
-  \item<4-> Pareto $\widehat k$ helps diagnose unreliable PSIS approximations.
-    Switching to WAIC is not a reliable fix for large $\widehat k$.
-  \item<5-> LOO makes the held-out prediction task explicit;
-    another validation split may be needed for a different task.
-  \item<6-> ELPD: higher is better. On the $-2\times\text{ELPD}$ scale,
-    lower is better; the ranking contains the same information.
-\end{enumerate}
-
-%\vspace{6\baselineskip}
-%{\small see \href{http://link.springer.com/article/10.1007/s11222-016-9696-4}{Vehtari, Gelman \& Gabry (2017a)}}
-\end{frame}
 
 %\begin{frame}{}
 
@@ -1261,8 +1360,16 @@ model1 -14.4       6.1
 %\end{frame}
 
 
-\section{Model averaging and Stacking}
-\frame{\sectionpage}
+\begin{frame}{Looking ahead: model averaging}
+
+  Model comparison need not end with selecting one model.
+
+  Lecture 9b introduces model averaging and stacking:
+  combining predictive distributions from several candidate models.
+
+  Today's foundation is to define the prediction task, check the computations,
+  and compare held-out performance with its uncertainty.
+\end{frame}
 
 %\begin{frame}{}
 
@@ -1337,5 +1444,145 @@ model1 -14.4       6.1
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+
+% Details below can be omitted without interrupting the main lecture.
+\section{Additional material}
+\frame{\sectionpage}
+\subsection{Advanced PSIS}
+
+\begin{frame}
+\frametitle{PSIS for groups, dependence and time series}
+
+\begin{enumerate}
+  \item PSIS-LOO for hierarchical models
+  \begin{enumerate}
+  \item leave-one-group out is challenging for PSIS-LOO
+  %\\ \vspace{0.2\baselineskip}
+%    {\small see Merkel, Furr and Rabe-Hesketh
+%      (2018) for an approach using quadrature integration}
+  \end{enumerate}
+  \item<2-> PSIS-LOO for non-factorizable models
+  %  \begin{enumerate}
+ %   \item {\url{mc-stan.org/loo/articles/loo2-non-factorizable.html}}
+%    \end{enumerate}
+  \item<3-> PSIS-LOO for time series
+  \begin{enumerate}
+  \item Approximate leave-future-out cross-validation %\\ \vspace{0.2\baselineskip}
+%    {\url{mc-stan.org/loo/articles/loo2-lfo.html}}
+  \end{enumerate}
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame}{PSIS-LOO for time series}
+
+  \only<1>{\includegraphics[width=8cm]{figs/lake4data.pdf}}
+  \only<2>{\includegraphics[width=8cm]{figs/lake4pred.pdf}}
+  \only<3>{\includegraphics[width=8cm]{figs/lake4psisrefits.pdf}}
+
+  \medskip
+  \only<3> {\small \url{mc-stan.org/loo/articles/loo2-lfo.html}}
+
+\end{frame}
+
+
+\subsection{Information criteria}
+
+\begin{frame}{}
+
+\frametitle{Akaike information criterion}
+
+\begin{enumerate}
+  \item Recall the gap between training lppd and LOO performance
+  \[
+    \text{elpd}_\text{loo} = \sum_i \log p(y_i|y) - p_\text{loo}
+  \]
+  \pause
+  \item Akaike information criterion
+  \[
+    \text{elpd}_\text{AIC} = \sum_i \log p(y_i|\hat{\theta}_\text{MLE}) - k
+  \]
+  \item AIC
+  \[
+    \text{AIC} = - 2 \text{elpd}_\text{AIC}
+  \]
+\end{enumerate}
+
+\end{frame}
+
+
+\begin{frame}{}
+
+\frametitle{Deviance information criterion}
+
+\begin{enumerate}
+  \item Deviance information criterion
+  \[
+    \text{elpd}_\text{DIC} = \sum_i \log p(y_i|\hat{\theta}_\text{Bayes}) - p_\text{DIC}
+  \]
+  \item We estimate the effective number of parameters with
+  \[
+  p_\text{DIC1} = 2 (\log p(y|\hat{\theta}_\text{Bayes}) - \E_{p(\theta|y)} (\log p(y|\theta)) )
+  \]
+  or
+  \[
+  p_\text{DIC2} = 2 V_{p(\theta|y)} (\log p(y|\theta))
+  \]
+  \item DIC
+  \[
+    \text{DIC} = - 2 \text{elpd}_\text{DIC}
+  \]
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame}{}
+
+\frametitle{Widely applicable information criterion (WAIC)}
+
+\begin{enumerate}
+  \item Watanabe information criterion
+  \[
+    \text{elpd}_\text{WAIC} = \sum_i \log \uured{p(y_i|y)} - p_\text{WAIC}
+  \]
+  \item We estimate the effective number of parameters with
+  \[
+  p_\text{WAIC1} = 2 \sum^n_i (\log \E_{p(\theta|y)}(p(y_i|\theta)) - \E_{p(\theta|y)} (\log p(y_i|\theta)))
+  \]
+  or
+  \[
+  p_\text{WAIC2} = \sum_{i=1}^n \operatorname{Var}_{\theta\mid y}[\log p(y_i\mid\theta)]
+  \]
+  \item WAIC
+  \[
+    \text{WAIC} = - 2 \text{elpd}_\text{WAIC}
+  \]
+  \item WAIC can be seen as an approximation of the $elpd_\text{loo}$
+\end{enumerate}
+
+\end{frame}
+
+
+
+\begin{frame}{}
+
+\frametitle{WAIC vs PSIS-LOO}
+
+\begin{enumerate}
+  \item<2-> WAIC and LOO estimate pointwise predictive performance;
+    they can differ substantially with finite data.
+  \item<3-> PSIS-LOO is generally preferable when its importance-sampling
+    diagnostics are satisfactory.
+  \item<4-> Pareto $\widehat k$ helps diagnose unreliable PSIS approximations.
+    Switching to WAIC is not a reliable fix for large $\widehat k$.
+  \item<5-> LOO makes the held-out prediction task explicit;
+    another validation split may be needed for a different task.
+  \item<6-> ELPD: higher is better. On the $-2\times\text{ELPD}$ scale,
+    lower is better; the ranking contains the same information.
+\end{enumerate}
+
+%\vspace{6\baselineskip}
+%{\small see \href{http://link.springer.com/article/10.1007/s11222-016-9696-4}{Vehtari, Gelman \& Gabry (2017a)}}
+\end{frame}
 
 \end{document}

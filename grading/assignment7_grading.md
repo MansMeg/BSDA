@@ -76,7 +76,36 @@ For the Pooled/Hiearchical and separate model (1p each) c) iii): the posterior d
 - Both means, CIs, comment and histogram (or motivation of not including a histogram)
 
 
-### Q8 - 3p
+### Q8 - 2p
+
+In d), for the hierarchical model only (1p each): Are the marginal posteriors `p(theta | y)` and `p(log(tau) | y)` visualized and the parameters interpreted correctly? Here, `theta` is the population mean of the machine means and `tau` is the between-machine standard deviation.
+
+For each of the two parameters:
+
+- No valid posterior plot and no correct interpretation (0p)
+- Valid posterior plot but missing or incorrect interpretation (0.5p)
+- Correct interpretation but missing or incorrect posterior plot (0.5p)
+- Valid posterior plot and correct interpretation (1p)
+
+### Q9 - 2p
+
+In e), is the joint posterior `p(mu_3, log(tau) | y)` visualized and its shape and dependence explained?
+
+Joint posterior visualization (1p):
+
+- Missing or clearly incorrect joint posterior plot; separate marginal plots alone are insufficient (0p)
+- Joint posterior plot is provided but has minor errors or unclear axis labels (0.5p)
+- Valid joint posterior plot with clearly labeled axes (1p)
+
+Description and interpretation (1p):
+
+- No explanation or clearly incorrect explanation (0p)
+- Describes the observed shape or explains the relationship between `mu_3` and `log(tau)`, but the discussion is incomplete (0.5p)
+- Describes the observed shape and explains correctly. (1p)
+
+A pronounced funnel is not required for full credit; assess whether the explanation is consistent with the plotted posterior and the hierarchical model.
+
+### Q10 - 3p
 
 For the Pooled/Hiearchical and separate model (1p each): When using the prior of Gamma(1,1) for sigma parameter(s), the posterior for mu for machine 6 has 90% credibility intervals close to ...
 
@@ -84,7 +113,7 @@ For the Pooled/Hiearchical and separate model (1p each): When using the prior of
 - Answer is only partially correct (0.5p)
 - Answers look correct
 
-### Q9 - 1p
+### Q11 - 1p
 
 In f), is a reasonable explanation given?
 

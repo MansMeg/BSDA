@@ -87,7 +87,7 @@ Requirements for the projects are:
 \item The paper replication track should reproduce a published statistical analysis by implementing its data and model in Stan and preparing the result for inclusion in \texttt{posteriordb} (inclusion in \texttt{posteriordb} is optional).
 \item Real data should be used (see below for details).
 \item In the ordinary project track, at least two different models should be estimated and compared.
-\item In the paper replication track, one faithful implementation of a sufficiently interesting or complex model is enough (i.e. a model not used in the course). The comparison should instead be between the published results and the Stan implementation.
+\item In the paper replication track, one faithful implementation of a sufficiently interesting or complex model is enough (i.e. a model not used in the course). The required comparison is between the published results and the Stan implementation. A small extension and ELPD comparison are optional, subject to the conditions below.
 \end{itemize}
 
 \emph{Tip!} Write the report so you can add your final report as an example of work you have done to future potential employers.
@@ -136,7 +136,7 @@ For the paper replication track, students should instead find a published statis
 
 
 \subsection{Project Proposal (Part 1 and Part 2)}
-Students need to turn in a one-page project proposal and data description by and get approval for the proposed project. The Project proposal should follow the ICML paper format that can be found \href{https://icml.cc/Conferences/2020/StyleAuthorInstructions}{[here]}.
+Students need to turn in a 1--1.5 page project proposal and data description and get approval for the proposed project. This limit applies to part 1; part 2 extends it with the requested results and appendix. All project submissions are due at 23.59 on the date specified in the course schedule. The Project proposal should follow the ICML paper format that can be found \href{https://icml.cc/Conferences/2020/StyleAuthorInstructions}{[here]}.
 The ICML format is also available in overleaf here: \href{https://www.overleaf.com/latex/templates/icml-2019-submission-template/vkqjjvzjvhdc}{[here]}. We recommend using Overleaf for writing the proposal.
 
 \emph{Note!} You should also follow the formating instructions in the ICML template, e.g. regarding Tables, Figures etc.
@@ -167,7 +167,7 @@ The primary goal is to reproduce the selected published results as closely as po
 
 If results differ, investigate and explain the discrepancy. Distinguish established causes from possible explanations and identify any differences that remain unresolved. A carefully documented investigation of disagreement can satisfy the replication objective.
 
-Also, you should the replicated model with a small improvement you think make sense based on critical assessment of the model (e.g. using posterior predictive checking). Compare the two models using ELPD.
+If feasible, time permits, and the original model was straightforward to implement, you should also consider a small improvement motivated by critical assessment of the replicated model (e.g. posterior predictive checking). Compare the baseline and extended models using ELPD based on HMC posterior draws. This extension is optional: replication as closely as possible, or a carefully documented investigation of why results differ, is sufficient. Clearly separate any extension from the baseline replication.
 
 \paragraph{Comparing parameter estimates}
 When the paper reports maximum likelihood estimates (MLEs), you may compare these with maximum a posteriori (MAP) estimates from your Stan model. With sufficiently vague proper priors, MAP estimates should be close to the MLEs when the parameters are identified by the likelihood. Check that the priors have little influence on the estimates, for example by assessing sensitivity to wider priors. You do not need to reproduce the original estimation procedure.
@@ -186,7 +186,7 @@ For the paper replication track, the Project proposal part 1 should instead incl
   \item Data (roughly 0.25 page): describe the original data and how the data was accessed and if there are any licence.
   \item Model and methods (roughly 0.25 page): Description of the original statistical model. If there are more than one in the paper. Choose one, ideally the one the authors settle on if not too complicated. A statement of whether the original analysis is Bayesian or frequentist. If it is frequentist, explain the Bayesian version to be implemented in Stan, including the choice of proper (but weakly informative) priors.
   \item Results (0.25 page): Describe what parameters you will compare.
-  \item Acknowledgements (max 0.25 page)
+  \item Acknowledgements/contribution statement (required; max 0.25 page, excluded from the proposal page count)
   A short assessment of whether the data and model are suitable for \texttt{posteriordb} (see the \texttt{posteriordb} paper)
 \end{enumerate}
 
@@ -208,7 +208,7 @@ The ICML format is also available in overleaf here: \href{https://www.overleaf.c
 
 \emph{Note!} You should also follow the formating instructions in the ICML template, e.g. regarding Tables, Figures etc.
 
-The paper should consist of \emph{between three and a half (3.5) and four (4) pages}, excluding references and eventual appendices. Write the report as you would do in a real situation, i.e. do not refer to the paper as a "mini-project" or similar.
+The paper should consist of \emph{between three and a half (3.5) and four (4) pages}, excluding references and eventual appendices. For the replication track, the required acknowledgements/contribution statement is also excluded from the page count. Write the report as you would do in a real situation, i.e. do not refer to the paper as a "mini-project" or similar.
 
 \emph{The project report should include all the group members names!}
 
@@ -244,7 +244,7 @@ The paper should include the following parts/sections:
     \item Conclusions from the results.
     \item Discussion of problems and potential improvements and other models
   \end{itemize}
-  \item Acknowledgements (optional)
+  \item Acknowledgements (optional for the ordinary track; required contribution statement for the replication track)
   \begin{itemize}
     \item If you are willing to let me use your project report as an example in the next course, please state that in the Acknowledgements. Just add the following sentence: "We hereby grant our consent for the utilization of this project report as a reference material within the context of future editions of the course."
     \item Other people you might want to thank.
@@ -257,7 +257,7 @@ The paper should include the following parts/sections:
 \end{enumerate}
 
 \paragraph{Paper replication project report}
-For the paper replication track, the report should have the same length and format, but the content should be adapted to the reproduction task. It should include:
+For the paper replication track, the report should have the same length and format, but the content should be adapted to the reproduction task. The following list modifies the relevant sections of the ordinary outline; the title, abstract, conclusions, and appendix remain required. The acknowledgements/contribution statement is required for replication projects and is excluded from both proposal and final report page counts. It should include:
 
 \begin{enumerate}
   \item Introduction: describe the original paper, the scientific question, and why the model is interesting.
@@ -268,7 +268,7 @@ For the paper replication track, the report should have the same length and form
   \item \texttt{posteriordb} contribution (in acknowledgements): describe the data object, Stan model, posterior object, model info object, and whether a pull request was submitted or the files are ready for submission.
 \end{enumerate}
 
-For this track, model comparison using LOO/WAIC is not required unless it is relevant for reproducing the paper. The central comparison is between the published analysis and the Stan implementation - can you replicate the original results?
+For this track, the central comparison is between the published analysis and the Stan implementation: can you replicate the results or explain why they differ? A small extension and ELPD comparison are encouraged only under the conditions above and are not required to pass. If undertaken, describe the motivation and report the ELPD comparison separately from the baseline replication.
 
 \paragraph{Additional requirements for the report}
 \begin{enumerate}

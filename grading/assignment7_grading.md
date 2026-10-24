@@ -78,7 +78,7 @@ For the Pooled/Hiearchical and separate model (1p each) c) iii): the posterior d
 
 ### Q8 - 2p
 
-In d), for the hierarchical model only (1p each): Are the marginal posteriors `p(theta | y)` and `p(log(tau) | y)` visualized and the parameters interpreted correctly? Here, `theta` is the population mean of the machine means and `tau` is the between-machine standard deviation; `log(tau)` is its logarithm.
+In d), for the hierarchical model only (1p each): Are the marginal posteriors `p(theta | y)` and `p(log(tau) | y)` visualized and the parameters interpreted correctly? Here, `theta` is the population mean of the machine means and `tau` is the between-machine standard deviation.
 
 For each of the two parameters:
 
@@ -89,7 +89,7 @@ For each of the two parameters:
 
 ### Q9 - 2p
 
-In e), for the hierarchical model only: Is the joint posterior `p(mu_3, log(tau) | y)` visualized and its shape and dependence explained?
+In e), is the joint posterior `p(mu_3, log(tau) | y)` visualized and its shape and dependence explained?
 
 Joint posterior visualization (1p):
 
@@ -101,9 +101,9 @@ Description and interpretation (1p):
 
 - No explanation or clearly incorrect explanation (0p)
 - Describes the observed shape or explains the relationship between `mu_3` and `log(tau)`, but the discussion is incomplete (0.5p)
-- Describes the observed shape and explains that small `tau` implies stronger pooling of `mu_3` towards the population mean, whereas larger `tau` allows more variation between machine means and greater influence from machine 3's own data (1p)
+- Describes the observed shape and explains correctly. (1p)
 
-A pronounced funnel is not required for full credit; assess whether the explanation is consistent with the plotted posterior and the hierarchical model. A change in conditional spread need not imply a simple linear correlation.
+A pronounced funnel is not required for full credit; assess whether the explanation is consistent with the plotted posterior and the hierarchical model.
 
 ### Q10 - 3p
 

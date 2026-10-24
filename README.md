@@ -39,7 +39,7 @@ To pass, you should pass all assignments, the oral exams connected to the assign
 On each assignment, if everything is correct (>90% of points), a VG point will be awarded. To receive the VG point for an assignment, you also need to pass the oral exam for that assignment. Similarly on the mini-project, if it is considered to be very good, 2 VG points can be awarded. A total of 7 or more VG points is needed to get VG on the course. 
 
 ### Oral exams
-There will be oral exams connected to the assignments. Each oral exam covers a set of assignments, and for each covered assignment you will answer one randomly drawn oral question. See the [oral exam document](https://github.com/MansMeg/BSDA/blob/main/oral_exam/oral_exam_questions.pdf) for detailed instructions and the question list.
+There will be oral exams connected to the assignments. Each oral exam covers a set of assignments, and for each covered assignment you will answer one randomly drawn oral question. In addition to the predefined questions, the examiner may ask questions about any part of your own submitted assignments, including your code, results, and reasoning. See the [oral exam document](https://github.com/MansMeg/BSDA/blob/main/oral_exam/oral_exam_questions.pdf) for detailed instructions and the question list.
 
 ### Reassessing grades
 Grades are not subject to appeal. However, a grading decision must be reassessed if it is clearly incorrect. Grades can never be lowered. If students want grades to be reassessed, they should contact the course administration who will distribute a form for reassessment the students have to fill out. 

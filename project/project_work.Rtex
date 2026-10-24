@@ -162,29 +162,41 @@ For Project Proposal part 2, you need to add the following to your report:
   \item Address comments you got on part 1.
 \end{enumerate}
 
+\paragraph{Objective of the paper replication track}
+The primary goal is to reproduce the selected published results as closely as possible, using the original data, preprocessing, and model specification. The estimation procedure may differ from the original paper: you may use Stan optimization to obtain MAP estimates (to compare with MLE) or HMC to obtain posterior draws. Agreement should be assessed at the precision reported in the paper, taking numerical and Monte Carlo uncertainty into account.
+
+If results differ, investigate and explain the discrepancy. Distinguish established causes from possible explanations and identify any differences that remain unresolved. A carefully documented investigation of disagreement can satisfy the replication objective.
+
+Also, you should the replicated model with a small improvement you think make sense based on critical assessment of the model (e.g. using posterior predictive checking). Compare the two models using ELPD.
+
+\paragraph{Comparing parameter estimates}
+When the paper reports maximum likelihood estimates (MLEs), you may compare these with maximum a posteriori (MAP) estimates from your Stan model. With sufficiently vague proper priors, MAP estimates should be close to the MLEs when the parameters are identified by the likelihood. Check that the priors have little influence on the estimates, for example by assessing sensitivity to wider priors. You do not need to reproduce the original estimation procedure.
+
+Clearly label each estimator and distinguish MAP estimates from posterior means or medians obtained using HMC. Discuss whether differences from the published estimates may arise from the priors, the choice of summary, or other aspects of the implementation.
+
+Include a table comparing relevant parameter point estimates from the paper and your implementation, with clearly labeled estimation methods, parameter scales, and differences. Report posterior uncertainty alongside the Bayesian estimates. If there are too many parameters for the main report, include the scientifically central parameters and those with the largest discrepancies, explain the selection criterion, and provide the full comparison in an appendix.
+
 \paragraph{Paper replication project proposal}
 For the paper replication track, the Project proposal part 1 should instead include:
 
 \begin{enumerate}
   \item Title
   \item Abstract (1 paragraph)
-  \item Introduction to the paper and statistical problem (roughly 0.5 page)
-  \item Paper, data, and model sources, including links and (potential) license information
-  \item A short motivation for why the paper/model is interesting
-  \item Description of the original statistical model
-  \item A statement of whether the original analysis is Bayesian or frequentist. If it is frequentist, explain the Bayesian version to be implemented in Stan, including the choice of proper priors.
-  \item A list of the main results from the paper that will be checked against the Stan implementation
-  \item A short assessment of whether the data and model are suitable for \texttt{posteriordb} (see the \texttt{posteriordb} paper)
+  \item Introduction (roughly 0.5 page): describe the original paper, the scientific question, and why the model is interesting to replicate. Cite the paper at least once.
+  \item Data (roughly 0.25 page): describe the original data and how the data was accessed and if there are any licence.
+  \item Model and methods (roughly 0.25 page): Description of the original statistical model. If there are more than one in the paper. Choose one, ideally the one the authors settle on if not too complicated. A statement of whether the original analysis is Bayesian or frequentist. If it is frequentist, explain the Bayesian version to be implemented in Stan, including the choice of proper (but weakly informative) priors.
+  \item Results (0.25 page): Describe what parameters you will compare.
+  \item Acknowledgements (max 0.25 page)
+  A short assessment of whether the data and model are suitable for \texttt{posteriordb} (see the \texttt{posteriordb} paper)
 \end{enumerate}
 
 For Project Proposal part 2 in the paper replication track, you need to add:
 
 \begin{enumerate}
   \item Stan code in the appendix for the proposed model
-  \item A first fit of the Stan model, including basic diagnostics
-  \item A preliminary comparison with at least one result from the original paper
-  \item A short description of the planned \texttt{posteriordb} data, model, and posterior objects
-  \item Address comments you got on part 1
+  \item A first fit of the Stan model, including basic diagnostics in the Result section.
+  \item A preliminary comparison table with at least one parameter estimate from the original paper and the corresponding Stan estimate, with clearly labeled estimators and parameter scales in the Result section.
+  \item Address comments you got on part 1.
 \end{enumerate}
 
 
@@ -252,8 +264,8 @@ For the paper replication track, the report should have the same length and form
   \item Data: describe the original data, preprocessing, and how the data were converted to Stan format.
   \item Model and methods: describe the original model, the Stan implementation, priors, and any deviations from the paper.
   \item Computation: report diagnostics such as $\hat{R}$, effective sample sizes, divergences, and relevant computational issues.
-  \item Reproduction results: compare selected results from the paper with the Stan results and discuss agreement or disagreement.
-  \item \texttt{posteriordb} contribution (in appendix): describe the data object, Stan model, posterior object, model info object, and whether a pull request was submitted or the files are ready for submission.
+  \item Reproduction results: present the baseline replication and the parameter comparison table described above. Assess agreement at the precision reported in the paper, accounting for numerical and Monte Carlo uncertainty. Investigate discrepancies, distinguish established causes from possible explanations, and identify unresolved differences. Clearly separate any extensions from the baseline replication.
+  \item \texttt{posteriordb} contribution (in acknowledgements): describe the data object, Stan model, posterior object, model info object, and whether a pull request was submitted or the files are ready for submission.
 \end{enumerate}
 
 For this track, model comparison using LOO/WAIC is not required unless it is relevant for reproducing the paper. The central comparison is between the published analysis and the Stan implementation - can you replicate the original results?
@@ -319,7 +331,7 @@ To pass the report (G), the following criterias should be fulfilled:
 \item show basic knowledge and understanding of the core concepts of the course by using concepts correctly
 \item show an understanding in when certain methods should be used or not, and how
 \item for the ordinary project track, use at least two (2) \emph{Bayesian} different models and compare them in a correct way (two linear regression models with different covariates is an example of two different models)
-\item for the paper replication track, implement the selected published model and data in Stan, compare the Stan results with selected results from the original paper, and prepare the data, model, posterior, and metadata in a \texttt{posteriordb}-compatible form
+\item for the paper replication track, implement the selected published model and data in Stan, present a baseline replication and a clearly labeled parameter comparison table, provide a reasoned assessment of agreement or a carefully documented investigation of discrepancies (including unresolved differences), and prepare the data, model, posterior, and metadata in a \texttt{posteriordb}-compatible form
 \item state what has been done in the report with clarity, good english and rigour so it is easy for a reader to understand and follow the paper.
 \item correctly use references in the report following the guideline of the template in Section \ref{project_report}
 \end{enumerate}
@@ -330,7 +342,7 @@ To pass the mini-project with distinction (VG), the following criterias also app
 \item show deep knowledge knowledge and understanding of the core concepts and how to adapt them in a good way to a new situation
 \item connect the analysis in the report with other areas in statistics or previous courses taken in the masters program, i.e. not just repeat what has been done in previous labs.
 \item use models that has not been part of the BSDA course (but for example presented in other courses)
-\item for the paper replication track, choose a substantially interesting or complex model, give a convincing reproduction of the published results, and make a high-quality \texttt{posteriordb} contribution with checks passed locally or a pull request prepared
+\item for the paper replication track, choose a substantially interesting or complex model, give a convincing replication of the published results or a thorough, well-supported investigation of discrepancies, and make a high-quality \texttt{posteriordb} contribution with checks passed locally or a pull request prepared
 \end{enumerate}
 
 
